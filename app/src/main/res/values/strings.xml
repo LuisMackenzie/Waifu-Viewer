@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Waifu Viewer</string>
+    <string name="waifu_viewer">Waifu Viewer</string>
+
+
+    <string name="is_first_time">first_time</string>
+    <string name="download_image">Download image</string>
+    <string name="permission_request">Se Requiere el permiso para guardar la imagen en el dispositivo</string>
+    <string name="ok_text">Ok</string>
+    <string name="gif_content">GIF</string>
+    <string name="portrait_default">Portrait</string>
+    <string name="nsfw_content">NSFW</string>
+    <string name="server_mode">Server Mode</string>
+</resources>
