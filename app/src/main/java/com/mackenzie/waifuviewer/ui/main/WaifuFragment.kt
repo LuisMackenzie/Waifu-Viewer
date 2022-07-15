@@ -1,40 +1,30 @@
 package com.mackenzie.waifuviewer.ui.main
 
-import android.Manifest
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.WaifuViewModel
 import com.mackenzie.waifuviewer.WaifuViewModelFactory
 import com.mackenzie.waifuviewer.adapters.WaifuAdapter
 import com.mackenzie.waifuviewer.adapters.WaifuPicsAdapter
-import com.mackenzie.waifuviewer.data.WaifuManager
 import com.mackenzie.waifuviewer.data.WaifusRepository
 import com.mackenzie.waifuviewer.databinding.FragmentWaifuBinding
-import com.mackenzie.waifuviewer.models.Waifu
-import com.mackenzie.waifuviewer.models.WaifuPicsResult
-import com.mackenzie.waifuviewer.ui.common.PermissionRequester
+import com.mackenzie.waifuviewer.ui.common.app
 import com.mackenzie.waifuviewer.ui.common.launchAndCollect
 import com.mackenzie.waifuviewer.ui.common.visible
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
-import retrofit2.*
 
 class WaifuFragment: Fragment(R.layout.fragment_waifu) {
 
     private val safeArgs: WaifuFragmentArgs by navArgs()
     private val viewModel: WaifuViewModel by viewModels {
-        WaifuViewModelFactory(WaifusRepository(requireActivity() as AppCompatActivity)) }
+        WaifuViewModelFactory(WaifusRepository(requireActivity().app)) }
     private lateinit var mainState: MainState
     private var mainServer: Boolean = false
     private val waifuAdapter = WaifuAdapter{mainState.onWaifuClicked(it)}
@@ -73,7 +63,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         // mainServer = bun.getBoolean(IS_SERVER_SELECTED)
         val isNsfw = bun.getBoolean(IS_NSFW_WAIFU)
         val isGif = bun.getBoolean(IS_GIF_WAIFU)
-        val orientation = if (!bun.getBoolean(IS_LANDS_WAIFU)) ORIENTATION_PORTRAIT else ORIENTATION_LANDSCAPE
+        val orientation = bun.getBoolean(IS_LANDS_WAIFU)
         // val waifuId = bun.getString(ID_WAIFU)
         val categoryTag = bun.getString(CATEGORY_TAG)!!
 
@@ -89,10 +79,10 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
                     viewModel.onCustomWaifusReady(isNsfw, isGif = false, categoryTag, orientation)
                 }
                 "mori-calliope" -> {
-                    viewModel.onCustomWaifusReady(isNsfw, isGif = false, categoryTag, ORIENTATION_PORTRAIT)
+                    viewModel.onCustomWaifusReady(isNsfw, isGif = false, categoryTag, false)
                 }
                 "raiden-shogun" -> {
-                    viewModel.onCustomWaifusReady(isNsfw, isGif = false, categoryTag, ORIENTATION_PORTRAIT)
+                    viewModel.onCustomWaifusReady(isNsfw, isGif = false, categoryTag, false)
                 }
                 "oppai" -> {
                     viewModel.onCustomWaifusReady(isNsfw, isGif = false, categoryTag, orientation)

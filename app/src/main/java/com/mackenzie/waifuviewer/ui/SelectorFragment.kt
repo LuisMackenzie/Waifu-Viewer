@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ImageView
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -17,20 +15,20 @@ import com.mackenzie.waifuviewer.data.WaifusRepository
 import com.mackenzie.waifuviewer.databinding.FragmentSelectorBinding
 import com.mackenzie.waifuviewer.models.WaifuPic
 import com.mackenzie.waifuviewer.ui.common.PermissionRequester
+import com.mackenzie.waifuviewer.ui.common.app
 import com.mackenzie.waifuviewer.ui.common.launchAndCollect
 import com.mackenzie.waifuviewer.ui.common.loadUrl
 import com.mackenzie.waifuviewer.ui.main.MainState
-import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.ID_WAIFU
+import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.CATEGORY_TAG
 import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_GIF_WAIFU
 import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_LANDS_WAIFU
 import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_NSFW_WAIFU
-import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.CATEGORY_TAG
 import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_SERVER_SELECTED
 import kotlinx.coroutines.launch
 
 class SelectorFragment : Fragment(R.layout.fragment_selector) {
 
-    private val viewModel: SelectorViewModel by viewModels { SelectorViewModelFactory(WaifusRepository(requireActivity() as AppCompatActivity)) }
+    private val viewModel: SelectorViewModel by viewModels { SelectorViewModelFactory(WaifusRepository(requireActivity().app)) }
     private lateinit var binding:FragmentSelectorBinding
     private var backgroudImage: ImageView? = null
     private lateinit var mainState: MainState

@@ -27,7 +27,7 @@ class SelectorViewModel (private val waifusRepository: WaifusRepository): ViewMo
         viewModelScope.launch {
             _state.value = UiState(isLoading = true)
             // val waifu = waifusRepository.getWaifuInfo(waifuIdDefault)
-            val waifu = waifusRepository.getOnlyWaifuPic()
+            val waifu = waifusRepository.requestOnlyWaifuPic()
 
             _state.value = UiState(waifu = waifu, isLoading = false)
         }
@@ -36,7 +36,7 @@ class SelectorViewModel (private val waifusRepository: WaifusRepository): ViewMo
     private fun loadRandomWaifu() {
         viewModelScope.launch {
             _state.value = UiState(isLoading = true)
-            val waifuResult = waifusRepository.getWaifuOnly()
+            // val waifuResult = waifusRepository.getWaifuOnly()
             // _state.value = UiState(waifu = waifuResult.waifus[0], isLoading = false)
         }
     }
@@ -44,7 +44,7 @@ class SelectorViewModel (private val waifusRepository: WaifusRepository): ViewMo
     private fun loadAdultWaifu() {
         viewModelScope.launch {
             _state.value = UiState(isLoading = true)
-            val waifuResult = waifusRepository.getWaifuOnlyNsfw()
+            // val waifuResult = waifusRepository.getWaifuOnlyNsfw()
             // _state.value = UiState(waifu = waifuResult.waifus[0], isLoading = false)
         }
     }

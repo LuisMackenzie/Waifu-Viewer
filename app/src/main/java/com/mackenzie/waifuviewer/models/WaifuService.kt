@@ -10,27 +10,27 @@ interface WaifuService {
     @GET("random/")
     suspend fun getRandomWaifu(
         @Query("is_nsfw") isNsfw:Boolean = false,
-        @Query("selected_tags") tags:String,
+        @Query("selected_tags") tags:String = "waifu",
         @Query("gif") isGif:Boolean = false,
         @Query("orientation") orientation:String = "PORTRAIT",
         @Query("many") manyWaifus:Boolean = true
     ): WaifuResult
 
-    @GET("random/")
+    /*@GET("random/")
     suspend fun getRandomWaifu(
         @Query("is_nsfw") isNsfw:Boolean = false,
         @Query("gif") isGif:Boolean = false,
         @Query("orientation") orientation:String = "PORTRAIT",
         @Query("many") manyWaifus:Boolean = true
-    ): WaifuResult
+    ): WaifuResult*/
 
-    @GET("random/")
+   /* @GET("random/")
     suspend fun getEspecialWaifu(
         @Query("is_nsfw") isNsfw:Boolean = false,
         @Query("selected_tags") tags:String,
         @Query("gif") isGif:Boolean = false,
         @Query("many") manyWaifus:Boolean = true
-    ): WaifuResult
+    ): WaifuResult*/
 
     @GET("{type}/{category}")
     suspend fun getOnlyWaifuPic(
@@ -38,19 +38,13 @@ interface WaifuService {
         @Path("category") category:String = "waifu"
     ): WaifuPic
 
-    @POST("many/{type}/{category}")
+    @POST("{many}/{type}/{category}")
     suspend fun getWaifuPics(
-        // @Path("many") many:String = "many",
+        @Path("many") many:String = "many",
         @Path("type") type:String = "sfw",
         @Path("category") category:String = "waifu",
         @Body() body: JsonObject
     ): Response<WaifuPicsResult>
-
-    @POST("many/")
-    suspend fun getWaifuPics2(
-        @Url() type:String = "sfw",
-        @Url() category:String = "waifu"
-    ):  Call<WaifuPicsResult>
 
     @GET("info/")
     suspend fun getWaifu(@Query("images") nameId:String): WaifuResult

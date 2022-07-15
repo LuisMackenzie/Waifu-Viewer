@@ -12,7 +12,7 @@ class App: Application() {
     override fun onCreate() {
         super.onCreate()
         // instance = this
-        db = Room.databaseBuilder(this, WaifuDataBase::class.java, "waifu_database").build()
+        db = Room.databaseBuilder(this, WaifuDataBase::class.java, "waifu-database").build()
     }
 
     /*companion object {

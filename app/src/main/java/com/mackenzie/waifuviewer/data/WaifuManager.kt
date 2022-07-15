@@ -27,7 +27,7 @@ class WaifuManager {
 
         Log.e("WaifuManager", "waifuPicJson: $jsonBody")
         try {
-            val waifuPics = servicePics.getWaifuPics(isNsfw, tag, jsonBody).body()
+            val waifuPics = servicePics.getWaifuPics( "many",isNsfw, tag, jsonBody).body()
             if (waifuPics != null) {
                 onResult(waifuPics.images)
                 Log.e("WaifuManager", "Habemus Waifus ${waifuPics.images}")

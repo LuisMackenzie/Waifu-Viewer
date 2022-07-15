@@ -1,29 +1,19 @@
 package com.mackenzie.waifuviewer
 
-import android.util.Log
-import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.mackenzie.waifuviewer.data.WaifuManager
 import com.mackenzie.waifuviewer.data.WaifusRepository
 import com.mackenzie.waifuviewer.models.Waifu
-import com.mackenzie.waifuviewer.models.WaifuPic
-import com.mackenzie.waifuviewer.models.WaifuPicsResult
 import com.mackenzie.waifuviewer.models.WaifuResult
+import com.mackenzie.waifuviewer.models.db.WaifuImItem
+import com.mackenzie.waifuviewer.models.db.WaifuPicItem
 import com.mackenzie.waifuviewer.ui.common.Scope
-import com.mackenzie.waifuviewer.ui.main.WaifuFragment
-import com.mackenzie.waifuviewer.ui.main.WaifuFragmentArgs
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.HttpException
-import kotlin.jvm.internal.Ref
 
 class WaifuViewModel(private val waifusRepository: WaifusRepository): ViewModel(), Scope by Scope.Impl() {
 
@@ -32,24 +22,37 @@ class WaifuViewModel(private val waifusRepository: WaifusRepository): ViewModel(
     // private val _events = Channel<UiEvent> ()
     // val events = _events.receiveAsFlow()
 
-    private fun onWaifusReady() {
+    init {
         viewModelScope.launch {
+
             _state.value = UiState(isLoading = true)
-            _state.value = UiState(waifusIm = waifusRepository.getRandomWaifus(), isLoading = false)
+            waifusRepository.savedWaifusPic.collect{ WaifuPics ->
+                _state.value = UiState(waifusSavedPics = WaifuPics, isLoading = false)
+            }
+            waifusRepository.savedWaifusIm.collect{ WaifuIm ->
+                _state.value = UiState(waifusSavedIm = WaifuIm, isLoading = false)
+            }
         }
     }
 
-    fun onCustomWaifusReady(isNsfw: Boolean, isGif: Boolean, tag: String, orientation: String) {
+
+    private fun onWaifusReady() {
+        viewModelScope.launch {
+            _state.value = UiState(isLoading = true)
+            // _state.value = UiState(waifusIm = waifusRepository.requestWaifusIm(), isLoading = false)
+        }
+    }
+
+    fun onCustomWaifusReady(isNsfw: Boolean, isGif: Boolean, tag: String, orientation: Boolean) {
 
         viewModelScope.launch {
             _state.value = UiState(isLoading = true)
             val waifus: WaifuResult
             if (tag == "all") {
-                waifus = waifusRepository.getCustomRandomWaifus(isNsfw, isGif, orientation)
+                waifus = waifusRepository.requestWaifusIm(isNsfw = isNsfw, tag = "waifu", isGif =  isGif, orientation = orientation)
                 _state.value = UiState(waifusIm = waifus, isLoading = false)
             } else {
-                waifus = waifusRepository.getCustomTagWaifus(isNsfw, isGif, tag, orientation)
-                // waifus = waifusRepository.getEspecialWaifu(isNsfw, isGif, tag)
+                waifus = waifusRepository.requestWaifusIm(isNsfw, tag, isGif,  orientation)
                 _state.value = UiState(waifusIm = waifus, isLoading = false)
             }
             if (waifus.waifus.isEmpty()) {
@@ -91,7 +94,8 @@ class WaifuViewModel(private val waifusRepository: WaifusRepository): ViewModel(
         val isLoading: Boolean = false,
         val waifusIm: WaifuResult? = null,
         val waifusPics: List<String>? = null,
-        // val waifu: String? = null,
+        val waifusSavedPics: List<WaifuPicItem>? = null,
+        val waifusSavedIm: List<WaifuImItem>? = null,
         val isError: Boolean = false
     )
 
