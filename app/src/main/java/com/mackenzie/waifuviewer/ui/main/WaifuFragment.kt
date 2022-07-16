@@ -121,6 +121,18 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
                 Toast.makeText(requireContext(), "Servidor WaifuPics", Toast.LENGTH_LONG).show()
             }
         }
+        /*state.waifusSavedPics?.let { randomWaifus ->
+            if (waifuPicsAdapter.waifuItemList.isEmpty()) {
+                waifuPicsAdapter.waifuItemList = randomWaifus
+                Toast.makeText(requireContext(), "Local WaifuPics", Toast.LENGTH_LONG).show()
+            }
+        }*/
+        /*state.waifusSavedIm?.let { randomWaifus ->
+            if (waifuAdapter.waifuItemList.isEmpty()) {
+                waifuAdapter.waifuItemList = randomWaifus
+                Toast.makeText(requireContext(), "Local WaifuIm", Toast.LENGTH_LONG).show()
+            }
+        }*/
     }
 
     // Este metodo rebe un estado en un flow y devuelve algo

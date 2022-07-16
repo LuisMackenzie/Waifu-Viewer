@@ -27,7 +27,7 @@ class WaifusRepository(application: App) {
     val savedWaifusIm = localDataSource.waifusIm
 
     suspend fun requestWaifusIm(isNsfw: Boolean, tag: String, isGif: Boolean, orientation: Boolean): WaifuResult = withContext(Dispatchers.IO) {
-        var waifusIm: WaifuResult = WaifuResult(emptyList())
+        val waifusIm: WaifuResult
         if(localDataSource.isImEmpty()) {
             val waifus = remoteDataSource.getRandomWaifusIm(isNsfw, tag, isGif, getOrientation(orientation))
             waifusIm = waifus
@@ -39,9 +39,9 @@ class WaifusRepository(application: App) {
         }
     }
 
-    suspend fun requestWaifusPics(isNsfw: String, tag: String) {
+    suspend fun requestWaifusPics(isNsfw: String, tag: String) = withContext(Dispatchers.IO) {
         if(localDataSource.isPicsEmpty()) {
-            val waifus : List<String> = remoteDataSource.getRandomWaifusPics(isNsfw, tag)
+            val waifus = remoteDataSource.getRandomWaifusPics(isNsfw, tag)
             localDataSource.savePics(waifus.toLocalModelPics())
         }
     }

@@ -25,21 +25,13 @@ class WaifuViewModel(private val waifusRepository: WaifusRepository): ViewModel(
     init {
         viewModelScope.launch {
 
-            _state.value = UiState(isLoading = true)
+            // _state.value = UiState(isLoading = true)
             waifusRepository.savedWaifusPic.collect{ WaifuPics ->
-                _state.value = UiState(waifusSavedPics = WaifuPics, isLoading = false)
+                _state.value = UiState(waifusSavedPics = WaifuPics)
             }
             waifusRepository.savedWaifusIm.collect{ WaifuIm ->
-                _state.value = UiState(waifusSavedIm = WaifuIm, isLoading = false)
+                _state.value = UiState(waifusSavedIm = WaifuIm)
             }
-        }
-    }
-
-
-    private fun onWaifusReady() {
-        viewModelScope.launch {
-            _state.value = UiState(isLoading = true)
-            // _state.value = UiState(waifusIm = waifusRepository.requestWaifusIm(), isLoading = false)
         }
     }
 
@@ -83,11 +75,6 @@ class WaifuViewModel(private val waifusRepository: WaifusRepository): ViewModel(
             }
         }
     }
-
-    /*override fun onCleared() {
-        destroyScope()
-        super.onCleared()
-    }*/
 
 
     data class UiState(
