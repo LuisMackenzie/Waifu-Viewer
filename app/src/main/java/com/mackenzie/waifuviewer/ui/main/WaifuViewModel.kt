@@ -64,7 +64,9 @@ class WaifuViewModel(private val waifusRepository: WaifusRepository): ViewModel(
 
     private fun waifusGetter(isNsfw: String, tag: String) {
         viewModelScope.launch {
-            WaifuManager().getWaifuPics(isNsfw = isNsfw, tag = tag) { waifuResult ->
+            val waifus = waifusRepository.requestWaifusPics(isNsfw, tag)
+            _state.value = UiState(waifusPics = waifus, isLoading = false)
+            /*WaifuManager().getWaifuPics(isNsfw = isNsfw, tag = tag) { waifuResult ->
                 if (waifuResult != null){
                     if (!waifuResult.isEmpty()) {
                         _state.value = UiState(waifusPics = waifuResult, isLoading = false)
@@ -72,7 +74,7 @@ class WaifuViewModel(private val waifusRepository: WaifusRepository): ViewModel(
                         _state.value = UiState(isLoading = false, isError = true)
                     }
                 }
-            }
+            }*/
         }
     }
 

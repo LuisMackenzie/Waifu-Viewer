@@ -34,15 +34,21 @@ class WaifusRepository(application: App) {
             localDataSource.saveIm(waifus.waifus.toLocalModelIm())
             return@withContext waifus
         } else {
-            waifusIm =  remoteDataSource.getRandomWaifusIm(isNsfw, tag, isGif, getOrientation(orientation))
+            waifusIm = remoteDataSource.getRandomWaifusIm(isNsfw, tag, isGif, getOrientation(orientation))
             return@withContext waifusIm
         }
     }
 
-    suspend fun requestWaifusPics(isNsfw: String, tag: String) = withContext(Dispatchers.IO) {
+    suspend fun requestWaifusPics(isNsfw: String, tag: String): List<String> = withContext(Dispatchers.IO) {
+        val waifusPics: List<String>
         if(localDataSource.isPicsEmpty()) {
-            val waifus = remoteDataSource.getRandomWaifusPics(isNsfw, tag)
-            localDataSource.savePics(waifus.toLocalModelPics())
+            waifusPics = remoteDataSource.getRandomWaifusPics(isNsfw, tag)
+            // waifusPics = waifus
+            localDataSource.savePics(waifusPics.toLocalModelPics())
+            return@withContext waifusPics
+        } else {
+            waifusPics = remoteDataSource.getRandomWaifusPics(isNsfw, tag)
+            return@withContext waifusPics
         }
     }
 
