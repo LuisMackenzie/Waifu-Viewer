@@ -1,43 +1,43 @@
 package com.mackenzie.waifuviewer.data
 
 import android.util.Log
-import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
 import com.mackenzie.waifuviewer.App
 import com.mackenzie.waifuviewer.models.RemoteConnection.servicePics
 import com.mackenzie.waifuviewer.models.Waifu
-import com.mackenzie.waifuviewer.models.datasource.WaifusLocalDataSource
+import com.mackenzie.waifuviewer.models.datasource.WaifusImLocalDataSource
+import com.mackenzie.waifuviewer.models.datasource.WaifusPicLocalDataSource
 import com.mackenzie.waifuviewer.models.datasource.WaifusRemoteDataSource
 import com.mackenzie.waifuviewer.models.db.WaifuImItem
 import com.mackenzie.waifuviewer.models.db.WaifuPicItem
-import com.mackenzie.waifuviewer.ui.main.WaifuFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class WaifusRepository(application: App) {
 
-    private val localDataSource = WaifusLocalDataSource(application.db.waifuPicDao(), application.db.waifuImDao())
+    private val localPicDataSource = WaifusPicLocalDataSource(application.db.waifuPicDao())
+    private val localImDataSource = WaifusImLocalDataSource(application.db.waifuImDao())
     private val remoteDataSource = WaifusRemoteDataSource()
 
-    val savedWaifusPic = localDataSource.waifusPic
-    val savedWaifusIm = localDataSource.waifusIm
+    val savedWaifusPic = localPicDataSource.waifusPic
+    val savedWaifusIm = localImDataSource.waifusIm
 
-    fun findImById(id: Int) = localDataSource.findImById(id)
-    fun findPicsById(id: Int) = localDataSource.findPicById(id)
+    fun findPicsById(id: Int) = localPicDataSource.findPicById(id)
+    fun findImById(id: Int) = localImDataSource.findImById(id)
+
 
     suspend fun requestWaifusIm(isNsfw: Boolean, tag: String, isGif: Boolean, orientation: Boolean) = withContext(Dispatchers.IO) {
-        if(localDataSource.isImEmpty()) {
+        if(localImDataSource.isImEmpty()) {
             val waifus = remoteDataSource.getRandomWaifusIm(isNsfw, tag, isGif, getOrientation(orientation))
-            localDataSource.saveIm(waifus.waifus.toLocalModelIm())
+            localImDataSource.saveIm(waifus.waifus.toLocalModelIm())
         } else {
             Log.e("Waifus Repository", "LocalDataSource IM IS NOT EMPTY")
         }
     }
 
     suspend fun requestWaifusPics(isNsfw: String, tag: String) = withContext(Dispatchers.IO) {
-        if(localDataSource.isPicsEmpty()) {
+        if(localPicDataSource.isPicsEmpty()) {
             val waifusPics = remoteDataSource.getRandomWaifusPics(isNsfw, tag)
-            localDataSource.savePics(waifusPics.toLocalModelPics())
+            localPicDataSource.savePics(waifusPics.toLocalModelPics())
         } else {
             Log.e("Waifus Repository", "LocalDataSource PICS IS NOT EMPTY")
         }
