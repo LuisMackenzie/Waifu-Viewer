@@ -29,7 +29,7 @@ import kotlinx.coroutines.launch
 class SelectorFragment : Fragment(R.layout.fragment_selector) {
 
     private val viewModel: SelectorViewModel by viewModels { SelectorViewModelFactory(WaifusRepository(requireActivity().app)) }
-    private lateinit var binding:FragmentSelectorBinding
+    private lateinit var binding: FragmentSelectorBinding
     private var backgroudImage: ImageView? = null
     private lateinit var mainState: MainState
 

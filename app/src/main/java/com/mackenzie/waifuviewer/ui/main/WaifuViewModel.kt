@@ -3,10 +3,7 @@ package com.mackenzie.waifuviewer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.mackenzie.waifuviewer.data.WaifuManager
 import com.mackenzie.waifuviewer.data.WaifusRepository
-import com.mackenzie.waifuviewer.models.Waifu
-import com.mackenzie.waifuviewer.models.WaifuResult
 import com.mackenzie.waifuviewer.models.db.WaifuImItem
 import com.mackenzie.waifuviewer.models.db.WaifuPicItem
 import com.mackenzie.waifuviewer.ui.common.Scope
@@ -25,7 +22,7 @@ class WaifuViewModel(private val waifusRepository: WaifusRepository): ViewModel(
     init {
         viewModelScope.launch {
 
-            // _state.value = UiState(isLoading = true)
+            _state.value = UiState(isLoading = true)
             waifusRepository.savedWaifusPic.collect{ WaifuPics ->
                 _state.value = UiState(waifusSavedPics = WaifuPics)
             }
@@ -39,17 +36,19 @@ class WaifuViewModel(private val waifusRepository: WaifusRepository): ViewModel(
 
         viewModelScope.launch {
             _state.value = UiState(isLoading = true)
-            val waifus: WaifuResult
+            // val waifus: WaifuResult
             if (tag == "all") {
-                waifus = waifusRepository.requestWaifusIm(isNsfw = isNsfw, tag = "waifu", isGif =  isGif, orientation = orientation)
-                _state.value = UiState(waifusIm = waifus, isLoading = false)
+                waifusRepository.requestWaifusIm(isNsfw,"waifu",isGif,orientation)
+                // waifus = waifusRepository.requestWaifusIm(isNsfw = isNsfw, tag = "waifu", isGif =  isGif, orientation = orientation)
+                // _state.value = UiState(waifusIm = waifus, isLoading = false)
             } else {
-                waifus = waifusRepository.requestWaifusIm(isNsfw, tag, isGif,  orientation)
-                _state.value = UiState(waifusIm = waifus, isLoading = false)
+                waifusRepository.requestWaifusIm(isNsfw, tag, isGif,  orientation)
+                // waifus = waifusRepository.requestWaifusIm(isNsfw, tag, isGif,  orientation)
+                // _state.value = UiState(waifusIm = waifus, isLoading = false)
             }
-            if (waifus.waifus.isEmpty()) {
+            /*if (waifus.waifus.isEmpty()) {
                 _state.value = UiState(isLoading = false, isError = true)
-            }
+            }*/
         }
     }
 
@@ -64,8 +63,13 @@ class WaifuViewModel(private val waifusRepository: WaifusRepository): ViewModel(
 
     private fun waifusGetter(isNsfw: String, tag: String) {
         viewModelScope.launch {
-            val waifus = waifusRepository.requestWaifusPics(isNsfw, tag)
-            _state.value = UiState(waifusPics = waifus, isLoading = false)
+            if (tag == "all") {
+                waifusRepository.requestWaifusPics(isNsfw, "waifu")
+            } else {
+                waifusRepository.requestWaifusPics(isNsfw, tag)
+            }
+            // val waifus = waifusRepository.requestWaifusPics(isNsfw, tag)
+            // _state.value = UiState(waifusPics = waifus, isLoading = false)
             /*WaifuManager().getWaifuPics(isNsfw = isNsfw, tag = tag) { waifuResult ->
                 if (waifuResult != null){
                     if (!waifuResult.isEmpty()) {
@@ -81,8 +85,8 @@ class WaifuViewModel(private val waifusRepository: WaifusRepository): ViewModel(
 
     data class UiState(
         val isLoading: Boolean = false,
-        val waifusIm: WaifuResult? = null,
-        val waifusPics: List<String>? = null,
+        // val waifusIm: WaifuResult? = null,
+        // val waifusPics: List<String>? = null,
         val waifusSavedPics: List<WaifuPicItem>? = null,
         val waifusSavedIm: List<WaifuImItem>? = null,
         val isError: Boolean = false

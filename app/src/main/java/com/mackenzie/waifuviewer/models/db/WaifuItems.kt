@@ -10,7 +10,7 @@ import kotlinx.parcelize.Parcelize
 @Entity
 data class WaifuImItem(
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    val id: Int = 0,
     val dominant_color: String,
     val extension: String,
     val favourites: Int,
@@ -30,6 +30,6 @@ data class WaifuImItem(
 @Entity
 data class WaifuPicItem(
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    val id: Int = 0,
     val url: String
 ) : Parcelable

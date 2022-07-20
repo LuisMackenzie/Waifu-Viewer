@@ -9,7 +9,7 @@ import androidx.navigation.fragment.navArgs
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.WaifuViewModel
 import com.mackenzie.waifuviewer.WaifuViewModelFactory
-import com.mackenzie.waifuviewer.adapters.WaifuAdapter
+import com.mackenzie.waifuviewer.adapters.WaifuImAdapter
 import com.mackenzie.waifuviewer.adapters.WaifuPicsAdapter
 import com.mackenzie.waifuviewer.data.WaifusRepository
 import com.mackenzie.waifuviewer.databinding.FragmentWaifuBinding
@@ -27,8 +27,8 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         WaifuViewModelFactory(WaifusRepository(requireActivity().app)) }
     private lateinit var mainState: MainState
     private var mainServer: Boolean = false
-    private val waifuAdapter = WaifuAdapter{mainState.onWaifuClicked(it)}
-    private val waifuPicsAdapter = WaifuPicsAdapter{mainState.onWaifuPicsClicked(it)}
+    private val waifuImAdapter = WaifuImAdapter{mainState.onWaifuClicked(it)}
+    private val waifuPicsAdapter = WaifuPicsAdapter{ mainState.onWaifuPicsClicked(it) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -38,7 +38,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
             if (mainServer) {
                 recycler.adapter = waifuPicsAdapter
             } else {
-                recycler.adapter = waifuAdapter
+                recycler.adapter = waifuImAdapter
             }
         }
 
@@ -89,6 +89,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
                 }
                 else -> {
                     viewModel.onCustomWaifusReady(isNsfw, isGif, categoryTag, orientation)
+                    // Toast.makeText(requireContext(), "$categoryTag $isNsfw", Toast.LENGTH_SHORT).show()
                 }
             }
         } else {
@@ -109,30 +110,34 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         recycler.visibility = if(state.isLoading) View.GONE else View.VISIBLE
         ivError.visibility = if(state.isError) View.VISIBLE else View.GONE
         tvError.visibility = if(state.isError) View.VISIBLE else View.GONE
-        state.waifusIm?.let { randomWaifus ->
+        /*state.waifusIm?.let { randomWaifus ->
             if (waifuAdapter.waifuItemList.isEmpty()) {
                 waifuAdapter.waifuItemList = randomWaifus.waifus
                 Toast.makeText(requireContext(), "Servidor WaifuIm", Toast.LENGTH_LONG).show()
             }
-        }
-        state.waifusPics?.let { randomWaifus ->
+        }*/
+        /*state.waifusPics?.let { randomWaifus ->
             if (waifuPicsAdapter.waifuItemList.isEmpty()) {
                 waifuPicsAdapter.waifuItemList = randomWaifus
                 Toast.makeText(requireContext(), "Servidor WaifuPics", Toast.LENGTH_LONG).show()
             }
-        }
+        }*/
         /*state.waifusSavedPics?.let { randomWaifus ->
             if (waifuPicsAdapter.waifuItemList.isEmpty()) {
                 waifuPicsAdapter.waifuItemList = randomWaifus
-                Toast.makeText(requireContext(), "Local WaifuPics", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), "Local WaifuPics", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(requireContext(), "No Waifus", Toast.LENGTH_SHORT).show()
             }
         }*/
-        /*state.waifusSavedIm?.let { randomWaifus ->
-            if (waifuAdapter.waifuItemList.isEmpty()) {
-                waifuAdapter.waifuItemList = randomWaifus
-                Toast.makeText(requireContext(), "Local WaifuIm", Toast.LENGTH_LONG).show()
+        state.waifusSavedIm?.let { randomWaifus ->
+            if (waifuImAdapter.waifuItemList.isEmpty()) {
+                waifuImAdapter.waifuItemList = randomWaifus
+                Toast.makeText(requireContext(), "Local WaifuIm", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(requireContext(), "No Waifus", Toast.LENGTH_SHORT).show()
             }
-        }*/
+        }
     }
 
     // Este metodo rebe un estado en un flow y devuelve algo

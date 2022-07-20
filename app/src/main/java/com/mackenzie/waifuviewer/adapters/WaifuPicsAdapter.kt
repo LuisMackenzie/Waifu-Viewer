@@ -5,20 +5,17 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.databinding.ViewMediaItemBinding
-import com.mackenzie.waifuviewer.models.Waifu
-import com.mackenzie.waifuviewer.models.WaifuPic
+import com.mackenzie.waifuviewer.models.db.WaifuPicItem
 import com.mackenzie.waifuviewer.ui.common.basicDiffUtil
 import com.mackenzie.waifuviewer.ui.common.inflate
 import com.mackenzie.waifuviewer.ui.common.loadUrl
 
-class WaifuPicsAdapter(private val listener: (String) -> Unit ): RecyclerView.Adapter<WaifuPicsAdapter.ViewHolder>() {
+class WaifuPicsAdapter(private val listener: (WaifuPicItem) -> Unit ): RecyclerView.Adapter<WaifuPicsAdapter.ViewHolder>() {
 
-    var waifuItemList: List<String> by basicDiffUtil(
+    var waifuItemList: List<WaifuPicItem> by basicDiffUtil(
         emptyList(),
         areItemsTheSame = { old, new -> old == new }
     )
-
-    // var waifuItemList : List<String> = emptyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = parent.inflate(R.layout.view_media_item, false)
@@ -27,11 +24,16 @@ class WaifuPicsAdapter(private val listener: (String) -> Unit ): RecyclerView.Ad
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val waifuItem = waifuItemList[position]
-        holder.bind(waifuItem)
+        holder.bind(waifuItem.url)
+
         holder.itemView.setOnClickListener { listener(waifuItem) }
     }
 
     override fun getItemCount(): Int = waifuItemList.size
+
+    fun submitList(waifus: List<WaifuPicItem>) {
+        waifuItemList = waifus
+    }
 
     inner class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
 

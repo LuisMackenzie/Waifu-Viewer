@@ -8,6 +8,8 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.mackenzie.waifuviewer.models.Waifu
 import com.mackenzie.waifuviewer.models.WaifuPic
+import com.mackenzie.waifuviewer.models.db.WaifuImItem
+import com.mackenzie.waifuviewer.models.db.WaifuPicItem
 import com.mackenzie.waifuviewer.ui.SelectorFragmentDirections
 import com.mackenzie.waifuviewer.ui.common.PermissionRequester
 import kotlinx.coroutines.CoroutineScope
@@ -27,13 +29,13 @@ class MainState(
     private val navController: NavController,
     private val permissionRequester: PermissionRequester
 ) {
-    fun onWaifuClicked(waifu: Waifu) {
-        val action = WaifuFragmentDirections.actionWaifuToDetail(waifu.url)
+    fun onWaifuClicked(waifu: WaifuImItem) {
+        val action = WaifuFragmentDirections.actionWaifuImToDetail(waifu.imageId)
         navController.navigate(action)
     }
 
-    fun onWaifuPicsClicked(url: String) {
-        val action = WaifuFragmentDirections.actionWaifuDestToDetailDest(url)
+    fun onWaifuPicsClicked(waifu: WaifuPicItem) {
+        val action = WaifuFragmentDirections.actionWaifuPicsToDetail(waifu.id)
         navController.navigate(action)
     }
 

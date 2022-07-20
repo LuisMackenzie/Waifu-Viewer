@@ -25,7 +25,14 @@
         android:label="fragment_waifu"
         tools:layout="@layout/fragment_waifu" >
         <action
-            android:id="@+id/action_waifu_to_detail"
+            android:id="@+id/action_waifu_im_to_detail"
+            app:destination="@id/detail_dest"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@android:anim/slide_out_right" />
+        <action
+            android:id="@+id/action_waifu_pics_to_detail"
             app:destination="@id/detail_dest"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
@@ -34,13 +41,6 @@
         <argument
             android:name="bundleInfo"
             app:argType="android.os.Bundle" />
-        <action
-            android:id="@+id/action_waifu_dest_to_detail_dest"
-            app:destination="@id/detail_dest"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@android:anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/detail_dest"
@@ -52,8 +52,7 @@
             app:argType="com.mackenzie.waifuviewer.models.Waifu"
             app:nullable="true" />-->
         <argument
-            android:name="waifuUrl"
-            app:argType="string"
-            app:nullable="true" />
+            android:name="waifuId"
+            app:argType="integer" />
     </fragment>
 </navigation>

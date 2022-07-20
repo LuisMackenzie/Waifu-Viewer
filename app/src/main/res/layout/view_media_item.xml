@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+        <import type="com.mackenzie.waifuviewer.models.db.WaifuPicItem"/>
+        <import type="com.mackenzie.waifuviewer.models.db.WaifuImItem"/>
+        <variable name="waifuPic" type="WaifuPicItem" />
+        <variable name="waifuIm" type="WaifuImItem"/>
+    </data>
+
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -53,3 +62,4 @@
 
 </androidx.cardview.widget.CardView>
 
+</layout>

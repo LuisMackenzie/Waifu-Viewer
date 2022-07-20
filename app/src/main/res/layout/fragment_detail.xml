@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:fresco="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="com.mackenzie.waifuviewer.models.db.WaifuPicItem"/>
+        <import type="com.mackenzie.waifuviewer.models.db.WaifuImItem"/>
+        <variable name="waifuPic" type="WaifuPicItem" />
+        <variable name="waifuIm" type="WaifuImItem"/>
+    </data>
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -52,8 +59,10 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="32dp"
         android:clickable="true"
-        fresco:srcCompat="@drawable/ic_baseline_download"
+        android:src="@drawable/ic_baseline_download"
         android:contentDescription="@string/download_image"
         android:focusable="true" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</layout>

@@ -1,40 +1,29 @@
 package com.mackenzie.waifuviewer.ui.detail
 
-import android.Manifest
 import android.content.ContentValues.TAG
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.ImageView
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.gif.GifDrawable
-import com.bumptech.glide.request.target.ViewTarget
 import com.mackenzie.waifuviewer.R
+import com.mackenzie.waifuviewer.data.WaifusRepository
 import com.mackenzie.waifuviewer.databinding.FragmentDetailBinding
-import com.mackenzie.waifuviewer.models.PermissionChecker
-import com.mackenzie.waifuviewer.models.Waifu
-import com.mackenzie.waifuviewer.ui.common.PermissionRequester
+import com.mackenzie.waifuviewer.models.db.WaifuImItem
+import com.mackenzie.waifuviewer.models.db.WaifuPicItem
+import com.mackenzie.waifuviewer.ui.common.app
 import com.mackenzie.waifuviewer.ui.common.loadUrl
 import com.mackenzie.waifuviewer.ui.main.MainState
-import com.mackenzie.waifuviewer.ui.main.WaifuFragment
 import com.mackenzie.waifuviewer.ui.main.buildMainState
 import com.mackenzie.waifuviewer.utils.SaveImage
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.io.IOException
 import java.net.URL
@@ -45,7 +34,7 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
     private val safeArgs: DetailFragmentArgs by navArgs()
 
     private val viewModel: DetailViewModel by viewModels {
-        DetailViewModelFactory(requireNotNull(safeArgs.waifuUrl)) }
+        DetailViewModelFactory(safeArgs.waifuId, WaifusRepository(requireActivity().app)) }
     private lateinit var mainState: MainState
     private var title: String? = null
     private var link: String? = null
@@ -76,13 +65,27 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
 
 
     private fun FragmentDetailBinding.updateUI(state: DetailViewModel.UiState) {
-        // val waifu = state.waifu
+
         pbLoading.visibility = View.GONE
-        state.url?.let {
+        state.idPic?.let {
             // tvDetail.text = it.imageId.toString()
             tvDetail.text = ""
-            ivDetail.loadUrl(it)
-            prepareDownload(it)
+            Toast.makeText(context, "Aqui esta pasando algo fuera del flujo PICS", Toast.LENGTH_SHORT).show()
+        }
+        state.idIm?.let {
+            // tvDetail.text = it.imageId.toString()
+            tvDetail.text = ""
+            Toast.makeText(context, "Aqui esta pasando algo fuera del flujo IM", Toast.LENGTH_SHORT).show()
+        }
+        state.waifuPic?.let {
+            tvDetail.text = ""
+            ivDetail.loadUrl(it.url)
+            prepareDownloadPic(it)
+        }
+        state.waifuIm?.let {
+            tvDetail.text = ""
+            ivDetail.loadUrl(it.url)
+            prepareDownloadIm(it)
         }
 
         // val dominantColor = waifu.dominant_color
@@ -91,10 +94,16 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
 
 
 
-    private fun prepareDownload(waifuUrl: String) {
-        title = waifuUrl.substringAfterLast('/')
-        link = waifuUrl
-        imageExt = waifuUrl.substringAfterLast('.')
+    private fun prepareDownloadPic(waifuPic: WaifuPicItem) {
+        title = waifuPic.url.substringAfterLast('/')
+        link = waifuPic.url
+        imageExt = waifuPic.url.substringAfterLast('.')
+        // Toast.makeText(context, "Extension:$imageExt, Titulo:$title", Toast.LENGTH_SHORT).show()
+    }
+    private fun prepareDownloadIm(waifuIm: WaifuImItem) {
+        title = waifuIm.file
+        link = waifuIm.url
+        imageExt = waifuIm.extension
         // Toast.makeText(context, "Extension:$imageExt, Titulo:$title", Toast.LENGTH_SHORT).show()
     }
 
@@ -144,14 +153,6 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
 
     private fun requestDownload() {
         downloadImage(title!!, link!!, imageExt!!)
-    }
-
-    private fun doRequestPermission(isPermissionGranted:Boolean) {
-        if (isPermissionGranted) {
-            // Snackbar.make(binding.root, "Permission Granted!!", Snackbar.LENGTH_SHORT).show()
-        } else {
-            // Snackbar.make(binding.root, "Permission Denied!!", Snackbar.LENGTH_SHORT).show()
-        }
     }
 
     private fun downloadImage(title: String, link: String, fileType: String) {

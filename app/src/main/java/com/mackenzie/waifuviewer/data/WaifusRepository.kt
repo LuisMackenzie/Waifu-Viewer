@@ -1,21 +1,17 @@
 package com.mackenzie.waifuviewer.data
 
-import android.app.Activity
-import android.app.Application
-import androidx.lifecycle.Transformations.map
-import com.google.gson.JsonObject
+import android.util.Log
+import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import com.mackenzie.waifuviewer.App
-import com.mackenzie.waifuviewer.WaifuViewModel
-import com.mackenzie.waifuviewer.models.*
-import com.mackenzie.waifuviewer.models.RemoteConnection.serviceIm
 import com.mackenzie.waifuviewer.models.RemoteConnection.servicePics
-import com.mackenzie.waifuviewer.models.db.WaifuImDao
+import com.mackenzie.waifuviewer.models.Waifu
+import com.mackenzie.waifuviewer.models.datasource.WaifusLocalDataSource
+import com.mackenzie.waifuviewer.models.datasource.WaifusRemoteDataSource
 import com.mackenzie.waifuviewer.models.db.WaifuImItem
-import com.mackenzie.waifuviewer.models.db.WaifuPicDao
 import com.mackenzie.waifuviewer.models.db.WaifuPicItem
+import com.mackenzie.waifuviewer.ui.main.WaifuFragment
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
 class WaifusRepository(application: App) {
@@ -26,29 +22,24 @@ class WaifusRepository(application: App) {
     val savedWaifusPic = localDataSource.waifusPic
     val savedWaifusIm = localDataSource.waifusIm
 
-    suspend fun requestWaifusIm(isNsfw: Boolean, tag: String, isGif: Boolean, orientation: Boolean): WaifuResult = withContext(Dispatchers.IO) {
-        val waifusIm: WaifuResult
+    fun findImById(id: Int) = localDataSource.findImById(id)
+    fun findPicsById(id: Int) = localDataSource.findPicById(id)
+
+    suspend fun requestWaifusIm(isNsfw: Boolean, tag: String, isGif: Boolean, orientation: Boolean) = withContext(Dispatchers.IO) {
         if(localDataSource.isImEmpty()) {
             val waifus = remoteDataSource.getRandomWaifusIm(isNsfw, tag, isGif, getOrientation(orientation))
-            waifusIm = waifus
             localDataSource.saveIm(waifus.waifus.toLocalModelIm())
-            return@withContext waifus
         } else {
-            waifusIm = remoteDataSource.getRandomWaifusIm(isNsfw, tag, isGif, getOrientation(orientation))
-            return@withContext waifusIm
+            Log.e("Waifus Repository", "LocalDataSource IM IS NOT EMPTY")
         }
     }
 
-    suspend fun requestWaifusPics(isNsfw: String, tag: String): List<String> = withContext(Dispatchers.IO) {
-        val waifusPics: List<String>
+    suspend fun requestWaifusPics(isNsfw: String, tag: String) = withContext(Dispatchers.IO) {
         if(localDataSource.isPicsEmpty()) {
-            waifusPics = remoteDataSource.getRandomWaifusPics(isNsfw, tag)
-            // waifusPics = waifus
+            val waifusPics = remoteDataSource.getRandomWaifusPics(isNsfw, tag)
             localDataSource.savePics(waifusPics.toLocalModelPics())
-            return@withContext waifusPics
         } else {
-            waifusPics = remoteDataSource.getRandomWaifusPics(isNsfw, tag)
-            return@withContext waifusPics
+            Log.e("Waifus Repository", "LocalDataSource PICS IS NOT EMPTY")
         }
     }
 
@@ -61,89 +52,15 @@ class WaifusRepository(application: App) {
             return "PORTRAIT"
         }
     }
-
-    // private val apiKey = activity.getString(R.string.api_key)
-    // private val regionRepository = RegionRepository(activity)
-
-
-
-    // suspend fun getRandomWaifusGif() = serviceIm.getRandomWaifu(isGif = true)
-
-    // suspend fun getWaifuOnly() = serviceIm.getRandomWaifu(manyWaifus = false)
-
-    // suspend fun getWaifuOnlyNsfw() = serviceIm.getRandomWaifu(isNsfw = true, manyWaifus = false)
-
-    /*suspend fun getCustomRandomWaifus(isNsfw: Boolean,
-                                isGif: Boolean,
-                                orientation: Boolean) = serviceIm.getRandomWaifu(isNsfw, isGif, orientation)*/
-
-    /*suspend fun getCustomTagWaifus(isNsfw: Boolean,
-                                      isGif: Boolean, tag: String,
-                                      orientation: String) = serviceIm.getRandomWaifu(isNsfw, tag, isGif, orientation)*/
-
-    // suspend fun getWaifuInfo(waifuId: String) = serviceIm.getWaifu(waifuId)
-
-    /*suspend fun getEspecialWaifu(isNsfw: Boolean,
-                                 isGif: Boolean,
-                                 tag: String) = serviceIm.getEspecialWaifu(isNsfw, tag, isGif)*/
-
-
-    // suspend fun getCategories(categories: String) = serviceIm.getCategories()
-
-    /*suspend fun getWaifuPics(isNsfw: String, tag: String) {
-        val apiCall: Call<WaifuPicsResult> = RemoteConnection.servicePics.getWaifuPics(type = isNsfw, category = tag)
-        // apiCall.enqueue(this)
-
-    }*/
-
-
-}
-
-class WaifusLocalDataSource(private val PicDao: WaifuPicDao, private val ImDao: WaifuImDao) {
-
-    val waifusPic: Flow<List<WaifuPicItem>> = PicDao.getAllPic()
-    val waifusIm: Flow<List<WaifuImItem>> = ImDao.getAllIm()
-    fun isPicsEmpty() = PicDao.waifuCount() == 0
-    fun isImEmpty() = ImDao.waifuCount() == 0
-    fun savePics(waifus: List<WaifuPicItem>) {
-        PicDao.insertAllWaifus(waifus)
-    }
-    fun saveIm(waifus: List<WaifuImItem>) {
-        ImDao.insertAllWaifus(waifus)
-    }
-}
-
-class WaifusRemoteDataSource() {
-
-    suspend fun getRandomWaifusIm(isNsfw: Boolean, tag: String, isGif: Boolean, orientation: String) = serviceIm.getRandomWaifu(isNsfw, tag, isGif,  orientation)
-
-    suspend fun getRandomWaifusPics(isNsfw: String, tag: String) =
-        servicePics.getWaifuPics(type = isNsfw, category = tag, body = getJson(isNsfw, tag)).body()!!.images
-
-
-    private fun getJson(isNsfw: String, tag: String): JsonObject {
-        val jsonBody = JsonObject()
-        jsonBody.addProperty("classification", isNsfw)
-        jsonBody.addProperty("category", tag)
-        return jsonBody
-    }
-
-    /*suspend fun getRandomWaifusPics(isNsfw: String, tag: String) = WaifuManager().getWaifuPics(isNsfw = isNsfw, tag = tag) { waifuPicsResult ->
-        if (waifuPicsResult != null){
-
-        }
-    }*/
-
 }
 
 private fun List<String>.toLocalModelPics() : List<WaifuPicItem> = map { it.toLocalModelPics() }
 
-private fun String.toLocalModelPics(): WaifuPicItem = WaifuPicItem(id = 0,url = this)
+private fun String.toLocalModelPics(): WaifuPicItem = WaifuPicItem(url = this)
 
 private fun List<Waifu>.toLocalModelIm() : List<WaifuImItem>  = map { it.toLocalModelIm() }
 
 private fun Waifu.toLocalModelIm(): WaifuImItem = WaifuImItem(
-    id = imageId ?: 0,
     file = file,
     extension = extension,
     imageId = imageId,
