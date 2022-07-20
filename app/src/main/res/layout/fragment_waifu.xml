@@ -31,7 +31,7 @@
         android:id="@+id/tv_error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No waifu found :( Try again later"
+        android:text="@string/no_waifu_found"
         android:textSize="30sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"

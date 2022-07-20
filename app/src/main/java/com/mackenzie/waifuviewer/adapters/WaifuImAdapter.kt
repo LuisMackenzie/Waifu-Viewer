@@ -14,7 +14,7 @@ class WaifuImAdapter(private val listener: (WaifuImItem) -> Unit ): RecyclerView
 
     var waifuItemList: List<WaifuImItem> by basicDiffUtil(
         emptyList(),
-        areItemsTheSame = { old, new -> old.imageId == new.imageId }
+        areItemsTheSame = { old, new -> old == new }
     )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

@@ -3,10 +3,12 @@ package com.mackenzie.waifuviewer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.fragment.navArgs
 import com.mackenzie.waifuviewer.data.WaifusRepository
 import com.mackenzie.waifuviewer.models.db.WaifuImItem
 import com.mackenzie.waifuviewer.models.db.WaifuPicItem
 import com.mackenzie.waifuviewer.ui.common.Scope
+import com.mackenzie.waifuviewer.ui.main.WaifuFragmentArgs
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,18 +18,20 @@ class WaifuViewModel(private val waifusRepository: WaifusRepository): ViewModel(
 
     private val _state = MutableStateFlow(UiState())
     val state: StateFlow<UiState> = _state.asStateFlow()
+    private var mainServer: Boolean = false
     // private val _events = Channel<UiEvent> ()
     // val events = _events.receiveAsFlow()
 
     init {
         viewModelScope.launch {
-
-            _state.value = UiState(isLoading = true)
-            waifusRepository.savedWaifusPic.collect{ WaifuPics ->
-                _state.value = UiState(waifusSavedPics = WaifuPics)
-            }
-            waifusRepository.savedWaifusIm.collect{ WaifuIm ->
-                _state.value = UiState(waifusSavedIm = WaifuIm)
+            if (mainServer) {
+                waifusRepository.savedWaifusPic.collect{ WaifuPics ->
+                    _state.value = UiState(waifusSavedPics = WaifuPics)
+                }
+            } else {
+                waifusRepository.savedWaifusIm.collect{ WaifuIm ->
+                    _state.value = UiState(waifusSavedIm = WaifuIm)
+                }
             }
         }
     }

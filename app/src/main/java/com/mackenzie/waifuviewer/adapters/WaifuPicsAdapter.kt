@@ -24,8 +24,7 @@ class WaifuPicsAdapter(private val listener: (WaifuPicItem) -> Unit ): RecyclerV
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val waifuItem = waifuItemList[position]
-        holder.bind(waifuItem.url)
-
+        holder.bind(waifuItem)
         holder.itemView.setOnClickListener { listener(waifuItem) }
     }
 
@@ -38,9 +37,9 @@ class WaifuPicsAdapter(private val listener: (WaifuPicItem) -> Unit ): RecyclerV
     inner class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
 
         private val binding = ViewMediaItemBinding.bind(view)
-        fun bind(url: String) = with(binding) {
+        fun bind(waifu: WaifuPicItem) = with(binding) {
             // waifuTitle.text = url
-            waifuThumb.loadUrl(url)
+            waifuThumb.loadUrl(waifu.url)
         }
 
     }

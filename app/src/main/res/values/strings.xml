@@ -11,4 +11,5 @@
     <string name="portrait_default">Portrait</string>
     <string name="nsfw_content">NSFW</string>
     <string name="server_mode">Server Mode</string>
+    <string name="no_waifu_found">No waifu found :( Try again later</string>
 </resources>

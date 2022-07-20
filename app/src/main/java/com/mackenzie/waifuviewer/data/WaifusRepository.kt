@@ -27,8 +27,9 @@ class WaifusRepository(application: App) {
 
     suspend fun requestWaifusIm(isNsfw: Boolean, tag: String, isGif: Boolean, orientation: Boolean) = withContext(Dispatchers.IO) {
         if(localImDataSource.isImEmpty()) {
-            val waifus = remoteDataSource.getRandomWaifusIm(isNsfw, tag, isGif, getOrientation(orientation))
-            localImDataSource.saveIm(waifus.waifus.toLocalModelIm())
+            val waifusIm = remoteDataSource.getRandomWaifusIm(isNsfw, tag, isGif, getOrientation(orientation))
+            localImDataSource.saveIm(waifusIm.waifus.toLocalModelIm())
+            Log.e("Waifus Repository", "LocalDataSource IM IS EMPTY")
         } else {
             Log.e("Waifus Repository", "LocalDataSource IM IS NOT EMPTY")
         }
@@ -38,6 +39,7 @@ class WaifusRepository(application: App) {
         if(localPicDataSource.isPicsEmpty()) {
             val waifusPics = remoteDataSource.getRandomWaifusPics(isNsfw, tag)
             localPicDataSource.savePics(waifusPics.toLocalModelPics())
+            Log.e("Waifus Repository", "LocalDataSource PICS IS EMPTY")
         } else {
             Log.e("Waifus Repository", "LocalDataSource PICS IS NOT EMPTY")
         }

@@ -17,8 +17,6 @@
     android:layout_margin="4dp"
     app:cardCornerRadius="@dimen/default_corner">
 
-
-
     <RelativeLayout
         android:id="@+id/content"
         android:layout_width="match_parent"

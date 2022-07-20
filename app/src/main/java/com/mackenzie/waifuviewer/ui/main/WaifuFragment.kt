@@ -26,7 +26,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
     private val viewModel: WaifuViewModel by viewModels {
         WaifuViewModelFactory(WaifusRepository(requireActivity().app)) }
     private lateinit var mainState: MainState
-    private var mainServer: Boolean = false
+    public var mainServer: Boolean = false
     private val waifuImAdapter = WaifuImAdapter{mainState.onWaifuClicked(it)}
     private val waifuPicsAdapter = WaifuPicsAdapter{ mainState.onWaifuPicsClicked(it) }
 
@@ -110,6 +110,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         recycler.visibility = if(state.isLoading) View.GONE else View.VISIBLE
         ivError.visibility = if(state.isError) View.VISIBLE else View.GONE
         tvError.visibility = if(state.isError) View.VISIBLE else View.GONE
+
         /*state.waifusIm?.let { randomWaifus ->
             if (waifuAdapter.waifuItemList.isEmpty()) {
                 waifuAdapter.waifuItemList = randomWaifus.waifus
@@ -122,25 +123,31 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
                 Toast.makeText(requireContext(), "Servidor WaifuPics", Toast.LENGTH_LONG).show()
             }
         }*/
-        /*state.waifusSavedPics?.let { randomWaifus ->
-            if (waifuPicsAdapter.waifuItemList.isEmpty()) {
-                waifuPicsAdapter.waifuItemList = randomWaifus
-                Toast.makeText(requireContext(), "Local WaifuPics", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(requireContext(), "No Waifus", Toast.LENGTH_SHORT).show()
+        if (mainServer) {
+            state.waifusSavedPics?.let { savedPicWaifus ->
+                if (waifuPicsAdapter.waifuItemList.isEmpty()) {
+                    // waifuPicsAdapter.waifuItemList = savedPicWaifus
+                    waifuPicsAdapter.submitList(savedPicWaifus)
+                    Toast.makeText(requireContext(), "Local WaifuPics", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(requireContext(), "No Waifus", Toast.LENGTH_SHORT).show()
+                }
             }
-        }*/
-        state.waifusSavedIm?.let { randomWaifus ->
-            if (waifuImAdapter.waifuItemList.isEmpty()) {
-                waifuImAdapter.waifuItemList = randomWaifus
-                Toast.makeText(requireContext(), "Local WaifuIm", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(requireContext(), "No Waifus", Toast.LENGTH_SHORT).show()
+        } else {
+            state.waifusSavedIm?.let { savedImWaifus ->
+                if (waifuImAdapter.waifuItemList.isEmpty()) {
+                    // waifuImAdapter.waifuItemList = savedImWaifus
+                    waifuImAdapter.submitList(savedImWaifus)
+                    Toast.makeText(requireContext(), "Local WaifuIm", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(requireContext(), "No Waifus", Toast.LENGTH_SHORT).show()
+                }
             }
         }
+
     }
 
-    // Este metodo rebe un estado en un flow y devuelve algo
+    // Este metodo recibe un estado en un flow y devuelve algo
     private fun <T, U> Flow<T>.diff(mapf: (T) -> U, body: (U) -> Unit) {
         viewLifecycleOwner.launchAndCollect(
             flow = map(mapf).distinctUntilChanged(),
