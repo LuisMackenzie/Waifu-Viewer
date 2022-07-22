@@ -5,7 +5,7 @@ class MainServer() {
     val server: Boolean
         get() = _server
 
-    fun setServer(server: Boolean) {
-        _server = server
+    fun setServer(value: Boolean) {
+        _server = value
     }
 }

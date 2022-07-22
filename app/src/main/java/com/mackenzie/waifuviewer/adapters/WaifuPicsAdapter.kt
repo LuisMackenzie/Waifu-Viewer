@@ -31,7 +31,7 @@ class WaifuPicsAdapter(private val listener: (WaifuPicItem) -> Unit ): RecyclerV
     override fun getItemCount(): Int = waifuItemList.size
 
     fun submitList(waifus: List<WaifuPicItem>) {
-        waifuItemList += waifus
+        waifuItemList = waifus
     }
 
     inner class ViewHolder(view: View): RecyclerView.ViewHolder(view) {

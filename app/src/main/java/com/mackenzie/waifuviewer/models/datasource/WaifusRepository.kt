@@ -55,7 +55,8 @@ class WaifusRepository(application: App) {
     }
 
     suspend fun requestNewWaifusPics(isNsfw: String, tag: String) = withContext(Dispatchers.IO) {
-        remoteDataSource.getRandomWaifusPics(isNsfw, tag)
+        val waifusPics = remoteDataSource.getRandomWaifusPics(isNsfw, tag)
+        localPicDataSource.savePics(waifusPics.toLocalModelPics())
     }
 
     suspend fun requestOnlyWaifuPic() = servicePics.getOnlyWaifuPic()

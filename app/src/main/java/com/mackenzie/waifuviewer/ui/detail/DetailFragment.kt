@@ -1,6 +1,7 @@
 package com.mackenzie.waifuviewer.ui.detail
 
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -20,7 +21,10 @@ import com.mackenzie.waifuviewer.models.db.WaifuImItem
 import com.mackenzie.waifuviewer.models.db.WaifuPicItem
 import com.mackenzie.waifuviewer.ui.common.MainServer
 import com.mackenzie.waifuviewer.ui.common.app
+import com.mackenzie.waifuviewer.ui.common.launchAndCollect
+import com.mackenzie.waifuviewer.ui.common.loadUrl
 import com.mackenzie.waifuviewer.ui.main.MainState
+import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_SERVER_SELECTED
 import com.mackenzie.waifuviewer.ui.main.buildMainState
 import com.mackenzie.waifuviewer.utils.SaveImage
 import kotlinx.coroutines.Dispatchers.IO
@@ -33,8 +37,10 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
 
     private val safeArgs: DetailFragmentArgs by navArgs()
 
-    private val viewModel: DetailViewModel by viewModels {
-        DetailViewModelFactory(safeArgs.waifuId, WaifusRepository(requireActivity().app)) }
+    private val picsViewModel: DetailPicsViewModel by viewModels {
+        DetailPicsViewModelFactory(safeArgs.waifuId, WaifusRepository(requireActivity().app)) }
+    private val imViewModel: DetailImViewModel by viewModels {
+        DetailImViewModelFactory(safeArgs.waifuId, WaifusRepository(requireActivity().app)) }
     private lateinit var mainState: MainState
     private var mainServer = MainServer()
     private var title: String? = null
@@ -51,51 +57,76 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
         mainState = buildMainState()
         val binding = FragmentDetailBinding.bind(view)
         binding.setUpElements()
+        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
+        val server = sharedPref.getBoolean(IS_SERVER_SELECTED, false)
+        Toast.makeText(context, "server == $server", Toast.LENGTH_SHORT).show()
+        mainServer.setServer(server)
 
         // viewModel.state.observe(this, ::updateUI)
+        if (mainServer.server) {
+            binding.launchPicsCollect()
+        } else {
+            binding.launchImCollect()
+        }
+
+    }
+
+    private fun FragmentDetailBinding.launchPicsCollect() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.state.collect {
-                    binding.updateUI(it)
+                picsViewModel.state.collect {
+                    withPicsUpdateUI(it)
+                    Toast.makeText(context, "Aqui esta el flujo PICS ${mainServer.server}", Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
 
-    private fun FragmentDetailBinding.updateUI(state: DetailViewModel.UiState) {
+    private fun FragmentDetailBinding.launchImCollect() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                imViewModel.state.collect {
+                    withImUpdateUI(it)
+                    Toast.makeText(context, "Aqui esta el flujo IM ${mainServer.server}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private fun FragmentDetailBinding.withPicsUpdateUI(state: DetailPicsViewModel.UiState) {
 
         pbLoading.visibility = View.GONE
-        if(mainServer.server) {
-            state.idPic?.let {
+
+            /*state.idPic?.let {
                 // tvDetail.text = it.imageId.toString()
-                // tvDetail.text = ""
-                Toast.makeText(context, "Aqui esta pasando algo fuera del flujo PICS", Toast.LENGTH_SHORT).show()
-            }
-            /*state.waifuPic?.let {
+                tvDetail.text = ""
+                Toast.makeText(context, "Aqui esta el flujo PICS", Toast.LENGTH_SHORT).show()
+            }*/
+            state.waifuPic?.let {
                 tvDetail.text = ""
                 ivDetail.loadUrl(it.url)
                 prepareDownloadPic(it)
-            }*/
-        } else {
-            state.idIm?.let {
-                // tvDetail.text = it.imageId.toString()
-                tvDetail.text = ""
-                Toast.makeText(context, "Aqui esta pasando algo fuera del flujo IM", Toast.LENGTH_SHORT).show()
             }
-            /*state.waifuIm?.let {
-                tvDetail.text = it.imageId.toString()
-                ivDetail.loadUrl(it.url)
-                prepareDownloadIm(it)
-            }*/
+    }
+
+    private fun FragmentDetailBinding.withImUpdateUI(state: DetailImViewModel.UiState) {
+
+        pbLoading.visibility = View.GONE
+
+        /*state.idIm?.let {
+            // tvDetail.text = it.imageId.toString()
+            tvDetail.text = ""
+            Toast.makeText(context, "Aqui esta el flujo IM", Toast.LENGTH_SHORT).show()
+        }*/
+        state.waifuIm?.let {
+            tvDetail.text = it.imageId.toString()
+            ivDetail.loadUrl(it.url)
+            prepareDownloadIm(it)
         }
-
-
-
-
-
         // val dominantColor = waifu.dominant_color
         // prepareDownload(waifu)
     }
+
 
 
 
@@ -113,37 +144,10 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
     }
 
     private fun RequestPermision() {
-
-
-        // private val storagePermissionChecker = PermissionChecker(, Manifest.permission.ACCESS_COARSE_LOCATION)
         viewLifecycleOwner.lifecycleScope.launch {
-            // storagePermissionRequester.request()
             mainState.requestPermissionLauncher {isWritePermissionGranted = it}
-            // requestDownload()
-            /*if (isWritePermissionGranted == true) {
-                requestDownload()
-            }*/
         }
 
-
-
-        /*when {
-            ContextCompat.checkSelfPermission(requireContext(),
-                Manifest.permission.READ_EXTERNAL_STORAGE)
-                    == PackageManager.PERMISSION_GRANTED -> {
-                if (isWritePermissionGranted == null) {
-                    isWritePermissionGranted = true
-                }
-            }
-            else -> {
-                requestPermissionsLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                if (isWritePermissionGranted == null) {
-                    isWritePermissionGranted = true
-                }
-                // Toast.makeText(applicationContext, "Vuelve a intentar la descarga", Toast.LENGTH_SHORT).show()
-
-            }
-        }*/
     }
 
     private fun FragmentDetailBinding.setUpElements() {

@@ -3,40 +3,27 @@ package com.mackenzie.waifuviewer.ui.detail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.mackenzie.waifuviewer.models.datasource.WaifusRepository
 import com.mackenzie.waifuviewer.models.Waifu
-import com.mackenzie.waifuviewer.models.db.WaifuImItem
+import com.mackenzie.waifuviewer.models.datasource.WaifusRepository
 import com.mackenzie.waifuviewer.models.db.WaifuPicItem
-import com.mackenzie.waifuviewer.ui.common.MainServer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class DetailViewModel (private val waifuId: Int, private val repository: WaifusRepository): ViewModel() {
+class DetailPicsViewModel (private val waifuId: Int, private val repository: WaifusRepository): ViewModel() {
 
     private val _state = MutableStateFlow(UiState(waifuId))
     val state: StateFlow<UiState> = _state.asStateFlow()
-    private var mainServer = MainServer()
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            if (mainServer.server) {
-                repository.findPicsById(waifuId).collect {
-                    _state.value = UiState(idPic = it.id, waifuPic = it)
-                }
-            } else {
-                repository.findImById(waifuId).collect {
-                    _state.value = UiState(idIm = it.id,waifuIm = it)
-                }
+            repository.findPicsById(waifuId).collect {
+                _state.value = UiState(waifuPic = it)
+                // _state.value = UiState(idPic = it.id)
             }
-
-
-
         }
-        // waifu = state.value.waifu
-        // loadWaifu(waifu)
     }
 
 
@@ -103,16 +90,14 @@ class DetailViewModel (private val waifuId: Int, private val repository: WaifusR
 
     data class UiState(
         val idPic: Int? = null,
-        val idIm: Int? = null,
         val waifuPic: WaifuPicItem? = null,
-        val waifuIm: WaifuImItem? = null,
         val requestStoragePermission: Boolean = true)
 
 }
 
 @Suppress("UNCHECKED_CAST")
-class DetailViewModelFactory(private val waifuId: Int, private val repository: WaifusRepository) : ViewModelProvider.Factory {
+class DetailPicsViewModelFactory(private val waifuId: Int, private val repository: WaifusRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return DetailViewModel(waifuId, repository) as T
+        return DetailPicsViewModel(waifuId, repository) as T
     }
 }

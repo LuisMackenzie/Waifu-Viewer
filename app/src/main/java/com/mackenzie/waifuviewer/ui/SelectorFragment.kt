@@ -1,6 +1,7 @@
 package com.mackenzie.waifuviewer.ui
 
 import android.Manifest
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
@@ -147,9 +148,14 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
         if (!selectedTag.isEmpty()) {
             bun.putString(CATEGORY_TAG, selectedTag)
         }
+
+        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
+        with (sharedPref.edit()) {
+            putBoolean(IS_SERVER_SELECTED, sServer.isChecked)
+            apply()
+        }
+
         mainState.onButtonGetWaifuClicked(bun)
-        // val action = SelectorFragmentDirections.actionSelectorToWaifu(bun)
-        // findNavController().navigate(action)
 
     }
 
