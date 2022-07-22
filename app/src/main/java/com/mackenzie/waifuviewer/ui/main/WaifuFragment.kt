@@ -42,9 +42,6 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
             }
         }
 
-        // loadCustomResult()
-
-
         viewLifecycleOwner.launchAndCollect(viewModel.state) { binding.updateUI(it) }
 
         /*with(viewModel.state) {
