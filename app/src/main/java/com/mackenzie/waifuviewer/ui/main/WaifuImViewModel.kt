@@ -27,7 +27,7 @@ class WaifuImViewModel(private val waifusRepository: WaifusRepository): ViewMode
     fun onImReady(isNsfw: Boolean, isGif: Boolean, tag: String, orientation: Boolean) {
 
         viewModelScope.launch {
-            _state.value = UiState(isLoading = true)
+            // _state.value = UiState(isLoading = true)
             // val waifus: WaifuResult
             if (tag == "all") {
                 if (isNsfw) {

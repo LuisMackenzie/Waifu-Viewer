@@ -27,7 +27,7 @@ class WaifuPicsViewModel(private val waifusRepository: WaifusRepository): ViewMo
     }
 
     fun onPicsReady(isNsfw: Boolean, tag: String) {
-            _state.value = UiState(isLoading = true)
+            // _state.value = UiState(isLoading = true)
             if (isNsfw) {
                 waifusGetter("nsfw", tag)
             } else {

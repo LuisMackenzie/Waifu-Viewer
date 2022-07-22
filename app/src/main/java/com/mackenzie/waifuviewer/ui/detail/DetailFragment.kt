@@ -59,7 +59,6 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
         binding.setUpElements()
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
         val server = sharedPref.getBoolean(IS_SERVER_SELECTED, false)
-        Toast.makeText(context, "server == $server", Toast.LENGTH_SHORT).show()
         mainServer.setServer(server)
 
         // viewModel.state.observe(this, ::updateUI)
@@ -76,7 +75,7 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 picsViewModel.state.collect {
                     withPicsUpdateUI(it)
-                    Toast.makeText(context, "Aqui esta el flujo PICS ${mainServer.server}", Toast.LENGTH_SHORT).show()
+                    // Toast.makeText(context, "Aqui esta el flujo PICS ${mainServer.server}", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -87,7 +86,7 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 imViewModel.state.collect {
                     withImUpdateUI(it)
-                    Toast.makeText(context, "Aqui esta el flujo IM ${mainServer.server}", Toast.LENGTH_SHORT).show()
+                    // Toast.makeText(context, "Aqui esta el flujo IM ${mainServer.server}", Toast.LENGTH_SHORT).show()
                 }
             }
         }
