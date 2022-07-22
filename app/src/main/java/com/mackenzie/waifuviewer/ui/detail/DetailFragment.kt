@@ -14,12 +14,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import com.mackenzie.waifuviewer.R
-import com.mackenzie.waifuviewer.data.WaifusRepository
+import com.mackenzie.waifuviewer.models.datasource.WaifusRepository
 import com.mackenzie.waifuviewer.databinding.FragmentDetailBinding
 import com.mackenzie.waifuviewer.models.db.WaifuImItem
 import com.mackenzie.waifuviewer.models.db.WaifuPicItem
+import com.mackenzie.waifuviewer.ui.common.MainServer
 import com.mackenzie.waifuviewer.ui.common.app
-import com.mackenzie.waifuviewer.ui.common.loadUrl
 import com.mackenzie.waifuviewer.ui.main.MainState
 import com.mackenzie.waifuviewer.ui.main.buildMainState
 import com.mackenzie.waifuviewer.utils.SaveImage
@@ -36,6 +36,7 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
     private val viewModel: DetailViewModel by viewModels {
         DetailViewModelFactory(safeArgs.waifuId, WaifusRepository(requireActivity().app)) }
     private lateinit var mainState: MainState
+    private var mainServer = MainServer()
     private var title: String? = null
     private var link: String? = null
     private var imageExt:String? = null
@@ -59,34 +60,38 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
                 }
             }
         }
-
     }
-
-
 
     private fun FragmentDetailBinding.updateUI(state: DetailViewModel.UiState) {
 
         pbLoading.visibility = View.GONE
-        state.idPic?.let {
-            // tvDetail.text = it.imageId.toString()
-            tvDetail.text = ""
-            Toast.makeText(context, "Aqui esta pasando algo fuera del flujo PICS", Toast.LENGTH_SHORT).show()
+        if(mainServer.server) {
+            state.idPic?.let {
+                // tvDetail.text = it.imageId.toString()
+                // tvDetail.text = ""
+                Toast.makeText(context, "Aqui esta pasando algo fuera del flujo PICS", Toast.LENGTH_SHORT).show()
+            }
+            /*state.waifuPic?.let {
+                tvDetail.text = ""
+                ivDetail.loadUrl(it.url)
+                prepareDownloadPic(it)
+            }*/
+        } else {
+            state.idIm?.let {
+                // tvDetail.text = it.imageId.toString()
+                tvDetail.text = ""
+                Toast.makeText(context, "Aqui esta pasando algo fuera del flujo IM", Toast.LENGTH_SHORT).show()
+            }
+            /*state.waifuIm?.let {
+                tvDetail.text = it.imageId.toString()
+                ivDetail.loadUrl(it.url)
+                prepareDownloadIm(it)
+            }*/
         }
-        state.idIm?.let {
-            // tvDetail.text = it.imageId.toString()
-            tvDetail.text = ""
-            Toast.makeText(context, "Aqui esta pasando algo fuera del flujo IM", Toast.LENGTH_SHORT).show()
-        }
-        state.waifuPic?.let {
-            tvDetail.text = ""
-            ivDetail.loadUrl(it.url)
-            prepareDownloadPic(it)
-        }
-        state.waifuIm?.let {
-            tvDetail.text = ""
-            ivDetail.loadUrl(it.url)
-            prepareDownloadIm(it)
-        }
+
+
+
+
 
         // val dominantColor = waifu.dominant_color
         // prepareDownload(waifu)

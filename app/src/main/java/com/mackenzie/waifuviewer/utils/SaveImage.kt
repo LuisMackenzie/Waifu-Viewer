@@ -39,15 +39,6 @@ class SaveImage {
             val uri = context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
             imageOutStream = context.contentResolver.openOutputStream(uri!!)
 
-            /*val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
-                addCategory(Intent.CATEGORY_OPENABLE)
-                // setDataAndType(uri, "image/jpeg")
-                putExtra(Intent.EXTRA_TITLE, "Waifu.jpg")
-                putExtra("mimeType", "image/jpeg")
-                putExtra(DocumentsContract.EXTRA_INITIAL_URI, uri)
-            }*/
-            // context.startActivity(Intent.createChooser(intent, "Set as:"))
-
         } else {
             val directory =
                 File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).absolutePath + File.separator + "Waifus")

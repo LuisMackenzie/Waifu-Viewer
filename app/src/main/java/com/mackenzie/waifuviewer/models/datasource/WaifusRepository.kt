@@ -1,4 +1,4 @@
-package com.mackenzie.waifuviewer.data
+package com.mackenzie.waifuviewer.models.datasource
 
 import android.util.Log
 import com.mackenzie.waifuviewer.App
@@ -29,10 +29,19 @@ class WaifusRepository(application: App) {
         if(localImDataSource.isImEmpty()) {
             val waifusIm = remoteDataSource.getRandomWaifusIm(isNsfw, tag, isGif, getOrientation(orientation))
             localImDataSource.saveIm(waifusIm.waifus.toLocalModelIm())
-            Log.e("Waifus Repository", "LocalDataSource IM IS EMPTY")
+            Log.e("Waifus Repository", "LocalDataSource IM IS EMPTY    TAG = $tag")
         } else {
-            Log.e("Waifus Repository", "LocalDataSource IM IS NOT EMPTY")
+            // remoteDataSource.getRandomWaifusIm(isNsfw, tag, isGif, getOrientation(orientation))
+            Log.e("Waifus Repository", "LocalDataSource IM IS NOT EMPTY    TAG = $tag")
         }
+
+        // val waifusIm = remoteDataSource.getRandomWaifusIm(isNsfw, tag, isGif, getOrientation(orientation))
+        // localImDataSource.saveIm(waifusIm.waifus.toLocalModelIm())
+    }
+
+    suspend fun requestNewWaifusIm(isNsfw: Boolean, tag: String, isGif: Boolean, orientation: Boolean) = withContext(Dispatchers.IO) {
+        val waifusIm = remoteDataSource.getRandomWaifusIm(isNsfw, tag, isGif, getOrientation(orientation))
+        localImDataSource.saveIm(waifusIm.waifus.toLocalModelIm())
     }
 
     suspend fun requestWaifusPics(isNsfw: String, tag: String) = withContext(Dispatchers.IO) {
@@ -43,6 +52,10 @@ class WaifusRepository(application: App) {
         } else {
             Log.e("Waifus Repository", "LocalDataSource PICS IS NOT EMPTY")
         }
+    }
+
+    suspend fun requestNewWaifusPics(isNsfw: String, tag: String) = withContext(Dispatchers.IO) {
+        remoteDataSource.getRandomWaifusPics(isNsfw, tag)
     }
 
     suspend fun requestOnlyWaifuPic() = servicePics.getOnlyWaifuPic()
@@ -74,5 +87,5 @@ private fun Waifu.toLocalModelIm(): WaifuImItem = WaifuImItem(
     url = url,
     width = width,
     height = height,
-    favourites = favourites ?: 0
+    favourites = favourites
 )

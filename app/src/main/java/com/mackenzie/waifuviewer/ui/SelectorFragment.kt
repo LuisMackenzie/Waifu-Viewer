@@ -11,9 +11,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.mackenzie.waifuviewer.R
-import com.mackenzie.waifuviewer.data.WaifusRepository
 import com.mackenzie.waifuviewer.databinding.FragmentSelectorBinding
 import com.mackenzie.waifuviewer.models.WaifuPic
+import com.mackenzie.waifuviewer.models.datasource.WaifusRepository
 import com.mackenzie.waifuviewer.ui.common.PermissionRequester
 import com.mackenzie.waifuviewer.ui.common.app
 import com.mackenzie.waifuviewer.ui.common.launchAndCollect
@@ -28,7 +28,9 @@ import kotlinx.coroutines.launch
 
 class SelectorFragment : Fragment(R.layout.fragment_selector) {
 
-    private val viewModel: SelectorViewModel by viewModels { SelectorViewModelFactory(WaifusRepository(requireActivity().app)) }
+    private val viewModel: SelectorViewModel by viewModels { SelectorViewModelFactory(
+        WaifusRepository(requireActivity().app)
+    ) }
     private lateinit var binding: FragmentSelectorBinding
     private var backgroudImage: ImageView? = null
     private lateinit var mainState: MainState

@@ -1,7 +1,7 @@
 package com.mackenzie.waifuviewer.ui
 
 import androidx.lifecycle.*
-import com.mackenzie.waifuviewer.data.WaifusRepository
+import com.mackenzie.waifuviewer.models.datasource.WaifusRepository
 import com.mackenzie.waifuviewer.models.WaifuPic
 import com.mackenzie.waifuviewer.models.WaifuResult
 import com.mackenzie.waifuviewer.ui.common.Scope

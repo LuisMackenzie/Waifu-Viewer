@@ -3,30 +3,37 @@ package com.mackenzie.waifuviewer.ui.detail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.mackenzie.waifuviewer.data.WaifusRepository
+import com.mackenzie.waifuviewer.models.datasource.WaifusRepository
 import com.mackenzie.waifuviewer.models.Waifu
 import com.mackenzie.waifuviewer.models.db.WaifuImItem
 import com.mackenzie.waifuviewer.models.db.WaifuPicItem
-import com.mackenzie.waifuviewer.ui.common.Scope
+import com.mackenzie.waifuviewer.ui.common.MainServer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class DetailViewModel (waifuId: Int, private val repository: WaifusRepository): ViewModel() {
+class DetailViewModel (private val waifuId: Int, private val repository: WaifusRepository): ViewModel() {
 
     private val _state = MutableStateFlow(UiState(waifuId))
     val state: StateFlow<UiState> = _state.asStateFlow()
+    private var mainServer = MainServer()
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.findPicsById(waifuId).collect {
-                _state.value = UiState(waifuPic = it)
+            if (mainServer.server) {
+                repository.findPicsById(waifuId).collect {
+                    _state.value = UiState(idPic = it.id, waifuPic = it)
+                }
+            } else {
+                repository.findImById(waifuId).collect {
+                    _state.value = UiState(idIm = it.id,waifuIm = it)
+                }
             }
-            repository.findImById(waifuId).collect {
-                _state.value = UiState(waifuIm = it)
-            }
+
+
+
         }
         // waifu = state.value.waifu
         // loadWaifu(waifu)
