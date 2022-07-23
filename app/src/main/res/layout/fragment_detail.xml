@@ -51,6 +51,30 @@
         tools:text="Waifu Name ID" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fav_pics"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:layout_margin="32dp"
+        android:clickable="true"
+        android:visibility="gone"
+        android:src="@{waifuPic.favorite ? @drawable/ic_favorite_on : @drawable/ic_favorite_off}"
+        android:contentDescription="@string/download_image"
+        android:focusable="true" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fav_im"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:layout_margin="32dp"
+        android:clickable="true"
+        android:visibility="gone"
+        android:src="@{waifuIm.favorite ? @drawable/ic_favorite_on : @drawable/ic_favorite_off}"
+        android:contentDescription="@string/download_image"
+        android:focusable="true" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

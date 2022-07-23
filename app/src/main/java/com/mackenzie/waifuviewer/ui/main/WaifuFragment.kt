@@ -13,7 +13,6 @@ import com.mackenzie.waifuviewer.adapters.WaifuImAdapter
 import com.mackenzie.waifuviewer.adapters.WaifuPicsAdapter
 import com.mackenzie.waifuviewer.models.datasource.WaifusRepository
 import com.mackenzie.waifuviewer.databinding.FragmentWaifuBinding
-import com.mackenzie.waifuviewer.ui.common.MainServer
 import com.mackenzie.waifuviewer.ui.common.app
 import com.mackenzie.waifuviewer.ui.common.launchAndCollect
 import com.mackenzie.waifuviewer.ui.common.visible
@@ -39,8 +38,6 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         mainState = buildMainState()
         mainServer = safeArgs.bundleInfo.getBoolean(IS_SERVER_SELECTED)
         bun = safeArgs.bundleInfo
-        // val serverSelected = safeArgs.bundleInfo.getBoolean(IS_SERVER_SELECTED)
-        // mainServer.setServer(serverSelected)
         val binding = FragmentWaifuBinding.bind(view).apply {
             if (mainServer) {
                 recycler.adapter = waifuPicsAdapter
@@ -55,18 +52,8 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
             viewLifecycleOwner.launchAndCollect(imViewModel.state) { binding.withImUpdateUI(it) }
         }
 
-
-
-
-        /*with(viewModel.state) {
-            diff({it.waifusIm}, {waifuAdapter.waifuItemList = if (it != null) it.waifus else emptyList()})
-            // diff({it.waifusPics}, {waifuPicsAdapter.waifuItemList = if (it != null) it else emptyList()})
-            diff({it.isLoading}, {binding.progress.visible = isVisible})
-        }*/
-
         loadCustomResult()
 
-        //  Toast.makeText(requireContext(), "${mainServer}", Toast.LENGTH_SHORT).show()
     }
 
     private fun loadCustomResult() {

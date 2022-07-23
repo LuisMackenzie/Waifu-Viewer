@@ -62,11 +62,21 @@ class WaifusRepository(application: App) {
             return "PORTRAIT"
         }
     }
+
+    suspend fun switchPicsFavorite(picsItem: WaifuPicItem) {
+        val updatedWaifu = picsItem.copy(isFavorite = !picsItem.isFavorite)
+        localPicDataSource.savePics(listOf(updatedWaifu))
+    }
+
+    suspend fun switchImFavorite(imItem: WaifuImItem) {
+        val updatedWaifu = imItem.copy(isFavorite = !imItem.isFavorite)
+        localImDataSource.saveIm(listOf(updatedWaifu))
+    }
 }
 
 private fun List<String>.toLocalModelPics() : List<WaifuPicItem> = map { it.toLocalModelPics() }
 
-private fun String.toLocalModelPics(): WaifuPicItem = WaifuPicItem(url = this)
+private fun String.toLocalModelPics(): WaifuPicItem = WaifuPicItem(url = this, isFavorite = false)
 
 private fun List<Waifu>.toLocalModelIm() : List<WaifuImItem>  = map { it.toLocalModelIm() }
 
@@ -75,6 +85,7 @@ private fun Waifu.toLocalModelIm(): WaifuImItem = WaifuImItem(
     extension = extension,
     imageId = imageId,
     isNsfw = isNsfw,
+    favourites = favourites,
     previewUrl = previewUrl,
     source = source,
     uploadedAt = uploadedAt,
@@ -82,5 +93,5 @@ private fun Waifu.toLocalModelIm(): WaifuImItem = WaifuImItem(
     url = url,
     width = width,
     height = height,
-    favourites = favourites
+    isFavorite = false
 )

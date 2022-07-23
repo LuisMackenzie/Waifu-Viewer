@@ -13,22 +13,24 @@ import kotlinx.coroutines.launch
 
 class DetailImViewModel (private val waifuId: Int, private val repository: WaifusRepository): ViewModel() {
 
-    private val _state = MutableStateFlow(UiState(waifuId))
+    private val _state = MutableStateFlow(UiState())
     val state: StateFlow<UiState> = _state.asStateFlow()
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
             repository.findImById(waifuId).collect {
                 _state.value = UiState(waifuIm = it)
-                // _state.value = UiState(idIm = it.id, waifuIm = it)
             }
         }
     }
 
-    data class UiState(
-        val idIm: Int? = null,
-        val waifuIm: WaifuImItem? = null,
-        val requestStoragePermission: Boolean = true)
+    fun onFavoriteClicked() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _state.value.waifuIm?.let { repository.switchImFavorite(it) }
+        }
+    }
+
+    data class UiState(val waifuIm: WaifuImItem? = null)
 
 }
 

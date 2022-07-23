@@ -19,10 +19,9 @@ import com.mackenzie.waifuviewer.models.datasource.WaifusRepository
 import com.mackenzie.waifuviewer.databinding.FragmentDetailBinding
 import com.mackenzie.waifuviewer.models.db.WaifuImItem
 import com.mackenzie.waifuviewer.models.db.WaifuPicItem
-import com.mackenzie.waifuviewer.ui.common.MainServer
 import com.mackenzie.waifuviewer.ui.common.app
-import com.mackenzie.waifuviewer.ui.common.launchAndCollect
 import com.mackenzie.waifuviewer.ui.common.loadUrl
+import com.mackenzie.waifuviewer.ui.common.visible
 import com.mackenzie.waifuviewer.ui.main.MainState
 import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_SERVER_SELECTED
 import com.mackenzie.waifuviewer.ui.main.buildMainState
@@ -47,25 +46,14 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
     private var link: String? = null
     private var imageExt:String? = null
     private var isWritePermissionGranted: Boolean = false
-    // private val storagePermissionRequester = PermissionRequester(this , Manifest.permission.WRITE_EXTERNAL_STORAGE)
-    /*private val requestPermissionsLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
-        doRequestPermission(isGranted)
-    }*/
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mainState = buildMainState()
         val binding = FragmentDetailBinding.bind(view)
-        binding.setUpElements()
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
         mainServer = sharedPref.getBoolean(IS_SERVER_SELECTED, false)
-
-        // viewModel.state.observe(this, ::updateUI)
-        if (mainServer) {
-            binding.launchPicsCollect()
-        } else {
-            binding.launchImCollect()
-        }
+        binding.setUpElements()
 
     }
 
@@ -74,7 +62,6 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 picsViewModel.state.collect {
                     withPicsUpdateUI(it)
-                    Toast.makeText(context, "Aqui esta el flujo PICS $mainServer", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -85,7 +72,6 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 imViewModel.state.collect {
                     withImUpdateUI(it)
-                    Toast.makeText(context, "Aqui esta el flujo IM $mainServer", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -94,68 +80,69 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
     private fun FragmentDetailBinding.withPicsUpdateUI(state: DetailPicsViewModel.UiState) {
 
         pbLoading.visibility = View.GONE
-
+        state.waifuPic?.let {
+            tvDetail.text = ""
+            ivDetail.loadUrl(it.url)
+            prepareDownloadPic(it)
+        }
             /*state.idPic?.let {
                 // tvDetail.text = it.imageId.toString()
                 tvDetail.text = ""
                 Toast.makeText(context, "Aqui esta el flujo PICS", Toast.LENGTH_SHORT).show()
             }*/
-            state.waifuPic?.let {
-                tvDetail.text = ""
-                ivDetail.loadUrl(it.url)
-                prepareDownloadPic(it)
-            }
     }
 
     private fun FragmentDetailBinding.withImUpdateUI(state: DetailImViewModel.UiState) {
 
         pbLoading.visibility = View.GONE
-
-        /*state.idIm?.let {
-            // tvDetail.text = it.imageId.toString()
-            tvDetail.text = ""
-            Toast.makeText(context, "Aqui esta el flujo IM", Toast.LENGTH_SHORT).show()
-        }*/
         state.waifuIm?.let {
             tvDetail.text = it.imageId.toString()
             ivDetail.loadUrl(it.url)
             prepareDownloadIm(it)
         }
-        // Toast.makeText(context, "Aqui esta el flujo IM $mainServer", Toast.LENGTH_SHORT).show()
-        // val dominantColor = waifu.dominant_color
-        // prepareDownload(waifu)
+        /*state.idIm?.let {
+            // tvDetail.text = it.imageId.toString()
+            tvDetail.text = ""
+            Toast.makeText(context, "Aqui esta el flujo IM", Toast.LENGTH_SHORT).show()
+        }*/
     }
-
-
-
 
     private fun prepareDownloadPic(waifuPic: WaifuPicItem) {
         title = waifuPic.url.substringAfterLast('/')
         link = waifuPic.url
         imageExt = waifuPic.url.substringAfterLast('.')
-        // Toast.makeText(context, "Extension:$imageExt, Titulo:$title", Toast.LENGTH_SHORT).show()
     }
+
     private fun prepareDownloadIm(waifuIm: WaifuImItem) {
         title = waifuIm.file
         link = waifuIm.url
         imageExt = waifuIm.extension
-        // Toast.makeText(context, "Extension:$imageExt, Titulo:$title", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun FragmentDetailBinding.setUpElements() {
+        if (mainServer) {
+            launchPicsCollect()
+            favPics.visible = true
+            favIm.visible = false
+        } else {
+            launchImCollect()
+            favPics.visible = false
+            favIm.visible = true
+        }
+
+        favIm.setOnClickListener { imViewModel.onFavoriteClicked() }
+        favPics.setOnClickListener { picsViewModel.onFavoriteClicked() }
+        fab.setOnClickListener {
+            if (isWritePermissionGranted != true ) {
+                RequestPermision()
+            }
+            requestDownload()
+        }
     }
 
     private fun RequestPermision() {
         viewLifecycleOwner.lifecycleScope.launch {
             mainState.requestPermissionLauncher {isWritePermissionGranted = it}
-        }
-
-    }
-
-    private fun FragmentDetailBinding.setUpElements() {
-        fab.setOnClickListener {
-            if (isWritePermissionGranted != true ) {
-                RequestPermision()
-                // Toast.makeText(requireContext(), "$isWritePermissionGranted", Toast.LENGTH_SHORT).show()
-            }
-            requestDownload()
         }
     }
 
@@ -195,7 +182,6 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
             "png" -> return "image/png"
             "gif" -> return "image/gif"
             else -> {
-                // Toast.makeText(context, "Flujo else", Toast.LENGTH_SHORT).show()
                 return "image/jpeg"
             }
         }
