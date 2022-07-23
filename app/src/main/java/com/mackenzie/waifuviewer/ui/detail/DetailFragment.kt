@@ -81,7 +81,7 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
 
         pbLoading.visibility = View.GONE
         state.waifuPic?.let {
-            tvDetail.text = ""
+            tvDetail.text = it.url.substringAfterLast('/').substringBeforeLast('.')
             ivDetail.loadUrl(it.url)
             if (it.isFavorite) {
                 favPics.setImageResource(R.drawable.ic_favorite_on)
@@ -134,10 +134,8 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
             launchImCollect()
             favPics.visible = false
             favIm.visible = true
-            favIm.setImageResource(R.drawable.ic_favorite_on)
+
         }
-        // if (waifu.isFavorite) View.VISIBLE else View.GONE
-        // favIm.setImageResource(R.drawable.ic_favorite_on)
 
         favIm.setOnClickListener { imViewModel.onFavoriteClicked() }
         favPics.setOnClickListener { picsViewModel.onFavoriteClicked() }
