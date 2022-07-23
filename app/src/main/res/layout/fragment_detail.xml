@@ -31,8 +31,7 @@
     <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/iv_detail"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:url="@{waifuIm.url}"/>
+        android:layout_height="match_parent" />
 
     <!--<com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/iv_detail"
@@ -50,7 +49,6 @@
         android:layout_gravity="bottom|center_horizontal"
         android:textSize="25sp"
         android:textColor="@color/grey"
-        app:title="@{waifuIm.file}"
         tools:text="Waifu Name ID" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

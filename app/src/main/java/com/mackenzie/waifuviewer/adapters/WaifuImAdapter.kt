@@ -28,9 +28,10 @@ class WaifuImAdapter(private val listener: (WaifuImItem) -> Unit ): ListAdapter<
 
         private val binding = ViewMediaItemBinding.bind(view)
         fun bind(waifu: WaifuImItem) = with(binding) {
-            waifuIm = waifu
-            // waifuTitle.text = waifu.imageId.toString()
-            // waifuThumb.loadUrl(waifu.url)
+            // waifuIm = waifu
+            waifuTitle.text = waifu.imageId.toString()
+            waifuThumb.loadUrl(waifu.url)
+            ivFavs.visibility = if (waifu.isFavorite) View.VISIBLE else View.GONE
         }
     }
 }

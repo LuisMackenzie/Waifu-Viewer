@@ -28,9 +28,10 @@ class WaifuPicsAdapter(private val listener: (WaifuPicItem) -> Unit ): ListAdapt
 
         private val binding = ViewMediaItemBinding.bind(view)
         fun bind(waifu: WaifuPicItem) = with(binding) {
-            waifuPic = waifu
-            // waifuTitle.text = url
-            // waifuThumb.loadUrl(waifu.url)
+            // waifuPic = waifu
+            waifuTitle.text = waifu.url.substringAfterLast('/').substringBeforeLast('.')
+            waifuThumb.loadUrl(waifu.url)
+            ivFavs.visibility = if (waifu.isFavorite) View.VISIBLE else View.GONE
         }
 
     }

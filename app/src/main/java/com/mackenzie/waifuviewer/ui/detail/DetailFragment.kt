@@ -83,6 +83,9 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
         state.waifuPic?.let {
             tvDetail.text = ""
             ivDetail.loadUrl(it.url)
+            if (it.isFavorite) {
+                favPics.setImageResource(R.drawable.ic_favorite_on)
+            }
             prepareDownloadPic(it)
         }
             /*state.idPic?.let {
@@ -98,6 +101,9 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
         state.waifuIm?.let {
             tvDetail.text = it.imageId.toString()
             ivDetail.loadUrl(it.url)
+            if (it.isFavorite) {
+                favIm.setImageResource(R.drawable.ic_favorite_on)
+            }
             prepareDownloadIm(it)
         }
         /*state.idIm?.let {
@@ -128,7 +134,10 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
             launchImCollect()
             favPics.visible = false
             favIm.visible = true
+            favIm.setImageResource(R.drawable.ic_favorite_on)
         }
+        // if (waifu.isFavorite) View.VISIBLE else View.GONE
+        // favIm.setImageResource(R.drawable.ic_favorite_on)
 
         favIm.setOnClickListener { imViewModel.onFavoriteClicked() }
         favPics.setOnClickListener { picsViewModel.onFavoriteClicked() }
