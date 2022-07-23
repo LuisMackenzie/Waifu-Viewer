@@ -112,12 +112,13 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
 
         state.waifusSavedPics?.let { savedPicWaifus ->
             waifuPicsAdapter.submitList(savedPicWaifus)
-            val count = waifuPicsAdapter.itemCount
-            Toast.makeText(requireContext(), "Total Waifus = $count", Toast.LENGTH_SHORT).show()
+            if (waifuPicsAdapter.itemCount != 0) {
+                val count = waifuPicsAdapter.itemCount
+                Toast.makeText(requireContext(), "Total Waifus = $count", Toast.LENGTH_SHORT).show()
+            }
         }
 
         fabRecycler.setOnClickListener { picsViewModel.onRequestMore(isNsfw, categoryTag) }
-
     }
 
     private fun FragmentWaifuBinding.withImUpdateUI(state: WaifuImViewModel.UiState) {
@@ -129,8 +130,10 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
 
         state.waifusSavedIm?.let { savedImWaifus ->
             waifuImAdapter.submitList(savedImWaifus)
-            val count = waifuImAdapter.itemCount
-            Toast.makeText(requireContext(), "Total Waifus = $count", Toast.LENGTH_SHORT).show()
+            if (waifuImAdapter.itemCount != 0) {
+                val count = waifuImAdapter.itemCount
+                Toast.makeText(requireContext(), "Total Waifus = $count", Toast.LENGTH_SHORT).show()
+            }
         }
 
         val bun = safeArgs.bundleInfo
@@ -140,7 +143,6 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         val categoryTag = bun.getString(CATEGORY_TAG)!!
 
         fabRecycler.setOnClickListener { imViewModel.onRequestMore(isNsfw, isGif, categoryTag, orientation) }
-
     }
 
     companion object {

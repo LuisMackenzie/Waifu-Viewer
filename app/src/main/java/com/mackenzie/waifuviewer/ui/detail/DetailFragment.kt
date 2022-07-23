@@ -35,7 +35,6 @@ import java.net.URL
 class DetailFragment: Fragment(R.layout.fragment_detail) {
 
     private val safeArgs: DetailFragmentArgs by navArgs()
-
     private val picsViewModel: DetailPicsViewModel by viewModels {
         DetailPicsViewModelFactory(safeArgs.waifuId, WaifusRepository(requireActivity().app)) }
     private val imViewModel: DetailImViewModel by viewModels {
