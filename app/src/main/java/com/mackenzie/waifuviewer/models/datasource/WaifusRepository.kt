@@ -25,36 +25,30 @@ class WaifusRepository(application: App) {
     fun findImById(id: Int) = localImDataSource.findImById(id)
 
 
-    suspend fun requestWaifusIm(isNsfw: Boolean, tag: String, isGif: Boolean, orientation: Boolean) = withContext(Dispatchers.IO) {
+    suspend fun requestWaifusIm(isNsfw: Boolean, tag: String, isGif: Boolean, orientation: Boolean) {
         if(localImDataSource.isImEmpty()) {
             val waifusIm = remoteDataSource.getRandomWaifusIm(isNsfw, tag, isGif, getOrientation(orientation))
             localImDataSource.saveIm(waifusIm.waifus.toLocalModelIm())
-            Log.e("Waifus Repository", "LocalDataSource IM IS EMPTY    TAG = $tag")
         } else {
-            // remoteDataSource.getRandomWaifusIm(isNsfw, tag, isGif, getOrientation(orientation))
-            Log.e("Waifus Repository", "LocalDataSource IM IS NOT EMPTY    TAG = $tag")
+            Log.e("Waifus Repository", "LocalDataSource IM IS NOT EMPTY")
         }
-
-        // val waifusIm = remoteDataSource.getRandomWaifusIm(isNsfw, tag, isGif, getOrientation(orientation))
-        // localImDataSource.saveIm(waifusIm.waifus.toLocalModelIm())
     }
 
-    suspend fun requestNewWaifusIm(isNsfw: Boolean, tag: String, isGif: Boolean, orientation: Boolean) = withContext(Dispatchers.IO) {
+    suspend fun requestNewWaifusIm(isNsfw: Boolean, tag: String, isGif: Boolean, orientation: Boolean) {
         val waifusIm = remoteDataSource.getRandomWaifusIm(isNsfw, tag, isGif, getOrientation(orientation))
         localImDataSource.saveIm(waifusIm.waifus.toLocalModelIm())
     }
 
-    suspend fun requestWaifusPics(isNsfw: String, tag: String) = withContext(Dispatchers.IO) {
+    suspend fun requestWaifusPics(isNsfw: String, tag: String) {
         if(localPicDataSource.isPicsEmpty()) {
             val waifusPics = remoteDataSource.getRandomWaifusPics(isNsfw, tag)
             localPicDataSource.savePics(waifusPics.toLocalModelPics())
-            Log.e("Waifus Repository", "LocalDataSource PICS IS EMPTY")
         } else {
             Log.e("Waifus Repository", "LocalDataSource PICS IS NOT EMPTY")
         }
     }
 
-    suspend fun requestNewWaifusPics(isNsfw: String, tag: String) = withContext(Dispatchers.IO) {
+    suspend fun requestNewWaifusPics(isNsfw: String, tag: String) {
         val waifusPics = remoteDataSource.getRandomWaifusPics(isNsfw, tag)
         localPicDataSource.savePics(waifusPics.toLocalModelPics())
     }
