@@ -30,7 +30,7 @@ class MainState(
     private val permissionRequester: PermissionRequester
 ) {
     fun onWaifuClicked(waifu: WaifuImItem) {
-        val action = WaifuFragmentDirections.actionWaifuImToDetail(waifu.imageId)
+        val action = WaifuFragmentDirections.actionWaifuImToDetail(waifu.id)
         navController.navigate(action)
     }
 
