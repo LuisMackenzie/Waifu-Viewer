@@ -42,7 +42,7 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
     private val imViewModel: DetailImViewModel by viewModels {
         DetailImViewModelFactory(safeArgs.waifuId, WaifusRepository(requireActivity().app)) }
     private lateinit var mainState: MainState
-    private var mainServer = MainServer()
+    private var mainServer: Boolean = false
     private var title: String? = null
     private var link: String? = null
     private var imageExt:String? = null
@@ -58,11 +58,10 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
         val binding = FragmentDetailBinding.bind(view)
         binding.setUpElements()
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
-        val server = sharedPref.getBoolean(IS_SERVER_SELECTED, false)
-        mainServer.setServer(server)
+        mainServer = sharedPref.getBoolean(IS_SERVER_SELECTED, false)
 
         // viewModel.state.observe(this, ::updateUI)
-        if (mainServer.server) {
+        if (mainServer) {
             binding.launchPicsCollect()
         } else {
             binding.launchImCollect()
@@ -75,7 +74,7 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 picsViewModel.state.collect {
                     withPicsUpdateUI(it)
-                    // Toast.makeText(context, "Aqui esta el flujo PICS ${mainServer.server}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Aqui esta el flujo PICS $mainServer", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -86,7 +85,7 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 imViewModel.state.collect {
                     withImUpdateUI(it)
-                    // Toast.makeText(context, "Aqui esta el flujo IM ${mainServer.server}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Aqui esta el flujo IM $mainServer", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -122,6 +121,7 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
             ivDetail.loadUrl(it.url)
             prepareDownloadIm(it)
         }
+        // Toast.makeText(context, "Aqui esta el flujo IM $mainServer", Toast.LENGTH_SHORT).show()
         // val dominantColor = waifu.dominant_color
         // prepareDownload(waifu)
     }

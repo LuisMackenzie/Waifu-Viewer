@@ -41,7 +41,18 @@ inline fun <reified T : Activity> Context.startActivity(body: Intent.() -> Unit)
     startActivity(intentFor<T>(body))
 }
 
-inline fun <VH : RecyclerView.ViewHolder, T> RecyclerView.Adapter<VH>.basicDiffUtil(
+inline fun <T> basicDiffUtil(
+    crossinline areItemsTheSame: (T, T) -> Boolean = { old, new -> old == new },
+    crossinline areContentsTheSame: (T, T) -> Boolean = { old, new -> old == new }
+) = object : DiffUtil.ItemCallback<T>() {
+    override fun areItemsTheSame(oldItem: T, newItem: T): Boolean =
+        areItemsTheSame(oldItem, newItem)
+
+    override fun areContentsTheSame(oldItem: T, newItem: T): Boolean =
+        areContentsTheSame(oldItem, newItem)
+}
+
+/*inline fun <VH : RecyclerView.ViewHolder, T> RecyclerView.Adapter<VH>.basicDiffUtil(
     initialValue: List<T>,
     crossinline areItemsTheSame: (T, T) -> Boolean = { old, new -> old == new },
     crossinline areContentsTheSame: (T, T) -> Boolean = { old, new -> old == new }
@@ -58,7 +69,7 @@ inline fun <VH : RecyclerView.ViewHolder, T> RecyclerView.Adapter<VH>.basicDiffU
 
             override fun getNewListSize(): Int = new.size
         }).dispatchUpdatesTo(this@basicDiffUtil)
-    }
+    }*/
 
 var View.visible: Boolean get() = visibility == View.VISIBLE
     set(value) {

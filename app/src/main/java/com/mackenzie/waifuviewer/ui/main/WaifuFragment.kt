@@ -30,26 +30,26 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         WaifuImViewModelFactory(WaifusRepository(requireActivity().app)) }
     private lateinit var mainState: MainState
     private lateinit var bun: Bundle
-    private var mainServer = MainServer()
+    private var mainServer: Boolean = false
     private val waifuImAdapter = WaifuImAdapter{mainState.onWaifuClicked(it)}
     private val waifuPicsAdapter = WaifuPicsAdapter{ mainState.onWaifuPicsClicked(it) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mainState = buildMainState()
-        mainServer.setServer(safeArgs.bundleInfo.getBoolean(IS_SERVER_SELECTED))
+        mainServer = safeArgs.bundleInfo.getBoolean(IS_SERVER_SELECTED)
         bun = safeArgs.bundleInfo
         // val serverSelected = safeArgs.bundleInfo.getBoolean(IS_SERVER_SELECTED)
         // mainServer.setServer(serverSelected)
         val binding = FragmentWaifuBinding.bind(view).apply {
-            if (mainServer.server) {
+            if (mainServer) {
                 recycler.adapter = waifuPicsAdapter
             } else {
                 recycler.adapter = waifuImAdapter
             }
         }
 
-        if (mainServer.server) {
+        if (mainServer) {
             viewLifecycleOwner.launchAndCollect(picsViewModel.state) { binding.withPicsUpdateUI(it) }
         } else {
             viewLifecycleOwner.launchAndCollect(imViewModel.state) { binding.withImUpdateUI(it) }
@@ -66,7 +66,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
 
         loadCustomResult()
 
-        // Toast.makeText(requireContext(), "${mainServer.server}", Toast.LENGTH_SHORT).show()
+        //  Toast.makeText(requireContext(), "${mainServer}", Toast.LENGTH_SHORT).show()
     }
 
     private fun loadCustomResult() {
@@ -76,7 +76,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         // val waifuId = bun.getString(ID_WAIFU)
         val categoryTag = bun.getString(CATEGORY_TAG)!!
 
-        if (!mainServer.server) {
+        if (!mainServer) {
             when (categoryTag) {
                 "uniform" -> {
                     imViewModel.onImReady(isNsfw, isGif = false, categoryTag, orientation)
@@ -129,35 +129,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
             Toast.makeText(requireContext(), "Total Waifus = $count", Toast.LENGTH_SHORT).show()
         }
 
-        /*state.waifusSavedPics?.let { savedPicWaifus ->
-            if (waifuPicsAdapter.waifuItemList.isEmpty()) {
-                waifuPicsAdapter.submitList(savedPicWaifus)
-                val count = waifuPicsAdapter.itemCount
-                Toast.makeText(requireContext(), "Total Waifus = $count", Toast.LENGTH_SHORT).show()
-                // Toast.makeText(requireContext(), "Local WaifuPics", Toast.LENGTH_SHORT).show()
-            } else {
-                waifuPicsAdapter.submitList(savedPicWaifus)
-                val count = waifuPicsAdapter.itemCount
-                Toast.makeText(requireContext(), "Total Waifus = $count", Toast.LENGTH_SHORT).show()
-            }
-        }*/
-
         fabRecycler.setOnClickListener { picsViewModel.onRequestMore(isNsfw, categoryTag) }
-
-
-        /*state.waifusIm?.let { randomWaifus ->
-            if (waifuAdapter.waifuItemList.isEmpty()) {
-                waifuAdapter.waifuItemList = randomWaifus.waifus
-                Toast.makeText(requireContext(), "Servidor WaifuIm", Toast.LENGTH_LONG).show()
-            }
-        }*/
-        /*state.waifusPics?.let { randomWaifus ->
-            if (waifuPicsAdapter.waifuItemList.isEmpty()) {
-                waifuPicsAdapter.waifuItemList = randomWaifus
-                Toast.makeText(requireContext(), "Servidor WaifuPics", Toast.LENGTH_LONG).show()
-            }
-        }*/
-
 
     }
 
@@ -168,24 +140,10 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         ivError.visibility = if(state.isError) View.VISIBLE else View.GONE
         tvError.visibility = if(state.isError) View.VISIBLE else View.GONE
 
-        /*state.waifusSavedIm?.let { savedImWaifus ->
+        state.waifusSavedIm?.let { savedImWaifus ->
             waifuImAdapter.submitList(savedImWaifus)
             val count = waifuImAdapter.itemCount
             Toast.makeText(requireContext(), "Total Waifus = $count", Toast.LENGTH_SHORT).show()
-        }*/
-
-        state.waifusSavedIm?.let { savedImWaifus ->
-            if (waifuImAdapter.waifuItemList.isEmpty()) {
-                // waifuImAdapter.waifuItemList = savedImWaifus
-                waifuImAdapter.submitList(savedImWaifus)
-                val count = waifuImAdapter.itemCount
-                Toast.makeText(requireContext(), "Total Waifus = $count", Toast.LENGTH_SHORT).show()
-                // Toast.makeText(requireContext(), "Local WaifuIm", Toast.LENGTH_SHORT).show()
-            } else {
-                waifuImAdapter.submitList(savedImWaifus)
-                val count = waifuImAdapter.itemCount
-                Toast.makeText(requireContext(), "Total Waifus = $count", Toast.LENGTH_SHORT).show()
-            }
         }
 
         val bun = safeArgs.bundleInfo
