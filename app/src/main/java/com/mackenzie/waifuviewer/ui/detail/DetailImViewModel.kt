@@ -17,7 +17,7 @@ class DetailImViewModel (private val waifuId: Int, private val repository: Waifu
     val state: StateFlow<UiState> = _state.asStateFlow()
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             repository.findImById(waifuId).collect {
                 _state.value = UiState(waifuIm = it)
             }
@@ -25,7 +25,7 @@ class DetailImViewModel (private val waifuId: Int, private val repository: Waifu
     }
 
     fun onFavoriteClicked() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             _state.value.waifuIm?.let { repository.switchImFavorite(it) }
         }
     }

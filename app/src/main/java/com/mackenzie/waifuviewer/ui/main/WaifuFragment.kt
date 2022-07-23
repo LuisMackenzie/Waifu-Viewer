@@ -143,14 +143,6 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
 
     }
 
-    // Este metodo recibe un estado en un flow y devuelve algo
-    private fun <T, U> Flow<T>.diff(mapf: (T) -> U, body: (U) -> Unit) {
-        viewLifecycleOwner.launchAndCollect(
-            flow = map(mapf).distinctUntilChanged(),
-            body = body
-        )
-    }
-
     companion object {
         const val EXTRA_WAIFU = "WaifuFragment:waifu"
         const val IS_SERVER_SELECTED = "WaifuFragment:server"

@@ -49,13 +49,13 @@ class SaveImage {
             val image = File(directory, imageTitle)
             imageOutStream = FileOutputStream(image)
 
-            val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+            /*val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
                 addCategory(Intent.CATEGORY_OPENABLE)
                 setDataAndType(Uri.fromFile(directory), mimeType)
                 // putExtra(Intent.EXTRA_TITLE, "Waifu.jpg")
                 putExtra("mimeType", mimeType)
                 // putExtra(DocumentsContract.EXTRA_INITIAL_URI, uri)
-            }
+            }*/
             // context.startActivity(Intent.createChooser(intent, "Set as:"))
         }
 

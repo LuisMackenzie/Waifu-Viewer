@@ -116,7 +116,7 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
     private fun prepareDownloadIm(waifuIm: WaifuImItem) {
         title = waifuIm.file
         link = waifuIm.url
-        imageExt = waifuIm.extension
+        imageExt = waifuIm.url.substringAfterLast('.')
     }
 
     private fun FragmentDetailBinding.setUpElements() {
@@ -185,6 +185,14 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
                 return "image/jpeg"
             }
         }
+    }
+
+    fun setWaifuPics(waifu: WaifuPicItem) {
+
+    }
+
+    fun setWaifuIm(waifu: WaifuImItem) {
+
     }
 
     private fun isGif(imagen: String): Boolean = imagen.endsWith("gif")

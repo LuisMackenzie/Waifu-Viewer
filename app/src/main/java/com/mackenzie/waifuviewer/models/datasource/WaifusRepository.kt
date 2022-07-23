@@ -25,7 +25,7 @@ class WaifusRepository(application: App) {
     fun findImById(id: Int) = localImDataSource.findImById(id)
 
 
-    suspend fun requestWaifusIm(isNsfw: Boolean, tag: String, isGif: Boolean, orientation: Boolean) = withContext(Dispatchers.IO) {
+    suspend fun requestWaifusIm(isNsfw: Boolean, tag: String, isGif: Boolean, orientation: Boolean) {
         if(localImDataSource.isImEmpty()) {
             val waifusIm = remoteDataSource.getRandomWaifusIm(isNsfw, tag, isGif, getOrientation(orientation))
             localImDataSource.saveIm(waifusIm.waifus.toLocalModelIm())
@@ -34,12 +34,12 @@ class WaifusRepository(application: App) {
         }
     }
 
-    suspend fun requestNewWaifusIm(isNsfw: Boolean, tag: String, isGif: Boolean, orientation: Boolean)= withContext(Dispatchers.IO) {
+    suspend fun requestNewWaifusIm(isNsfw: Boolean, tag: String, isGif: Boolean, orientation: Boolean) {
         val waifusIm = remoteDataSource.getRandomWaifusIm(isNsfw, tag, isGif, getOrientation(orientation))
         localImDataSource.saveIm(waifusIm.waifus.toLocalModelIm())
     }
 
-    suspend fun requestWaifusPics(isNsfw: String, tag: String) = withContext(Dispatchers.IO) {
+    suspend fun requestWaifusPics(isNsfw: String, tag: String) {
         if(localPicDataSource.isPicsEmpty()) {
             val waifusPics = remoteDataSource.getRandomWaifusPics(isNsfw, tag)
             localPicDataSource.savePics(waifusPics.toLocalModelPics())
@@ -48,7 +48,7 @@ class WaifusRepository(application: App) {
         }
     }
 
-    suspend fun requestNewWaifusPics(isNsfw: String, tag: String) = withContext(Dispatchers.IO) {
+    suspend fun requestNewWaifusPics(isNsfw: String, tag: String) {
         val waifusPics = remoteDataSource.getRandomWaifusPics(isNsfw, tag)
         localPicDataSource.savePics(waifusPics.toLocalModelPics())
     }
@@ -82,13 +82,8 @@ private fun List<Waifu>.toLocalModelIm() : List<WaifuImItem>  = map { it.toLocal
 
 private fun Waifu.toLocalModelIm(): WaifuImItem = WaifuImItem(
     file = file,
-    extension = extension,
     imageId = imageId,
     isNsfw = isNsfw,
-    favourites = favourites,
-    previewUrl = previewUrl,
-    source = source,
-    uploadedAt = uploadedAt,
     dominant_color = dominant_color,
     url = url,
     width = width,

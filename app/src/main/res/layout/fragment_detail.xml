@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <import type="com.mackenzie.waifuviewer.models.db.WaifuPicItem"/>
         <import type="com.mackenzie.waifuviewer.models.db.WaifuImItem"/>
@@ -30,7 +31,8 @@
     <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/iv_detail"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        app:url="@{waifuIm.url}"/>
 
     <!--<com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/iv_detail"
@@ -48,6 +50,7 @@
         android:layout_gravity="bottom|center_horizontal"
         android:textSize="25sp"
         android:textColor="@color/grey"
+        app:title="@{waifuIm.file}"
         tools:text="Waifu Name ID" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

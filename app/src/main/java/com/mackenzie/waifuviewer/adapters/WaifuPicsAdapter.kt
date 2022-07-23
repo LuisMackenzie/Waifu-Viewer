@@ -28,8 +28,9 @@ class WaifuPicsAdapter(private val listener: (WaifuPicItem) -> Unit ): ListAdapt
 
         private val binding = ViewMediaItemBinding.bind(view)
         fun bind(waifu: WaifuPicItem) = with(binding) {
+            waifuPic = waifu
             // waifuTitle.text = url
-            waifuThumb.loadUrl(waifu.url)
+            // waifuThumb.loadUrl(waifu.url)
         }
 
     }
