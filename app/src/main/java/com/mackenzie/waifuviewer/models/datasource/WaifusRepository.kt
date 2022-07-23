@@ -25,7 +25,7 @@ class WaifusRepository(application: App) {
     fun findImById(id: Int) = localImDataSource.findImById(id)
 
 
-    suspend fun requestWaifusIm(isNsfw: Boolean, tag: String, isGif: Boolean, orientation: Boolean) {
+    suspend fun requestWaifusIm(isNsfw: Boolean, tag: String, isGif: Boolean, orientation: Boolean) = withContext(Dispatchers.IO) {
         if(localImDataSource.isImEmpty()) {
             val waifusIm = remoteDataSource.getRandomWaifusIm(isNsfw, tag, isGif, getOrientation(orientation))
             localImDataSource.saveIm(waifusIm.waifus.toLocalModelIm())
@@ -34,12 +34,12 @@ class WaifusRepository(application: App) {
         }
     }
 
-    suspend fun requestNewWaifusIm(isNsfw: Boolean, tag: String, isGif: Boolean, orientation: Boolean) {
+    suspend fun requestNewWaifusIm(isNsfw: Boolean, tag: String, isGif: Boolean, orientation: Boolean)= withContext(Dispatchers.IO) {
         val waifusIm = remoteDataSource.getRandomWaifusIm(isNsfw, tag, isGif, getOrientation(orientation))
         localImDataSource.saveIm(waifusIm.waifus.toLocalModelIm())
     }
 
-    suspend fun requestWaifusPics(isNsfw: String, tag: String) {
+    suspend fun requestWaifusPics(isNsfw: String, tag: String) = withContext(Dispatchers.IO) {
         if(localPicDataSource.isPicsEmpty()) {
             val waifusPics = remoteDataSource.getRandomWaifusPics(isNsfw, tag)
             localPicDataSource.savePics(waifusPics.toLocalModelPics())
@@ -48,7 +48,7 @@ class WaifusRepository(application: App) {
         }
     }
 
-    suspend fun requestNewWaifusPics(isNsfw: String, tag: String) {
+    suspend fun requestNewWaifusPics(isNsfw: String, tag: String) = withContext(Dispatchers.IO) {
         val waifusPics = remoteDataSource.getRandomWaifusPics(isNsfw, tag)
         localPicDataSource.savePics(waifusPics.toLocalModelPics())
     }

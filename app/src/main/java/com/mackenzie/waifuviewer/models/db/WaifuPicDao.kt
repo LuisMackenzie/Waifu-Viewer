@@ -10,19 +10,19 @@ interface WaifuPicDao {
     fun getAllPic(): Flow<List<WaifuPicItem>>
 
     @Query("SELECT * FROM WaifuPicItem WHERE id = :id")
-    fun findById(id: Int): Flow<WaifuPicItem>
+    fun findPicsById(id: Int): Flow<WaifuPicItem>
 
     @Query("SELECT COUNT(id) FROM WaifuPicItem")
-    suspend fun waifuCount(): Int
+    fun waifuPicsCount(): Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertWaifu(waifu: WaifuPicItem)
+    fun insertWaifuPics(waifu: WaifuPicItem)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAllWaifus(waifus: List<WaifuPicItem>)
+    fun insertAllWaifuPics(waifus: List<WaifuPicItem>)
 
     @Update
-    suspend fun updateWaifu(waifu: WaifuPicItem)
+    fun updateWaifuPics(waifu: WaifuPicItem)
 
     /*@Delete
     fun delete(waifu: WaifuPicItem)*/

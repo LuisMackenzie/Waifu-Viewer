@@ -10,12 +10,12 @@ class WaifusPicLocalDataSource(private val PicDao: WaifuPicDao) {
 
     val waifusPic: Flow<List<WaifuPicItem>> = PicDao.getAllPic()
 
-    suspend fun isPicsEmpty(): Boolean = PicDao.waifuCount() == 0
+    fun isPicsEmpty(): Boolean = PicDao.waifuPicsCount() == 0
 
-    fun findPicById(id: Int): Flow<WaifuPicItem> = PicDao.findById(id)
+    fun findPicById(id: Int): Flow<WaifuPicItem> = PicDao.findPicsById(id)
 
-    suspend fun savePics(waifus: List<WaifuPicItem>) {
-        PicDao.insertAllWaifus(waifus)
+    fun savePics(waifus: List<WaifuPicItem>) {
+        PicDao.insertAllWaifuPics(waifus)
     }
 
 }
@@ -24,12 +24,12 @@ class WaifusImLocalDataSource(private val ImDao: WaifuImDao) {
 
     val waifusIm: Flow<List<WaifuImItem>> = ImDao.getAllIm()
 
-    suspend fun isImEmpty(): Boolean = ImDao.waifuCount() == 0
+    fun isImEmpty(): Boolean = ImDao.waifuImCount() == 0
 
-    fun findImById(id: Int): Flow<WaifuImItem> = ImDao.findById(id)
+    fun findImById(id: Int): Flow<WaifuImItem> = ImDao.findImById(id)
 
-    suspend fun saveIm(waifus: List<WaifuImItem>) {
-        ImDao.insertAllWaifus(waifus)
+    fun saveIm(waifus: List<WaifuImItem>) {
+        ImDao.insertAllWaifuIm(waifus)
     }
 
 }
