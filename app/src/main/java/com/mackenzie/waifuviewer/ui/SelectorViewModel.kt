@@ -14,16 +14,11 @@ import kotlinx.coroutines.launch
 
 class SelectorViewModel (private val waifusRepository: WaifusRepository): ViewModel(), Scope by Scope.Impl() {
 
-    private val waifuIdDefault: String = "fde0c21c420d9e0c"
-    private val waifuIdNight: String = "5872ca0583da7dea"
     private val _state = MutableStateFlow(UiState())
     val state: StateFlow<UiState> = _state.asStateFlow()
     // private val _events = Channel<UiEvent> ()
     // val events = _events.receiveAsFlow()
 
-    init {
-        // loadErrorOrWaifu()
-    }
 
     fun loadWaifu() {
         viewModelScope.launch {
@@ -41,22 +36,6 @@ class SelectorViewModel (private val waifusRepository: WaifusRepository): ViewMo
                 _state.update { UiState(waifu = waifu) }
             }
             _state.update { UiState(error = error) }
-        }
-    }
-
-    private fun loadRandomWaifu() {
-        viewModelScope.launch {
-            // _state.value = UiState(isLoading = true)
-            // val waifuResult = waifusRepository.getWaifuOnly()
-            // _state.value = UiState(waifu = waifuResult.waifus[0], isLoading = false)
-        }
-    }
-
-    private fun loadAdultWaifu() {
-        viewModelScope.launch {
-            // _state.value = UiState(isLoading = true)
-            // val waifuResult = waifusRepository.getWaifuOnlyNsfw()
-            // _state.value = UiState(waifu = waifuResult.waifus[0], isLoading = false)
         }
     }
 
