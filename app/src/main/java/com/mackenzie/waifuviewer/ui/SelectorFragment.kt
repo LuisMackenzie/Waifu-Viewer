@@ -63,11 +63,9 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
     private fun updateWaifu(state: SelectorViewModel.UiState) {
         state.waifu?.let { waifu ->
             setBackground(waifu)
-            Toast.makeText(requireContext(), "flujo normal", Toast.LENGTH_SHORT).show()
         }
         state.error?.let { error ->
             mainState.errorToString(error)
-            // binding.ivBackdrop.setBackgroundResource(R.drawable.ic_offline_background)
             Glide.with(requireContext())
                 .load(R.drawable.ic_offline_background)
                 .centerCrop()
