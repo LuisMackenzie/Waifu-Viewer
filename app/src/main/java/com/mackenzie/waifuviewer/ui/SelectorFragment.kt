@@ -17,7 +17,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.databinding.FragmentSelectorBinding
 import com.mackenzie.waifuviewer.models.WaifuPic
-import com.mackenzie.waifuviewer.models.datasource.WaifusRepository
+import com.mackenzie.waifuviewer.models.datasource.WaifusPicRepository
 import com.mackenzie.waifuviewer.ui.common.PermissionRequester
 import com.mackenzie.waifuviewer.ui.common.app
 import com.mackenzie.waifuviewer.ui.common.launchAndCollect
@@ -33,7 +33,7 @@ import kotlinx.coroutines.launch
 class SelectorFragment : Fragment(R.layout.fragment_selector) {
 
     private val viewModel: SelectorViewModel by viewModels { SelectorViewModelFactory(
-        WaifusRepository(requireActivity().app)
+        WaifusPicRepository(requireActivity().app)
     ) }
     private lateinit var binding: FragmentSelectorBinding
     private var backgroudImage: ImageView? = null
@@ -45,9 +45,6 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
         binding = FragmentSelectorBinding.bind(view)
         setUpElements()
         updateSpinner(binding.sServer.isChecked)
-        // val waifuDb = WaifusDatabase.getInstance(requireContext())
-        // fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-        // requestPermissionsLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
 
         viewLifecycleOwner.launchAndCollect(viewModel.state) { updateWaifu(it) }
         viewLifecycleOwner.lifecycleScope.launch {
@@ -64,6 +61,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
         state.waifu?.let { waifu ->
             setBackground(waifu)
         }
+
         state.error?.let { error ->
             mainState.errorToString(error)
             Glide.with(requireContext())
@@ -90,10 +88,9 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
         }*/
         sOrientation.setOnClickListener {
             if (sOrientation.isChecked) {
-                sOrientation.text = "Landscape (Default)"
-
+                sOrientation.text = "Landscape"
             } else {
-                sOrientation.text = "Portrait (Default)"
+                sOrientation.text = "Portrait"
             }
 
         }

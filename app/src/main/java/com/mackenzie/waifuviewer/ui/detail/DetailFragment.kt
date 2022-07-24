@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -15,8 +14,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import com.mackenzie.waifuviewer.R
-import com.mackenzie.waifuviewer.models.datasource.WaifusRepository
+import com.mackenzie.waifuviewer.models.datasource.WaifusImRepository
 import com.mackenzie.waifuviewer.databinding.FragmentDetailBinding
+import com.mackenzie.waifuviewer.models.datasource.WaifusPicRepository
 import com.mackenzie.waifuviewer.models.db.WaifuImItem
 import com.mackenzie.waifuviewer.models.db.WaifuPicItem
 import com.mackenzie.waifuviewer.ui.common.app
@@ -36,9 +36,9 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
 
     private val safeArgs: DetailFragmentArgs by navArgs()
     private val picsViewModel: DetailPicsViewModel by viewModels {
-        DetailPicsViewModelFactory(safeArgs.waifuId, WaifusRepository(requireActivity().app)) }
+        DetailPicsViewModelFactory(safeArgs.waifuId, WaifusPicRepository(requireActivity().app)) }
     private val imViewModel: DetailImViewModel by viewModels {
-        DetailImViewModelFactory(safeArgs.waifuId, WaifusRepository(requireActivity().app)) }
+        DetailImViewModelFactory(safeArgs.waifuId, WaifusImRepository(requireActivity().app)) }
     private lateinit var mainState: MainState
     private var mainServer: Boolean = false
     private var title: String? = null

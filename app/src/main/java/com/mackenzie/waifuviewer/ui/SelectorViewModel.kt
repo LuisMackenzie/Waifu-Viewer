@@ -2,9 +2,8 @@ package com.mackenzie.waifuviewer.ui
 
 import androidx.lifecycle.*
 import com.mackenzie.waifuviewer.models.Error
-import com.mackenzie.waifuviewer.models.datasource.WaifusRepository
 import com.mackenzie.waifuviewer.models.WaifuPic
-import com.mackenzie.waifuviewer.models.WaifuResult
+import com.mackenzie.waifuviewer.models.datasource.WaifusPicRepository
 import com.mackenzie.waifuviewer.ui.common.Scope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,7 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class SelectorViewModel (private val waifusRepository: WaifusRepository): ViewModel(), Scope by Scope.Impl() {
+class SelectorViewModel (private val waifusPicRepository: WaifusPicRepository): ViewModel(), Scope by Scope.Impl() {
 
     private val _state = MutableStateFlow(UiState())
     val state: StateFlow<UiState> = _state.asStateFlow()
@@ -22,7 +21,7 @@ class SelectorViewModel (private val waifusRepository: WaifusRepository): ViewMo
 
     fun loadWaifu() {
         viewModelScope.launch {
-            val waifu = waifusRepository.requestOnlyWaifuPic()
+            val waifu = waifusPicRepository.requestOnlyWaifuPic()
             _state.update { UiState(waifu = waifu) }
         }
     }
@@ -30,9 +29,9 @@ class SelectorViewModel (private val waifusRepository: WaifusRepository): ViewMo
     fun loadErrorOrWaifu() {
         viewModelScope.launch {
             // val waifu = waifusRepository.getWaifuInfo(waifuIdDefault)
-            val error = waifusRepository.requestOnlyWaifuPicFix()
+            val error = waifusPicRepository.requestOnlyWaifuPicFix()
             if (error == null) {
-                val waifu = waifusRepository.requestOnlyWaifuPic()
+                val waifu = waifusPicRepository.requestOnlyWaifuPic()
                 _state.update { UiState(waifu = waifu) }
             }
             _state.update { UiState(error = error) }
@@ -47,8 +46,8 @@ class SelectorViewModel (private val waifusRepository: WaifusRepository): ViewMo
 }
 
 @Suppress("UNCHECKED_CAST")
-class SelectorViewModelFactory(private val waifusRepository: WaifusRepository): ViewModelProvider.Factory {
+class SelectorViewModelFactory(private val waifusPicRepository: WaifusPicRepository): ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return SelectorViewModel(waifusRepository) as T
+        return SelectorViewModel(waifusPicRepository) as T
     }
 }

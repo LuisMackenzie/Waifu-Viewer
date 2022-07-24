@@ -11,23 +11,20 @@ import com.mackenzie.waifuviewer.WaifuPicsViewModel
 import com.mackenzie.waifuviewer.WaifuPicsViewModelFactory
 import com.mackenzie.waifuviewer.adapters.WaifuImAdapter
 import com.mackenzie.waifuviewer.adapters.WaifuPicsAdapter
-import com.mackenzie.waifuviewer.models.datasource.WaifusRepository
+import com.mackenzie.waifuviewer.models.datasource.WaifusImRepository
 import com.mackenzie.waifuviewer.databinding.FragmentWaifuBinding
-import com.mackenzie.waifuviewer.models.Error
+import com.mackenzie.waifuviewer.models.datasource.WaifusPicRepository
 import com.mackenzie.waifuviewer.ui.common.app
 import com.mackenzie.waifuviewer.ui.common.launchAndCollect
 import com.mackenzie.waifuviewer.ui.common.visible
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
 
 class WaifuFragment: Fragment(R.layout.fragment_waifu) {
 
     private val safeArgs: WaifuFragmentArgs by navArgs()
     private val picsViewModel: WaifuPicsViewModel by viewModels {
-        WaifuPicsViewModelFactory(WaifusRepository(requireActivity().app)) }
+        WaifuPicsViewModelFactory(WaifusPicRepository(requireActivity().app)) }
     private val imViewModel: WaifuImViewModel by viewModels {
-        WaifuImViewModelFactory(WaifusRepository(requireActivity().app)) }
+        WaifuImViewModelFactory(WaifusImRepository(requireActivity().app)) }
     private lateinit var mainState: MainState
     private lateinit var bun: Bundle
     private var mainServer: Boolean = false
