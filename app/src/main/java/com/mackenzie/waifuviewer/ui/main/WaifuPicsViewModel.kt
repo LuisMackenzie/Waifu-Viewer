@@ -71,14 +71,11 @@ class WaifuPicsViewModel(private val waifusPicRepository: WaifusPicRepository): 
         }
     }
 
-
     data class UiState(
         val isLoading: Boolean = false,
         val waifusSavedPics: List<WaifuPicItem>? = null,
         val error: Error? = null
     )
-
-
 }
 
 @Suppress("UNCHECKED_CAST")

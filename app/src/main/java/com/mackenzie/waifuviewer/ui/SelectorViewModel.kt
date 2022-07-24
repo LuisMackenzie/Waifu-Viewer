@@ -18,7 +18,6 @@ class SelectorViewModel (private val waifusPicRepository: WaifusPicRepository): 
     // private val _events = Channel<UiEvent> ()
     // val events = _events.receiveAsFlow()
 
-
     fun loadWaifu() {
         viewModelScope.launch {
             val waifu = waifusPicRepository.requestOnlyWaifuPic()
@@ -42,7 +41,6 @@ class SelectorViewModel (private val waifusPicRepository: WaifusPicRepository): 
         val waifu: WaifuPic? = null,
         val error: Error? = null
     )
-
 }
 
 @Suppress("UNCHECKED_CAST")

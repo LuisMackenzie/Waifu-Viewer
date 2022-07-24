@@ -37,7 +37,6 @@ class WaifusPicRepository(application: App) {
         val updatedWaifu = picsItem.copy(isFavorite = !picsItem.isFavorite)
         localPicDataSource.savePics(listOf(updatedWaifu))
     }
-
 }
 
 private fun List<String>.toLocalModelPics() : List<WaifuPicItem> = map { it.toLocalModelPics() }

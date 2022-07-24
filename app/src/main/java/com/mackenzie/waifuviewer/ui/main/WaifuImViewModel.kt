@@ -67,7 +67,6 @@ class WaifuImViewModel(private val waifusImRepository: WaifusImRepository): View
         val waifusSavedIm: List<WaifuImItem>? = null,
         val error: Error? = null
     )
-
 }
 
 @Suppress("UNCHECKED_CAST")
