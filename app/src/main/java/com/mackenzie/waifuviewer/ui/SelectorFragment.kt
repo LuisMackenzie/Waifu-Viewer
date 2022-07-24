@@ -12,6 +12,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.databinding.FragmentSelectorBinding
 import com.mackenzie.waifuviewer.models.WaifuPic
@@ -61,10 +63,17 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
     private fun updateWaifu(state: SelectorViewModel.UiState) {
         state.waifu?.let { waifu ->
             setBackground(waifu)
+            Toast.makeText(requireContext(), "flujo normal", Toast.LENGTH_SHORT).show()
         }
-
         state.error?.let { error ->
             mainState.errorToString(error)
+            // binding.ivBackdrop.setBackgroundResource(R.drawable.ic_offline_background)
+            Glide.with(requireContext())
+                .load(R.drawable.ic_offline_background)
+                .centerCrop()
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .error(R.drawable.ic_error_grey)
+                .into(binding.ivBackdrop)
             Toast.makeText(requireContext(), "Se requiere conexion para funcionar", Toast.LENGTH_SHORT).show()
         }
     }

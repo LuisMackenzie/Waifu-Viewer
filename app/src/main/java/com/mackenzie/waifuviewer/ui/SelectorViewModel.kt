@@ -22,7 +22,7 @@ class SelectorViewModel (private val waifusRepository: WaifusRepository): ViewMo
     // val events = _events.receiveAsFlow()
 
     init {
-        loadWaifu()
+        // loadErrorOrWaifu()
     }
 
     fun loadWaifu() {
@@ -36,6 +36,10 @@ class SelectorViewModel (private val waifusRepository: WaifusRepository): ViewMo
         viewModelScope.launch {
             // val waifu = waifusRepository.getWaifuInfo(waifuIdDefault)
             val error = waifusRepository.requestOnlyWaifuPicFix()
+            if (error == null) {
+                val waifu = waifusRepository.requestOnlyWaifuPic()
+                _state.update { UiState(waifu = waifu) }
+            }
             _state.update { UiState(error = error) }
         }
     }
@@ -56,18 +60,10 @@ class SelectorViewModel (private val waifusRepository: WaifusRepository): ViewMo
         }
     }
 
-    /*fun onUpdateWaifu() {
-        loadWaifu()
-    }*/
-
     data class UiState(
         val waifu: WaifuPic? = null,
         val error: Error? = null
     )
-
-    /*sealed interface UiEvent {
-        data class NavigateTo(val waifuResult: WaifuResult) : UiEvent
-    }*/
 
 }
 

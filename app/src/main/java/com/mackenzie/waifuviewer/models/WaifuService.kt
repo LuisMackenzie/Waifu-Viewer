@@ -16,6 +16,12 @@ interface WaifuService {
         @Query("many") manyWaifus:Boolean = true
     ): WaifuResult
 
+    @GET("info/")
+    suspend fun getWaifu(@Query("images") nameId:String): WaifuResult
+
+    @GET("endpoints/")
+    suspend fun getCategories(@Query("full") fullInfo:Boolean = true): TagResult
+
     /*@GET("random/")
     suspend fun getRandomWaifu(
         @Query("is_nsfw") isNsfw:Boolean = false,
@@ -45,11 +51,5 @@ interface WaifuService {
         @Path("category") category:String = "waifu",
         @Body() body: JsonObject
     ): Response<WaifuPicsResult>
-
-    @GET("info/")
-    suspend fun getWaifu(@Query("images") nameId:String): WaifuResult
-
-    @GET("endpoints/")
-    suspend fun getCategories(@Query("full") fullInfo:Boolean = true): TagResult
 
 }
