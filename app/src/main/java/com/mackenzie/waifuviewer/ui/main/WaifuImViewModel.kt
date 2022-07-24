@@ -3,12 +3,12 @@ package com.mackenzie.waifuviewer.ui.main
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.mackenzie.waifuviewer.models.Error
 import com.mackenzie.waifuviewer.models.datasource.WaifusRepository
 import com.mackenzie.waifuviewer.models.db.WaifuImItem
+import com.mackenzie.waifuviewer.models.toError
 import com.mackenzie.waifuviewer.ui.common.Scope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class WaifuImViewModel(private val waifusRepository: WaifusRepository): ViewModel(), Scope by Scope.Impl() {
@@ -18,8 +18,9 @@ class WaifuImViewModel(private val waifusRepository: WaifusRepository): ViewMode
 
     init {
         viewModelScope.launch {
-            waifusRepository.savedWaifusIm.collect{ WaifuIm ->
-                _state.value = UiState(waifusSavedIm = WaifuIm)
+            waifusRepository.savedWaifusIm
+                .catch { cause -> _state.update { it.copy(error = cause.toError()) }}
+                .collect{ WaifuIm -> _state.update { UiState(waifusSavedIm = WaifuIm) }
             }
         }
     }
@@ -27,37 +28,36 @@ class WaifuImViewModel(private val waifusRepository: WaifusRepository): ViewMode
     fun onImReady(isNsfw: Boolean, isGif: Boolean, tag: String, orientation: Boolean) {
 
         viewModelScope.launch {
-            // _state.value = UiState(isLoading = true)
-            // val waifus: WaifuResult
+            val error: Error?
             if (tag == "all") {
                 if (isNsfw) {
-                    waifusRepository.requestWaifusIm(isNsfw,"ecchi",isGif,orientation)
+                    error = waifusRepository.requestWaifusIm(isNsfw,"ecchi",isGif,orientation)
+                    _state.update { it.copy(error = error) }
                 } else {
-                    waifusRepository.requestWaifusIm(isNsfw,"waifu",isGif,orientation)
+                    error = waifusRepository.requestWaifusIm(isNsfw,"waifu",isGif,orientation)
+                    _state.update { it.copy(error = error) }
                 }
-                // waifus = waifusRepository.requestWaifusIm(isNsfw = isNsfw, tag = "waifu", isGif =  isGif, orientation = orientation)
-                // _state.value = UiState(isLoading = false)
             } else {
-                waifusRepository.requestWaifusIm(isNsfw, tag, isGif,  orientation)
-                // waifus = waifusRepository.requestWaifusIm(isNsfw, tag, isGif,  orientation)
-                // _state.value = UiState(isLoading = false)
+                error = waifusRepository.requestWaifusIm(isNsfw, tag, isGif,  orientation)
+                _state.update { it.copy(error = error) }
             }
-            /*if (waifus.waifus.isEmpty()) {
-                _state.value = UiState(isLoading = false, isError = true)
-            }*/
         }
     }
 
     fun onRequestMore(isNsfw: Boolean, isGif: Boolean, tag: String, orientation: Boolean) {
         viewModelScope.launch {
+            val error: Error?
             if (tag == "all") {
                 if (isNsfw) {
-                    waifusRepository.requestNewWaifusIm(isNsfw,"ecchi",isGif,orientation)
+                    error =waifusRepository.requestNewWaifusIm(isNsfw,"ecchi",isGif,orientation)
+                    _state.update { it.copy(error = error) }
                 } else {
-                    waifusRepository.requestNewWaifusIm(isNsfw,"waifu",isGif,orientation)
+                    error = waifusRepository.requestNewWaifusIm(isNsfw,"waifu",isGif,orientation)
+                    _state.update { it.copy(error = error) }
                 }
             } else {
-                waifusRepository.requestNewWaifusIm(isNsfw, tag, isGif,  orientation)
+                error = waifusRepository.requestNewWaifusIm(isNsfw, tag, isGif,  orientation)
+                _state.update { it.copy(error = error) }
             }
         }
     }
@@ -65,7 +65,7 @@ class WaifuImViewModel(private val waifusRepository: WaifusRepository): ViewMode
     data class UiState(
         val isLoading: Boolean = false,
         val waifusSavedIm: List<WaifuImItem>? = null,
-        val isError: Boolean = false
+        val error: Error? = null
     )
 
 }

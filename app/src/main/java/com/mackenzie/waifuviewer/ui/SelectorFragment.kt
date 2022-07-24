@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -38,7 +39,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mainState = MainState(viewLifecycleOwner.lifecycleScope, findNavController(), PermissionRequester(this , Manifest.permission.ACCESS_COARSE_LOCATION))
+        mainState = MainState(requireContext(), viewLifecycleOwner.lifecycleScope, findNavController(), PermissionRequester(this , Manifest.permission.ACCESS_COARSE_LOCATION))
         binding = FragmentSelectorBinding.bind(view)
         setUpElements()
         updateSpinner(binding.sServer.isChecked)
@@ -49,7 +50,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
         viewLifecycleOwner.launchAndCollect(viewModel.state) { updateWaifu(it) }
         viewLifecycleOwner.lifecycleScope.launch {
             mainState.requestPermissionLauncher {
-                viewModel.onUiReady()
+                viewModel.loadErrorOrWaifu()
             }
         }
     }
@@ -60,6 +61,11 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
     private fun updateWaifu(state: SelectorViewModel.UiState) {
         state.waifu?.let { waifu ->
             setBackground(waifu)
+        }
+
+        state.error?.let { error ->
+            mainState.errorToString(error)
+            Toast.makeText(requireContext(), "Se requiere conexion para funcionar", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -93,7 +99,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
         }
         fab.setOnClickListener {
             // viewLifecycleOwner.launchAndCollect(viewModel.state) { updateWaifu(it) }
-            viewModel.onUpdateWaifu()
+            viewModel.loadWaifu()
         }
         backgroudImage = ivBackdrop
     }

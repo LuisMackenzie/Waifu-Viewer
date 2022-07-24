@@ -2,15 +2,12 @@ package com.mackenzie.waifuviewer.models.datasource
 
 import android.util.Log
 import com.mackenzie.waifuviewer.App
+import com.mackenzie.waifuviewer.models.Error
 import com.mackenzie.waifuviewer.models.RemoteConnection.servicePics
 import com.mackenzie.waifuviewer.models.Waifu
-import com.mackenzie.waifuviewer.models.datasource.WaifusImLocalDataSource
-import com.mackenzie.waifuviewer.models.datasource.WaifusPicLocalDataSource
-import com.mackenzie.waifuviewer.models.datasource.WaifusRemoteDataSource
 import com.mackenzie.waifuviewer.models.db.WaifuImItem
 import com.mackenzie.waifuviewer.models.db.WaifuPicItem
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import com.mackenzie.waifuviewer.models.tryCall
 
 class WaifusRepository(application: App) {
 
@@ -25,7 +22,7 @@ class WaifusRepository(application: App) {
     fun findImById(id: Int) = localImDataSource.findImById(id)
 
 
-    suspend fun requestWaifusIm(isNsfw: Boolean, tag: String, isGif: Boolean, orientation: Boolean) {
+    suspend fun requestWaifusIm(isNsfw: Boolean, tag: String, isGif: Boolean, orientation: Boolean): Error? = tryCall {
         if(localImDataSource.isImEmpty()) {
             val waifusIm = remoteDataSource.getRandomWaifusIm(isNsfw, tag, isGif, getOrientation(orientation))
             localImDataSource.saveIm(waifusIm.waifus.toLocalModelIm())
@@ -34,12 +31,12 @@ class WaifusRepository(application: App) {
         }
     }
 
-    suspend fun requestNewWaifusIm(isNsfw: Boolean, tag: String, isGif: Boolean, orientation: Boolean) {
+    suspend fun requestNewWaifusIm(isNsfw: Boolean, tag: String, isGif: Boolean, orientation: Boolean): Error? = tryCall {
         val waifusIm = remoteDataSource.getRandomWaifusIm(isNsfw, tag, isGif, getOrientation(orientation))
         localImDataSource.saveIm(waifusIm.waifus.toLocalModelIm())
     }
 
-    suspend fun requestWaifusPics(isNsfw: String, tag: String) {
+    suspend fun requestWaifusPics(isNsfw: String, tag: String): Error? = tryCall {
         if(localPicDataSource.isPicsEmpty()) {
             val waifusPics = remoteDataSource.getRandomWaifusPics(isNsfw, tag)
             localPicDataSource.savePics(waifusPics.toLocalModelPics())
@@ -48,12 +45,14 @@ class WaifusRepository(application: App) {
         }
     }
 
-    suspend fun requestNewWaifusPics(isNsfw: String, tag: String) {
+    suspend fun requestNewWaifusPics(isNsfw: String, tag: String): Error? = tryCall {
         val waifusPics = remoteDataSource.getRandomWaifusPics(isNsfw, tag)
         localPicDataSource.savePics(waifusPics.toLocalModelPics())
     }
 
     suspend fun requestOnlyWaifuPic() = servicePics.getOnlyWaifuPic()
+
+    suspend fun requestOnlyWaifuPicFix(): Error? = tryCall { servicePics.getOnlyWaifuPic() }
 
     private fun getOrientation(ori: Boolean): String {
         if (ori) {
@@ -63,12 +62,12 @@ class WaifusRepository(application: App) {
         }
     }
 
-    suspend fun switchPicsFavorite(picsItem: WaifuPicItem) {
+    suspend fun switchPicsFavorite(picsItem: WaifuPicItem) = tryCall {
         val updatedWaifu = picsItem.copy(isFavorite = !picsItem.isFavorite)
         localPicDataSource.savePics(listOf(updatedWaifu))
     }
 
-    suspend fun switchImFavorite(imItem: WaifuImItem) {
+    suspend fun switchImFavorite(imItem: WaifuImItem) = tryCall {
         val updatedWaifu = imItem.copy(isFavorite = !imItem.isFavorite)
         localImDataSource.saveIm(listOf(updatedWaifu))
     }

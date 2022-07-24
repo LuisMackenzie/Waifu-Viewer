@@ -13,6 +13,7 @@ import com.mackenzie.waifuviewer.adapters.WaifuImAdapter
 import com.mackenzie.waifuviewer.adapters.WaifuPicsAdapter
 import com.mackenzie.waifuviewer.models.datasource.WaifusRepository
 import com.mackenzie.waifuviewer.databinding.FragmentWaifuBinding
+import com.mackenzie.waifuviewer.models.Error
 import com.mackenzie.waifuviewer.ui.common.app
 import com.mackenzie.waifuviewer.ui.common.launchAndCollect
 import com.mackenzie.waifuviewer.ui.common.visible
@@ -107,8 +108,9 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
 
         progress.visible = state.isLoading
         recycler.visibility = if(state.isLoading) View.GONE else View.VISIBLE
-        ivError.visibility = if(state.isError) View.VISIBLE else View.GONE
-        tvError.visibility = if(state.isError) View.VISIBLE else View.GONE
+
+        // ivError.visibility = View.GONE
+        // tvError.visibility = View.GONE
 
         state.waifusSavedPics?.let { savedPicWaifus ->
             waifuPicsAdapter.submitList(savedPicWaifus)
@@ -118,15 +120,23 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
             }
         }
 
+        state.error?.let {
+            mainState.errorToString(it)
+            ivError.visibility = View.VISIBLE
+            tvError.visibility = View.VISIBLE
+        }
+
         fabRecycler.setOnClickListener { picsViewModel.onRequestMore(isNsfw, categoryTag) }
     }
+
+
 
     private fun FragmentWaifuBinding.withImUpdateUI(state: WaifuImViewModel.UiState) {
 
         progress.visible = state.isLoading
         recycler.visibility = if(state.isLoading) View.GONE else View.VISIBLE
-        ivError.visibility = if(state.isError) View.VISIBLE else View.GONE
-        tvError.visibility = if(state.isError) View.VISIBLE else View.GONE
+        // ivError.visibility = if(state.error) View.VISIBLE else View.GONE
+        // tvError.visibility = if(state.error) View.VISIBLE else View.GONE
 
         state.waifusSavedIm?.let { savedImWaifus ->
             waifuImAdapter.submitList(savedImWaifus)
@@ -134,6 +144,12 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
                 val count = waifuImAdapter.itemCount
                 Toast.makeText(requireContext(), "Total Waifus = $count", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        state.error?.let {
+            mainState.errorToString(it)
+            ivError.visibility = View.VISIBLE
+            tvError.visibility = View.VISIBLE
         }
 
         val bun = safeArgs.bundleInfo
@@ -146,16 +162,11 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
     }
 
     companion object {
-        const val EXTRA_WAIFU = "WaifuFragment:waifu"
         const val IS_SERVER_SELECTED = "WaifuFragment:server"
         const val IS_NSFW_WAIFU = "WaifuFragment:nsfw"
         const val IS_GIF_WAIFU = "WaifuFragment:gif"
         const val IS_LANDS_WAIFU = "WaifuFragment:lands"
-        const val ID_WAIFU = "WaifuFragment:id"
         const val CATEGORY_TAG = "WaifuFragment:tag"
-        const val ORIENTATION_PORTRAIT = "PORTRAIT"
-        const val ORIENTATION_LANDSCAPE = "LANDSCAPE"
-        const val DEFAULT_REGION = "US"
     }
 
 }

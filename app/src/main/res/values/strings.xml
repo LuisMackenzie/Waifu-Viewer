@@ -12,4 +12,6 @@
     <string name="nsfw_content">NSFW</string>
     <string name="server_mode">Server Mode</string>
     <string name="no_waifu_found">No waifu found :( Try again later</string>
+    <string name="connectivity_error">Connection Error</string>
+    <string name="unknown_error">Unknown Error</string>
 </resources>

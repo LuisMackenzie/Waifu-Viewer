@@ -3,12 +3,12 @@ package com.mackenzie.waifuviewer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.mackenzie.waifuviewer.models.Error
 import com.mackenzie.waifuviewer.models.datasource.WaifusRepository
 import com.mackenzie.waifuviewer.models.db.WaifuPicItem
+import com.mackenzie.waifuviewer.models.toError
 import com.mackenzie.waifuviewer.ui.common.Scope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class WaifuPicsViewModel(private val waifusRepository: WaifusRepository): ViewModel(), Scope by Scope.Impl() {
@@ -20,14 +20,14 @@ class WaifuPicsViewModel(private val waifusRepository: WaifusRepository): ViewMo
 
     init {
         viewModelScope.launch {
-            waifusRepository.savedWaifusPic.collect{ WaifuPics ->
-                _state.value = UiState(waifusSavedPics = WaifuPics)
+            waifusRepository.savedWaifusPic
+                .catch { cause -> _state.update { it.copy(error = cause.toError()) }}
+                .collect{ WaifuPics -> _state.update { UiState(waifusSavedPics = WaifuPics) }
             }
         }
     }
 
     fun onPicsReady(isNsfw: Boolean, tag: String) {
-            // _state.value = UiState(isLoading = true)
             if (isNsfw) {
                 waifusGetter("nsfw", tag)
             } else {
@@ -37,17 +37,22 @@ class WaifuPicsViewModel(private val waifusRepository: WaifusRepository): ViewMo
 
     fun onRequestMore(isNsfw: Boolean, tag: String) {
         viewModelScope.launch {
+            val error: Error?
             if (isNsfw) {
                 if (tag == "all") {
-                    waifusRepository.requestNewWaifusPics("nsfw", "waifu")
+                    error = waifusRepository.requestNewWaifusPics("nsfw", "waifu")
+                    _state.update { it.copy(error = error) }
                 } else {
-                    waifusRepository.requestNewWaifusPics("nsfw", tag)
+                    error = waifusRepository.requestNewWaifusPics("nsfw", tag)
+                    _state.update { it.copy(error = error) }
                 }
             } else {
                 if (tag == "all") {
-                    waifusRepository.requestNewWaifusPics("sfw", "waifu")
+                    error = waifusRepository.requestNewWaifusPics("sfw", "waifu")
+                    _state.update { it.copy(error = error) }
                 } else {
-                    waifusRepository.requestNewWaifusPics("sfw", tag)
+                    error = waifusRepository.requestNewWaifusPics("sfw", tag)
+                    _state.update { it.copy(error = error) }
                 }
             }
         }
@@ -55,10 +60,13 @@ class WaifuPicsViewModel(private val waifusRepository: WaifusRepository): ViewMo
 
     private fun waifusGetter(isNsfw: String, tag: String) {
         viewModelScope.launch {
+            val error: Error?
             if (tag == "all") {
-                waifusRepository.requestWaifusPics(isNsfw, "waifu")
+                error = waifusRepository.requestWaifusPics(isNsfw, "waifu")
+                _state.update { it.copy(error = error) }
             } else {
-                waifusRepository.requestWaifusPics(isNsfw, tag)
+                error = waifusRepository.requestWaifusPics(isNsfw, tag)
+                _state.update { it.copy(error = error) }
             }
         }
     }
@@ -66,11 +74,8 @@ class WaifuPicsViewModel(private val waifusRepository: WaifusRepository): ViewMo
 
     data class UiState(
         val isLoading: Boolean = false,
-        // val waifusIm: WaifuResult? = null,
-        // val waifusPics: List<String>? = null,
         val waifusSavedPics: List<WaifuPicItem>? = null,
-        // val waifusSavedIm: List<WaifuImItem>? = null,
-        val isError: Boolean = false
+        val error: Error? = null
     )
 
 

@@ -1,6 +1,7 @@
 package com.mackenzie.waifuviewer.ui
 
 import androidx.lifecycle.*
+import com.mackenzie.waifuviewer.models.Error
 import com.mackenzie.waifuviewer.models.datasource.WaifusRepository
 import com.mackenzie.waifuviewer.models.WaifuPic
 import com.mackenzie.waifuviewer.models.WaifuResult
@@ -8,6 +9,7 @@ import com.mackenzie.waifuviewer.ui.common.Scope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SelectorViewModel (private val waifusRepository: WaifusRepository): ViewModel(), Scope by Scope.Impl() {
@@ -23,19 +25,24 @@ class SelectorViewModel (private val waifusRepository: WaifusRepository): ViewMo
         loadWaifu()
     }
 
-    private fun loadWaifu() {
+    fun loadWaifu() {
         viewModelScope.launch {
-            _state.value = UiState(isLoading = true)
-            // val waifu = waifusRepository.getWaifuInfo(waifuIdDefault)
             val waifu = waifusRepository.requestOnlyWaifuPic()
+            _state.update { UiState(waifu = waifu) }
+        }
+    }
 
-            _state.value = UiState(waifu = waifu, isLoading = false)
+    fun loadErrorOrWaifu() {
+        viewModelScope.launch {
+            // val waifu = waifusRepository.getWaifuInfo(waifuIdDefault)
+            val error = waifusRepository.requestOnlyWaifuPicFix()
+            _state.update { UiState(error = error) }
         }
     }
 
     private fun loadRandomWaifu() {
         viewModelScope.launch {
-            _state.value = UiState(isLoading = true)
+            // _state.value = UiState(isLoading = true)
             // val waifuResult = waifusRepository.getWaifuOnly()
             // _state.value = UiState(waifu = waifuResult.waifus[0], isLoading = false)
         }
@@ -43,46 +50,19 @@ class SelectorViewModel (private val waifusRepository: WaifusRepository): ViewMo
 
     private fun loadAdultWaifu() {
         viewModelScope.launch {
-            _state.value = UiState(isLoading = true)
+            // _state.value = UiState(isLoading = true)
             // val waifuResult = waifusRepository.getWaifuOnlyNsfw()
             // _state.value = UiState(waifu = waifuResult.waifus[0], isLoading = false)
         }
     }
 
-    fun onUpdateWaifu() {
+    /*fun onUpdateWaifu() {
         loadWaifu()
-    }
-
-    fun onUiReady() {
-
-    }
-
-    /*fun onButtonClicked(waifuResult: WaifuResult) {
-        viewModelScope.launch {
-            _state.value = UiState(waifus = waifusRepository.getRandomWaifus(), isLoading = false)
-        }
-    }
-
-    fun onLocationPermissionChecked() {
-        _state.value = _state.value.copy(requestLocationPermission = false)
-    }
-
-    fun onNavigationDone() {
-        _state.value = _state.value.copy(navigateTo = null)
-    }*/
-
-
-    /*override fun onCleared() {
-        destroyScope()
-        super.onCleared()
     }*/
 
     data class UiState(
-        val isLoading: Boolean = false,
-        val waifus: WaifuResult? = null,
         val waifu: WaifuPic? = null,
-        // val requestLocationPermission: Boolean = true,
-        // val navigateTo: WaifuResult? = null
+        val error: Error? = null
     )
 
     /*sealed interface UiEvent {
