@@ -8,11 +8,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.mackenzie.waifuviewer.R
-import com.mackenzie.waifuviewer.models.Error
-import com.mackenzie.waifuviewer.models.Waifu
-import com.mackenzie.waifuviewer.models.WaifuPic
-import com.mackenzie.waifuviewer.models.db.WaifuImItem
-import com.mackenzie.waifuviewer.models.db.WaifuPicItem
+import com.mackenzie.waifuviewer.data.Error
+import com.mackenzie.waifuviewer.data.db.WaifuImItem
+import com.mackenzie.waifuviewer.data.db.WaifuPicItem
 import com.mackenzie.waifuviewer.ui.SelectorFragmentDirections
 import com.mackenzie.waifuviewer.ui.common.PermissionRequester
 import kotlinx.coroutines.CoroutineScope

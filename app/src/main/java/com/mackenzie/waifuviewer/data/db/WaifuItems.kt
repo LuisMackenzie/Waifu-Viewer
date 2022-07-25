@@ -1,9 +1,8 @@
-package com.mackenzie.waifuviewer.models.db
+package com.mackenzie.waifuviewer.data.db
 
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.mackenzie.waifuviewer.models.Tag
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

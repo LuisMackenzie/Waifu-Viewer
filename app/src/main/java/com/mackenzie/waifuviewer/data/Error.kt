@@ -1,4 +1,4 @@
-package com.mackenzie.waifuviewer.models
+package com.mackenzie.waifuviewer.data
 
 import retrofit2.HttpException
 import java.io.IOException

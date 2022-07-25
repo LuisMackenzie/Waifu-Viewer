@@ -16,8 +16,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.databinding.FragmentSelectorBinding
-import com.mackenzie.waifuviewer.models.WaifuPic
-import com.mackenzie.waifuviewer.models.datasource.WaifusPicRepository
+import com.mackenzie.waifuviewer.data.WaifuPic
+import com.mackenzie.waifuviewer.data.datasource.WaifusPicRepository
+import com.mackenzie.waifuviewer.domain.RequestOnlyWaifuPicUseCase
 import com.mackenzie.waifuviewer.ui.common.PermissionRequester
 import com.mackenzie.waifuviewer.ui.common.app
 import com.mackenzie.waifuviewer.ui.common.launchAndCollect
@@ -32,9 +33,9 @@ import kotlinx.coroutines.launch
 
 class SelectorFragment : Fragment(R.layout.fragment_selector) {
 
-    private val viewModel: SelectorViewModel by viewModels { SelectorViewModelFactory(
-        WaifusPicRepository(requireActivity().app)
-    ) }
+    private val viewModel: SelectorViewModel by viewModels {
+        val repo = WaifusPicRepository(requireActivity().app)
+        SelectorViewModelFactory(RequestOnlyWaifuPicUseCase(repo)) }
     private lateinit var binding: FragmentSelectorBinding
     private var backgroudImage: ImageView? = null
     private lateinit var mainState: MainState

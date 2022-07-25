@@ -1,9 +1,8 @@
-package com.mackenzie.waifuviewer.models
+package com.mackenzie.waifuviewer.data
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
-import kotlinx.serialization.Serializable
 
 @Parcelize
 data class Waifu(

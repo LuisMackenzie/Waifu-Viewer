@@ -1,7 +1,7 @@
-package com.mackenzie.waifuviewer.models.datasource
+package com.mackenzie.waifuviewer.data.datasource
 
 import com.google.gson.JsonObject
-import com.mackenzie.waifuviewer.models.RemoteConnection
+import com.mackenzie.waifuviewer.data.RemoteConnection
 
 class WaifusPicRemoteDataSource {
 

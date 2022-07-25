@@ -1,16 +1,12 @@
-package com.mackenzie.waifuviewer.utils
+package com.mackenzie.waifuviewer.ui.common
 
 import android.content.ContentValues
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Build
 import android.os.Environment
-import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.widget.Toast
-import com.bumptech.glide.Glide
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.withContext
 import java.io.File

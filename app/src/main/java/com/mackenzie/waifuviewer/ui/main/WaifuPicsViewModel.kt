@@ -3,15 +3,20 @@ package com.mackenzie.waifuviewer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.mackenzie.waifuviewer.models.Error
-import com.mackenzie.waifuviewer.models.datasource.WaifusPicRepository
-import com.mackenzie.waifuviewer.models.db.WaifuPicItem
-import com.mackenzie.waifuviewer.models.toError
+import com.mackenzie.waifuviewer.data.Error
+import com.mackenzie.waifuviewer.data.datasource.WaifusPicRepository
+import com.mackenzie.waifuviewer.data.db.WaifuPicItem
+import com.mackenzie.waifuviewer.data.toError
+import com.mackenzie.waifuviewer.domain.GetWaifuPicUseCase
+import com.mackenzie.waifuviewer.domain.RequestWaifuPicUseCase
 import com.mackenzie.waifuviewer.ui.common.Scope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class WaifuPicsViewModel(private val waifusPicRepository: WaifusPicRepository): ViewModel(), Scope by Scope.Impl() {
+class WaifuPicsViewModel(
+    private val getWaifuPicUseCase: GetWaifuPicUseCase,
+    private val requestWaifuPicUseCase: RequestWaifuPicUseCase
+    ): ViewModel(), Scope by Scope.Impl() {
 
     private val _state = MutableStateFlow(UiState())
     val state: StateFlow<UiState> = _state.asStateFlow()
@@ -20,7 +25,7 @@ class WaifuPicsViewModel(private val waifusPicRepository: WaifusPicRepository): 
 
     init {
         viewModelScope.launch {
-            waifusPicRepository.savedWaifusPic
+            getWaifuPicUseCase()
                 .catch { cause -> _state.update { it.copy(error = cause.toError()) }}
                 .collect{ WaifuPics -> _state.update { UiState(waifusSavedPics = WaifuPics) }
             }
@@ -40,18 +45,18 @@ class WaifuPicsViewModel(private val waifusPicRepository: WaifusPicRepository): 
             val error: Error?
             if (isNsfw) {
                 if (tag == "all") {
-                    error = waifusPicRepository.requestNewWaifusPics("nsfw", "waifu")
+                    error = requestWaifuPicUseCase("nsfw", "waifu")
                     _state.update { it.copy(error = error) }
                 } else {
-                    error = waifusPicRepository.requestNewWaifusPics("nsfw", tag)
+                    error = requestWaifuPicUseCase("nsfw", tag)
                     _state.update { it.copy(error = error) }
                 }
             } else {
                 if (tag == "all") {
-                    error = waifusPicRepository.requestNewWaifusPics("sfw", "waifu")
+                    error = requestWaifuPicUseCase("sfw", "waifu")
                     _state.update { it.copy(error = error) }
                 } else {
-                    error = waifusPicRepository.requestNewWaifusPics("sfw", tag)
+                    error = requestWaifuPicUseCase("sfw", tag)
                     _state.update { it.copy(error = error) }
                 }
             }
@@ -62,10 +67,10 @@ class WaifuPicsViewModel(private val waifusPicRepository: WaifusPicRepository): 
         viewModelScope.launch {
             val error: Error?
             if (tag == "all") {
-                error = waifusPicRepository.requestWaifusPics(isNsfw, "waifu")
+                error = requestWaifuPicUseCase(isNsfw, "waifu")
                 _state.update { it.copy(error = error) }
             } else {
-                error = waifusPicRepository.requestWaifusPics(isNsfw, tag)
+                error = requestWaifuPicUseCase(isNsfw, tag)
                 _state.update { it.copy(error = error) }
             }
         }
@@ -79,8 +84,8 @@ class WaifuPicsViewModel(private val waifusPicRepository: WaifusPicRepository): 
 }
 
 @Suppress("UNCHECKED_CAST")
-class WaifuPicsViewModelFactory(private val waifusImRepository: WaifusPicRepository) : ViewModelProvider.Factory {
+class WaifuPicsViewModelFactory(private val getWaifuPicUseCase: GetWaifuPicUseCase, private val requestWaifuPicUseCase: RequestWaifuPicUseCase) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return WaifuPicsViewModel(waifusImRepository) as T
+        return WaifuPicsViewModel(getWaifuPicUseCase, requestWaifuPicUseCase) as T
     }
 }

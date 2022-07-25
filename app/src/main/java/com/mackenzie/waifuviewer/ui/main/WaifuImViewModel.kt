@@ -3,22 +3,27 @@ package com.mackenzie.waifuviewer.ui.main
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.mackenzie.waifuviewer.models.Error
-import com.mackenzie.waifuviewer.models.datasource.WaifusImRepository
-import com.mackenzie.waifuviewer.models.db.WaifuImItem
-import com.mackenzie.waifuviewer.models.toError
+import com.mackenzie.waifuviewer.data.Error
+import com.mackenzie.waifuviewer.data.datasource.WaifusImRepository
+import com.mackenzie.waifuviewer.data.db.WaifuImItem
+import com.mackenzie.waifuviewer.data.toError
+import com.mackenzie.waifuviewer.domain.GetWaifuImUseCase
+import com.mackenzie.waifuviewer.domain.RequestWaifuImUseCase
 import com.mackenzie.waifuviewer.ui.common.Scope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class WaifuImViewModel(private val waifusImRepository: WaifusImRepository): ViewModel(), Scope by Scope.Impl() {
+class WaifuImViewModel(
+    private val getWaifuImUseCase: GetWaifuImUseCase,
+    private val requestWaifuImUseCase: RequestWaifuImUseCase
+    ): ViewModel(), Scope by Scope.Impl() {
 
     private val _state = MutableStateFlow(UiState())
     val state: StateFlow<UiState> = _state.asStateFlow()
 
     init {
         viewModelScope.launch {
-            waifusImRepository.savedWaifusIm
+            getWaifuImUseCase()
                 .catch { cause -> _state.update { it.copy(error = cause.toError()) }}
                 .collect{ WaifuIm -> _state.update { UiState(waifusSavedIm = WaifuIm) }
             }
@@ -31,14 +36,14 @@ class WaifuImViewModel(private val waifusImRepository: WaifusImRepository): View
             val error: Error?
             if (tag == "all") {
                 if (isNsfw) {
-                    error = waifusImRepository.requestWaifusIm(isNsfw,"ecchi",isGif,orientation)
+                    error = requestWaifuImUseCase(isNsfw,"ecchi",isGif,orientation)
                     _state.update { it.copy(error = error) }
                 } else {
-                    error = waifusImRepository.requestWaifusIm(isNsfw,"waifu",isGif,orientation)
+                    error = requestWaifuImUseCase(isNsfw,"waifu",isGif,orientation)
                     _state.update { it.copy(error = error) }
                 }
             } else {
-                error = waifusImRepository.requestWaifusIm(isNsfw, tag, isGif,  orientation)
+                error = requestWaifuImUseCase(isNsfw, tag, isGif,  orientation)
                 _state.update { it.copy(error = error) }
             }
         }
@@ -49,14 +54,14 @@ class WaifuImViewModel(private val waifusImRepository: WaifusImRepository): View
             val error: Error?
             if (tag == "all") {
                 if (isNsfw) {
-                    error =waifusImRepository.requestNewWaifusIm(isNsfw,"ecchi",isGif,orientation)
+                    error = requestWaifuImUseCase(isNsfw,"ecchi",isGif,orientation)
                     _state.update { it.copy(error = error) }
                 } else {
-                    error = waifusImRepository.requestNewWaifusIm(isNsfw,"waifu",isGif,orientation)
+                    error = requestWaifuImUseCase(isNsfw,"waifu",isGif,orientation)
                     _state.update { it.copy(error = error) }
                 }
             } else {
-                error = waifusImRepository.requestNewWaifusIm(isNsfw, tag, isGif,  orientation)
+                error = requestWaifuImUseCase(isNsfw, tag, isGif,  orientation)
                 _state.update { it.copy(error = error) }
             }
         }
@@ -70,8 +75,8 @@ class WaifuImViewModel(private val waifusImRepository: WaifusImRepository): View
 }
 
 @Suppress("UNCHECKED_CAST")
-class WaifuImViewModelFactory(private val waifusImRepository: WaifusImRepository) : ViewModelProvider.Factory {
+class WaifuImViewModelFactory(private val getWaifuImUseCase: GetWaifuImUseCase, private val requestWaifuImUseCase: RequestWaifuImUseCase) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return WaifuImViewModel(waifusImRepository) as T
+        return WaifuImViewModel(getWaifuImUseCase, requestWaifuImUseCase) as T
     }
 }

@@ -5,7 +5,7 @@
 
     <data>
         <import type="java.util.List"/>
-        <import type="com.mackenzie.waifuviewer.models.db.WaifuPicItem"/>
+        <import type="com.mackenzie.waifuviewer.data.db.WaifuPicItem"/>
         <variable name="loading" type="boolean"/>
         <variable name="waifus" type="List&lt;WaifuPicItem>"/>
     </data>

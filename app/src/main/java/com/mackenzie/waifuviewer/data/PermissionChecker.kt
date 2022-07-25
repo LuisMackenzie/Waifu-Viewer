@@ -1,4 +1,4 @@
-package com.mackenzie.waifuviewer.models
+package com.mackenzie.waifuviewer.data
 
 import android.app.Application
 import android.content.pm.PackageManager

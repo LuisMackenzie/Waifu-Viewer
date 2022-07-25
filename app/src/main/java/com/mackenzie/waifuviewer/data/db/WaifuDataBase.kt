@@ -1,4 +1,4 @@
-package com.mackenzie.waifuviewer.models.db
+package com.mackenzie.waifuviewer.data.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

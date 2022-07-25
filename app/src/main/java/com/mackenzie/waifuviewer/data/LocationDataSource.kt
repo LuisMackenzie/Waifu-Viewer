@@ -1,4 +1,4 @@
-package com.mackenzie.waifuviewer.models
+package com.mackenzie.waifuviewer.data
 
 import android.annotation.SuppressLint
 import android.app.Application

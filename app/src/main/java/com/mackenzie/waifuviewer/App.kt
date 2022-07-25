@@ -2,7 +2,7 @@ package com.mackenzie.waifuviewer
 
 import android.app.Application
 import androidx.room.Room
-import com.mackenzie.waifuviewer.models.db.WaifuDataBase
+import com.mackenzie.waifuviewer.data.db.WaifuDataBase
 
 class App: Application() {
 
@@ -11,11 +11,6 @@ class App: Application() {
 
     override fun onCreate() {
         super.onCreate()
-        // instance = this
         db = Room.databaseBuilder(this, WaifuDataBase::class.java, "waifu-database").build()
     }
-
-    /*companion object {
-        lateinit var instance: App
-    }*/
 }

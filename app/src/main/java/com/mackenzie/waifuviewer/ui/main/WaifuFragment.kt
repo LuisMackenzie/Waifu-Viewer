@@ -9,11 +9,13 @@ import androidx.navigation.fragment.navArgs
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.WaifuPicsViewModel
 import com.mackenzie.waifuviewer.WaifuPicsViewModelFactory
-import com.mackenzie.waifuviewer.adapters.WaifuImAdapter
-import com.mackenzie.waifuviewer.adapters.WaifuPicsAdapter
-import com.mackenzie.waifuviewer.models.datasource.WaifusImRepository
+import com.mackenzie.waifuviewer.data.datasource.WaifusImRepository
 import com.mackenzie.waifuviewer.databinding.FragmentWaifuBinding
-import com.mackenzie.waifuviewer.models.datasource.WaifusPicRepository
+import com.mackenzie.waifuviewer.data.datasource.WaifusPicRepository
+import com.mackenzie.waifuviewer.domain.GetWaifuImUseCase
+import com.mackenzie.waifuviewer.domain.GetWaifuPicUseCase
+import com.mackenzie.waifuviewer.domain.RequestWaifuImUseCase
+import com.mackenzie.waifuviewer.domain.RequestWaifuPicUseCase
 import com.mackenzie.waifuviewer.ui.common.app
 import com.mackenzie.waifuviewer.ui.common.launchAndCollect
 import com.mackenzie.waifuviewer.ui.common.visible
@@ -22,9 +24,11 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
 
     private val safeArgs: WaifuFragmentArgs by navArgs()
     private val picsViewModel: WaifuPicsViewModel by viewModels {
-        WaifuPicsViewModelFactory(WaifusPicRepository(requireActivity().app)) }
+        val repo = WaifusPicRepository(requireActivity().app)
+        WaifuPicsViewModelFactory(GetWaifuPicUseCase(repo), RequestWaifuPicUseCase(repo)) }
     private val imViewModel: WaifuImViewModel by viewModels {
-        WaifuImViewModelFactory(WaifusImRepository(requireActivity().app)) }
+        val repo = WaifusImRepository(requireActivity().app)
+        WaifuImViewModelFactory(GetWaifuImUseCase(repo), RequestWaifuImUseCase(repo)) }
     private lateinit var mainState: MainState
     private lateinit var bun: Bundle
     private var mainServer: Boolean = false

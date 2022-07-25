@@ -1,7 +1,7 @@
-package com.mackenzie.waifuviewer.models.datasource
+package com.mackenzie.waifuviewer.data.datasource
 
-import com.mackenzie.waifuviewer.models.db.WaifuImDao
-import com.mackenzie.waifuviewer.models.db.WaifuImItem
+import com.mackenzie.waifuviewer.data.db.WaifuImDao
+import com.mackenzie.waifuviewer.data.db.WaifuImItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext

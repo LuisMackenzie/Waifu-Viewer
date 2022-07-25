@@ -3,22 +3,27 @@ package com.mackenzie.waifuviewer.ui.detail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.mackenzie.waifuviewer.models.datasource.WaifusImRepository
-import com.mackenzie.waifuviewer.models.datasource.WaifusPicRepository
-import com.mackenzie.waifuviewer.models.db.WaifuPicItem
+import com.mackenzie.waifuviewer.data.db.WaifuPicItem
+import com.mackenzie.waifuviewer.domain.FindWaifuPicUseCase
+import com.mackenzie.waifuviewer.domain.SwitchPicFavoriteUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class DetailPicsViewModel (private val waifuId: Int, private val waifusPicRepository: WaifusPicRepository): ViewModel() {
+class DetailPicsViewModel (
+    waifuId: Int,
+    findWaifuPicUseCase: FindWaifuPicUseCase,
+    private val switchPicFavoriteUseCase: SwitchPicFavoriteUseCase
+    ): ViewModel() {
 
     private val _state = MutableStateFlow(UiState())
     val state: StateFlow<UiState> = _state.asStateFlow()
 
+
     init {
         viewModelScope.launch {
-            waifusPicRepository.findPicsById(waifuId).collect {
+            findWaifuPicUseCase(waifuId).collect {
                 _state.value = UiState(waifuPic = it)
             }
         }
@@ -26,7 +31,7 @@ class DetailPicsViewModel (private val waifuId: Int, private val waifusPicReposi
 
     fun onFavoriteClicked() {
         viewModelScope.launch {
-            _state.value.waifuPic?.let { waifusPicRepository.switchPicsFavorite(it) }
+            _state.value.waifuPic?.let { switchPicFavoriteUseCase(it) }
         }
     }
 
@@ -35,8 +40,12 @@ class DetailPicsViewModel (private val waifuId: Int, private val waifusPicReposi
 }
 
 @Suppress("UNCHECKED_CAST")
-class DetailPicsViewModelFactory(private val waifuId: Int, private val waifusPicRepository: WaifusPicRepository) : ViewModelProvider.Factory {
+class DetailPicsViewModelFactory(
+    private val waifuId: Int,
+    private val findWaifuPicUseCase: FindWaifuPicUseCase,
+    private val switchPicFavoriteUseCase: SwitchPicFavoriteUseCase
+    ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return DetailPicsViewModel(waifuId, waifusPicRepository) as T
+        return DetailPicsViewModel(waifuId, findWaifuPicUseCase, switchPicFavoriteUseCase) as T
     }
 }

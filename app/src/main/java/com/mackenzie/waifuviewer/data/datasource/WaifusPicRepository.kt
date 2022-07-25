@@ -1,11 +1,11 @@
-package com.mackenzie.waifuviewer.models.datasource
+package com.mackenzie.waifuviewer.data.datasource
 
 import android.util.Log
 import com.mackenzie.waifuviewer.App
-import com.mackenzie.waifuviewer.models.Error
-import com.mackenzie.waifuviewer.models.RemoteConnection
-import com.mackenzie.waifuviewer.models.db.WaifuPicItem
-import com.mackenzie.waifuviewer.models.tryCall
+import com.mackenzie.waifuviewer.data.Error
+import com.mackenzie.waifuviewer.data.RemoteConnection
+import com.mackenzie.waifuviewer.data.db.WaifuPicItem
+import com.mackenzie.waifuviewer.data.tryCall
 
 class WaifusPicRepository(application: App) {
 

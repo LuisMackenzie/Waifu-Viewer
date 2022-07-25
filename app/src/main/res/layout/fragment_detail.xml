@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-        <import type="com.mackenzie.waifuviewer.models.db.WaifuPicItem"/>
-        <import type="com.mackenzie.waifuviewer.models.db.WaifuImItem"/>
+        <import type="com.mackenzie.waifuviewer.data.db.WaifuPicItem"/>
+        <import type="com.mackenzie.waifuviewer.data.db.WaifuImItem"/>
         <variable name="waifuPic" type="WaifuPicItem" />
         <variable name="waifuIm" type="WaifuImItem"/>
     </data>

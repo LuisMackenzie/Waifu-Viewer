@@ -14,18 +14,22 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import com.mackenzie.waifuviewer.R
-import com.mackenzie.waifuviewer.models.datasource.WaifusImRepository
+import com.mackenzie.waifuviewer.data.datasource.WaifusImRepository
 import com.mackenzie.waifuviewer.databinding.FragmentDetailBinding
-import com.mackenzie.waifuviewer.models.datasource.WaifusPicRepository
-import com.mackenzie.waifuviewer.models.db.WaifuImItem
-import com.mackenzie.waifuviewer.models.db.WaifuPicItem
+import com.mackenzie.waifuviewer.data.datasource.WaifusPicRepository
+import com.mackenzie.waifuviewer.data.db.WaifuImItem
+import com.mackenzie.waifuviewer.data.db.WaifuPicItem
+import com.mackenzie.waifuviewer.domain.FindWaifuImUseCase
+import com.mackenzie.waifuviewer.domain.FindWaifuPicUseCase
+import com.mackenzie.waifuviewer.domain.SwitchImFavoriteUseCase
+import com.mackenzie.waifuviewer.domain.SwitchPicFavoriteUseCase
 import com.mackenzie.waifuviewer.ui.common.app
 import com.mackenzie.waifuviewer.ui.common.loadUrl
 import com.mackenzie.waifuviewer.ui.common.visible
 import com.mackenzie.waifuviewer.ui.main.MainState
 import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_SERVER_SELECTED
 import com.mackenzie.waifuviewer.ui.main.buildMainState
-import com.mackenzie.waifuviewer.utils.SaveImage
+import com.mackenzie.waifuviewer.ui.common.SaveImage
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import java.io.IOException
@@ -36,9 +40,11 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
 
     private val safeArgs: DetailFragmentArgs by navArgs()
     private val picsViewModel: DetailPicsViewModel by viewModels {
-        DetailPicsViewModelFactory(safeArgs.waifuId, WaifusPicRepository(requireActivity().app)) }
+        val repo = WaifusPicRepository(requireActivity().app)
+        DetailPicsViewModelFactory(safeArgs.waifuId, FindWaifuPicUseCase(repo), SwitchPicFavoriteUseCase(repo)) }
     private val imViewModel: DetailImViewModel by viewModels {
-        DetailImViewModelFactory(safeArgs.waifuId, WaifusImRepository(requireActivity().app)) }
+        val repo = WaifusImRepository(requireActivity().app)
+        DetailImViewModelFactory(safeArgs.waifuId, FindWaifuImUseCase(repo), SwitchImFavoriteUseCase(repo)) }
     private lateinit var mainState: MainState
     private var mainServer: Boolean = false
     private var title: String? = null
@@ -193,15 +199,7 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
         }
     }
 
-    fun setWaifuPics(waifu: WaifuPicItem) {
-
-    }
-
-    fun setWaifuIm(waifu: WaifuImItem) {
-
-    }
-
-    private fun isGif(imagen: String): Boolean = imagen.endsWith("gif")
+    // private fun isGif(imagen: String): Boolean = imagen.endsWith("gif")
 
 
 }

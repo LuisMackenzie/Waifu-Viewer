@@ -1,4 +1,4 @@
-package com.mackenzie.waifuviewer.adapters
+package com.mackenzie.waifuviewer.ui.main
 
 import android.view.View
 import android.view.ViewGroup
@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.databinding.ViewMediaItemBinding
-import com.mackenzie.waifuviewer.models.db.WaifuPicItem
+import com.mackenzie.waifuviewer.data.db.WaifuPicItem
 import com.mackenzie.waifuviewer.ui.common.basicDiffUtil
 import com.mackenzie.waifuviewer.ui.common.inflate
 import com.mackenzie.waifuviewer.ui.common.loadUrl
