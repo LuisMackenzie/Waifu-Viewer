@@ -1,7 +1,5 @@
-package com.mackenzie.waifuviewer.framework.datasource
+package com.mackenzie.waifuviewer.framework.server
 
-import com.mackenzie.waifuviewer.data.RemoteConnection
-import com.mackenzie.waifuviewer.data.Waifu
 import com.mackenzie.waifuviewer.data.datasource.WaifusImRemoteDataSource
 import com.mackenzie.waifuviewer.domain.WaifuImItem
 

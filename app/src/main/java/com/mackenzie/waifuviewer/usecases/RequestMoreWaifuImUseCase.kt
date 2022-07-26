@@ -1,6 +1,6 @@
 package com.mackenzie.waifuviewer.usecases
 
-import com.mackenzie.waifuviewer.data.Error
+import com.mackenzie.waifuviewer.domain.Error
 import com.mackenzie.waifuviewer.data.datasource.WaifusImRepository
 
 class RequestMoreWaifuImUseCase(private val repo: WaifusImRepository) {

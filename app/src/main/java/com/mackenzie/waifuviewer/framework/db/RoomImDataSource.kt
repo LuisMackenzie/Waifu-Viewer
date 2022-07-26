@@ -1,8 +1,6 @@
-package com.mackenzie.waifuviewer.framework.datasource
+package com.mackenzie.waifuviewer.framework.db
 
 import com.mackenzie.waifuviewer.data.datasource.WaifusImLocalDataSource
-import com.mackenzie.waifuviewer.framework.db.WaifuImDao
-import com.mackenzie.waifuviewer.framework.db.WaifuImDbItem
 import com.mackenzie.waifuviewer.domain.WaifuImItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -11,7 +9,7 @@ import kotlinx.coroutines.withContext
 
 class RoomImDataSource(private val ImDao: WaifuImDao) : WaifusImLocalDataSource {
 
-    override val waifusIm: Flow<List<WaifuImItem>> = ImDao.getAllIm().map { it.toDomainModel()}
+    override val waifusIm: Flow<List<WaifuImItem>> = ImDao.getAllIm().map { it.reversed().toDomainModel()}
 
     override suspend fun isImEmpty(): Boolean =  withContext(Dispatchers.IO) { ImDao.waifuImCount() == 0 }
 

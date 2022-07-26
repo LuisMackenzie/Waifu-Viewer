@@ -5,7 +5,7 @@ import android.app.Application
 import android.location.Geocoder
 import android.location.Location
 import com.mackenzie.waifuviewer.data.datasource.LocationDataSource
-import com.mackenzie.waifuviewer.framework.datasource.PlayServicesLocationDataSource
+import com.mackenzie.waifuviewer.framework.PlayServicesLocationDataSource
 
 class RegionRepository(application: Application) {
 

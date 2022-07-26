@@ -2,7 +2,7 @@ package com.mackenzie.waifuviewer.usecases
 
 import com.mackenzie.waifuviewer.data.datasource.WaifusImRepository
 import com.mackenzie.waifuviewer.domain.WaifuImItem
-import com.mackenzie.waifuviewer.data.Error
+import com.mackenzie.waifuviewer.domain.Error
 
 class SwitchImFavoriteUseCase(private val repo: WaifusImRepository) {
 

@@ -19,10 +19,10 @@ import com.mackenzie.waifuviewer.databinding.FragmentDetailBinding
 import com.mackenzie.waifuviewer.data.datasource.WaifusPicRepository
 import com.mackenzie.waifuviewer.domain.WaifuImItem
 import com.mackenzie.waifuviewer.domain.WaifuPicItem
-import com.mackenzie.waifuviewer.framework.datasource.RoomImDataSource
-import com.mackenzie.waifuviewer.framework.datasource.RoomPicDataSource
-import com.mackenzie.waifuviewer.framework.datasource.ServerImDataSource
-import com.mackenzie.waifuviewer.framework.datasource.ServerPicDataSource
+import com.mackenzie.waifuviewer.framework.db.RoomImDataSource
+import com.mackenzie.waifuviewer.framework.db.RoomPicDataSource
+import com.mackenzie.waifuviewer.framework.server.ServerImDataSource
+import com.mackenzie.waifuviewer.framework.server.ServerPicDataSource
 import com.mackenzie.waifuviewer.usecases.FindWaifuImUseCase
 import com.mackenzie.waifuviewer.usecases.FindWaifuPicUseCase
 import com.mackenzie.waifuviewer.usecases.SwitchImFavoriteUseCase

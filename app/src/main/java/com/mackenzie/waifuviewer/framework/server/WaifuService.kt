@@ -1,4 +1,4 @@
-package com.mackenzie.waifuviewer.data
+package com.mackenzie.waifuviewer.framework.server
 
 import com.google.gson.JsonObject
 import retrofit2.Response

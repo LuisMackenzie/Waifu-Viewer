@@ -12,10 +12,10 @@ import com.mackenzie.waifuviewer.WaifuPicsViewModelFactory
 import com.mackenzie.waifuviewer.data.datasource.WaifusImRepository
 import com.mackenzie.waifuviewer.databinding.FragmentWaifuBinding
 import com.mackenzie.waifuviewer.data.datasource.WaifusPicRepository
-import com.mackenzie.waifuviewer.framework.datasource.RoomImDataSource
-import com.mackenzie.waifuviewer.framework.datasource.RoomPicDataSource
-import com.mackenzie.waifuviewer.framework.datasource.ServerImDataSource
-import com.mackenzie.waifuviewer.framework.datasource.ServerPicDataSource
+import com.mackenzie.waifuviewer.framework.db.RoomImDataSource
+import com.mackenzie.waifuviewer.framework.db.RoomPicDataSource
+import com.mackenzie.waifuviewer.framework.server.ServerImDataSource
+import com.mackenzie.waifuviewer.framework.server.ServerPicDataSource
 import com.mackenzie.waifuviewer.ui.common.app
 import com.mackenzie.waifuviewer.ui.common.launchAndCollect
 import com.mackenzie.waifuviewer.ui.common.visible
@@ -120,7 +120,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
 
         state.waifusSavedPics?.let { savedPicWaifus ->
             waifuPicsAdapter.submitList(savedPicWaifus)
-            if (waifuPicsAdapter.itemCount != 0) {
+            if (waifuPicsAdapter.itemCount == 0) {
                 val count = waifuPicsAdapter.itemCount
                 Toast.makeText(requireContext(), "Total Waifus = $count", Toast.LENGTH_SHORT).show()
             }

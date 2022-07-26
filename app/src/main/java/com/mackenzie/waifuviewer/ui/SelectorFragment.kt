@@ -16,10 +16,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.databinding.FragmentSelectorBinding
-import com.mackenzie.waifuviewer.data.WaifuPic
 import com.mackenzie.waifuviewer.data.datasource.WaifusPicRepository
-import com.mackenzie.waifuviewer.framework.datasource.RoomPicDataSource
-import com.mackenzie.waifuviewer.framework.datasource.ServerPicDataSource
+import com.mackenzie.waifuviewer.framework.db.RoomPicDataSource
+import com.mackenzie.waifuviewer.framework.server.ServerPicDataSource
+import com.mackenzie.waifuviewer.framework.server.WaifuPic
 import com.mackenzie.waifuviewer.usecases.RequestOnlyWaifuPicUseCase
 import com.mackenzie.waifuviewer.ui.common.PermissionRequester
 import com.mackenzie.waifuviewer.ui.common.app

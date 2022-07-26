@@ -1,13 +1,10 @@
 package com.mackenzie.waifuviewer.data.datasource
 
 import android.util.Log
-import com.mackenzie.waifuviewer.App
-import com.mackenzie.waifuviewer.data.Error
-import com.mackenzie.waifuviewer.data.RemoteConnection
-import com.mackenzie.waifuviewer.data.tryCall
+import com.mackenzie.waifuviewer.framework.server.RemoteConnection
 import com.mackenzie.waifuviewer.domain.WaifuPicItem
-import com.mackenzie.waifuviewer.framework.datasource.RoomPicDataSource
-import com.mackenzie.waifuviewer.framework.datasource.ServerPicDataSource
+import com.mackenzie.waifuviewer.domain.tryCall
+import com.mackenzie.waifuviewer.domain.Error
 
 class WaifusPicRepository(
     private val localPicDataSource: WaifusPicLocalDataSource,

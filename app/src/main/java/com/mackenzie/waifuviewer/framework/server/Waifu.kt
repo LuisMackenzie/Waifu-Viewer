@@ -1,4 +1,4 @@
-package com.mackenzie.waifuviewer.data
+package com.mackenzie.waifuviewer.framework.server
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName

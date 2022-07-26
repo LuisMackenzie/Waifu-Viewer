@@ -3,9 +3,9 @@ package com.mackenzie.waifuviewer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.mackenzie.waifuviewer.data.Error
-import com.mackenzie.waifuviewer.data.toError
 import com.mackenzie.waifuviewer.domain.WaifuPicItem
+import com.mackenzie.waifuviewer.domain.Error
+import com.mackenzie.waifuviewer.domain.toError
 import com.mackenzie.waifuviewer.usecases.GetWaifuPicUseCase
 import com.mackenzie.waifuviewer.usecases.RequestWaifuPicUseCase
 import com.mackenzie.waifuviewer.ui.common.Scope

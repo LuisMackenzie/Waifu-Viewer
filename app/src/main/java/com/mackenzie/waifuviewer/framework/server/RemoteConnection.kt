@@ -1,4 +1,4 @@
-package com.mackenzie.waifuviewer.data
+package com.mackenzie.waifuviewer.framework.server
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

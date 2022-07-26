@@ -1,4 +1,4 @@
-package com.mackenzie.waifuviewer.framework.datasource
+package com.mackenzie.waifuviewer.framework
 
 import android.annotation.SuppressLint
 import android.app.Application

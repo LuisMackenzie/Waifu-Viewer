@@ -1,8 +1,6 @@
-package com.mackenzie.waifuviewer.framework.datasource
+package com.mackenzie.waifuviewer.framework.db
 
 import com.mackenzie.waifuviewer.data.datasource.WaifusPicLocalDataSource
-import com.mackenzie.waifuviewer.framework.db.WaifuPicDao
-import com.mackenzie.waifuviewer.framework.db.WaifuPicDbItem
 import com.mackenzie.waifuviewer.domain.WaifuPicItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -11,7 +9,7 @@ import kotlinx.coroutines.withContext
 
 class RoomPicDataSource(private val PicDao: WaifuPicDao) : WaifusPicLocalDataSource {
 
-    override val waifusPic: Flow<List<WaifuPicItem>> = PicDao.getAllPic().map { it.toDomainModel() }
+    override val waifusPic: Flow<List<WaifuPicItem>> = PicDao.getAllPic().map { it.reversed().toDomainModel() }
 
     override suspend fun isPicsEmpty(): Boolean = withContext(Dispatchers.IO) { PicDao.waifuPicsCount() == 0 }
 
