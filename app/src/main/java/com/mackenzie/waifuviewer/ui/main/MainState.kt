@@ -9,8 +9,8 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.data.Error
-import com.mackenzie.waifuviewer.data.db.WaifuImItem
-import com.mackenzie.waifuviewer.data.db.WaifuPicItem
+import com.mackenzie.waifuviewer.domain.WaifuImItem
+import com.mackenzie.waifuviewer.domain.WaifuPicItem
 import com.mackenzie.waifuviewer.ui.SelectorFragmentDirections
 import com.mackenzie.waifuviewer.ui.common.PermissionRequester
 import kotlinx.coroutines.CoroutineScope

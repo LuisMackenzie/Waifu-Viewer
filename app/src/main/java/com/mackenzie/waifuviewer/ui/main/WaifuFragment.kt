@@ -12,10 +12,10 @@ import com.mackenzie.waifuviewer.WaifuPicsViewModelFactory
 import com.mackenzie.waifuviewer.data.datasource.WaifusImRepository
 import com.mackenzie.waifuviewer.databinding.FragmentWaifuBinding
 import com.mackenzie.waifuviewer.data.datasource.WaifusPicRepository
-import com.mackenzie.waifuviewer.domain.GetWaifuImUseCase
-import com.mackenzie.waifuviewer.domain.GetWaifuPicUseCase
-import com.mackenzie.waifuviewer.domain.RequestWaifuImUseCase
-import com.mackenzie.waifuviewer.domain.RequestWaifuPicUseCase
+import com.mackenzie.waifuviewer.usecases.GetWaifuImUseCase
+import com.mackenzie.waifuviewer.usecases.GetWaifuPicUseCase
+import com.mackenzie.waifuviewer.usecases.RequestWaifuImUseCase
+import com.mackenzie.waifuviewer.usecases.RequestWaifuPicUseCase
 import com.mackenzie.waifuviewer.ui.common.app
 import com.mackenzie.waifuviewer.ui.common.launchAndCollect
 import com.mackenzie.waifuviewer.ui.common.visible

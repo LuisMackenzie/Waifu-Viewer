@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.databinding.ViewMediaItemBinding
-import com.mackenzie.waifuviewer.data.db.WaifuImItem
+import com.mackenzie.waifuviewer.domain.WaifuImItem
 import com.mackenzie.waifuviewer.ui.common.basicDiffUtil
 import com.mackenzie.waifuviewer.ui.common.inflate
 import com.mackenzie.waifuviewer.ui.common.loadUrl

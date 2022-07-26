@@ -3,8 +3,7 @@ package com.mackenzie.waifuviewer.ui
 import androidx.lifecycle.*
 import com.mackenzie.waifuviewer.data.Error
 import com.mackenzie.waifuviewer.data.WaifuPic
-import com.mackenzie.waifuviewer.data.datasource.WaifusPicRepository
-import com.mackenzie.waifuviewer.domain.RequestOnlyWaifuPicUseCase
+import com.mackenzie.waifuviewer.usecases.RequestOnlyWaifuPicUseCase
 import com.mackenzie.waifuviewer.ui.common.Scope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

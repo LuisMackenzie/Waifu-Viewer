@@ -3,22 +3,24 @@ package com.mackenzie.waifuviewer.data.datasource
 import android.util.Log
 import com.mackenzie.waifuviewer.App
 import com.mackenzie.waifuviewer.data.Error
-import com.mackenzie.waifuviewer.data.Waifu
-import com.mackenzie.waifuviewer.data.db.WaifuImItem
 import com.mackenzie.waifuviewer.data.tryCall
+import com.mackenzie.waifuviewer.domain.WaifuImItem
+import com.mackenzie.waifuviewer.framework.datasource.RoomImDataSource
+import com.mackenzie.waifuviewer.framework.datasource.ServerImDataSource
+import kotlinx.coroutines.flow.Flow
 
 class WaifusImRepository(application: App) {
 
-    private val localImDataSource = WaifusImLocalDataSource(application.db.waifuImDao())
-    private val remoteImDataSource = WaifusImRemoteDataSource()
+    private val localImDataSource: WaifusImLocalDataSource = RoomImDataSource(application.db.waifuImDao())
+    private val remoteImDataSource: WaifusImRemoteDataSource = ServerImDataSource()
     val savedWaifusIm = localImDataSource.waifusIm
 
-    fun findImById(id: Int) = localImDataSource.findImById(id)
+    fun findImById(id: Int): Flow<WaifuImItem> = localImDataSource.findImById(id)
 
     suspend fun requestWaifusIm(isNsfw: Boolean, tag: String, isGif: Boolean, orientation: Boolean): Error? = tryCall {
         if(localImDataSource.isImEmpty()) {
             val waifusIm = remoteImDataSource.getRandomWaifusIm(isNsfw, tag, isGif, getOrientation(orientation))
-            localImDataSource.saveIm(waifusIm.waifus.toLocalModelIm())
+            localImDataSource.saveIm(waifusIm)
         } else {
             Log.e("Waifus Repository", "LocalDataSource IM IS NOT EMPTY")
         }
@@ -26,7 +28,7 @@ class WaifusImRepository(application: App) {
 
     suspend fun requestNewWaifusIm(isNsfw: Boolean, tag: String, isGif: Boolean, orientation: Boolean): Error? = tryCall {
         val waifusIm = remoteImDataSource.getRandomWaifusIm(isNsfw, tag, isGif, getOrientation(orientation))
-        localImDataSource.saveIm(waifusIm.waifus.toLocalModelIm())
+        localImDataSource.saveIm(waifusIm)
     }
 
     private fun getOrientation(ori: Boolean): String {
@@ -42,16 +44,3 @@ class WaifusImRepository(application: App) {
         localImDataSource.saveIm(listOf(updatedWaifu))
     }
 }
-
-private fun List<Waifu>.toLocalModelIm() : List<WaifuImItem>  = map { it.toLocalModelIm() }
-
-private fun Waifu.toLocalModelIm(): WaifuImItem = WaifuImItem(
-    file = file,
-    imageId = imageId,
-    isNsfw = isNsfw,
-    dominant_color = dominant_color,
-    url = url,
-    width = width,
-    height = height,
-    isFavorite = false
-)

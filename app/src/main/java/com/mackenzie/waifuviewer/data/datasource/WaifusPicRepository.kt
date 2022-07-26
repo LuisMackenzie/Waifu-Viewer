@@ -4,13 +4,15 @@ import android.util.Log
 import com.mackenzie.waifuviewer.App
 import com.mackenzie.waifuviewer.data.Error
 import com.mackenzie.waifuviewer.data.RemoteConnection
-import com.mackenzie.waifuviewer.data.db.WaifuPicItem
 import com.mackenzie.waifuviewer.data.tryCall
+import com.mackenzie.waifuviewer.domain.WaifuPicItem
+import com.mackenzie.waifuviewer.framework.datasource.RoomPicDataSource
+import com.mackenzie.waifuviewer.framework.datasource.ServerPicDataSource
 
 class WaifusPicRepository(application: App) {
 
-    private val localPicDataSource = WaifusPicLocalDataSource(application.db.waifuPicDao())
-    private val remotePicDataSource = WaifusPicRemoteDataSource()
+    private val localPicDataSource: WaifusPicLocalDataSource = RoomPicDataSource(application.db.waifuPicDao())
+    private val remotePicDataSource: WaifusPicRemoteDataSource = ServerPicDataSource()
     val savedWaifusPic = localPicDataSource.waifusPic
 
     fun findPicsById(id: Int) = localPicDataSource.findPicById(id)
@@ -18,7 +20,7 @@ class WaifusPicRepository(application: App) {
     suspend fun requestWaifusPics(isNsfw: String, tag: String): Error? = tryCall {
         if(localPicDataSource.isPicsEmpty()) {
             val waifusPics = remotePicDataSource.getRandomWaifusPics(isNsfw, tag)
-            localPicDataSource.savePics(waifusPics.toLocalModelPics())
+            localPicDataSource.savePics(waifusPics)
         } else {
             Log.e("Waifus Repository", "LocalDataSource PICS IS NOT EMPTY")
         }
@@ -26,7 +28,7 @@ class WaifusPicRepository(application: App) {
 
     suspend fun requestNewWaifusPics(isNsfw: String, tag: String): Error? = tryCall {
         val waifusPics = remotePicDataSource.getRandomWaifusPics(isNsfw, tag)
-        localPicDataSource.savePics(waifusPics.toLocalModelPics())
+        localPicDataSource.savePics(waifusPics)
     }
 
     suspend fun requestOnlyWaifuPic() = RemoteConnection.servicePics.getOnlyWaifuPic()
@@ -38,7 +40,3 @@ class WaifusPicRepository(application: App) {
         localPicDataSource.savePics(listOf(updatedWaifu))
     }
 }
-
-private fun List<String>.toLocalModelPics() : List<WaifuPicItem> = map { it.toLocalModelPics() }
-
-private fun String.toLocalModelPics(): WaifuPicItem = WaifuPicItem(url = this, isFavorite = false)

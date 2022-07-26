@@ -2,8 +2,8 @@ package com.mackenzie.waifuviewer.ui.main
 
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.mackenzie.waifuviewer.data.db.WaifuImItem
-import com.mackenzie.waifuviewer.data.db.WaifuPicItem
+import com.mackenzie.waifuviewer.domain.WaifuImItem
+import com.mackenzie.waifuviewer.domain.WaifuPicItem
 
 @BindingAdapter("itemsPics")
 fun RecyclerView.setImItems(waifus: List<WaifuPicItem>?) {

@@ -4,17 +4,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.mackenzie.waifuviewer.data.Error
-import com.mackenzie.waifuviewer.data.datasource.WaifusImRepository
-import com.mackenzie.waifuviewer.data.db.WaifuImItem
 import com.mackenzie.waifuviewer.data.toError
-import com.mackenzie.waifuviewer.domain.GetWaifuImUseCase
-import com.mackenzie.waifuviewer.domain.RequestWaifuImUseCase
+import com.mackenzie.waifuviewer.domain.WaifuImItem
+import com.mackenzie.waifuviewer.usecases.GetWaifuImUseCase
+import com.mackenzie.waifuviewer.usecases.RequestWaifuImUseCase
 import com.mackenzie.waifuviewer.ui.common.Scope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class WaifuImViewModel(
-    private val getWaifuImUseCase: GetWaifuImUseCase,
+    getWaifuImUseCase: GetWaifuImUseCase,
     private val requestWaifuImUseCase: RequestWaifuImUseCase
     ): ViewModel(), Scope by Scope.Impl() {
 

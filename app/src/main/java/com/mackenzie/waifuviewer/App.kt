@@ -2,7 +2,7 @@ package com.mackenzie.waifuviewer
 
 import android.app.Application
 import androidx.room.Room
-import com.mackenzie.waifuviewer.data.db.WaifuDataBase
+import com.mackenzie.waifuviewer.framework.db.WaifuDataBase
 
 class App: Application() {
 

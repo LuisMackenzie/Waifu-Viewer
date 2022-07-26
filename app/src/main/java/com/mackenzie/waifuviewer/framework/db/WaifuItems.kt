@@ -1,4 +1,4 @@
-package com.mackenzie.waifuviewer.data.db
+package com.mackenzie.waifuviewer.framework.db
 
 import android.os.Parcelable
 import androidx.room.Entity
@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 @Entity
-data class WaifuImItem(
+data class WaifuImDbItem(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val dominant_color: String,
     // val extension: String,
@@ -27,7 +27,7 @@ data class WaifuImItem(
 
 @Parcelize
 @Entity
-data class WaifuPicItem(
+data class WaifuPicDbItem(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val url: String,
     val isFavorite: Boolean

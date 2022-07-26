@@ -1,7 +1,7 @@
-package com.mackenzie.waifuviewer.domain
+package com.mackenzie.waifuviewer.usecases
 
 import com.mackenzie.waifuviewer.data.datasource.WaifusImRepository
-import com.mackenzie.waifuviewer.data.db.WaifuImItem
+import com.mackenzie.waifuviewer.domain.WaifuImItem
 import kotlinx.coroutines.flow.Flow
 
 class GetWaifuImUseCase(private val repo: WaifusImRepository) {

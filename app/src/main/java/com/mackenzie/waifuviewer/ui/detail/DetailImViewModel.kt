@@ -3,9 +3,9 @@ package com.mackenzie.waifuviewer.ui.detail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.mackenzie.waifuviewer.data.db.WaifuImItem
-import com.mackenzie.waifuviewer.domain.FindWaifuImUseCase
-import com.mackenzie.waifuviewer.domain.SwitchImFavoriteUseCase
+import com.mackenzie.waifuviewer.domain.WaifuImItem
+import com.mackenzie.waifuviewer.usecases.FindWaifuImUseCase
+import com.mackenzie.waifuviewer.usecases.SwitchImFavoriteUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

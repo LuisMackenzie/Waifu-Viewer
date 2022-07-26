@@ -1,4 +1,4 @@
-package com.mackenzie.waifuviewer.domain
+package com.mackenzie.waifuviewer.usecases
 
 import com.mackenzie.waifuviewer.data.datasource.WaifusImRepository
 import com.mackenzie.waifuviewer.data.Error
