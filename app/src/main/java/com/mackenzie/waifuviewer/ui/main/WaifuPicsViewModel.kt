@@ -9,12 +9,14 @@ import com.mackenzie.waifuviewer.domain.WaifuPicItem
 import com.mackenzie.waifuviewer.usecases.GetWaifuPicUseCase
 import com.mackenzie.waifuviewer.usecases.RequestWaifuPicUseCase
 import com.mackenzie.waifuviewer.ui.common.Scope
+import com.mackenzie.waifuviewer.usecases.RequestMoreWaifuPicUseCase
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class WaifuPicsViewModel(
     getWaifuPicUseCase: GetWaifuPicUseCase,
-    private val requestWaifuPicUseCase: RequestWaifuPicUseCase
+    private val requestWaifuPicUseCase: RequestWaifuPicUseCase,
+    private val requestMorePicUseCase: RequestMoreWaifuPicUseCase
     ): ViewModel(), Scope by Scope.Impl() {
 
     private val _state = MutableStateFlow(UiState())
@@ -44,18 +46,18 @@ class WaifuPicsViewModel(
             val error: Error?
             if (isNsfw) {
                 if (tag == "all") {
-                    error = requestWaifuPicUseCase("nsfw", "waifu")
+                    error = requestMorePicUseCase("nsfw", "waifu")
                     _state.update { it.copy(error = error) }
                 } else {
-                    error = requestWaifuPicUseCase("nsfw", tag)
+                    error = requestMorePicUseCase("nsfw", tag)
                     _state.update { it.copy(error = error) }
                 }
             } else {
                 if (tag == "all") {
-                    error = requestWaifuPicUseCase("sfw", "waifu")
+                    error = requestMorePicUseCase("sfw", "waifu")
                     _state.update { it.copy(error = error) }
                 } else {
-                    error = requestWaifuPicUseCase("sfw", tag)
+                    error = requestMorePicUseCase("sfw", tag)
                     _state.update { it.copy(error = error) }
                 }
             }
@@ -83,8 +85,11 @@ class WaifuPicsViewModel(
 }
 
 @Suppress("UNCHECKED_CAST")
-class WaifuPicsViewModelFactory(private val getWaifuPicUseCase: GetWaifuPicUseCase, private val requestWaifuPicUseCase: RequestWaifuPicUseCase) : ViewModelProvider.Factory {
+class WaifuPicsViewModelFactory(
+    private val getWaifuPicUseCase: GetWaifuPicUseCase,
+    private val requestWaifuPicUseCase: RequestWaifuPicUseCase,
+    private val requestMorePicUseCase: RequestMoreWaifuPicUseCase) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return WaifuPicsViewModel(getWaifuPicUseCase, requestWaifuPicUseCase) as T
+        return WaifuPicsViewModel(getWaifuPicUseCase, requestWaifuPicUseCase, requestMorePicUseCase) as T
     }
 }

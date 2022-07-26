@@ -18,6 +18,8 @@ import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.databinding.FragmentSelectorBinding
 import com.mackenzie.waifuviewer.data.WaifuPic
 import com.mackenzie.waifuviewer.data.datasource.WaifusPicRepository
+import com.mackenzie.waifuviewer.framework.datasource.RoomPicDataSource
+import com.mackenzie.waifuviewer.framework.datasource.ServerPicDataSource
 import com.mackenzie.waifuviewer.usecases.RequestOnlyWaifuPicUseCase
 import com.mackenzie.waifuviewer.ui.common.PermissionRequester
 import com.mackenzie.waifuviewer.ui.common.app
@@ -34,7 +36,9 @@ import kotlinx.coroutines.launch
 class SelectorFragment : Fragment(R.layout.fragment_selector) {
 
     private val viewModel: SelectorViewModel by viewModels {
-        val repo = WaifusPicRepository(requireActivity().app)
+        val localDataSource = RoomPicDataSource(requireActivity().app.db.waifuPicDao())
+        val remoteDataSource = ServerPicDataSource()
+        val repo = WaifusPicRepository(localDataSource, remoteDataSource)
         SelectorViewModelFactory(RequestOnlyWaifuPicUseCase(repo)) }
     private lateinit var binding: FragmentSelectorBinding
     private var backgroudImage: ImageView? = null

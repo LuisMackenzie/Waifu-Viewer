@@ -9,10 +9,13 @@ import com.mackenzie.waifuviewer.framework.datasource.RoomImDataSource
 import com.mackenzie.waifuviewer.framework.datasource.ServerImDataSource
 import kotlinx.coroutines.flow.Flow
 
-class WaifusImRepository(application: App) {
+class WaifusImRepository(
+    private val localImDataSource: WaifusImLocalDataSource,
+    private val remoteImDataSource: WaifusImRemoteDataSource
+) {
 
-    private val localImDataSource: WaifusImLocalDataSource = RoomImDataSource(application.db.waifuImDao())
-    private val remoteImDataSource: WaifusImRemoteDataSource = ServerImDataSource()
+    // private val localImDataSource: WaifusImLocalDataSource = RoomImDataSource(application.db.waifuImDao())
+    // private val remoteImDataSource: WaifusImRemoteDataSource = ServerImDataSource()
     val savedWaifusIm = localImDataSource.waifusIm
 
     fun findImById(id: Int): Flow<WaifuImItem> = localImDataSource.findImById(id)

@@ -9,10 +9,13 @@ import com.mackenzie.waifuviewer.domain.WaifuPicItem
 import com.mackenzie.waifuviewer.framework.datasource.RoomPicDataSource
 import com.mackenzie.waifuviewer.framework.datasource.ServerPicDataSource
 
-class WaifusPicRepository(application: App) {
+class WaifusPicRepository(
+    private val localPicDataSource: WaifusPicLocalDataSource,
+    private val remotePicDataSource: WaifusPicRemoteDataSource
+    ) {
 
-    private val localPicDataSource: WaifusPicLocalDataSource = RoomPicDataSource(application.db.waifuPicDao())
-    private val remotePicDataSource: WaifusPicRemoteDataSource = ServerPicDataSource()
+    // private val localPicDataSource: WaifusPicLocalDataSource = RoomPicDataSource(application.db.waifuPicDao())
+    // private val remotePicDataSource: WaifusPicRemoteDataSource = ServerPicDataSource()
     val savedWaifusPic = localPicDataSource.waifusPic
 
     fun findPicsById(id: Int) = localPicDataSource.findPicById(id)

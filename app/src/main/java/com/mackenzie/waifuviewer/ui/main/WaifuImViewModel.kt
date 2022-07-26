@@ -9,12 +9,14 @@ import com.mackenzie.waifuviewer.domain.WaifuImItem
 import com.mackenzie.waifuviewer.usecases.GetWaifuImUseCase
 import com.mackenzie.waifuviewer.usecases.RequestWaifuImUseCase
 import com.mackenzie.waifuviewer.ui.common.Scope
+import com.mackenzie.waifuviewer.usecases.RequestMoreWaifuImUseCase
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class WaifuImViewModel(
     getWaifuImUseCase: GetWaifuImUseCase,
-    private val requestWaifuImUseCase: RequestWaifuImUseCase
+    private val requestWaifuImUseCase: RequestWaifuImUseCase,
+    private val requestMoreImUseCase: RequestMoreWaifuImUseCase
     ): ViewModel(), Scope by Scope.Impl() {
 
     private val _state = MutableStateFlow(UiState())
@@ -53,14 +55,14 @@ class WaifuImViewModel(
             val error: Error?
             if (tag == "all") {
                 if (isNsfw) {
-                    error = requestWaifuImUseCase(isNsfw,"ecchi",isGif,orientation)
+                    error = requestMoreImUseCase(isNsfw,"ecchi",isGif,orientation)
                     _state.update { it.copy(error = error) }
                 } else {
-                    error = requestWaifuImUseCase(isNsfw,"waifu",isGif,orientation)
+                    error = requestMoreImUseCase(isNsfw,"waifu",isGif,orientation)
                     _state.update { it.copy(error = error) }
                 }
             } else {
-                error = requestWaifuImUseCase(isNsfw, tag, isGif,  orientation)
+                error = requestMoreImUseCase(isNsfw, tag, isGif,  orientation)
                 _state.update { it.copy(error = error) }
             }
         }
@@ -74,8 +76,12 @@ class WaifuImViewModel(
 }
 
 @Suppress("UNCHECKED_CAST")
-class WaifuImViewModelFactory(private val getWaifuImUseCase: GetWaifuImUseCase, private val requestWaifuImUseCase: RequestWaifuImUseCase) : ViewModelProvider.Factory {
+class WaifuImViewModelFactory(
+    private val getWaifuImUseCase: GetWaifuImUseCase,
+    private val requestWaifuImUseCase: RequestWaifuImUseCase,
+    private val requestMoreImUseCase: RequestMoreWaifuImUseCase
+    ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return WaifuImViewModel(getWaifuImUseCase, requestWaifuImUseCase) as T
+        return WaifuImViewModel(getWaifuImUseCase, requestWaifuImUseCase, requestMoreImUseCase) as T
     }
 }

@@ -12,23 +12,28 @@ import com.mackenzie.waifuviewer.WaifuPicsViewModelFactory
 import com.mackenzie.waifuviewer.data.datasource.WaifusImRepository
 import com.mackenzie.waifuviewer.databinding.FragmentWaifuBinding
 import com.mackenzie.waifuviewer.data.datasource.WaifusPicRepository
-import com.mackenzie.waifuviewer.usecases.GetWaifuImUseCase
-import com.mackenzie.waifuviewer.usecases.GetWaifuPicUseCase
-import com.mackenzie.waifuviewer.usecases.RequestWaifuImUseCase
-import com.mackenzie.waifuviewer.usecases.RequestWaifuPicUseCase
+import com.mackenzie.waifuviewer.framework.datasource.RoomImDataSource
+import com.mackenzie.waifuviewer.framework.datasource.RoomPicDataSource
+import com.mackenzie.waifuviewer.framework.datasource.ServerImDataSource
+import com.mackenzie.waifuviewer.framework.datasource.ServerPicDataSource
 import com.mackenzie.waifuviewer.ui.common.app
 import com.mackenzie.waifuviewer.ui.common.launchAndCollect
 import com.mackenzie.waifuviewer.ui.common.visible
+import com.mackenzie.waifuviewer.usecases.*
 
 class WaifuFragment: Fragment(R.layout.fragment_waifu) {
 
     private val safeArgs: WaifuFragmentArgs by navArgs()
     private val picsViewModel: WaifuPicsViewModel by viewModels {
-        val repo = WaifusPicRepository(requireActivity().app)
-        WaifuPicsViewModelFactory(GetWaifuPicUseCase(repo), RequestWaifuPicUseCase(repo)) }
+        val localDataSource = RoomPicDataSource(requireActivity().app.db.waifuPicDao())
+        val remoteDataSource = ServerPicDataSource()
+        val repo = WaifusPicRepository(localDataSource, remoteDataSource)
+        WaifuPicsViewModelFactory(GetWaifuPicUseCase(repo), RequestWaifuPicUseCase(repo), RequestMoreWaifuPicUseCase(repo)) }
     private val imViewModel: WaifuImViewModel by viewModels {
-        val repo = WaifusImRepository(requireActivity().app)
-        WaifuImViewModelFactory(GetWaifuImUseCase(repo), RequestWaifuImUseCase(repo)) }
+        val localDataSource = RoomImDataSource(requireActivity().app.db.waifuImDao())
+        val remoteDataSource = ServerImDataSource()
+        val repo = WaifusImRepository(localDataSource, remoteDataSource)
+        WaifuImViewModelFactory(GetWaifuImUseCase(repo), RequestWaifuImUseCase(repo), RequestMoreWaifuImUseCase(repo)) }
     private lateinit var mainState: MainState
     private lateinit var bun: Bundle
     private var mainServer: Boolean = false

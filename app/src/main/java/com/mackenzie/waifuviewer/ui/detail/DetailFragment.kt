@@ -19,6 +19,10 @@ import com.mackenzie.waifuviewer.databinding.FragmentDetailBinding
 import com.mackenzie.waifuviewer.data.datasource.WaifusPicRepository
 import com.mackenzie.waifuviewer.domain.WaifuImItem
 import com.mackenzie.waifuviewer.domain.WaifuPicItem
+import com.mackenzie.waifuviewer.framework.datasource.RoomImDataSource
+import com.mackenzie.waifuviewer.framework.datasource.RoomPicDataSource
+import com.mackenzie.waifuviewer.framework.datasource.ServerImDataSource
+import com.mackenzie.waifuviewer.framework.datasource.ServerPicDataSource
 import com.mackenzie.waifuviewer.usecases.FindWaifuImUseCase
 import com.mackenzie.waifuviewer.usecases.FindWaifuPicUseCase
 import com.mackenzie.waifuviewer.usecases.SwitchImFavoriteUseCase
@@ -40,10 +44,14 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
 
     private val safeArgs: DetailFragmentArgs by navArgs()
     private val picsViewModel: DetailPicsViewModel by viewModels {
-        val repo = WaifusPicRepository(requireActivity().app)
+        val localDataSource = RoomPicDataSource(requireActivity().app.db.waifuPicDao())
+        val remoteDataSource = ServerPicDataSource()
+        val repo = WaifusPicRepository(localDataSource, remoteDataSource)
         DetailPicsViewModelFactory(safeArgs.waifuId, FindWaifuPicUseCase(repo), SwitchPicFavoriteUseCase(repo)) }
     private val imViewModel: DetailImViewModel by viewModels {
-        val repo = WaifusImRepository(requireActivity().app)
+        val localDataSource = RoomImDataSource(requireActivity().app.db.waifuImDao())
+        val remoteDataSource = ServerImDataSource()
+        val repo = WaifusImRepository(localDataSource, remoteDataSource)
         DetailImViewModelFactory(safeArgs.waifuId, FindWaifuImUseCase(repo), SwitchImFavoriteUseCase(repo)) }
     private lateinit var mainState: MainState
     private var mainServer: Boolean = false
