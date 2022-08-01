@@ -30,8 +30,9 @@ class SelectorViewModel (private val requestOnlyWaifu: RequestOnlyWaifuPicUseCas
             // val waifu = waifusRepository.getWaifuInfo(waifuIdDefault)
             val error = requestOnlyWaifu()
             if (error == null) {
-                val waifu = requestOnlyWaifu.get()
-                _state.update { UiState(waifu = waifu) }
+                loadWaifu()
+                // val waifu = requestOnlyWaifu.get()
+                // _state.update { UiState(waifu = waifu) }
             }
             _state.update { UiState(error = error) }
         }

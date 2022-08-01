@@ -42,6 +42,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
         SelectorViewModelFactory(RequestOnlyWaifuPicUseCase(repo)) }
     private lateinit var binding: FragmentSelectorBinding
     private var backgroudImage: ImageView? = null
+    private var loaded: Boolean = false
     private lateinit var mainState: MainState
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -54,7 +55,9 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
         viewLifecycleOwner.launchAndCollect(viewModel.state) { updateWaifu(it) }
         viewLifecycleOwner.lifecycleScope.launch {
             mainState.requestPermissionLauncher {
-                viewModel.loadErrorOrWaifu()
+                if (!loaded) {
+                    viewModel.loadErrorOrWaifu()
+                }
             }
         }
     }
@@ -65,6 +68,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
     private fun updateWaifu(state: SelectorViewModel.UiState) {
         state.waifu?.let { waifu ->
             setBackground(waifu)
+            loaded = true
         }
 
         state.error?.let { error ->

@@ -24,6 +24,8 @@ class WaifuPicsAdapter(private val listener: (WaifuPicItem) -> Unit ): ListAdapt
         holder.itemView.setOnClickListener { listener(waifuItem) }
     }
 
+    override fun getItemCount(): Int = currentList.size
+
     inner class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
 
         private val binding = ViewMediaItemBinding.bind(view)
