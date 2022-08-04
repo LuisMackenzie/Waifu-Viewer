@@ -3,7 +3,6 @@ package com.mackenzie.waifuviewer.ui.detail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.mackenzie.waifuviewer.domain.WaifuPicItem
 import com.mackenzie.waifuviewer.usecases.FindWaifuPicUseCase
 import com.mackenzie.waifuviewer.usecases.SwitchPicFavoriteUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,7 +34,7 @@ class DetailPicsViewModel (
         }
     }
 
-    data class UiState(val waifuPic: WaifuPicItem? = null)
+    data class UiState(val waifuPic: com.mackenzie.waifuviewer.domain.WaifuPicItem? = null)
 
 }
 

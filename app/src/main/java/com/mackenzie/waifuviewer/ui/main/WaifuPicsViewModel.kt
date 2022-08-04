@@ -3,9 +3,8 @@ package com.mackenzie.waifuviewer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.mackenzie.waifuviewer.domain.WaifuPicItem
+import com.mackenzie.waifuviewer.data.toError
 import com.mackenzie.waifuviewer.domain.Error
-import com.mackenzie.waifuviewer.domain.toError
 import com.mackenzie.waifuviewer.usecases.GetWaifuPicUseCase
 import com.mackenzie.waifuviewer.usecases.RequestWaifuPicUseCase
 import com.mackenzie.waifuviewer.ui.common.Scope
@@ -28,8 +27,7 @@ class WaifuPicsViewModel(
         viewModelScope.launch {
             getWaifuPicUseCase()
                 .catch { cause -> _state.update { it.copy(error = cause.toError()) }}
-                .collect{ WaifuPics -> _state.update { UiState(waifusSavedPics = WaifuPics) }
-            }
+                .collect{ WaifuPics -> _state.update { UiState(waifusSavedPics = WaifuPics) } }
         }
     }
 
@@ -79,7 +77,7 @@ class WaifuPicsViewModel(
 
     data class UiState(
         val isLoading: Boolean = false,
-        val waifusSavedPics: List<WaifuPicItem>? = null,
+        val waifusSavedPics: List<com.mackenzie.waifuviewer.domain.WaifuPicItem>? = null,
         val error: Error? = null
     )
 }
@@ -88,7 +86,8 @@ class WaifuPicsViewModel(
 class WaifuPicsViewModelFactory(
     private val getWaifuPicUseCase: GetWaifuPicUseCase,
     private val requestWaifuPicUseCase: RequestWaifuPicUseCase,
-    private val requestMorePicUseCase: RequestMoreWaifuPicUseCase) : ViewModelProvider.Factory {
+    private val requestMorePicUseCase: RequestMoreWaifuPicUseCase
+) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return WaifuPicsViewModel(getWaifuPicUseCase, requestWaifuPicUseCase, requestMorePicUseCase) as T
     }

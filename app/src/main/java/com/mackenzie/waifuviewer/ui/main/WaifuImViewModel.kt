@@ -3,9 +3,8 @@ package com.mackenzie.waifuviewer.ui.main
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.mackenzie.waifuviewer.data.toError
 import com.mackenzie.waifuviewer.domain.Error
-import com.mackenzie.waifuviewer.domain.WaifuImItem
-import com.mackenzie.waifuviewer.domain.toError
 import com.mackenzie.waifuviewer.usecases.GetWaifuImUseCase
 import com.mackenzie.waifuviewer.usecases.RequestWaifuImUseCase
 import com.mackenzie.waifuviewer.ui.common.Scope
@@ -26,8 +25,7 @@ class WaifuImViewModel(
         viewModelScope.launch {
             getWaifuImUseCase()
                 .catch { cause -> _state.update { it.copy(error = cause.toError()) }}
-                .collect{ WaifuIm -> _state.update { UiState(waifusSavedIm = WaifuIm) }
-            }
+                .collect{ WaifuIm -> _state.update { UiState(waifusSavedIm = WaifuIm) } }
         }
     }
 
@@ -70,7 +68,7 @@ class WaifuImViewModel(
 
     data class UiState(
         val isLoading: Boolean = false,
-        val waifusSavedIm: List<WaifuImItem>? = null,
+        val waifusSavedIm: List<com.mackenzie.waifuviewer.domain.WaifuImItem>? = null,
         val error: Error? = null
     )
 }

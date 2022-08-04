@@ -15,31 +15,41 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.mackenzie.waifuviewer.R
+import com.mackenzie.waifuviewer.WaifuPicsViewModel
+import com.mackenzie.waifuviewer.data.WaifusImRepository
 import com.mackenzie.waifuviewer.databinding.FragmentSelectorBinding
-import com.mackenzie.waifuviewer.data.datasource.WaifusPicRepository
-import com.mackenzie.waifuviewer.framework.db.RoomPicDataSource
-import com.mackenzie.waifuviewer.framework.server.ServerPicDataSource
-import com.mackenzie.waifuviewer.framework.server.WaifuPic
-import com.mackenzie.waifuviewer.usecases.RequestOnlyWaifuPicUseCase
+import com.mackenzie.waifuviewer.data.WaifusPicRepository
+import com.mackenzie.waifuviewer.data.db.RoomImDataSource
+import com.mackenzie.waifuviewer.data.db.RoomPicDataSource
+import com.mackenzie.waifuviewer.data.server.ServerImDataSource
+import com.mackenzie.waifuviewer.data.server.ServerPicDataSource
 import com.mackenzie.waifuviewer.ui.common.PermissionRequester
 import com.mackenzie.waifuviewer.ui.common.app
 import com.mackenzie.waifuviewer.ui.common.launchAndCollect
 import com.mackenzie.waifuviewer.ui.common.loadUrl
 import com.mackenzie.waifuviewer.ui.main.MainState
+import com.mackenzie.waifuviewer.ui.main.SelectorImViewModel
+import com.mackenzie.waifuviewer.ui.main.SelectorImViewModelFactory
 import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.CATEGORY_TAG
 import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_GIF_WAIFU
 import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_LANDS_WAIFU
 import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_NSFW_WAIFU
 import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_SERVER_SELECTED
+import com.mackenzie.waifuviewer.usecases.*
 import kotlinx.coroutines.launch
 
 class SelectorFragment : Fragment(R.layout.fragment_selector) {
 
-    private val viewModel: SelectorViewModel by viewModels {
+    private val imViewModel: SelectorImViewModel by viewModels {
+        val localDataSource = RoomImDataSource(requireActivity().app.db.waifuImDao())
+        val remoteDataSource = ServerImDataSource()
+        val repo = WaifusImRepository(localDataSource, remoteDataSource)
+        SelectorImViewModelFactory(GetWaifuImUseCase(repo), RequestOnlyWaifuImUseCase(repo)) }
+    private val picsViewModel: SelectorPicViewModel by viewModels {
         val localDataSource = RoomPicDataSource(requireActivity().app.db.waifuPicDao())
         val remoteDataSource = ServerPicDataSource()
         val repo = WaifusPicRepository(localDataSource, remoteDataSource)
-        SelectorViewModelFactory(RequestOnlyWaifuPicUseCase(repo)) }
+        SelectorPicViewModelFactory(GetOnlyWaifuPicUseCase(repo), RequestOnlyWaifuPicUseCase(repo)) }
     private lateinit var binding: FragmentSelectorBinding
     private var backgroudImage: ImageView? = null
     private var loaded: Boolean = false
@@ -52,12 +62,17 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
         setUpElements()
         updateSpinner(binding.sServer.isChecked)
 
-        viewLifecycleOwner.launchAndCollect(viewModel.state) { updateWaifu(it) }
-        viewLifecycleOwner.lifecycleScope.launch {
-            mainState.requestPermissionLauncher {
-                if (!loaded) {
-                    viewModel.loadErrorOrWaifu()
-                }
+        /*viewLifecycleOwner.launchAndCollect(imViewModel.state) { updateImWaifu(it) }
+        mainState.requestPermissionLauncher {
+            if (!loaded) {
+                imViewModel.loadErrorOrWaifu()
+            }
+        }*/
+
+        viewLifecycleOwner.launchAndCollect(picsViewModel.state) { updatePicWaifu(it) }
+        mainState.requestPermissionLauncher {
+            if (!loaded) {
+                picsViewModel.loadErrorOrWaifu()
             }
         }
     }
@@ -65,9 +80,9 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
 
 
 
-    private fun updateWaifu(state: SelectorViewModel.UiState) {
+    private fun updateImWaifu(state: SelectorImViewModel.UiState) {
         state.waifu?.let { waifu ->
-            setBackground(waifu)
+            setBackground(waifu.url)
             loaded = true
         }
 
@@ -83,8 +98,26 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
         }
     }
 
-    private fun setBackground(waifu: WaifuPic) {
-        backgroudImage?.loadUrl(waifu.url)
+    private fun updatePicWaifu(state: SelectorPicViewModel.UiState) {
+        state.waifu?.let { waifu ->
+            setBackground(waifu.url)
+            loaded = true
+        }
+
+        state.error?.let { error ->
+            mainState.errorToString(error)
+            Glide.with(requireContext())
+                .load(R.drawable.ic_offline_background)
+                .centerCrop()
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .error(R.drawable.ic_error_grey)
+                .into(binding.ivBackdrop)
+            Toast.makeText(requireContext(), "Se requiere conexion para funcionar", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun setBackground(url: String) {
+        backgroudImage?.loadUrl(url)
     }
 
     private fun setUpElements() = with(binding) {
@@ -112,7 +145,8 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
         }
         fab.setOnClickListener {
             // viewLifecycleOwner.launchAndCollect(viewModel.state) { updateWaifu(it) }
-            viewModel.loadWaifu()
+            // imViewModel.loadErrorOrWaifu()
+            picsViewModel.loadErrorOrWaifu()
         }
         backgroudImage = ivBackdrop
     }

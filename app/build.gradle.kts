@@ -15,7 +15,7 @@ android {
         minSdk = 24
         targetSdk = 32
         versionCode = 1
-        versionName = "0.4"
+        versionName = "0.5.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -44,23 +44,29 @@ dependencies {
     val retrofit_version = "2.9.0"
     val roomVersion = "2.4.2"
 
+    // modules Implementation
+    implementation (project(":domain"))
+    implementation (project(":data"))
+    implementation (project(":usecases"))
+
+
     implementation ("androidx.core:core-ktx:1.8.0")
     implementation ("androidx.appcompat:appcompat:1.4.2")
     implementation ("com.google.android.material:material:1.6.1")
     implementation ("androidx.constraintlayout:constraintlayout:2.1.4")
 
     // Permisions request
-    implementation("androidx.activity:activity-ktx:1.5.0")
-    implementation("androidx.fragment:fragment-ktx:1.5.0")
+    implementation("androidx.activity:activity-ktx:1.5.1")
+    implementation("androidx.fragment:fragment-ktx:1.5.1")
 
     // Navigation
-    implementation("androidx.navigation:navigation-fragment-ktx:2.5.0")
-    implementation("androidx.navigation:navigation-ui-ktx:2.5.0")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.5.1")
+    implementation("androidx.navigation:navigation-ui-ktx:2.5.1")
 
     // Corrutinas
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
     // ViewModel
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
     // Room DB
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
@@ -78,6 +84,9 @@ dependencies {
     implementation ("com.squareup.okhttp3:logging-interceptor:4.9.3")
     // library to parse JSON in Kotlin
     implementation ("com.beust:klaxon:5.5")
+
+    // library to use Either Class in Kotlin
+    implementation ("io.arrow-kt:arrow-core:1.0.1")
 
 
     // Serialization

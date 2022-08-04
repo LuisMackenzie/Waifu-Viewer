@@ -1,4 +1,3 @@
-
 pluginManagement {
     repositories {
         gradlePluginPortal()
@@ -19,3 +18,6 @@ dependencyResolutionManagement {
 }*/
 rootProject.name = "Waifu Viewer"
 include (":app")
+include (":domain")
+include(":data")
+include(":usecases")

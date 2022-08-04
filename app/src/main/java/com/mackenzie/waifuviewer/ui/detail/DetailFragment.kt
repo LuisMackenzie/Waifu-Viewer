@@ -14,15 +14,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import com.mackenzie.waifuviewer.R
-import com.mackenzie.waifuviewer.data.datasource.WaifusImRepository
+import com.mackenzie.waifuviewer.data.WaifusImRepository
 import com.mackenzie.waifuviewer.databinding.FragmentDetailBinding
-import com.mackenzie.waifuviewer.data.datasource.WaifusPicRepository
-import com.mackenzie.waifuviewer.domain.WaifuImItem
-import com.mackenzie.waifuviewer.domain.WaifuPicItem
-import com.mackenzie.waifuviewer.framework.db.RoomImDataSource
-import com.mackenzie.waifuviewer.framework.db.RoomPicDataSource
-import com.mackenzie.waifuviewer.framework.server.ServerImDataSource
-import com.mackenzie.waifuviewer.framework.server.ServerPicDataSource
+import com.mackenzie.waifuviewer.data.WaifusPicRepository
+import com.mackenzie.waifuviewer.data.db.RoomImDataSource
+import com.mackenzie.waifuviewer.data.db.RoomPicDataSource
+import com.mackenzie.waifuviewer.data.server.ServerImDataSource
+import com.mackenzie.waifuviewer.data.server.ServerPicDataSource
 import com.mackenzie.waifuviewer.usecases.FindWaifuImUseCase
 import com.mackenzie.waifuviewer.usecases.FindWaifuPicUseCase
 import com.mackenzie.waifuviewer.usecases.SwitchImFavoriteUseCase
@@ -126,13 +124,13 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
         }*/
     }
 
-    private fun prepareDownloadPic(waifuPic: WaifuPicItem) {
+    private fun prepareDownloadPic(waifuPic: com.mackenzie.waifuviewer.domain.WaifuPicItem) {
         title = waifuPic.url.substringAfterLast('/')
         link = waifuPic.url
         imageExt = waifuPic.url.substringAfterLast('.')
     }
 
-    private fun prepareDownloadIm(waifuIm: WaifuImItem) {
+    private fun prepareDownloadIm(waifuIm: com.mackenzie.waifuviewer.domain.WaifuImItem) {
         title = waifuIm.file
         link = waifuIm.url
         imageExt = waifuIm.url.substringAfterLast('.')
