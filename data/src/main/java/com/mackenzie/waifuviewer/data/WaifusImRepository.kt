@@ -35,16 +35,9 @@ class WaifusImRepository(
 
     suspend fun requestOnlyWaifuIm(): WaifuImItem {
         val waifuIm = remoteImDataSource.getOnlyWaifuIm()
-
-        /*waifuIm.fold(ifLeft = { return it }) {
-            localImDataSource.saveOnlyIm(it)
-        }*/
+        localImDataSource.saveOnlyIm(waifuIm)
         return waifuIm
     }
-
-    // suspend fun requestOnlyWaifuIm() = remoteImDataSource.getOnlyWaifuIm()
-
-    // suspend fun requestOnlyWaifuImFix() = remoteImDataSource.getOnlyWaifuIm()
 
     private fun getOrientation(ori: Boolean): String {
         if (ori) {

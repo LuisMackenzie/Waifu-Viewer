@@ -62,19 +62,19 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
         setUpElements()
         updateSpinner(binding.sServer.isChecked)
 
-        /*viewLifecycleOwner.launchAndCollect(imViewModel.state) { updateImWaifu(it) }
+        viewLifecycleOwner.launchAndCollect(imViewModel.state) { updateImWaifu(it) }
         mainState.requestPermissionLauncher {
             if (!loaded) {
                 imViewModel.loadErrorOrWaifu()
             }
-        }*/
+        }
 
-        viewLifecycleOwner.launchAndCollect(picsViewModel.state) { updatePicWaifu(it) }
+        /*viewLifecycleOwner.launchAndCollect(picsViewModel.state) { updatePicWaifu(it) }
         mainState.requestPermissionLauncher {
             if (!loaded) {
                 picsViewModel.loadErrorOrWaifu()
             }
-        }
+        }*/
     }
 
 
@@ -145,8 +145,8 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
         }
         fab.setOnClickListener {
             // viewLifecycleOwner.launchAndCollect(viewModel.state) { updateWaifu(it) }
-            // imViewModel.loadErrorOrWaifu()
-            picsViewModel.loadErrorOrWaifu()
+            imViewModel.loadErrorOrWaifu()
+            // picsViewModel.loadErrorOrWaifu()
         }
         backgroudImage = ivBackdrop
     }

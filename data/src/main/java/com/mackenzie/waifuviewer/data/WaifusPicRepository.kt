@@ -1,6 +1,5 @@
 package com.mackenzie.waifuviewer.data
 
-import arrow.core.rightIfNotNull
 import com.mackenzie.waifuviewer.data.datasource.WaifusPicLocalDataSource
 import com.mackenzie.waifuviewer.data.datasource.WaifusPicRemoteDataSource
 import com.mackenzie.waifuviewer.domain.WaifuPicItem
@@ -22,7 +21,6 @@ class WaifusPicRepository(
             waifusPics.fold(ifLeft = { return it }) {
                 localPicDataSource.savePics(it)
             }
-
         }
         return null
     }
@@ -37,16 +35,8 @@ class WaifusPicRepository(
 
     suspend fun requestOnlyWaifuPic(): WaifuPicItem {
         val waifuPic = remotePicDataSource.getOnlyWaifuPics()
-        // localPicDataSource.saveOnlyPics(waifuPic)
+        localPicDataSource.saveOnlyPics(waifuPic)
         return waifuPic
-    }
-
-    // suspend fun requestOnlyWaifuPic() = RemoteConnection.servicePics.getOnlyWaifuPic()
-
-    suspend fun requestOnlyWaifuPicFix(): Error? {
-        val waifusPics = remotePicDataSource.getOnlyWaifuPics()
-        // waifusPics.fold(ifLeft = { return it }, ifRight = {return null})
-        return null
     }
 
     suspend fun switchPicsFavorite(picsItem: WaifuPicItem) :Error? {

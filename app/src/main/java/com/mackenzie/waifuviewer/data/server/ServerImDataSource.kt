@@ -16,7 +16,7 @@ class ServerImDataSource : WaifusImRemoteDataSource {
     }
 
     override suspend fun getOnlyWaifuIm(): WaifuImItem {
-        val waifu = serviceIm.getRandomWaifuIm().waifus.first().toDomainModel()
+        val waifu = serviceIm.getOnlyRandomWaifuIm().waifus.first().toDomainModel()
         return waifu
     }
 

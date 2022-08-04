@@ -27,7 +27,7 @@ class WaifuImAdapter(private val listener: (WaifuImItem) -> Unit ): ListAdapter<
     inner class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
 
         private val binding = ViewMediaItemBinding.bind(view)
-        fun bind(waifu: com.mackenzie.waifuviewer.domain.WaifuImItem) = with(binding) {
+        fun bind(waifu: WaifuImItem) = with(binding) {
             // waifuIm = waifu
             waifuTitle.text = waifu.imageId.toString()
             waifuThumb.loadUrl(waifu.url)

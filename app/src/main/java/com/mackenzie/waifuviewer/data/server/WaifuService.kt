@@ -21,13 +21,14 @@ interface WaifuService {
     @GET("endpoints/")
     suspend fun getCategories(@Query("full") fullInfo:Boolean = true): TagResult
 
-    /*@GET("random/")
-    suspend fun getRandomWaifu(
+    @GET("random/")
+    suspend fun getOnlyRandomWaifuIm(
         @Query("is_nsfw") isNsfw:Boolean = false,
+        @Query("selected_tags") tags:String = "waifu",
         @Query("gif") isGif:Boolean = false,
         @Query("orientation") orientation:String = "PORTRAIT",
-        @Query("many") manyWaifus:Boolean = true
-    ): WaifuResult*/
+        @Query("many") manyWaifus:Boolean = false
+    ): WaifuResult
 
    /* @GET("random/")
     suspend fun getEspecialWaifu(

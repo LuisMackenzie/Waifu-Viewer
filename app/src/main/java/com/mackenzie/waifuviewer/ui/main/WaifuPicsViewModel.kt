@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.mackenzie.waifuviewer.data.toError
 import com.mackenzie.waifuviewer.domain.Error
+import com.mackenzie.waifuviewer.domain.WaifuPicItem
 import com.mackenzie.waifuviewer.usecases.GetWaifuPicUseCase
 import com.mackenzie.waifuviewer.usecases.RequestWaifuPicUseCase
 import com.mackenzie.waifuviewer.ui.common.Scope
@@ -27,7 +28,7 @@ class WaifuPicsViewModel(
         viewModelScope.launch {
             getWaifuPicUseCase()
                 .catch { cause -> _state.update { it.copy(error = cause.toError()) }}
-                .collect{ WaifuPics -> _state.update { UiState(waifusSavedPics = WaifuPics) } }
+                .collect{ waifusPics -> _state.update { UiState(waifus = waifusPics) } }
         }
     }
 
@@ -77,7 +78,7 @@ class WaifuPicsViewModel(
 
     data class UiState(
         val isLoading: Boolean = false,
-        val waifusSavedPics: List<com.mackenzie.waifuviewer.domain.WaifuPicItem>? = null,
+        val waifus: List<WaifuPicItem>? = null,
         val error: Error? = null
     )
 }

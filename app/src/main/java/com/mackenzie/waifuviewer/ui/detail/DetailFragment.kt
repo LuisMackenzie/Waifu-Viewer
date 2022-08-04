@@ -42,14 +42,10 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
 
     private val safeArgs: DetailFragmentArgs by navArgs()
     private val picsViewModel: DetailPicsViewModel by viewModels {
-        val localDataSource = RoomPicDataSource(requireActivity().app.db.waifuPicDao())
-        val remoteDataSource = ServerPicDataSource()
-        val repo = WaifusPicRepository(localDataSource, remoteDataSource)
+        val repo = WaifusPicRepository(RoomPicDataSource(requireActivity().app.db.waifuPicDao()), ServerPicDataSource())
         DetailPicsViewModelFactory(safeArgs.waifuId, FindWaifuPicUseCase(repo), SwitchPicFavoriteUseCase(repo)) }
     private val imViewModel: DetailImViewModel by viewModels {
-        val localDataSource = RoomImDataSource(requireActivity().app.db.waifuImDao())
-        val remoteDataSource = ServerImDataSource()
-        val repo = WaifusImRepository(localDataSource, remoteDataSource)
+        val repo = WaifusImRepository(RoomImDataSource(requireActivity().app.db.waifuImDao()), ServerImDataSource())
         DetailImViewModelFactory(safeArgs.waifuId, FindWaifuImUseCase(repo), SwitchImFavoriteUseCase(repo)) }
     private lateinit var mainState: MainState
     private var mainServer: Boolean = false

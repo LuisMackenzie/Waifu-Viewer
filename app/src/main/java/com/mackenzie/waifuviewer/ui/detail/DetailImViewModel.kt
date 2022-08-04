@@ -5,9 +5,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.mackenzie.waifuviewer.usecases.FindWaifuImUseCase
 import com.mackenzie.waifuviewer.usecases.SwitchImFavoriteUseCase
+import com.mackenzie.waifuviewer.domain.WaifuImItem
+import com.mackenzie.waifuviewer.domain.Error
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class DetailImViewModel (
@@ -29,11 +32,17 @@ class DetailImViewModel (
 
     fun onFavoriteClicked() {
         viewModelScope.launch {
-            _state.value.waifuIm?.let { switchImFavoriteUseCase(it) }
+            _state.value.waifuIm?.let { waifu ->
+                val error = switchImFavoriteUseCase(waifu)
+                _state.update { it.copy(error = error) }
+            }
         }
     }
 
-    data class UiState(val waifuIm: com.mackenzie.waifuviewer.domain.WaifuImItem? = null)
+    data class UiState(
+        val waifuIm: WaifuImItem? = null,
+        val error: Error? = null
+    )
 
 }
 

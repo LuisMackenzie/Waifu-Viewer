@@ -24,12 +24,10 @@ class WaifuPicsAdapter(private val listener: (WaifuPicItem) -> Unit ): ListAdapt
         holder.itemView.setOnClickListener { listener(waifuItem) }
     }
 
-    override fun getItemCount(): Int = currentList.size
-
     inner class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
 
         private val binding = ViewMediaItemBinding.bind(view)
-        fun bind(waifu: com.mackenzie.waifuviewer.domain.WaifuPicItem) = with(binding) {
+        fun bind(waifu: WaifuPicItem) = with(binding) {
             // waifuPic = waifu
             waifuTitle.text = waifu.url.substringAfterLast('/').substringBeforeLast('.')
             waifuThumb.loadUrl(waifu.url)
