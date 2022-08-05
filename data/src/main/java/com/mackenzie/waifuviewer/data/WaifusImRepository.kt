@@ -47,8 +47,6 @@ class WaifusImRepository(
         }
     }
 
-
-
     suspend fun switchImFavorite(imItem: WaifuImItem): Error? {
         val updatedWaifu = imItem.copy(isFavorite = !imItem.isFavorite)
         return localImDataSource.saveIm(listOf(updatedWaifu))

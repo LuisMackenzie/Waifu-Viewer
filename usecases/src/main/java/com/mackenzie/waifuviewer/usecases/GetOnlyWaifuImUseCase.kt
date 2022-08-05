@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 class GetOnlyWaifuImUseCase(private val repo: WaifusImRepository) {
 
-    operator fun invoke(): Flow<List<WaifuImItem>> = repo.savedWaifusIm
+    operator fun invoke() = repo.savedWaifusIm
 }

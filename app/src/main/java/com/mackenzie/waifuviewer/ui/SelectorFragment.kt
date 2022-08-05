@@ -41,14 +41,10 @@ import kotlinx.coroutines.launch
 class SelectorFragment : Fragment(R.layout.fragment_selector) {
 
     private val imViewModel: SelectorImViewModel by viewModels {
-        val localDataSource = RoomImDataSource(requireActivity().app.db.waifuImDao())
-        val remoteDataSource = ServerImDataSource()
-        val repo = WaifusImRepository(localDataSource, remoteDataSource)
-        SelectorImViewModelFactory(GetWaifuImUseCase(repo), RequestOnlyWaifuImUseCase(repo)) }
+        val repo = WaifusImRepository(RoomImDataSource(requireActivity().app.db.waifuImDao()), ServerImDataSource())
+        SelectorImViewModelFactory(GetOnlyWaifuImUseCase(repo), RequestOnlyWaifuImUseCase(repo)) }
     private val picsViewModel: SelectorPicViewModel by viewModels {
-        val localDataSource = RoomPicDataSource(requireActivity().app.db.waifuPicDao())
-        val remoteDataSource = ServerPicDataSource()
-        val repo = WaifusPicRepository(localDataSource, remoteDataSource)
+        val repo = WaifusPicRepository(RoomPicDataSource(requireActivity().app.db.waifuPicDao()), ServerPicDataSource())
         SelectorPicViewModelFactory(GetOnlyWaifuPicUseCase(repo), RequestOnlyWaifuPicUseCase(repo)) }
     private lateinit var binding: FragmentSelectorBinding
     private var backgroudImage: ImageView? = null

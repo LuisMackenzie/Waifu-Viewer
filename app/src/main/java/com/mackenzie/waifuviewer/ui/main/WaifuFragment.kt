@@ -130,7 +130,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         state.isLoading.let {
             progress.visibility = if (it) View.VISIBLE else View.GONE
             recycler.visibility = if(it) View.GONE else View.VISIBLE
-            Toast.makeText(requireContext(), "Loading Waifus", Toast.LENGTH_SHORT).show()
+            // Toast.makeText(requireContext(), "Loading Waifus", Toast.LENGTH_SHORT).show()
         }
 
         fabRecycler.setOnClickListener {
@@ -152,8 +152,8 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         val orientation = bun.getBoolean(IS_LANDS_WAIFU)
         val categoryTag = bun.getString(CATEGORY_TAG)!!
 
-        progress.visible = state.isLoading
-        recycler.visibility = if(state.isLoading) View.GONE else View.VISIBLE
+        // progress.visible = state.isLoading
+        // recycler.visibility = if(state.isLoading) View.GONE else View.VISIBLE
 
         state.waifusSavedIm?.let { savedImWaifus ->
             waifuImAdapter.submitList(savedImWaifus)
@@ -171,8 +171,8 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         }
         state.isLoading.let {
             progress.visibility = if (it) View.VISIBLE else View.GONE
-            recycler.visibility = if(it) View.GONE else View.VISIBLE
-            Toast.makeText(requireContext(), "Loading Waifus", Toast.LENGTH_SHORT).show()
+            recycler.visibility = if (it) View.GONE else View.VISIBLE
+            // Toast.makeText(requireContext(), "Loading Waifus", Toast.LENGTH_SHORT).show()
         }
 
         fabRecycler.setOnClickListener {

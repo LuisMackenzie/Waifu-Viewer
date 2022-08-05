@@ -5,7 +5,8 @@ import com.mackenzie.waifuviewer.data.WaifusPicRepository
 
 class RequestWaifuPicUseCase(private val repo: WaifusPicRepository) {
 
-    suspend operator fun invoke(isNsfw:String, tag:String) : Error?
-    = repo.requestWaifusPics(isNsfw, tag)
+    suspend operator fun invoke(isNsfw:String, tag:String) : Error? {
+        return repo.requestWaifusPics(isNsfw, tag)
+    }
 
 }

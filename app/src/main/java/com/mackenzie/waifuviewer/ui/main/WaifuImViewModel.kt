@@ -57,14 +57,14 @@ class WaifuImViewModel(
             if (tag == "all") {
                 if (isNsfw) {
                     error = requestMoreImUseCase(isNsfw,"ecchi",isGif,orientation)
-                    _state.update { it.copy(error = error) }
+                    _state.update { _state.value.copy(isLoading = false, error = error) }
                 } else {
                     error = requestMoreImUseCase(isNsfw,"waifu",isGif,orientation)
-                    _state.update { it.copy(error = error) }
+                    _state.update { _state.value.copy(isLoading = false, error = error) }
                 }
             } else {
                 error = requestMoreImUseCase(isNsfw, tag, isGif,  orientation)
-                _state.update { it.copy(error = error) }
+                _state.update { _state.value.copy(isLoading = false, error = error) }
             }
         }
     }

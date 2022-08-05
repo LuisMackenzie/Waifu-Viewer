@@ -42,22 +42,23 @@ class WaifuPicsViewModel(
 
     fun onRequestMore(isNsfw: Boolean, tag: String) {
         viewModelScope.launch {
+            _state.value = _state.value.copy(isLoading = true)
             val error: Error?
             if (isNsfw) {
                 if (tag == "all") {
                     error = requestMorePicUseCase("nsfw", "waifu")
-                    _state.update { it.copy(error = error) }
+                    _state.update { _state.value.copy(isLoading = false, error = error) }
                 } else {
                     error = requestMorePicUseCase("nsfw", tag)
-                    _state.update { it.copy(error = error) }
+                    _state.update { _state.value.copy(isLoading = false, error = error) }
                 }
             } else {
                 if (tag == "all") {
                     error = requestMorePicUseCase("sfw", "waifu")
-                    _state.update { it.copy(error = error) }
+                    _state.update { _state.value.copy(isLoading = false, error = error) }
                 } else {
                     error = requestMorePicUseCase("sfw", tag)
-                    _state.update { it.copy(error = error) }
+                    _state.update { _state.value.copy(isLoading = false, error = error) }
                 }
             }
         }
@@ -68,10 +69,10 @@ class WaifuPicsViewModel(
             val error: Error?
             if (tag == "all") {
                 error = requestWaifuPicUseCase(isNsfw, "waifu")
-                _state.update { it.copy(error = error) }
+                _state.update { _state.value.copy(isLoading = false, error = error) }
             } else {
                 error = requestWaifuPicUseCase(isNsfw, tag)
-                _state.update { it.copy(error = error) }
+                _state.update { _state.value.copy(isLoading = false, error = error) }
             }
         }
     }
