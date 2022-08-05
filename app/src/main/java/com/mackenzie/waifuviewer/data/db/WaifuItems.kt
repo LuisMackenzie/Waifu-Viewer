@@ -8,7 +8,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 @Entity
 data class WaifuImDbItem(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @PrimaryKey(autoGenerate = true) val id: Int,
     val dominant_color: String,
     // val extension: String,
     // val favourites: Int,
@@ -28,7 +28,7 @@ data class WaifuImDbItem(
 @Parcelize
 @Entity
 data class WaifuPicDbItem(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @PrimaryKey(autoGenerate = true) val id: Int,
     val url: String,
     val isFavorite: Boolean
 ) : Parcelable

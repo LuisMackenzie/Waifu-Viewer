@@ -13,7 +13,7 @@ class RoomPicDataSource(private val PicDao: WaifuPicDao) : WaifusPicLocalDataSou
 
     override val waifusPic: Flow<List<WaifuPicItem>> = PicDao.getAllPic().map { it.reversed().toDomainModel() }
 
-    override suspend fun isPicsEmpty(): Boolean = withContext(Dispatchers.IO) { PicDao.waifuPicsCount() == 0 }
+    override suspend fun isPicsEmpty(): Boolean = withContext(Dispatchers.Default) { PicDao.waifuPicsCount() == 0 }
 
     override fun findPicById(id: Int): Flow<WaifuPicItem> = PicDao.findPicsById(id).map { it.toDomainModel() }
 
@@ -24,10 +24,6 @@ class RoomPicDataSource(private val PicDao: WaifuPicDao) : WaifusPicLocalDataSou
     override suspend fun saveOnlyPics(waifu: WaifuPicItem): Error? = tryCall {
         PicDao.insertWaifuPics(waifu.fromDomainModel())
     }.fold(ifLeft = { it }, ifRight = { null })
-
-    /*override suspend fun savePics(waifus: List<WaifuPicItem>) = withContext(Dispatchers.IO) {
-        PicDao.insertAllWaifuPics(waifus.fromDomainModel())
-    }*/
 
 }
 

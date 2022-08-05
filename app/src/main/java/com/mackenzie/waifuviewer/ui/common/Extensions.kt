@@ -55,7 +55,7 @@ fun <T> LifecycleOwner.launchAndCollect(
     Lifecycle.State = Lifecycle.State.STARTED,
     body: (T) -> Unit) {
     lifecycleScope.launch {
-        repeatOnLifecycle(state) {
+        this@launchAndCollect.repeatOnLifecycle(state) {
             // viewModel.state.collect(::updateWaifu)
             flow.collect(body)
         }

@@ -31,17 +31,20 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
     private val imViewModel: WaifuImViewModel by viewModels {
         val repo = WaifusImRepository(RoomImDataSource(requireActivity().app.db.waifuImDao()), ServerImDataSource())
         WaifuImViewModelFactory(GetWaifuImUseCase(repo), RequestWaifuImUseCase(repo), RequestMoreWaifuImUseCase(repo)) }
-    private lateinit var mainState: MainState
-    private lateinit var binding: FragmentWaifuBinding
-    private var mainServer: Boolean = false
-    private var numOfWaifusIsShowed : Boolean= false
     private val waifuImAdapter = WaifuImAdapter{ mainState.onWaifuClicked(it) }
     private val waifuPicsAdapter = WaifuPicsAdapter{ mainState.onWaifuPicsClicked(it) }
+    private lateinit var mainState: MainState
+    private lateinit var binding: FragmentWaifuBinding
+    private lateinit var bun :Bundle
+    private var mainServer: Boolean = false
+    private var numOfWaifusIsShowed : Boolean= false
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mainState = buildMainState()
         mainServer = safeArgs.bundleInfo.getBoolean(IS_SERVER_SELECTED)
+        bun = safeArgs.bundleInfo
         binding = FragmentWaifuBinding.bind(view).apply {
             if (mainServer) {
                 recycler.adapter = waifuPicsAdapter
@@ -56,7 +59,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
             viewLifecycleOwner.launchAndCollect(imViewModel.state) { binding.withImUpdateUI(it) }
         }
 
-        loadCustomResult(safeArgs.bundleInfo)
+        loadCustomResult(bun)
 
     }
 
@@ -88,7 +91,6 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
                 }
                 else -> {
                     imViewModel.onImReady(isNsfw, isGif, categoryTag, orientation)
-                    Toast.makeText(requireContext(), "$categoryTag $isNsfw", Toast.LENGTH_SHORT).show()
                 }
             }
         } else {
@@ -98,7 +100,6 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
                 }
                 else -> {
                     picsViewModel.onPicsReady(isNsfw, categoryTag)
-                    Toast.makeText(requireContext(), "$categoryTag $isNsfw", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -107,13 +108,15 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
     private fun FragmentWaifuBinding.withPicsUpdateUI(state: WaifuPicsViewModel.UiState) {
 
         var count: Int
-        val bun = safeArgs.bundleInfo
+        // val bun = safeArgs.bundleInfo
         val isNsfw = bun.getBoolean(IS_NSFW_WAIFU)
         val categoryTag = bun.getString(CATEGORY_TAG)!!
 
+
+
         state.waifus?.let { savedPicWaifus ->
             waifuPicsAdapter.submitList(savedPicWaifus)
-            Toast.makeText(requireContext(), "Showing Waifus", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Showing PICS Waifus $savedPicWaifus", Toast.LENGTH_SHORT).show()
             count = waifuPicsAdapter.itemCount
             if (count != 0 && !numOfWaifusIsShowed) {
                 Toast.makeText(requireContext(), "Total Waifus = $count", Toast.LENGTH_SHORT).show()
@@ -127,6 +130,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
             tvError.visibility = View.VISIBLE
             // Toast.makeText(requireContext(), "Loading Error", Toast.LENGTH_SHORT).show()
         }
+
         state.isLoading.let {
             progress.visibility = if (it) View.VISIBLE else View.GONE
             recycler.visibility = if(it) View.GONE else View.VISIBLE
@@ -135,7 +139,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
 
         fabRecycler.setOnClickListener {
             picsViewModel.onRequestMore(isNsfw, categoryTag)
-            activity?.onBackPressed()
+            // activity?.onBackPressed()
             // count = waifuPicsAdapter.itemCount
             Toast.makeText(requireContext(), "30 More Waifus are incoming. Hit button for show", Toast.LENGTH_SHORT).show()
         }
@@ -146,7 +150,6 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
     private fun FragmentWaifuBinding.withImUpdateUI(state: WaifuImViewModel.UiState) {
 
         var count: Int
-        val bun = safeArgs.bundleInfo
         val isNsfw = bun.getBoolean(IS_NSFW_WAIFU)
         val isGif = bun.getBoolean(IS_GIF_WAIFU)
         val orientation = bun.getBoolean(IS_LANDS_WAIFU)
@@ -155,20 +158,28 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         // progress.visible = state.isLoading
         // recycler.visibility = if(state.isLoading) View.GONE else View.VISIBLE
 
-        state.waifusSavedIm?.let { savedImWaifus ->
-            waifuImAdapter.submitList(savedImWaifus)
-            Toast.makeText(requireContext(), "Showing Waifus", Toast.LENGTH_SHORT).show()
+        // waifuIm = state.waifus
+        // loading = state.isLoading
+        // error = state.error?.let{mainState::errorToString}.toString()
+        // Toast.makeText(requireContext(), "Showing IM Waifus ${state.waifus}", Toast.LENGTH_SHORT).show()
+
+        state.waifus?.let { savedImWaifus ->
+            // waifuImAdapter.submitList(savedImWaifus)
+            binding.waifuIm = savedImWaifus
+            Toast.makeText(requireContext(), "Showing IM Waifus $savedImWaifus", Toast.LENGTH_SHORT).show()
             count = waifuImAdapter.itemCount
             if (count != 0 && !numOfWaifusIsShowed) {
                 Toast.makeText(requireContext(), "Total Waifus = $count", Toast.LENGTH_SHORT).show()
                 numOfWaifusIsShowed = true
             }
         }
+
         state.error?.let {
             mainState.errorToString(it)
             ivError.visibility = View.VISIBLE
             tvError.visibility = View.VISIBLE
         }
+
         state.isLoading.let {
             progress.visibility = if (it) View.VISIBLE else View.GONE
             recycler.visibility = if (it) View.GONE else View.VISIBLE
@@ -177,7 +188,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
 
         fabRecycler.setOnClickListener {
             imViewModel.onRequestMore(isNsfw, isGif, categoryTag, orientation)
-            activity?.onBackPressed()
+            // activity?.onBackPressed()
             Toast.makeText(requireContext(), "30 More Waifus are incoming. Hit button for show", Toast.LENGTH_SHORT).show()
         }
     }

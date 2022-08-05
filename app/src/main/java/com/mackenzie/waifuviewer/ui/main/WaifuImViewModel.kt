@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class WaifuImViewModel(
-    getWaifuImUseCase: GetWaifuImUseCase,
+    private val getWaifuImUseCase: GetWaifuImUseCase,
     private val requestWaifuImUseCase: RequestWaifuImUseCase,
     private val requestMoreImUseCase: RequestMoreWaifuImUseCase
     ): ViewModel(), Scope by Scope.Impl() {
@@ -25,53 +25,72 @@ class WaifuImViewModel(
     init {
         viewModelScope.launch {
             getWaifuImUseCase()
-                .catch { cause -> _state.update { it.copy(error = cause.toError()) }}
-                .collect{ WaifusIm -> _state.update { UiState(waifusSavedIm = WaifusIm) } }
+                .catch { cause -> _state.update { UiState(error = cause.toError()) }}
+                .collect{ WaifusIm -> _state.update { UiState(isLoading = false, waifus = WaifusIm) } }
         }
     }
 
     fun onImReady(isNsfw: Boolean, isGif: Boolean, tag: String, orientation: Boolean) {
         viewModelScope.launch {
-            _state.value = _state.value.copy(isLoading = true)
+            _state.update { UiState(isLoading = true) }
             val error: Error?
             if (tag == "all") {
                 if (isNsfw) {
                     error = requestWaifuImUseCase(isNsfw,"ecchi",isGif,orientation)
                     // _state.update { it.copy(error = error) }
                     _state.update { _state.value.copy(isLoading = false, error = error) }
+
                 } else {
                     error = requestWaifuImUseCase(isNsfw,"waifu",isGif,orientation)
                     // _state.update { it.copy(error = error) }
                     _state.update { _state.value.copy(isLoading = false, error = error) }
+
                 }
             } else {
                 error = requestWaifuImUseCase(isNsfw, tag, isGif,  orientation)
                 _state.update { _state.value.copy(isLoading = false, error = error) }
+
             }
         }
     }
 
     fun onRequestMore(isNsfw: Boolean, isGif: Boolean, tag: String, orientation: Boolean) {
         viewModelScope.launch {
+            _state.value = _state.value.copy(isLoading = true)
             val error: Error?
             if (tag == "all") {
                 if (isNsfw) {
                     error = requestMoreImUseCase(isNsfw,"ecchi",isGif,orientation)
                     _state.update { _state.value.copy(isLoading = false, error = error) }
+
                 } else {
                     error = requestMoreImUseCase(isNsfw,"waifu",isGif,orientation)
                     _state.update { _state.value.copy(isLoading = false, error = error) }
+
                 }
             } else {
                 error = requestMoreImUseCase(isNsfw, tag, isGif,  orientation)
                 _state.update { _state.value.copy(isLoading = false, error = error) }
+
             }
         }
     }
 
+    /*private fun getWaifusIm() {
+        viewModelScope.launch {
+            getWaifuImUseCase()
+                .catch { cause -> _state.update { UiState(error = cause.toError()) }}
+                .collect{ WaifusIm -> _state.update { UiState(waifus = WaifusIm) } }
+        }
+    }*/
+
+    /*private fun getWaifusIm(): Flow<List<WaifuImItem>> {
+        return _state.map { it.waifus }
+    }*/
+
     data class UiState(
         val isLoading: Boolean = false,
-        val waifusSavedIm: List<WaifuImItem>? = null,
+        val waifus: List<WaifuImItem>? = null,
         val error: Error? = null
     )
 }

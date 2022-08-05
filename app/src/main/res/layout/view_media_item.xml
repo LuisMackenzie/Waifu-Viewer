@@ -6,8 +6,8 @@
     <data>
         <import type="com.mackenzie.waifuviewer.domain.WaifuPicItem"/>
         <import type="com.mackenzie.waifuviewer.domain.WaifuImItem"/>
-        <variable name="waifuPic" type="com.mackenzie.waifuviewer.domain.WaifuPicItem" />
-        <variable name="waifuIm" type="com.mackenzie.waifuviewer.domain.WaifuImItem"/>
+        <variable name="waifuPic" type="WaifuPicItem" />
+        <variable name="waifuIm" type="WaifuImItem"/>
     </data>
 
 <androidx.cardview.widget.CardView
@@ -40,6 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:scaleType="centerCrop"
+            app:url="@{waifuIm.url}"
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
@@ -59,7 +60,7 @@
             android:layout_alignParentStart="true"
             android:layout_margin="14dp"
             android:src="@drawable/ic_favorite_on"
-            android:visibility="gone" />
+            app:visible="@{waifuIm.favorite}" />
 
 
     </RelativeLayout>

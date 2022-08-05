@@ -6,14 +6,14 @@ import com.mackenzie.waifuviewer.domain.WaifuImItem
 import com.mackenzie.waifuviewer.domain.WaifuPicItem
 
 @BindingAdapter("itemsPics")
-fun RecyclerView.setImItems(waifus: List<com.mackenzie.waifuviewer.domain.WaifuPicItem>?) {
+fun RecyclerView.setPicsItems(waifus: List<WaifuPicItem>?) {
     if (waifus != null) {
         (adapter as? WaifuPicsAdapter)?.submitList(waifus)
     }
 }
 
 @BindingAdapter("itemsIm")
-fun RecyclerView.setPicItems(waifus: List<com.mackenzie.waifuviewer.domain.WaifuImItem>?) {
+fun RecyclerView.setItems(waifus: List<WaifuImItem>?) {
     if (waifus != null) {
         (adapter as? WaifuImAdapter)?.submitList(waifus)
     }

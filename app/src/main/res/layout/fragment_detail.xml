@@ -5,8 +5,8 @@
     <data>
         <import type="com.mackenzie.waifuviewer.domain.WaifuPicItem"/>
         <import type="com.mackenzie.waifuviewer.domain.WaifuImItem"/>
-        <variable name="waifuPic" type="com.mackenzie.waifuviewer.domain.WaifuPicItem" />
-        <variable name="waifuIm" type="com.mackenzie.waifuviewer.domain.WaifuImItem"/>
+        <variable name="waifuPic" type="WaifuPicItem" />
+        <variable name="waifuIm" type="WaifuImItem"/>
     </data>
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"

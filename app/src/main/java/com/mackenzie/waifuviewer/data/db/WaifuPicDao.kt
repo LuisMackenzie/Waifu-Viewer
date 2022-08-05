@@ -24,7 +24,7 @@ interface WaifuPicDao {
     @Update
     fun updateWaifuPics(waifu: WaifuPicDbItem)
 
-    /*@Delete
-    fun delete(waifu: WaifuPicItem)*/
+    @Delete
+    fun deletePics(waifu: WaifuPicDbItem)
 
 }

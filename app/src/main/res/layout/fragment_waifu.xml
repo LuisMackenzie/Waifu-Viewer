@@ -4,10 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="java.util.List" />
         <import type="com.mackenzie.waifuviewer.domain.WaifuPicItem"/>
         <import type="com.mackenzie.waifuviewer.domain.WaifuImItem"/>
-        <variable name="waifuPic" type="com.mackenzie.waifuviewer.domain.WaifuPicItem" />
-        <variable name="waifuIm" type="com.mackenzie.waifuviewer.domain.WaifuImItem"/>
+        <variable name="loading" type="boolean" />
+        <variable name="waifuPic" type="List&lt;WaifuPicItem>" />
+        <variable name="waifuIm" type="List&lt;WaifuImItem>"/>
+        <variable name="error" type="String" />
     </data>
 
 <androidx.constraintlayout.widget.ConstraintLayout
@@ -45,6 +48,8 @@
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:padding="2dp"
+        app:itemsIm="@{waifuIm}"
+        app:itemsPics="@{waifuPic}"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="2"
         tools:itemCount="10"

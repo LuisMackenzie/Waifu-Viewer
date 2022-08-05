@@ -12,5 +12,4 @@ dependencies {
     implementation (project(":data"))
     implementation (project(":domain"))
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
-    implementation ("io.arrow-kt:arrow-core:1.0.1")
 }

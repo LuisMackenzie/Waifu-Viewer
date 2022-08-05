@@ -66,6 +66,7 @@ class WaifuPicsViewModel(
 
     private fun waifusGetter(isNsfw: String, tag: String) {
         viewModelScope.launch {
+            _state.value = _state.value.copy(isLoading = true)
             val error: Error?
             if (tag == "all") {
                 error = requestWaifuPicUseCase(isNsfw, "waifu")

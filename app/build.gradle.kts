@@ -15,7 +15,7 @@ android {
         minSdk = 24
         targetSdk = 32
         versionCode = 1
-        versionName = "0.5.0"
+        versionName = "0.6"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -74,7 +74,9 @@ dependencies {
 
     // Glide libraries
     implementation ("com.github.bumptech.glide:glide:4.13.2")
-    annotationProcessor ("com.github.bumptech.glide:compiler:4.13.2")
+    kapt("com.github.bumptech.glide:compiler:4.13.2")
+    // annotationProcessor ("com.github.bumptech.glide:compiler:4.13.2")
+
     // Retrofit Libraries
     implementation ("com.squareup.retrofit2:retrofit:$retrofit_version")
     implementation ("com.google.code.gson:gson:2.9.0")

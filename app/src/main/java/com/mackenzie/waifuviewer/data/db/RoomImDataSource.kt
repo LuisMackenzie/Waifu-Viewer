@@ -13,7 +13,7 @@ class RoomImDataSource(private val ImDao: WaifuImDao) : WaifusImLocalDataSource 
 
     override val waifusIm: Flow<List<WaifuImItem>> = ImDao.getAllIm().map { it.reversed().toDomainModel()}
 
-    override suspend fun isImEmpty(): Boolean = withContext(Dispatchers.IO) { ImDao.waifuImCount() == 0 }
+    override suspend fun isImEmpty(): Boolean = withContext(Dispatchers.Default) { ImDao.waifuImCount() == 0 }
 
     override fun findImById(id: Int): Flow<WaifuImItem> = ImDao.findImById(id).map { it.toDomainModel() }
 
