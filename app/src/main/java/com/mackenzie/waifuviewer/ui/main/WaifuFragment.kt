@@ -140,9 +140,9 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         }
 
         fabRecycler.setOnClickListener {
-            // picsViewModel.onRequestMore(isNsfw, categoryTag)
+            picsViewModel.onRequestMore(isNsfw, categoryTag)
             // activity?.onBackPressed()
-            Toast.makeText(requireContext(), "30 More Waifus are incoming. Hit button for show", Toast.LENGTH_SHORT).show()
+            // Toast.makeText(requireContext(), "30 More Waifus are incoming. Hit button for show", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -192,7 +192,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         }
 
         fabRecycler.setOnClickListener {
-            // imViewModel.onRequestMore(isNsfw, isGif, categoryTag, orientation)
+            imViewModel.onRequestMore(isNsfw, isGif, categoryTag, orientation)
             // activity?.onBackPressed()
             // Toast.makeText(requireContext(), "30 More Waifus are incoming. Hit button for show", Toast.LENGTH_SHORT).show()
         }
