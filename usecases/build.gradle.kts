@@ -12,4 +12,6 @@ dependencies {
     implementation (project(":data"))
     implementation (project(":domain"))
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
+    // library to use Either Class in Kotlin
+    implementation ("io.arrow-kt:arrow-core:1.0.1")
 }

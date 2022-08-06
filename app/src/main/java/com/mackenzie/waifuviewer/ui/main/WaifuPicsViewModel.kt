@@ -28,7 +28,7 @@ class WaifuPicsViewModel(
         viewModelScope.launch {
             getWaifuPicUseCase()
                 .catch { cause -> _state.update { it.copy(error = cause.toError()) }}
-                .collect{ waifusPics -> _state.update { UiState(waifus = waifusPics) } }
+                .collect{ waifusPics -> _state.update { _state.value.copy(waifus = waifusPics) } }
         }
     }
 
@@ -41,25 +41,57 @@ class WaifuPicsViewModel(
     }
 
     fun onRequestMore(isNsfw: Boolean, tag: String) {
+        if (isNsfw) {
+            moreWaifusGetter("nsfw", tag)
+        } else {
+            moreWaifusGetter("sfw", tag)
+        }
+    }
+
+    /*fun onRequestMore(isNsfw: Boolean, tag: String) {
         viewModelScope.launch {
             _state.value = _state.value.copy(isLoading = true)
-            val error: Error?
             if (isNsfw) {
                 if (tag == "all") {
-                    error = requestMorePicUseCase("nsfw", "waifu")
-                    _state.update { _state.value.copy(isLoading = false, error = error) }
+                    val error = requestMorePicUseCase("nsfw", "waifu")
+                    error.fold(
+                        ifLeft = { cause -> _state.update{ it.copy(error = cause) } },
+                        ifRight = { waifusPics -> _state.update{ it.copy(isLoading = false, waifus = waifusPics) } })
                 } else {
-                    error = requestMorePicUseCase("nsfw", tag)
-                    _state.update { _state.value.copy(isLoading = false, error = error) }
+                    val error = requestMorePicUseCase("nsfw", tag)
+                    error.fold(
+                        ifLeft = { cause -> _state.update{ it.copy(error = cause) } },
+                        ifRight = { waifusPics -> _state.update{ it.copy(isLoading = false, waifus = waifusPics) } })
                 }
             } else {
                 if (tag == "all") {
-                    error = requestMorePicUseCase("sfw", "waifu")
-                    _state.update { _state.value.copy(isLoading = false, error = error) }
+                    val error = requestMorePicUseCase("sfw", "waifu")
+                    error.fold(
+                        ifLeft = { cause -> _state.update{ it.copy(error = cause) } },
+                        ifRight = { waifusPics -> _state.update{ it.copy(isLoading = false, waifus = waifusPics) } })
                 } else {
-                    error = requestMorePicUseCase("sfw", tag)
-                    _state.update { _state.value.copy(isLoading = false, error = error) }
+                    val error = requestMorePicUseCase("sfw", tag)
+                    error.fold(
+                        ifLeft = { cause -> _state.update{ it.copy(error = cause) } },
+                        ifRight = { waifusPics -> _state.update{ it.copy(isLoading = false, waifus = waifusPics) } })
                 }
+            }
+        }
+    }*/
+
+    private fun moreWaifusGetter(isNsfw: String, tag: String) {
+        viewModelScope.launch {
+            _state.value = _state.value.copy(isLoading = true)
+            if (tag == "all") {
+                val error = requestMorePicUseCase(isNsfw, "waifu")
+                error.fold(
+                    ifLeft = { cause -> _state.update{ it.copy(error = cause) } },
+                    ifRight = { waifusPics -> _state.update{ it.copy(isLoading = false, waifus = waifusPics) } })
+            } else {
+                val error = requestMorePicUseCase(isNsfw, tag)
+                error.fold(
+                    ifLeft = { cause -> _state.update{ it.copy(error = cause) } },
+                    ifRight = { waifusPics -> _state.update{ it.copy(isLoading = false, waifus = waifusPics) } })
             }
         }
     }
@@ -67,13 +99,16 @@ class WaifuPicsViewModel(
     private fun waifusGetter(isNsfw: String, tag: String) {
         viewModelScope.launch {
             _state.value = _state.value.copy(isLoading = true)
-            val error: Error?
             if (tag == "all") {
-                error = requestWaifuPicUseCase(isNsfw, "waifu")
-                _state.update { _state.value.copy(isLoading = false, error = error) }
+                val error = requestWaifuPicUseCase(isNsfw, "waifu")
+                error.fold(
+                    ifLeft = { cause -> _state.update{ it.copy(error = cause) } },
+                    ifRight = { waifusPics -> _state.update{ it.copy(isLoading = false, waifus = waifusPics) } })
             } else {
-                error = requestWaifuPicUseCase(isNsfw, tag)
-                _state.update { _state.value.copy(isLoading = false, error = error) }
+                val error = requestWaifuPicUseCase(isNsfw, tag)
+                error.fold(
+                    ifLeft = { cause -> _state.update{ it.copy(error = cause) } },
+                    ifRight = { waifusPics -> _state.update{ it.copy(isLoading = false, waifus = waifusPics) } })
             }
         }
     }

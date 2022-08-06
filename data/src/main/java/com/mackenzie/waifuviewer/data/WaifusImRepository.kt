@@ -1,5 +1,8 @@
 package com.mackenzie.waifuviewer.data
 
+import arrow.core.Either
+import arrow.core.left
+import arrow.core.right
 import com.mackenzie.waifuviewer.data.datasource.WaifusImLocalDataSource
 import com.mackenzie.waifuviewer.data.datasource.WaifusImRemoteDataSource
 import com.mackenzie.waifuviewer.domain.WaifuImItem
@@ -15,27 +18,25 @@ class WaifusImRepository(
 
     fun findImById(id: Int): Flow<WaifuImItem> = localImDataSource.findImById(id)
 
-    suspend fun requestWaifusIm(isNsfw: Boolean, tag: String, isGif: Boolean, orientation: Boolean): Error? {
-        if(localImDataSource.isImEmpty()) {
-            val waifusIm = remoteImDataSource.getRandomWaifusIm(isNsfw, tag, isGif, getOrientation(orientation))
-            waifusIm.fold(ifLeft = { return it }) {
-                localImDataSource.saveIm(it)
+    suspend fun requestWaifusIm(isNsfw: Boolean, tag: String, isGif: Boolean, orientation: Boolean): Either<Error?, List<WaifuImItem>> =
+        remoteImDataSource.getRandomWaifusIm(isNsfw, tag, isGif, getOrientation(orientation))
+            .fold({ return it.left() }) {
+                if(localImDataSource.isImEmpty()) {
+                    localImDataSource.saveIm(it)
+                }
+                return it.right()
             }
-        }
-        return null
-    }
 
-    suspend fun requestNewWaifusIm(isNsfw: Boolean, tag: String, isGif: Boolean, orientation: Boolean): Error? {
-        val waifusIm = remoteImDataSource.getRandomWaifusIm(isNsfw, tag, isGif, getOrientation(orientation))
-        waifusIm.fold(ifLeft = { return it }) {
-            localImDataSource.saveIm(it)
-        }
-        return null
-    }
+    suspend fun requestNewWaifusIm(isNsfw: Boolean, tag: String, isGif: Boolean, orientation: Boolean): Either<Error?, List<WaifuImItem>> =
+        remoteImDataSource.getRandomWaifusIm(isNsfw, tag, isGif, getOrientation(orientation))
+            .fold(ifLeft = { return it.left() }) {
+                localImDataSource.saveIm(it)
+                return it.right()
+            }
 
     suspend fun requestOnlyWaifuIm(): WaifuImItem {
         val waifuIm = remoteImDataSource.getOnlyWaifuIm()
-        localImDataSource.saveOnlyIm(waifuIm)
+        // localImDataSource.saveOnlyIm(waifuIm)
         return waifuIm
     }
 

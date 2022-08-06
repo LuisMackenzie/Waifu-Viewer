@@ -11,7 +11,7 @@ interface WaifusImRemoteDataSource {
         tag: String,
         isGif: Boolean,
         orientation: String
-    ): Either<Error, List<WaifuImItem>>
+    ): Either<Error? , List<WaifuImItem>>
 
     suspend fun getOnlyWaifuIm(): WaifuImItem
 }

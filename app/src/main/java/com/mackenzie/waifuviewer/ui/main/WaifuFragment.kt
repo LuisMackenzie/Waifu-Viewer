@@ -16,10 +16,8 @@ import com.mackenzie.waifuviewer.data.db.RoomImDataSource
 import com.mackenzie.waifuviewer.data.db.RoomPicDataSource
 import com.mackenzie.waifuviewer.data.server.ServerImDataSource
 import com.mackenzie.waifuviewer.data.server.ServerPicDataSource
-import com.mackenzie.waifuviewer.domain.Error
 import com.mackenzie.waifuviewer.ui.common.app
 import com.mackenzie.waifuviewer.ui.common.launchAndCollect
-import com.mackenzie.waifuviewer.ui.common.visible
 import com.mackenzie.waifuviewer.usecases.*
 
 class WaifuFragment: Fragment(R.layout.fragment_waifu) {
@@ -47,9 +45,9 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         bun = safeArgs.bundleInfo
         binding = FragmentWaifuBinding.bind(view).apply {
             if (mainServer) {
-                recycler.adapter = waifuPicsAdapter
+                recyclerPics.adapter = waifuPicsAdapter
             } else {
-                recycler.adapter = waifuImAdapter
+                recyclerIm.adapter = waifuImAdapter
             }
         }
 
@@ -114,12 +112,17 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
 
 
 
+        // binding.recyclerIm.visibility = View.GONE
+
         state.waifus?.let { savedPicWaifus ->
-            waifuPicsAdapter.submitList(savedPicWaifus)
-            Toast.makeText(requireContext(), "Showing PICS Waifus $savedPicWaifus", Toast.LENGTH_SHORT).show()
-            count = waifuPicsAdapter.itemCount
+            // waifuPicsAdapter.submitList(savedPicWaifus)
+            binding.waifuPic = savedPicWaifus
+            // Toast.makeText(requireContext(), "Showing PICS Waifus $savedPicWaifus", Toast.LENGTH_SHORT).show()
+            count = savedPicWaifus.size
             if (count != 0 && !numOfWaifusIsShowed) {
                 Toast.makeText(requireContext(), "Total Waifus = $count", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Pics Waifus ID First ${savedPicWaifus.first().id}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Pics Waifus ID Last ${savedPicWaifus.last().id}", Toast.LENGTH_SHORT).show()
                 numOfWaifusIsShowed = true
             }
         }
@@ -128,19 +131,17 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
             mainState.errorToString(it)
             ivError.visibility = View.VISIBLE
             tvError.visibility = View.VISIBLE
-            // Toast.makeText(requireContext(), "Loading Error", Toast.LENGTH_SHORT).show()
         }
 
         state.isLoading.let {
             progress.visibility = if (it) View.VISIBLE else View.GONE
-            recycler.visibility = if(it) View.GONE else View.VISIBLE
-            // Toast.makeText(requireContext(), "Loading Waifus", Toast.LENGTH_SHORT).show()
+            recyclerPics.visibility = if(it) View.GONE else View.VISIBLE
+            recyclerIm.visibility = if(it) View.GONE else View.GONE
         }
 
         fabRecycler.setOnClickListener {
-            picsViewModel.onRequestMore(isNsfw, categoryTag)
+            // picsViewModel.onRequestMore(isNsfw, categoryTag)
             // activity?.onBackPressed()
-            // count = waifuPicsAdapter.itemCount
             Toast.makeText(requireContext(), "30 More Waifus are incoming. Hit button for show", Toast.LENGTH_SHORT).show()
         }
     }
@@ -165,11 +166,15 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
 
         state.waifus?.let { savedImWaifus ->
             // waifuImAdapter.submitList(savedImWaifus)
+            // waifuImAdapter.imAdapter.addAll(savedImWaifus)
             binding.waifuIm = savedImWaifus
-            Toast.makeText(requireContext(), "Showing IM Waifus $savedImWaifus", Toast.LENGTH_SHORT).show()
-            count = waifuImAdapter.itemCount
+            // waifuImAdapter.currentList.addAll(savedImWaifus)
+            // Toast.makeText(requireContext(), "Showing IM Waifus $savedImWaifus", Toast.LENGTH_SHORT).show()
+            count = savedImWaifus.size
             if (count != 0 && !numOfWaifusIsShowed) {
                 Toast.makeText(requireContext(), "Total Waifus = $count", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "IM Waifus ID First ${savedImWaifus.first().id}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "IM Waifus ID Last ${savedImWaifus.last().id}", Toast.LENGTH_SHORT).show()
                 numOfWaifusIsShowed = true
             }
         }
@@ -182,14 +187,14 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
 
         state.isLoading.let {
             progress.visibility = if (it) View.VISIBLE else View.GONE
-            recycler.visibility = if (it) View.GONE else View.VISIBLE
-            // Toast.makeText(requireContext(), "Loading Waifus", Toast.LENGTH_SHORT).show()
+            recyclerIm.visibility = if (it) View.GONE else View.VISIBLE
+            recyclerPics.visibility = if(it) View.GONE else View.GONE
         }
 
         fabRecycler.setOnClickListener {
-            imViewModel.onRequestMore(isNsfw, isGif, categoryTag, orientation)
+            // imViewModel.onRequestMore(isNsfw, isGif, categoryTag, orientation)
             // activity?.onBackPressed()
-            Toast.makeText(requireContext(), "30 More Waifus are incoming. Hit button for show", Toast.LENGTH_SHORT).show()
+            // Toast.makeText(requireContext(), "30 More Waifus are incoming. Hit button for show", Toast.LENGTH_SHORT).show()
         }
     }
 

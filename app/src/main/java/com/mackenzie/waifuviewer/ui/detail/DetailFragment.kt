@@ -95,6 +95,12 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
             }
             prepareDownloadPic(it)
         }
+
+        state.error?.let {
+            tvDetail.text = "Hubo algun Error"
+            ivDetail.setImageResource(R.drawable.ic_offline_background)
+
+        }
             /*state.idPic?.let {
                 // tvDetail.text = it.imageId.toString()
                 tvDetail.text = ""
@@ -112,6 +118,11 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
                 favIm.setImageResource(R.drawable.ic_favorite_on)
             }
             prepareDownloadIm(it)
+        }
+
+        state.error?.let {
+            tvDetail.text = "Hubo algun Error"
+            ivDetail.setImageResource(R.drawable.ic_offline_background)
         }
         /*state.idIm?.let {
             // tvDetail.text = it.imageId.toString()

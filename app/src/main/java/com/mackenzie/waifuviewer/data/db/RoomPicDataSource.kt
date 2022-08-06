@@ -11,7 +11,7 @@ import kotlinx.coroutines.withContext
 
 class RoomPicDataSource(private val PicDao: WaifuPicDao) : WaifusPicLocalDataSource {
 
-    override val waifusPic: Flow<List<WaifuPicItem>> = PicDao.getAllPic().map { it.reversed().toDomainModel() }
+    override val waifusPic: Flow<List<WaifuPicItem>> = PicDao.getAllPic().map { it.toDomainModel() }
 
     override suspend fun isPicsEmpty(): Boolean = withContext(Dispatchers.Default) { PicDao.waifuPicsCount() == 0 }
 

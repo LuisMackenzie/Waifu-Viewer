@@ -1,9 +1,13 @@
 package com.mackenzie.waifuviewer.data
 
+import arrow.core.Either
+import arrow.core.left
+import arrow.core.right
 import com.mackenzie.waifuviewer.data.datasource.WaifusPicLocalDataSource
 import com.mackenzie.waifuviewer.data.datasource.WaifusPicRemoteDataSource
 import com.mackenzie.waifuviewer.domain.WaifuPicItem
 import com.mackenzie.waifuviewer.domain.Error
+import com.mackenzie.waifuviewer.domain.WaifuImItem
 import kotlinx.coroutines.flow.Flow
 
 class WaifusPicRepository(
@@ -15,27 +19,26 @@ class WaifusPicRepository(
 
     fun findPicsById(id: Int): Flow<WaifuPicItem> = localPicDataSource.findPicById(id)
 
-    suspend fun requestWaifusPics(isNsfw: String, tag: String): Error? {
-        if(localPicDataSource.isPicsEmpty()) {
-            val waifusPics = remotePicDataSource.getRandomWaifusPics(isNsfw, tag)
-            waifusPics.fold(ifLeft = { return it }) {
+    suspend fun requestWaifusPics(isNsfw: String, tag: String): Either<Error?, List<WaifuPicItem>> =
+        remotePicDataSource.getRandomWaifusPics(isNsfw, tag)
+            .fold(ifLeft = { return it.left() }) {
+            if(localPicDataSource.isPicsEmpty()) {
                 localPicDataSource.savePics(it)
             }
+            return it.right()
         }
-        return null
-    }
 
-    suspend fun requestNewWaifusPics(isNsfw: String, tag: String): Error? {
-        val waifusPics = remotePicDataSource.getRandomWaifusPics(isNsfw, tag)
-        waifusPics.fold(ifLeft = { return it }) {
-            localPicDataSource.savePics(it)
-        }
-        return null
+    suspend fun requestNewWaifusPics(isNsfw: String, tag: String): Either<Error?, List<WaifuPicItem>> {
+        remotePicDataSource.getRandomWaifusPics(isNsfw, tag)
+            .fold(ifLeft = { return it.left() }) {
+                localPicDataSource.savePics(it)
+                return it.right()
+            }
     }
 
     suspend fun requestOnlyWaifuPic(): WaifuPicItem {
         val waifuPic = remotePicDataSource.getOnlyWaifuPics()
-        localPicDataSource.saveOnlyPics(waifuPic)
+        // localPicDataSource.saveOnlyPics(waifuPic)
         return waifuPic
     }
 

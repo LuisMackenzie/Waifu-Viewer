@@ -40,7 +40,6 @@
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:scaleType="centerCrop"
-            app:url="@{waifuIm.url}"
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
@@ -59,8 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_margin="14dp"
-            android:src="@drawable/ic_favorite_on"
-            app:visible="@{waifuIm.favorite}" />
+            android:src="@drawable/ic_favorite_on" />
 
 
     </RelativeLayout>
