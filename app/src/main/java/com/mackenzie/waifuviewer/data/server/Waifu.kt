@@ -3,9 +3,11 @@ package com.mackenzie.waifuviewer.data.server
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
+import org.intellij.lang.annotations.Identifier
 
 @Parcelize
 data class Waifu(
+    val id: Int,
     @SerializedName("dominant_color") val dominant_color: String,
     val extension: String,
     val favourites: Int,
@@ -28,6 +30,7 @@ data class WaifuResult(
 
 @Parcelize
 data class WaifuPic(
+    val id: Int,
     @SerializedName("url")val url: String
 ) : Parcelable
 

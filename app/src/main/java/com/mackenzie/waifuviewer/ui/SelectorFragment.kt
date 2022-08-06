@@ -15,7 +15,6 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.mackenzie.waifuviewer.R
-import com.mackenzie.waifuviewer.WaifuPicsViewModel
 import com.mackenzie.waifuviewer.data.WaifusImRepository
 import com.mackenzie.waifuviewer.databinding.FragmentSelectorBinding
 import com.mackenzie.waifuviewer.data.WaifusPicRepository
@@ -36,15 +35,14 @@ import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_LANDS_WAIFU
 import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_NSFW_WAIFU
 import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_SERVER_SELECTED
 import com.mackenzie.waifuviewer.usecases.*
-import kotlinx.coroutines.launch
 
 class SelectorFragment : Fragment(R.layout.fragment_selector) {
 
     private val imViewModel: SelectorImViewModel by viewModels {
-        val repo = WaifusImRepository(RoomImDataSource(requireActivity().app.db.waifuImDao()), ServerImDataSource())
+        val repo = WaifusImRepository(RoomImDataSource(requireActivity().app.imDataBase.waifuImDao()), ServerImDataSource())
         SelectorImViewModelFactory(GetOnlyWaifuImUseCase(repo), RequestOnlyWaifuImUseCase(repo)) }
     private val picsViewModel: SelectorPicViewModel by viewModels {
-        val repo = WaifusPicRepository(RoomPicDataSource(requireActivity().app.db.waifuPicDao()), ServerPicDataSource())
+        val repo = WaifusPicRepository(RoomPicDataSource(requireActivity().app.picDataBase.waifuPicDao()), ServerPicDataSource())
         SelectorPicViewModelFactory(GetOnlyWaifuPicUseCase(repo), RequestOnlyWaifuPicUseCase(repo)) }
     private lateinit var binding: FragmentSelectorBinding
     private var backgroudImage: ImageView? = null

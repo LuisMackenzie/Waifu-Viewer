@@ -22,7 +22,7 @@ interface WaifuImDao {
     fun insertAllWaifuIm(waifus: List<WaifuImDbItem>)
 
     @Update
-    fun updateWaifuIm(waifu: WaifuPicDbItem)
+    fun updateWaifuIm(waifu: WaifuImDbItem)
 
     @Delete
     fun deleteIm(waifu: WaifuImDbItem)

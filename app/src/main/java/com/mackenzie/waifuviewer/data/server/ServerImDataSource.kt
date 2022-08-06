@@ -28,7 +28,7 @@ private fun List<Waifu>.toDomainModel(): List<WaifuImItem> = map { it.toDomainMo
 
 private fun Waifu.toDomainModel(): WaifuImItem =
     WaifuImItem(
-        id = 0,
+        id,
         dominant_color,
         file,
         height,

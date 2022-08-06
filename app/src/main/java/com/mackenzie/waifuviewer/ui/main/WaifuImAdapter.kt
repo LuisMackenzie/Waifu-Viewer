@@ -28,7 +28,7 @@ class WaifuImAdapter(private val listener: (WaifuImItem) -> Unit ): ListAdapter<
     }
 
     override fun submitList(list: List<WaifuImItem>?) {
-        imAdapter.addAll(list ?: listOf())
+        // imAdapter.addAll(list ?: listOf())
         super.submitList(list?.toMutableList())
     }
 

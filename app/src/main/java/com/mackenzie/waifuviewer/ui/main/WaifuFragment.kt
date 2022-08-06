@@ -24,10 +24,10 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
 
     private val safeArgs: WaifuFragmentArgs by navArgs()
     private val picsViewModel: WaifuPicsViewModel by viewModels {
-        val repo = WaifusPicRepository(RoomPicDataSource(requireActivity().app.db.waifuPicDao()), ServerPicDataSource())
+        val repo = WaifusPicRepository(RoomPicDataSource(requireActivity().app.picDataBase.waifuPicDao()), ServerPicDataSource())
         WaifuPicsViewModelFactory(GetWaifuPicUseCase(repo), RequestWaifuPicUseCase(repo), RequestMoreWaifuPicUseCase(repo)) }
     private val imViewModel: WaifuImViewModel by viewModels {
-        val repo = WaifusImRepository(RoomImDataSource(requireActivity().app.db.waifuImDao()), ServerImDataSource())
+        val repo = WaifusImRepository(RoomImDataSource(requireActivity().app.imDataBase.waifuImDao()), ServerImDataSource())
         WaifuImViewModelFactory(GetWaifuImUseCase(repo), RequestWaifuImUseCase(repo), RequestMoreWaifuImUseCase(repo)) }
     private val waifuImAdapter = WaifuImAdapter{ mainState.onWaifuClicked(it) }
     private val waifuPicsAdapter = WaifuPicsAdapter{ mainState.onWaifuPicsClicked(it) }
@@ -165,11 +165,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         // Toast.makeText(requireContext(), "Showing IM Waifus ${state.waifus}", Toast.LENGTH_SHORT).show()
 
         state.waifus?.let { savedImWaifus ->
-            // waifuImAdapter.submitList(savedImWaifus)
-            // waifuImAdapter.imAdapter.addAll(savedImWaifus)
             binding.waifuIm = savedImWaifus
-            // waifuImAdapter.currentList.addAll(savedImWaifus)
-            // Toast.makeText(requireContext(), "Showing IM Waifus $savedImWaifus", Toast.LENGTH_SHORT).show()
             count = savedImWaifus.size
             if (count != 0 && !numOfWaifusIsShowed) {
                 Toast.makeText(requireContext(), "Total Waifus = $count", Toast.LENGTH_SHORT).show()
@@ -177,6 +173,21 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
                 Toast.makeText(requireContext(), "IM Waifus ID Last ${savedImWaifus.last().id}", Toast.LENGTH_SHORT).show()
                 numOfWaifusIsShowed = true
             }
+
+            /*if (waifuImAdapter.itemCount == 0) {
+                waifuImAdapter.submitList(savedImWaifus)
+                count = savedImWaifus.size
+                Toast.makeText(requireContext(), "Total Waifus = $count", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "IM Waifus ID First ${savedImWaifus.first().id}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "IM Waifus ID Last ${savedImWaifus.last().id}", Toast.LENGTH_SHORT).show()
+            }*/
+
+            // waifuImAdapter.submitList(waifuImAdapter.currentList + savedImWaifus)
+            // waifuImAdapter.submitList(savedImWaifus)
+            // waifuImAdapter.imAdapter.addAll(savedImWaifus)
+            // waifuImAdapter.currentList.addAll(savedImWaifus)
+            // Toast.makeText(requireContext(), "Showing IM Waifus $savedImWaifus", Toast.LENGTH_SHORT).show()
+
         }
 
         state.error?.let {

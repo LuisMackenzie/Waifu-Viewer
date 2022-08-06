@@ -28,7 +28,7 @@ class WaifuPicsAdapter(private val listener: (WaifuPicItem) -> Unit ): ListAdapt
     }
 
     override fun submitList(list: List<WaifuPicItem>?) {
-        picsAdapter.addAll(list ?: listOf())
+        // picsAdapter.addAll(list ?: listOf())
         super.submitList(list?.toMutableList())
     }
 

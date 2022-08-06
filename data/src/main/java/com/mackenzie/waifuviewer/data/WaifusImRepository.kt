@@ -23,6 +23,7 @@ class WaifusImRepository(
             .fold({ return it.left() }) {
                 if(localImDataSource.isImEmpty()) {
                     localImDataSource.saveIm(it)
+                    return it.right()
                 }
                 return it.right()
             }
