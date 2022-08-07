@@ -7,9 +7,10 @@ import com.mackenzie.waifuviewer.data.server.RemoteConnection.serviceIm
 import com.mackenzie.waifuviewer.data.tryCall
 import com.mackenzie.waifuviewer.domain.Error
 import com.mackenzie.waifuviewer.domain.WaifuImItem
+import javax.inject.Inject
 
 
-class ServerImDataSource : WaifusImRemoteDataSource {
+class ServerImDataSource @Inject constructor(): WaifusImRemoteDataSource {
 
     override suspend fun getRandomWaifusIm(isNsfw: Boolean, tag: String, isGif: Boolean, orientation: String): Either<Error? , List<WaifuImItem>> = tryCall {
         serviceIm.getRandomWaifuIm(isNsfw, tag, isGif,  orientation)

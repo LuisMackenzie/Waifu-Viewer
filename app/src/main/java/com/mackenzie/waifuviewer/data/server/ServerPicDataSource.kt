@@ -7,8 +7,9 @@ import com.mackenzie.waifuviewer.data.server.RemoteConnection.servicePics
 import com.mackenzie.waifuviewer.data.tryCall
 import com.mackenzie.waifuviewer.domain.Error
 import com.mackenzie.waifuviewer.domain.WaifuPicItem
+import javax.inject.Inject
 
-class ServerPicDataSource : WaifusPicRemoteDataSource {
+class ServerPicDataSource @Inject constructor() : WaifusPicRemoteDataSource {
 
     override suspend fun getRandomWaifusPics(isNsfw: String, tag: String): Either<Error?, List<WaifuPicItem>> = tryCall {
         servicePics
