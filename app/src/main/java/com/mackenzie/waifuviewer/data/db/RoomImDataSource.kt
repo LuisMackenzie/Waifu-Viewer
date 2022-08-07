@@ -9,8 +9,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class RoomImDataSource(private val ImDao: WaifuImDao) : WaifusImLocalDataSource {
+class RoomImDataSource @Inject constructor(private val ImDao: WaifuImDao) : WaifusImLocalDataSource {
 
     override val waifusIm: Flow<List<WaifuImItem>> = ImDao.getAllIm().map { it.toDomainModel()}
 

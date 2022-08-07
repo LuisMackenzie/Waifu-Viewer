@@ -8,34 +8,29 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.WaifuPicsViewModel
-import com.mackenzie.waifuviewer.WaifuPicsViewModelFactory
-import com.mackenzie.waifuviewer.data.WaifusImRepository
 import com.mackenzie.waifuviewer.databinding.FragmentWaifuBinding
-import com.mackenzie.waifuviewer.data.WaifusPicRepository
-import com.mackenzie.waifuviewer.data.db.RoomImDataSource
-import com.mackenzie.waifuviewer.data.db.RoomPicDataSource
-import com.mackenzie.waifuviewer.data.server.ServerImDataSource
-import com.mackenzie.waifuviewer.data.server.ServerPicDataSource
-import com.mackenzie.waifuviewer.ui.common.app
 import com.mackenzie.waifuviewer.ui.common.launchAndCollect
-import com.mackenzie.waifuviewer.usecases.*
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class WaifuFragment: Fragment(R.layout.fragment_waifu) {
 
     private val safeArgs: WaifuFragmentArgs by navArgs()
-    private val picsViewModel: WaifuPicsViewModel by viewModels {
+    /*private val picsViewModel: WaifuPicsViewModel by viewModels {
         val repo = WaifusPicRepository(RoomPicDataSource(requireActivity().app.picDataBase.waifuPicDao()), ServerPicDataSource())
         WaifuPicsViewModelFactory(GetWaifuPicUseCase(repo), RequestWaifuPicUseCase(repo), RequestMoreWaifuPicUseCase(repo)) }
     private val imViewModel: WaifuImViewModel by viewModels {
         val repo = WaifusImRepository(RoomImDataSource(requireActivity().app.imDataBase.waifuImDao()), ServerImDataSource())
-        WaifuImViewModelFactory(GetWaifuImUseCase(repo), RequestWaifuImUseCase(repo), RequestMoreWaifuImUseCase(repo)) }
+        WaifuImViewModelFactory(GetWaifuImUseCase(repo), RequestWaifuImUseCase(repo), RequestMoreWaifuImUseCase(repo)) }*/
+    private val picsViewModel: WaifuPicsViewModel by viewModels()
+    private val imViewModel: WaifuImViewModel by viewModels()
     private val waifuImAdapter = WaifuImAdapter{ mainState.onWaifuClicked(it) }
     private val waifuPicsAdapter = WaifuPicsAdapter{ mainState.onWaifuPicsClicked(it) }
     private lateinit var mainState: MainState
-    private lateinit var binding: FragmentWaifuBinding
+    // private lateinit var binding: FragmentWaifuBinding
     private lateinit var bun :Bundle
     private var mainServer: Boolean = false
-    private var numOfWaifusIsShowed : Boolean= false
+    private var numIsShowed : Boolean= false
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -43,7 +38,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         mainState = buildMainState()
         mainServer = safeArgs.bundleInfo.getBoolean(IS_SERVER_SELECTED)
         bun = safeArgs.bundleInfo
-        binding = FragmentWaifuBinding.bind(view).apply {
+        val binding = FragmentWaifuBinding.bind(view).apply {
             if (mainServer) {
                 recyclerPics.adapter = waifuPicsAdapter
             } else {
@@ -116,14 +111,14 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
 
         state.waifus?.let { savedPicWaifus ->
             // waifuPicsAdapter.submitList(savedPicWaifus)
-            binding.waifuPic = savedPicWaifus
+            waifuPic = savedPicWaifus
             // Toast.makeText(requireContext(), "Showing PICS Waifus $savedPicWaifus", Toast.LENGTH_SHORT).show()
             count = savedPicWaifus.size
-            if (count != 0 && !numOfWaifusIsShowed) {
+            if (count != 0 && !numIsShowed) {
                 Toast.makeText(requireContext(), "Total Waifus = $count", Toast.LENGTH_SHORT).show()
                 Toast.makeText(requireContext(), "Pics Waifus ID First ${savedPicWaifus.first().id}", Toast.LENGTH_SHORT).show()
                 Toast.makeText(requireContext(), "Pics Waifus ID Last ${savedPicWaifus.last().id}", Toast.LENGTH_SHORT).show()
-                numOfWaifusIsShowed = true
+                numIsShowed = true
             }
         }
 
@@ -165,13 +160,13 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         // Toast.makeText(requireContext(), "Showing IM Waifus ${state.waifus}", Toast.LENGTH_SHORT).show()
 
         state.waifus?.let { savedImWaifus ->
-            binding.waifuIm = savedImWaifus
+            waifuIm = savedImWaifus
             count = savedImWaifus.size
-            if (count != 0 && !numOfWaifusIsShowed) {
+            if (count != 0 && !numIsShowed) {
                 Toast.makeText(requireContext(), "Total Waifus = $count", Toast.LENGTH_SHORT).show()
                 Toast.makeText(requireContext(), "IM Waifus ID First ${savedImWaifus.first().id}", Toast.LENGTH_SHORT).show()
                 Toast.makeText(requireContext(), "IM Waifus ID Last ${savedImWaifus.last().id}", Toast.LENGTH_SHORT).show()
-                numOfWaifusIsShowed = true
+                numIsShowed = true
             }
 
             /*if (waifuImAdapter.itemCount == 0) {

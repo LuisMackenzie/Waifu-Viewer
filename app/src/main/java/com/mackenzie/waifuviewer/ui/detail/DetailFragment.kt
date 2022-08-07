@@ -12,41 +12,33 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.navArgs
 import com.mackenzie.waifuviewer.R
-import com.mackenzie.waifuviewer.data.WaifusImRepository
 import com.mackenzie.waifuviewer.databinding.FragmentDetailBinding
-import com.mackenzie.waifuviewer.data.WaifusPicRepository
-import com.mackenzie.waifuviewer.data.db.RoomImDataSource
-import com.mackenzie.waifuviewer.data.db.RoomPicDataSource
-import com.mackenzie.waifuviewer.data.server.ServerImDataSource
-import com.mackenzie.waifuviewer.data.server.ServerPicDataSource
-import com.mackenzie.waifuviewer.usecases.FindWaifuImUseCase
-import com.mackenzie.waifuviewer.usecases.FindWaifuPicUseCase
-import com.mackenzie.waifuviewer.usecases.SwitchImFavoriteUseCase
-import com.mackenzie.waifuviewer.usecases.SwitchPicFavoriteUseCase
-import com.mackenzie.waifuviewer.ui.common.app
+import com.mackenzie.waifuviewer.ui.common.SaveImage
 import com.mackenzie.waifuviewer.ui.common.loadUrl
 import com.mackenzie.waifuviewer.ui.common.visible
 import com.mackenzie.waifuviewer.ui.main.MainState
 import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_SERVER_SELECTED
 import com.mackenzie.waifuviewer.ui.main.buildMainState
-import com.mackenzie.waifuviewer.ui.common.SaveImage
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import java.io.IOException
 import java.net.URL
 
-
+@AndroidEntryPoint
 class DetailFragment: Fragment(R.layout.fragment_detail) {
 
-    private val safeArgs: DetailFragmentArgs by navArgs()
-    private val picsViewModel: DetailPicsViewModel by viewModels {
+    // private val safeArgs: DetailFragmentArgs by navArgs()
+    /*private val picsViewModel: DetailPicsViewModel by viewModels {
         val repo = WaifusPicRepository(RoomPicDataSource(requireActivity().app.picDataBase.waifuPicDao()), ServerPicDataSource())
         DetailPicsViewModelFactory(safeArgs.waifuId, FindWaifuPicUseCase(repo), SwitchPicFavoriteUseCase(repo)) }
     private val imViewModel: DetailImViewModel by viewModels {
         val repo = WaifusImRepository(RoomImDataSource(requireActivity().app.imDataBase.waifuImDao()), ServerImDataSource())
-        DetailImViewModelFactory(safeArgs.waifuId, FindWaifuImUseCase(repo), SwitchImFavoriteUseCase(repo)) }
+        DetailImViewModelFactory(safeArgs.waifuId, FindWaifuImUseCase(repo), SwitchImFavoriteUseCase(repo)) }*/
+
+    private val picsViewModel: DetailPicsViewModel by viewModels()
+    private val imViewModel: DetailImViewModel by viewModels()
     private lateinit var mainState: MainState
     private var mainServer: Boolean = false
     private var title: String? = null

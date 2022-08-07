@@ -2,8 +2,9 @@ package com.mackenzie.waifuviewer.data
 
 import com.mackenzie.waifuviewer.data.datasource.LocationDataSource
 import com.mackenzie.waifuviewer.data.PermissionChecker.Permission.COARSE_LOCATION
+import javax.inject.Inject
 
-class RegionRepository(
+class RegionRepository  @Inject constructor(
     private val locationDataSource: LocationDataSource,
     private val permissionChecker: PermissionChecker
     ) {

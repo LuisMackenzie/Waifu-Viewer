@@ -1,10 +1,11 @@
+
 plugins {
     id ("com.android.application")
     id ("org.jetbrains.kotlin.android")
+    id ("org.jetbrains.kotlin.kapt")
     id ("kotlin-parcelize")
-    id ("kotlin-kapt")
     id ("androidx.navigation.safeargs.kotlin")
-    // id ("org.jetbrains.kotlin.plugin.serialization")
+    id ("dagger.hilt.android.plugin")
 }
 
 android {
@@ -42,7 +43,7 @@ android {
 dependencies {
 
     val retrofit_version = "2.9.0"
-    val roomVersion = "2.4.2"
+    val roomVersion = "2.4.3"
 
     // modules Implementation
     implementation (project(":domain"))
@@ -70,7 +71,12 @@ dependencies {
     // Room DB
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
+    // implementation("androidx.room:room-compiler:$roomVersion")
     kapt("androidx.room:room-compiler:$roomVersion")
+
+    // Hilt
+    implementation("com.google.dagger:hilt-android:2.43.2")
+    kapt("com.google.dagger:hilt-android-compiler:2.43.2")
 
     // Glide libraries
     implementation ("com.github.bumptech.glide:glide:4.13.2")
@@ -79,16 +85,16 @@ dependencies {
 
     // Retrofit Libraries
     implementation ("com.squareup.retrofit2:retrofit:$retrofit_version")
-    implementation ("com.google.code.gson:gson:2.9.0")
+    implementation ("com.google.code.gson:gson:2.9.1")
     implementation ("com.squareup.retrofit2:converter-gson:$retrofit_version")
     // OKHttp3 Logging interceptor
     implementation ("com.squareup.okhttp3:okhttp:4.9.3")
     implementation ("com.squareup.okhttp3:logging-interceptor:4.9.3")
     // library to parse JSON in Kotlin
-    implementation ("com.beust:klaxon:5.5")
+    implementation ("com.beust:klaxon:5.6")
 
     // library to use Either Class in Kotlin
-    implementation ("io.arrow-kt:arrow-core:1.0.1")
+    implementation ("io.arrow-kt:arrow-core:1.1.2")
 
 
     // Serialization
@@ -104,6 +110,14 @@ dependencies {
 
     // Location Play services
     implementation("com.google.android.gms:play-services-location:20.0.0")
+
+    // For instrumentation tests
+    androidTestImplementation ("com.google.dagger:hilt-android-testing:2.43.2")
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.43.2")
+
+    // For local unit tests
+    testImplementation ("com.google.dagger:hilt-android-testing:2.43.2")
+    kaptTest("com.google.dagger:hilt-android-compiler:2.43.2")
 
     testImplementation ("junit:junit:4.13.2")
     androidTestImplementation ("androidx.test.ext:junit:1.1.3")

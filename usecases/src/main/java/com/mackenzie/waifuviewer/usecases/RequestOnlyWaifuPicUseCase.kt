@@ -1,8 +1,9 @@
 package com.mackenzie.waifuviewer.usecases
 
 import com.mackenzie.waifuviewer.data.WaifusPicRepository
+import javax.inject.Inject
 
-class RequestOnlyWaifuPicUseCase (private val repo: WaifusPicRepository){
+class RequestOnlyWaifuPicUseCase @Inject constructor(private val repo: WaifusPicRepository){
 
     suspend operator fun invoke() = repo.requestOnlyWaifuPic()
 

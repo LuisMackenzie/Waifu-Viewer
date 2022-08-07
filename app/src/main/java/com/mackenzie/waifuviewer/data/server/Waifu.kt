@@ -3,7 +3,6 @@ package com.mackenzie.waifuviewer.data.server
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
-import org.intellij.lang.annotations.Identifier
 
 @Parcelize
 data class Waifu(

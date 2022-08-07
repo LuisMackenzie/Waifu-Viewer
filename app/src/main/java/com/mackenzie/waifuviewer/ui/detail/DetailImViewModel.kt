@@ -1,5 +1,6 @@
 package com.mackenzie.waifuviewer.ui.detail
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -7,20 +8,24 @@ import com.mackenzie.waifuviewer.usecases.FindWaifuImUseCase
 import com.mackenzie.waifuviewer.usecases.SwitchImFavoriteUseCase
 import com.mackenzie.waifuviewer.domain.WaifuImItem
 import com.mackenzie.waifuviewer.domain.Error
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class DetailImViewModel (
-    waifuId: Int,
+@HiltViewModel
+class DetailImViewModel @Inject constructor (
+    savedStateHandle: SavedStateHandle,
     findWaifuImUseCase: FindWaifuImUseCase,
     private val switchImFavoriteUseCase : SwitchImFavoriteUseCase
     ): ViewModel() {
 
     private val _state = MutableStateFlow(UiState())
     val state: StateFlow<UiState> = _state.asStateFlow()
+    private val waifuId = DetailFragmentArgs.fromSavedStateHandle(savedStateHandle).waifuId
 
     init {
         viewModelScope.launch {
@@ -46,6 +51,7 @@ class DetailImViewModel (
 
 }
 
+/*
 @Suppress("UNCHECKED_CAST")
 class DetailImViewModelFactory(
     private val waifuId: Int,
@@ -55,4 +61,4 @@ class DetailImViewModelFactory(
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return DetailImViewModel(waifuId, findWaifuImUseCase, switchImFavoriteUseCase) as T
     }
-}
+}*/

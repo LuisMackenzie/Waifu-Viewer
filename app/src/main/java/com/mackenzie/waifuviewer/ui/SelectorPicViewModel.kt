@@ -10,10 +10,13 @@ import com.mackenzie.waifuviewer.usecases.RequestOnlyWaifuPicUseCase
 import com.mackenzie.waifuviewer.ui.common.Scope
 import com.mackenzie.waifuviewer.usecases.GetOnlyWaifuPicUseCase
 import com.mackenzie.waifuviewer.usecases.GetWaifuPicUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SelectorPicViewModel(
+@HiltViewModel
+class SelectorPicViewModel @Inject constructor(
     private val getOnlyWaifuPicUseCase: GetOnlyWaifuPicUseCase,
     private val requestOnlyPicWaifu: RequestOnlyWaifuPicUseCase): ViewModel(), Scope by Scope.Impl() {
 
@@ -59,9 +62,10 @@ class SelectorPicViewModel(
     )
 }
 
+/*
 @Suppress("UNCHECKED_CAST")
 class SelectorPicViewModelFactory(private val getOnlyWaifuPicUseCase: GetOnlyWaifuPicUseCase, private val requestOnlyPicWaifu: RequestOnlyWaifuPicUseCase): ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return SelectorPicViewModel(getOnlyWaifuPicUseCase, requestOnlyPicWaifu) as T
     }
-}
+}*/

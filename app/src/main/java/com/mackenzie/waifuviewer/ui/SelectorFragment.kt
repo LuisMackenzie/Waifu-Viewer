@@ -15,35 +15,30 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.mackenzie.waifuviewer.R
-import com.mackenzie.waifuviewer.data.WaifusImRepository
 import com.mackenzie.waifuviewer.databinding.FragmentSelectorBinding
-import com.mackenzie.waifuviewer.data.WaifusPicRepository
-import com.mackenzie.waifuviewer.data.db.RoomImDataSource
-import com.mackenzie.waifuviewer.data.db.RoomPicDataSource
-import com.mackenzie.waifuviewer.data.server.ServerImDataSource
-import com.mackenzie.waifuviewer.data.server.ServerPicDataSource
 import com.mackenzie.waifuviewer.ui.common.PermissionRequester
-import com.mackenzie.waifuviewer.ui.common.app
 import com.mackenzie.waifuviewer.ui.common.launchAndCollect
 import com.mackenzie.waifuviewer.ui.common.loadUrl
 import com.mackenzie.waifuviewer.ui.main.MainState
 import com.mackenzie.waifuviewer.ui.main.SelectorImViewModel
-import com.mackenzie.waifuviewer.ui.main.SelectorImViewModelFactory
 import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.CATEGORY_TAG
 import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_GIF_WAIFU
 import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_LANDS_WAIFU
 import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_NSFW_WAIFU
 import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_SERVER_SELECTED
-import com.mackenzie.waifuviewer.usecases.*
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SelectorFragment : Fragment(R.layout.fragment_selector) {
 
-    private val imViewModel: SelectorImViewModel by viewModels {
+    /*private val imViewModel: SelectorImViewModel by viewModels {
         val repo = WaifusImRepository(RoomImDataSource(requireActivity().app.imDataBase.waifuImDao()), ServerImDataSource())
         SelectorImViewModelFactory(GetOnlyWaifuImUseCase(repo), RequestOnlyWaifuImUseCase(repo)) }
     private val picsViewModel: SelectorPicViewModel by viewModels {
         val repo = WaifusPicRepository(RoomPicDataSource(requireActivity().app.picDataBase.waifuPicDao()), ServerPicDataSource())
-        SelectorPicViewModelFactory(GetOnlyWaifuPicUseCase(repo), RequestOnlyWaifuPicUseCase(repo)) }
+        SelectorPicViewModelFactory(GetOnlyWaifuPicUseCase(repo), RequestOnlyWaifuPicUseCase(repo)) }*/
+    private val picsViewModel: SelectorPicViewModel by viewModels()
+    private val imViewModel: SelectorImViewModel by viewModels()
     private lateinit var binding: FragmentSelectorBinding
     private var backgroudImage: ImageView? = null
     private var loaded: Boolean = false

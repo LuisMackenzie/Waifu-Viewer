@@ -7,9 +7,10 @@ import android.location.Location
 import com.google.android.gms.location.LocationServices
 import com.mackenzie.waifuviewer.data.datasource.LocationDataSource
 import kotlinx.coroutines.suspendCancellableCoroutine
+import javax.inject.Inject
 import kotlin.coroutines.resume
 
-class PlayServicesLocationDataSource(application: Application) : LocationDataSource {
+class PlayServicesLocationDataSource @Inject constructor(application: Application) : LocationDataSource {
     private val fusedLocationClient = LocationServices.getFusedLocationProviderClient(application)
     private val geocoder = Geocoder(application)
 

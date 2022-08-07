@@ -6,7 +6,9 @@ import android.os.Bundle
 import android.view.WindowInsets
 import android.view.WindowManager
 import com.mackenzie.waifuviewer.R
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class NavHostActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -4,8 +4,9 @@ import arrow.core.Either
 import com.mackenzie.waifuviewer.domain.Error
 import com.mackenzie.waifuviewer.data.WaifusImRepository
 import com.mackenzie.waifuviewer.domain.WaifuImItem
+import javax.inject.Inject
 
-class RequestMoreWaifuImUseCase(private val repo: WaifusImRepository) {
+class RequestMoreWaifuImUseCase @Inject constructor(private val repo: WaifusImRepository) {
 
     suspend operator fun invoke(isNsfw:Boolean, tag:String, isGif:Boolean, orientation:Boolean): Either<Error?, List<WaifuImItem>> {
         return repo.requestNewWaifusIm(isNsfw, tag, isGif,  orientation)

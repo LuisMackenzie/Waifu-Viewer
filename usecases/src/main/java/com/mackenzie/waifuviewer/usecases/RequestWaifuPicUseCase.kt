@@ -4,8 +4,9 @@ import arrow.core.Either
 import com.mackenzie.waifuviewer.domain.Error
 import com.mackenzie.waifuviewer.data.WaifusPicRepository
 import com.mackenzie.waifuviewer.domain.WaifuPicItem
+import javax.inject.Inject
 
-class RequestWaifuPicUseCase(private val repo: WaifusPicRepository) {
+class RequestWaifuPicUseCase @Inject constructor(private val repo: WaifusPicRepository) {
 
     suspend operator fun invoke(isNsfw:String, tag:String): Either<Error?, List<WaifuPicItem>> {
         return repo.requestWaifusPics(isNsfw, tag)

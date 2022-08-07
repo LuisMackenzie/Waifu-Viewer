@@ -9,8 +9,9 @@ import com.mackenzie.waifuviewer.domain.WaifuPicItem
 import com.mackenzie.waifuviewer.domain.Error
 import com.mackenzie.waifuviewer.domain.WaifuImItem
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class WaifusPicRepository(
+class WaifusPicRepository @Inject constructor(
     private val localPicDataSource: WaifusPicLocalDataSource,
     private val remotePicDataSource: WaifusPicRemoteDataSource
     ) {

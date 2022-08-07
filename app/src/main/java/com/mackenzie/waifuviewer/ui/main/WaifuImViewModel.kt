@@ -10,10 +10,13 @@ import com.mackenzie.waifuviewer.usecases.GetWaifuImUseCase
 import com.mackenzie.waifuviewer.usecases.RequestWaifuImUseCase
 import com.mackenzie.waifuviewer.ui.common.Scope
 import com.mackenzie.waifuviewer.usecases.RequestMoreWaifuImUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class WaifuImViewModel(
+@HiltViewModel
+class WaifuImViewModel @Inject constructor(
     getWaifuImUseCase: GetWaifuImUseCase,
     private val requestWaifuImUseCase: RequestWaifuImUseCase,
     private val requestMoreImUseCase: RequestMoreWaifuImUseCase
@@ -100,6 +103,7 @@ class WaifuImViewModel(
     )
 }
 
+/*
 @Suppress("UNCHECKED_CAST")
 class WaifuImViewModelFactory(
     private val getWaifuImUseCase: GetWaifuImUseCase,
@@ -109,4 +113,4 @@ class WaifuImViewModelFactory(
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return WaifuImViewModel(getWaifuImUseCase, requestWaifuImUseCase, requestMoreImUseCase) as T
     }
-}
+}*/

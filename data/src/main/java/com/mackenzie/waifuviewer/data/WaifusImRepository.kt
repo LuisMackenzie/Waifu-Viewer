@@ -8,8 +8,9 @@ import com.mackenzie.waifuviewer.data.datasource.WaifusImRemoteDataSource
 import com.mackenzie.waifuviewer.domain.WaifuImItem
 import com.mackenzie.waifuviewer.domain.Error
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class WaifusImRepository(
+class WaifusImRepository @Inject constructor(
     private val localImDataSource: WaifusImLocalDataSource,
     private val remoteImDataSource: WaifusImRemoteDataSource
 ) {

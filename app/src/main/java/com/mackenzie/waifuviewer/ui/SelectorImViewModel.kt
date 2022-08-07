@@ -6,10 +6,13 @@ import com.mackenzie.waifuviewer.domain.WaifuImItem
 import com.mackenzie.waifuviewer.usecases.RequestOnlyWaifuImUseCase
 import com.mackenzie.waifuviewer.ui.common.Scope
 import com.mackenzie.waifuviewer.usecases.GetOnlyWaifuImUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SelectorImViewModel(
+@HiltViewModel
+class SelectorImViewModel @Inject constructor(
     private val getOnlyWaifuImUseCase: GetOnlyWaifuImUseCase,
     private val requestOnlyImWaifu: RequestOnlyWaifuImUseCase): ViewModel(), Scope by Scope.Impl() {
 
@@ -46,6 +49,7 @@ class SelectorImViewModel(
 
 }
 
+/*
 @Suppress("UNCHECKED_CAST")
 class SelectorImViewModelFactory(
     private val getOnlyWaifuImUseCase: GetOnlyWaifuImUseCase,
@@ -53,4 +57,4 @@ class SelectorImViewModelFactory(
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return SelectorImViewModel(getOnlyWaifuImUseCase, requestOnlyImWaifu) as T
     }
-}
+}*/
