@@ -8,7 +8,7 @@ interface WaifusPicRemoteDataSource {
     suspend fun getRandomWaifusPics(
         isNsfw: String,
         tag: String
-    ): Either<Error?, List<WaifuPicItem>>
+    ): Either<Error, List<WaifuPicItem>>
 
     suspend fun getOnlyWaifuPics(): WaifuPicItem
 }

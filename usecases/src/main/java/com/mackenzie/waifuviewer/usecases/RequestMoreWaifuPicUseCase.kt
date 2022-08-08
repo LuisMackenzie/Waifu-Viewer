@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 class RequestMoreWaifuPicUseCase @Inject constructor(private val repo: WaifusPicRepository) {
 
-    suspend operator fun invoke(isNsfw:String, tag:String) : Either<Error?, List<WaifuPicItem>> {
+    suspend operator fun invoke(isNsfw:String, tag:String) : Either<Error, List<WaifuPicItem>> {
         return repo.requestNewWaifusPics(isNsfw, tag)
     }
 

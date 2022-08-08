@@ -11,10 +11,10 @@ import com.mackenzie.waifuviewer.domain.WaifuPicItem
 import com.mackenzie.waifuviewer.ui.common.basicDiffUtil
 import com.mackenzie.waifuviewer.ui.common.inflate
 import com.mackenzie.waifuviewer.ui.common.loadUrl
+import com.mackenzie.waifuviewer.ui.common.visible
 
 class WaifuImAdapter(private val listener: (WaifuImItem) -> Unit ): ListAdapter<WaifuImItem, WaifuImAdapter.ViewHolder>(basicDiffUtil { old, new -> old.id == new.id }) {
 
-    val imAdapter: MutableList<WaifuImItem> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = parent.inflate(R.layout.view_media_item, false)
@@ -25,11 +25,6 @@ class WaifuImAdapter(private val listener: (WaifuImItem) -> Unit ): ListAdapter<
         val waifuItem = getItem(position)
         holder.bind(waifuItem)
         holder.itemView.setOnClickListener { listener(waifuItem) }
-    }
-
-    override fun submitList(list: List<WaifuImItem>?) {
-        // imAdapter.addAll(list ?: listOf())
-        super.submitList(list?.toMutableList())
     }
 
     class ViewHolder(view: View): RecyclerView.ViewHolder(view) {

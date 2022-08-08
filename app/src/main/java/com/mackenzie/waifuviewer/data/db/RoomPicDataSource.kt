@@ -14,7 +14,7 @@ class RoomPicDataSource @Inject constructor(private val PicDao: WaifuPicDao) : W
 
     override val waifusPic: Flow<List<WaifuPicItem>> = PicDao.getAllPic().map { it.toDomainModel() }
 
-    override suspend fun isPicsEmpty(): Boolean = withContext(Dispatchers.Default) { PicDao.waifuPicsCount() == 0 }
+    override suspend fun isPicsEmpty(): Boolean = PicDao.waifuPicsCount() == 0
 
     override fun findPicById(id: Int): Flow<WaifuPicItem> = PicDao.findPicsById(id).map { it.toDomainModel() }
 

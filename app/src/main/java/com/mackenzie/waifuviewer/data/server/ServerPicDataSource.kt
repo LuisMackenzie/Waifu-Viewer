@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 class ServerPicDataSource @Inject constructor() : WaifusPicRemoteDataSource {
 
-    override suspend fun getRandomWaifusPics(isNsfw: String, tag: String): Either<Error?, List<WaifuPicItem>> = tryCall {
+    override suspend fun getRandomWaifusPics(isNsfw: String, tag: String): Either<Error, List<WaifuPicItem>> = tryCall {
         servicePics
             .getRandomWaifuPics(type = isNsfw, category = tag, body = getJson(isNsfw, tag))
             .body()!!

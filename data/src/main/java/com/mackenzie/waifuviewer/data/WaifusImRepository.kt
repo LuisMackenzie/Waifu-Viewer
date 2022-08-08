@@ -19,17 +19,17 @@ class WaifusImRepository @Inject constructor(
 
     fun findImById(id: Int): Flow<WaifuImItem> = localImDataSource.findImById(id)
 
-    suspend fun requestWaifusIm(isNsfw: Boolean, tag: String, isGif: Boolean, orientation: Boolean): Either<Error?, List<WaifuImItem>> =
-        remoteImDataSource.getRandomWaifusIm(isNsfw, tag, isGif, getOrientation(orientation))
-            .fold({ return it.left() }) {
-                if(localImDataSource.isImEmpty()) {
-                    localImDataSource.saveIm(it)
-                    return it.right()
-                }
-                return it.right()
+    suspend fun requestWaifusIm(isNsfw: Boolean, tag: String, isGif: Boolean, orientation: Boolean): Error? {
+        if(localImDataSource.isImEmpty()) {
+            val waifus = remoteImDataSource.getRandomWaifusIm(isNsfw, tag, isGif, getOrientation(orientation))
+            waifus.fold(ifLeft = {return it}) {
+                localImDataSource.saveIm(it)
             }
+        }
+        return null
+    }
 
-    suspend fun requestNewWaifusIm(isNsfw: Boolean, tag: String, isGif: Boolean, orientation: Boolean): Either<Error?, List<WaifuImItem>> =
+    suspend fun requestNewWaifusIm(isNsfw: Boolean, tag: String, isGif: Boolean, orientation: Boolean): Either<Error, List<WaifuImItem>> =
         remoteImDataSource.getRandomWaifusIm(isNsfw, tag, isGif, getOrientation(orientation))
             .fold(ifLeft = { return it.left() }) {
                 localImDataSource.saveIm(it)
@@ -52,6 +52,6 @@ class WaifusImRepository @Inject constructor(
 
     suspend fun switchImFavorite(imItem: WaifuImItem): Error? {
         val updatedWaifu = imItem.copy(isFavorite = !imItem.isFavorite)
-        return localImDataSource.saveIm(listOf(updatedWaifu))
+        return localImDataSource.saveOnlyIm(updatedWaifu)
     }
 }

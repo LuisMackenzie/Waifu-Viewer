@@ -28,8 +28,8 @@ class WaifuImViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             getWaifuImUseCase()
-                .catch { cause -> _state.update { UiState(error = cause.toError()) }}
-                .collect{ WaifusIm -> _state.update { _state.value.copy(waifus = WaifusIm) } }
+                .catch { cause -> _state.update { it.copy(error = cause.toError()) }}
+                .collect{ WaifusIm -> _state.update { UiState(waifus = WaifusIm) } }
         }
     }
 
@@ -39,20 +39,14 @@ class WaifuImViewModel @Inject constructor(
             if (tag == "all") {
                 if (isNsfw) {
                     val error = requestWaifuImUseCase(isNsfw,"ecchi",isGif,orientation)
-                    error.fold(
-                        ifLeft = { cause -> _state.update{ it.copy(error = cause) } },
-                        ifRight = { waifusIm -> _state.update{ it.copy(isLoading = false, waifus = waifusIm) } })
+                    _state.update { _state.value.copy(isLoading = false, error = error) }
                 } else {
                     val error = requestWaifuImUseCase(isNsfw,"waifu",isGif,orientation)
-                    error.fold(
-                        ifLeft = { cause -> _state.update{ it.copy(error = cause) } },
-                        ifRight = { waifusIm -> _state.update{ it.copy(isLoading = false, waifus = waifusIm) } })
+                    _state.update { _state.value.copy(isLoading = false, error = error) }
                 }
             } else {
                 val error = requestWaifuImUseCase(isNsfw, tag, isGif,  orientation)
-                error.fold(
-                    ifLeft = { cause -> _state.update{ it.copy(error = cause) } },
-                    ifRight = { waifusIm -> _state.value = _state.value.copy(isLoading = false, waifus = waifusIm) })
+                _state.update { _state.value.copy(isLoading = false, error = error) }
             }
         }
     }

@@ -29,14 +29,6 @@ import java.net.URL
 @AndroidEntryPoint
 class DetailFragment: Fragment(R.layout.fragment_detail) {
 
-    // private val safeArgs: DetailFragmentArgs by navArgs()
-    /*private val picsViewModel: DetailPicsViewModel by viewModels {
-        val repo = WaifusPicRepository(RoomPicDataSource(requireActivity().app.picDataBase.waifuPicDao()), ServerPicDataSource())
-        DetailPicsViewModelFactory(safeArgs.waifuId, FindWaifuPicUseCase(repo), SwitchPicFavoriteUseCase(repo)) }
-    private val imViewModel: DetailImViewModel by viewModels {
-        val repo = WaifusImRepository(RoomImDataSource(requireActivity().app.imDataBase.waifuImDao()), ServerImDataSource())
-        DetailImViewModelFactory(safeArgs.waifuId, FindWaifuImUseCase(repo), SwitchImFavoriteUseCase(repo)) }*/
-
     private val picsViewModel: DetailPicsViewModel by viewModels()
     private val imViewModel: DetailImViewModel by viewModels()
     private lateinit var mainState: MainState
@@ -93,11 +85,6 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
             ivDetail.setImageResource(R.drawable.ic_offline_background)
 
         }
-            /*state.idPic?.let {
-                // tvDetail.text = it.imageId.toString()
-                tvDetail.text = ""
-                Toast.makeText(context, "Aqui esta el flujo PICS", Toast.LENGTH_SHORT).show()
-            }*/
     }
 
     private fun FragmentDetailBinding.withImUpdateUI(state: DetailImViewModel.UiState) {
@@ -116,11 +103,6 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
             tvDetail.text = "Hubo algun Error"
             ivDetail.setImageResource(R.drawable.ic_offline_background)
         }
-        /*state.idIm?.let {
-            // tvDetail.text = it.imageId.toString()
-            tvDetail.text = ""
-            Toast.makeText(context, "Aqui esta el flujo IM", Toast.LENGTH_SHORT).show()
-        }*/
     }
 
     private fun prepareDownloadPic(waifuPic: com.mackenzie.waifuviewer.domain.WaifuPicItem) {

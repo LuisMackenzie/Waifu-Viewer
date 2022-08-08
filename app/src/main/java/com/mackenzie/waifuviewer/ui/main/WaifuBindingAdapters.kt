@@ -13,7 +13,7 @@ fun RecyclerView.setPicsItems(waifus: List<WaifuPicItem>?) {
 }
 
 @BindingAdapter("itemsIm")
-fun RecyclerView.setItems(waifus: List<WaifuImItem>?) {
+fun RecyclerView.setImItems(waifus: List<WaifuImItem>?) {
     if (waifus != null) {
         (adapter as? WaifuImAdapter)?.submitList(waifus)
     }

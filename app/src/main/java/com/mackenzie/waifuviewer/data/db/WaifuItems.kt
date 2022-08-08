@@ -9,7 +9,7 @@ import kotlinx.parcelize.Parcelize
 @Entity
 data class WaifuImDbItem(
     @PrimaryKey(autoGenerate = true) val id: Int,
-    val dominant_color: String,
+    val dominantColor: String,
     // val extension: String,
     // val favourites: Int,
     val file: String,

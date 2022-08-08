@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 class ServerImDataSource @Inject constructor(): WaifusImRemoteDataSource {
 
-    override suspend fun getRandomWaifusIm(isNsfw: Boolean, tag: String, isGif: Boolean, orientation: String): Either<Error? , List<WaifuImItem>> = tryCall {
+    override suspend fun getRandomWaifusIm(isNsfw: Boolean, tag: String, isGif: Boolean, orientation: String): Either<Error, List<WaifuImItem>> = tryCall {
         serviceIm.getRandomWaifuIm(isNsfw, tag, isGif,  orientation)
             .waifus
             .toDomainModel()
@@ -29,7 +29,7 @@ private fun List<Waifu>.toDomainModel(): List<WaifuImItem> = map { it.toDomainMo
 
 private fun Waifu.toDomainModel(): WaifuImItem =
     WaifuImItem(
-        id,
+        id = 0,
         dominant_color,
         file,
         height,

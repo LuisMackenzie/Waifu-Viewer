@@ -13,13 +13,13 @@ interface WaifuImDao {
     fun findImById(id: Int): Flow<WaifuImDbItem>
 
     @Query("SELECT COUNT(id) FROM WaifuImDbItem")
-    fun waifuImCount(): Int
+    suspend fun waifuImCount(): Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertWaifuIm(waifu: WaifuImDbItem)
+    suspend fun insertWaifuIm(waifu: WaifuImDbItem)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAllWaifuIm(waifus: List<WaifuImDbItem>)
+    suspend fun insertAllWaifuIm(waifus: List<WaifuImDbItem>)
 
     @Update
     fun updateWaifuIm(waifu: WaifuImDbItem)

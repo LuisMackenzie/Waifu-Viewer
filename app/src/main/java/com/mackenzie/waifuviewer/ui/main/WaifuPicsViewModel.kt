@@ -9,6 +9,7 @@ import com.mackenzie.waifuviewer.domain.WaifuPicItem
 import com.mackenzie.waifuviewer.usecases.GetWaifuPicUseCase
 import com.mackenzie.waifuviewer.usecases.RequestWaifuPicUseCase
 import com.mackenzie.waifuviewer.ui.common.Scope
+import com.mackenzie.waifuviewer.ui.main.WaifuImViewModel
 import com.mackenzie.waifuviewer.usecases.RequestMoreWaifuPicUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -31,7 +32,7 @@ class WaifuPicsViewModel @Inject constructor(
         viewModelScope.launch {
             getWaifuPicUseCase()
                 .catch { cause -> _state.update { it.copy(error = cause.toError()) }}
-                .collect{ waifusPics -> _state.update { _state.value.copy(waifus = waifusPics) } }
+                .collect{ waifusPics -> _state.update { UiState(waifus = waifusPics) } }
         }
     }
 
@@ -104,14 +105,10 @@ class WaifuPicsViewModel @Inject constructor(
             _state.value = _state.value.copy(isLoading = true)
             if (tag == "all") {
                 val error = requestWaifuPicUseCase(isNsfw, "waifu")
-                error.fold(
-                    ifLeft = { cause -> _state.update{ it.copy(error = cause) } },
-                    ifRight = { waifusPics -> _state.update{ it.copy(isLoading = false, waifus = waifusPics) } })
+                _state.update { _state.value.copy(isLoading = false, error = error) }
             } else {
                 val error = requestWaifuPicUseCase(isNsfw, tag)
-                error.fold(
-                    ifLeft = { cause -> _state.update{ it.copy(error = cause) } },
-                    ifRight = { waifusPics -> _state.update{ it.copy(isLoading = false, waifus = waifusPics) } })
+                _state.update { _state.value.copy(isLoading = false, error = error) }
             }
         }
     }

@@ -20,16 +20,18 @@ class WaifusPicRepository @Inject constructor(
 
     fun findPicsById(id: Int): Flow<WaifuPicItem> = localPicDataSource.findPicById(id)
 
-    suspend fun requestWaifusPics(isNsfw: String, tag: String): Either<Error?, List<WaifuPicItem>> =
-        remotePicDataSource.getRandomWaifusPics(isNsfw, tag)
-            .fold(ifLeft = { return it.left() }) {
-            if(localPicDataSource.isPicsEmpty()) {
+    suspend fun requestWaifusPics(isNsfw: String, tag: String): Error? {
+        if(localPicDataSource.isPicsEmpty()) {
+            val waifus = remotePicDataSource.getRandomWaifusPics(isNsfw, tag)
+            waifus.fold(ifLeft = {return it}) {
                 localPicDataSource.savePics(it)
             }
-            return it.right()
         }
+        return null
+    }
 
-    suspend fun requestNewWaifusPics(isNsfw: String, tag: String): Either<Error?, List<WaifuPicItem>> {
+
+    suspend fun requestNewWaifusPics(isNsfw: String, tag: String): Either<Error, List<WaifuPicItem>> {
         remotePicDataSource.getRandomWaifusPics(isNsfw, tag)
             .fold(ifLeft = { return it.left() }) {
                 localPicDataSource.savePics(it)
@@ -45,6 +47,6 @@ class WaifusPicRepository @Inject constructor(
 
     suspend fun switchPicsFavorite(picsItem: WaifuPicItem) :Error? {
         val updatedWaifu = picsItem.copy(isFavorite = !picsItem.isFavorite)
-        return localPicDataSource.savePics(listOf(updatedWaifu))
+        return localPicDataSource.saveOnlyPics(updatedWaifu)
     }
 }

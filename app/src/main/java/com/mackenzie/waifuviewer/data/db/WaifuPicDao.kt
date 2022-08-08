@@ -13,13 +13,13 @@ interface WaifuPicDao {
     fun findPicsById(id: Int): Flow<WaifuPicDbItem>
 
     @Query("SELECT COUNT(id) FROM WaifuPicDbItem")
-    fun waifuPicsCount(): Int
+    suspend fun waifuPicsCount(): Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertWaifuPics(waifu: WaifuPicDbItem)
+    suspend fun insertWaifuPics(waifu: WaifuPicDbItem)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAllWaifuPics(waifus: List<WaifuPicDbItem>)
+    suspend fun insertAllWaifuPics(waifus: List<WaifuPicDbItem>)
 
     @Update
     fun updateWaifuPics(waifu: WaifuPicDbItem)

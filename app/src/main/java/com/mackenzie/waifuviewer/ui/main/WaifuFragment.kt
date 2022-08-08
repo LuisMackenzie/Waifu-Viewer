@@ -16,18 +16,11 @@ import dagger.hilt.android.AndroidEntryPoint
 class WaifuFragment: Fragment(R.layout.fragment_waifu) {
 
     private val safeArgs: WaifuFragmentArgs by navArgs()
-    /*private val picsViewModel: WaifuPicsViewModel by viewModels {
-        val repo = WaifusPicRepository(RoomPicDataSource(requireActivity().app.picDataBase.waifuPicDao()), ServerPicDataSource())
-        WaifuPicsViewModelFactory(GetWaifuPicUseCase(repo), RequestWaifuPicUseCase(repo), RequestMoreWaifuPicUseCase(repo)) }
-    private val imViewModel: WaifuImViewModel by viewModels {
-        val repo = WaifusImRepository(RoomImDataSource(requireActivity().app.imDataBase.waifuImDao()), ServerImDataSource())
-        WaifuImViewModelFactory(GetWaifuImUseCase(repo), RequestWaifuImUseCase(repo), RequestMoreWaifuImUseCase(repo)) }*/
     private val picsViewModel: WaifuPicsViewModel by viewModels()
     private val imViewModel: WaifuImViewModel by viewModels()
     private val waifuImAdapter = WaifuImAdapter{ mainState.onWaifuClicked(it) }
     private val waifuPicsAdapter = WaifuPicsAdapter{ mainState.onWaifuPicsClicked(it) }
     private lateinit var mainState: MainState
-    // private lateinit var binding: FragmentWaifuBinding
     private lateinit var bun :Bundle
     private var mainServer: Boolean = false
     private var numIsShowed : Boolean= false
@@ -40,9 +33,9 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         bun = safeArgs.bundleInfo
         val binding = FragmentWaifuBinding.bind(view).apply {
             if (mainServer) {
-                recyclerPics.adapter = waifuPicsAdapter
+                recycler.adapter = waifuPicsAdapter
             } else {
-                recyclerIm.adapter = waifuImAdapter
+                recycler.adapter = waifuImAdapter
             }
         }
 
@@ -110,8 +103,8 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         // binding.recyclerIm.visibility = View.GONE
 
         state.waifus?.let { savedPicWaifus ->
-            // waifuPicsAdapter.submitList(savedPicWaifus)
-            waifuPic = savedPicWaifus
+            waifuPicsAdapter.submitList(savedPicWaifus)
+            // waifuPic = savedPicWaifus
             // Toast.makeText(requireContext(), "Showing PICS Waifus $savedPicWaifus", Toast.LENGTH_SHORT).show()
             count = savedPicWaifus.size
             if (count != 0 && !numIsShowed) {
@@ -130,8 +123,6 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
 
         state.isLoading.let {
             progress.visibility = if (it) View.VISIBLE else View.GONE
-            recyclerPics.visibility = if(it) View.GONE else View.VISIBLE
-            recyclerIm.visibility = if(it) View.GONE else View.GONE
         }
 
         fabRecycler.setOnClickListener {
@@ -160,7 +151,8 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         // Toast.makeText(requireContext(), "Showing IM Waifus ${state.waifus}", Toast.LENGTH_SHORT).show()
 
         state.waifus?.let { savedImWaifus ->
-            waifuIm = savedImWaifus
+            // waifuIm = savedImWaifus
+            waifuImAdapter.submitList(savedImWaifus)
             count = savedImWaifus.size
             if (count != 0 && !numIsShowed) {
                 Toast.makeText(requireContext(), "Total Waifus = $count", Toast.LENGTH_SHORT).show()
@@ -193,8 +185,6 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
 
         state.isLoading.let {
             progress.visibility = if (it) View.VISIBLE else View.GONE
-            recyclerIm.visibility = if (it) View.GONE else View.VISIBLE
-            recyclerPics.visibility = if(it) View.GONE else View.GONE
         }
 
         fabRecycler.setOnClickListener {

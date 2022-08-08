@@ -6,7 +6,6 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Waifu(
-    val id: Int,
     @SerializedName("dominant_color") val dominant_color: String,
     val extension: String,
     val favourites: Int,
@@ -29,7 +28,6 @@ data class WaifuResult(
 
 @Parcelize
 data class WaifuPic(
-    val id: Int,
     @SerializedName("url")val url: String
 ) : Parcelable
 
