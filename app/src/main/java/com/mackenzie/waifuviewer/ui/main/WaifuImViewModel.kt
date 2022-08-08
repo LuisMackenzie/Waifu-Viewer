@@ -35,18 +35,18 @@ class WaifuImViewModel @Inject constructor(
 
     fun onImReady(isNsfw: Boolean, isGif: Boolean, tag: String, orientation: Boolean) {
         viewModelScope.launch {
-            _state.update { UiState(isLoading = true) }
+            _state.value = _state.value.copy(isLoading = true)
             if (tag == "all") {
                 if (isNsfw) {
                     val error = requestWaifuImUseCase(isNsfw,"ecchi",isGif,orientation)
-                    _state.update { _state.value.copy(isLoading = false, error = error) }
+                    _state.update { _state.value.copy( error = error) }
                 } else {
                     val error = requestWaifuImUseCase(isNsfw,"waifu",isGif,orientation)
-                    _state.update { _state.value.copy(isLoading = false, error = error) }
+                    _state.update { _state.value.copy(error = error) }
                 }
             } else {
                 val error = requestWaifuImUseCase(isNsfw, tag, isGif,  orientation)
-                _state.update { _state.value.copy(isLoading = false, error = error) }
+                _state.update { _state.value.copy(error = error) }
             }
         }
     }

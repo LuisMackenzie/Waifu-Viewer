@@ -109,8 +109,8 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
             count = savedPicWaifus.size
             if (count != 0 && !numIsShowed) {
                 Toast.makeText(requireContext(), "Total Waifus = $count", Toast.LENGTH_SHORT).show()
-                Toast.makeText(requireContext(), "Pics Waifus ID First ${savedPicWaifus.first().id}", Toast.LENGTH_SHORT).show()
-                Toast.makeText(requireContext(), "Pics Waifus ID Last ${savedPicWaifus.last().id}", Toast.LENGTH_SHORT).show()
+                // Toast.makeText(requireContext(), "Pics Waifus ID First ${savedPicWaifus.first().id}", Toast.LENGTH_SHORT).show()
+                // Toast.makeText(requireContext(), "Pics Waifus ID Last ${savedPicWaifus.last().id}", Toast.LENGTH_SHORT).show()
                 numIsShowed = true
             }
         }
@@ -156,8 +156,8 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
             count = savedImWaifus.size
             if (count != 0 && !numIsShowed) {
                 Toast.makeText(requireContext(), "Total Waifus = $count", Toast.LENGTH_SHORT).show()
-                Toast.makeText(requireContext(), "IM Waifus ID First ${savedImWaifus.first().id}", Toast.LENGTH_SHORT).show()
-                Toast.makeText(requireContext(), "IM Waifus ID Last ${savedImWaifus.last().id}", Toast.LENGTH_SHORT).show()
+                // Toast.makeText(requireContext(), "IM Waifus ID First ${savedImWaifus.first().id}", Toast.LENGTH_SHORT).show()
+                // Toast.makeText(requireContext(), "IM Waifus ID Last ${savedImWaifus.last().id}", Toast.LENGTH_SHORT).show()
                 numIsShowed = true
             }
 
