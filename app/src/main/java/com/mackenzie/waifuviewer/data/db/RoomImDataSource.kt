@@ -14,19 +14,11 @@ import javax.inject.Inject
 
 class RoomImDataSource @Inject constructor(private val ImDao: WaifuImDao) : WaifusImLocalDataSource {
 
-    override val waifusIm: Flow<List<WaifuImItem>> = ImDao.getAllIm().map { it.toDomainModel()}
+    override val waifusIm: Flow<List<WaifuImItem>> = ImDao.getAllIm().map { it.toDomainModel() }
 
     override suspend fun isImEmpty(): Boolean = ImDao.waifuImCount() == 0
 
     override fun findImById(id: Int): Flow<WaifuImItem> = ImDao.findImById(id).map { it.toDomainModel() }
-
-    /*override suspend fun saveIm(waifus: List<WaifuImItem>): Error? = trySave {
-        ImDao.insertAllWaifuIm(waifus.fromDomainModel())
-    }
-
-    override suspend fun saveOnlyIm(waifu: WaifuImItem): Error? = trySave {
-        ImDao.insertWaifuIm(waifu.fromDomainModel())
-    }*/
 
     override suspend fun saveIm(waifus: List<WaifuImItem>): Error? = tryCall {
         ImDao.insertAllWaifuIm(waifus.fromDomainModel())

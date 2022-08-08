@@ -103,14 +103,11 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         // binding.recyclerIm.visibility = View.GONE
 
         state.waifus?.let { savedPicWaifus ->
-            waifuPicsAdapter.submitList(savedPicWaifus)
+            waifuPicsAdapter.submitList(savedPicWaifus.reversed())
             // waifuPic = savedPicWaifus
-            // Toast.makeText(requireContext(), "Showing PICS Waifus $savedPicWaifus", Toast.LENGTH_SHORT).show()
             count = savedPicWaifus.size
             if (count != 0 && !numIsShowed) {
                 Toast.makeText(requireContext(), "Total Waifus = $count", Toast.LENGTH_SHORT).show()
-                // Toast.makeText(requireContext(), "Pics Waifus ID First ${savedPicWaifus.first().id}", Toast.LENGTH_SHORT).show()
-                // Toast.makeText(requireContext(), "Pics Waifus ID Last ${savedPicWaifus.last().id}", Toast.LENGTH_SHORT).show()
                 numIsShowed = true
             }
         }
@@ -127,8 +124,8 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
 
         fabRecycler.setOnClickListener {
             picsViewModel.onRequestMore(isNsfw, categoryTag)
-            // activity?.onBackPressed()
-            // Toast.makeText(requireContext(), "30 More Waifus are incoming. Hit button for show", Toast.LENGTH_SHORT).show()
+            activity?.onBackPressed()
+            Toast.makeText(requireContext(), "More Waifus are coming.", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -152,12 +149,11 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
 
         state.waifus?.let { savedImWaifus ->
             // waifuIm = savedImWaifus
-            waifuImAdapter.submitList(savedImWaifus)
+            waifuImAdapter.submitList(savedImWaifus.reversed())
+            // recycler.scrollToPosition(savedImWaifus.last().id)
             count = savedImWaifus.size
             if (count != 0 && !numIsShowed) {
                 Toast.makeText(requireContext(), "Total Waifus = $count", Toast.LENGTH_SHORT).show()
-                // Toast.makeText(requireContext(), "IM Waifus ID First ${savedImWaifus.first().id}", Toast.LENGTH_SHORT).show()
-                // Toast.makeText(requireContext(), "IM Waifus ID Last ${savedImWaifus.last().id}", Toast.LENGTH_SHORT).show()
                 numIsShowed = true
             }
 
@@ -189,8 +185,8 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
 
         fabRecycler.setOnClickListener {
             imViewModel.onRequestMore(isNsfw, isGif, categoryTag, orientation)
-            // activity?.onBackPressed()
-            // Toast.makeText(requireContext(), "30 More Waifus are incoming. Hit button for show", Toast.LENGTH_SHORT).show()
+            activity?.onBackPressed()
+            Toast.makeText(requireContext(), "More Waifus are coming.", Toast.LENGTH_SHORT).show()
         }
     }
 

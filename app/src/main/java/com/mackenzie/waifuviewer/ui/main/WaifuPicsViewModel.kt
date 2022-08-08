@@ -32,7 +32,7 @@ class WaifuPicsViewModel @Inject constructor(
         viewModelScope.launch {
             getWaifuPicUseCase()
                 .catch { cause -> _state.update { it.copy(error = cause.toError()) }}
-                .collect{ waifusPics -> _state.update { UiState(waifus = waifusPics) } }
+                .collect{ waifusPics -> _state.update { UiState(isLoading = false, waifus = waifusPics) } }
         }
     }
 
@@ -83,32 +83,28 @@ class WaifuPicsViewModel @Inject constructor(
         }
     }*/
 
-    private fun moreWaifusGetter(isNsfw: String, tag: String) {
-        viewModelScope.launch {
-            _state.value = _state.value.copy(isLoading = true)
-            if (tag == "all") {
-                val error = requestMorePicUseCase(isNsfw, "waifu")
-                error.fold(
-                    ifLeft = { cause -> _state.update{ it.copy(error = cause) } },
-                    ifRight = { waifusPics -> _state.update{ it.copy(isLoading = false, waifus = waifusPics) } })
-            } else {
-                val error = requestMorePicUseCase(isNsfw, tag)
-                error.fold(
-                    ifLeft = { cause -> _state.update{ it.copy(error = cause) } },
-                    ifRight = { waifusPics -> _state.update{ it.copy(isLoading = false, waifus = waifusPics) } })
-            }
-        }
-    }
-
     private fun waifusGetter(isNsfw: String, tag: String) {
         viewModelScope.launch {
             _state.value = _state.value.copy(isLoading = true)
             if (tag == "all") {
                 val error = requestWaifuPicUseCase(isNsfw, "waifu")
-                _state.update { _state.value.copy(isLoading = false, error = error) }
+                _state.update { _state.value.copy(error = error) }
             } else {
                 val error = requestWaifuPicUseCase(isNsfw, tag)
-                _state.update { _state.value.copy(isLoading = false, error = error) }
+                _state.update { _state.value.copy(error = error) }
+            }
+        }
+    }
+
+    private fun moreWaifusGetter(isNsfw: String, tag: String) {
+        viewModelScope.launch {
+            // _state.value = _state.value.copy(isLoading = true)
+            if (tag == "all") {
+                val error = requestMorePicUseCase(isNsfw, "waifu")
+                _state.update { _state.value.copy(error = error) }
+            } else {
+                val error = requestMorePicUseCase(isNsfw, tag)
+                _state.update { _state.value.copy(error = error) }
             }
         }
     }

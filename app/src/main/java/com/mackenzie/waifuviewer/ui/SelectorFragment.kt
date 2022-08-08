@@ -31,13 +31,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class SelectorFragment : Fragment(R.layout.fragment_selector) {
 
-    /*private val imViewModel: SelectorImViewModel by viewModels {
-        val repo = WaifusImRepository(RoomImDataSource(requireActivity().app.imDataBase.waifuImDao()), ServerImDataSource())
-        SelectorImViewModelFactory(GetOnlyWaifuImUseCase(repo), RequestOnlyWaifuImUseCase(repo)) }
-    private val picsViewModel: SelectorPicViewModel by viewModels {
-        val repo = WaifusPicRepository(RoomPicDataSource(requireActivity().app.picDataBase.waifuPicDao()), ServerPicDataSource())
-        SelectorPicViewModelFactory(GetOnlyWaifuPicUseCase(repo), RequestOnlyWaifuPicUseCase(repo)) }*/
-    private val picsViewModel: SelectorPicViewModel by viewModels()
+    // private val picsViewModel: SelectorPicViewModel by viewModels()
     private val imViewModel: SelectorImViewModel by viewModels()
     private lateinit var binding: FragmentSelectorBinding
     private var backgroudImage: ImageView? = null
@@ -51,19 +45,19 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
         setUpElements()
         updateSpinner(binding.sServer.isChecked)
 
-        /*viewLifecycleOwner.launchAndCollect(imViewModel.state) { updateImWaifu(it) }
+        viewLifecycleOwner.launchAndCollect(imViewModel.state) { updateImWaifu(it) }
         mainState.requestPermissionLauncher {
             if (!loaded) {
                 imViewModel.loadErrorOrWaifu()
             }
-        }*/
+        }
 
-        viewLifecycleOwner.launchAndCollect(picsViewModel.state) { updatePicWaifu(it) }
+        /*viewLifecycleOwner.launchAndCollect(picsViewModel.state) { updatePicWaifu(it) }
         mainState.requestPermissionLauncher {
             if (!loaded) {
                 picsViewModel.loadErrorOrWaifu()
             }
-        }
+        }*/
     }
 
 
@@ -134,8 +128,8 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
         }
         fab.setOnClickListener {
             // viewLifecycleOwner.launchAndCollect(viewModel.state) { updateWaifu(it) }
-            // imViewModel.loadErrorOrWaifu()
-            picsViewModel.loadErrorOrWaifu()
+            imViewModel.loadErrorOrWaifu()
+            // picsViewModel.loadErrorOrWaifu()
         }
         backgroudImage = ivBackdrop
     }

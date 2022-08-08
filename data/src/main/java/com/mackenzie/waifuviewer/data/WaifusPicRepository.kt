@@ -30,13 +30,12 @@ class WaifusPicRepository @Inject constructor(
         return null
     }
 
-
-    suspend fun requestNewWaifusPics(isNsfw: String, tag: String): Either<Error, List<WaifuPicItem>> {
-        remotePicDataSource.getRandomWaifusPics(isNsfw, tag)
-            .fold(ifLeft = { return it.left() }) {
-                localPicDataSource.savePics(it)
-                return it.right()
-            }
+    suspend fun requestNewWaifusPics(isNsfw: String, tag: String): Error? {
+        val waifus = remotePicDataSource.getRandomWaifusPics(isNsfw, tag)
+        waifus.fold(ifLeft = {return it}) {
+            localPicDataSource.savePics(it)
+        }
+        return null
     }
 
     suspend fun requestOnlyWaifuPic(): WaifuPicItem {

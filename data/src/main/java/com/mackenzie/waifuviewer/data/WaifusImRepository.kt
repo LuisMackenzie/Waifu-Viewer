@@ -29,12 +29,13 @@ class WaifusImRepository @Inject constructor(
         return null
     }
 
-    suspend fun requestNewWaifusIm(isNsfw: Boolean, tag: String, isGif: Boolean, orientation: Boolean): Either<Error, List<WaifuImItem>> =
-        remoteImDataSource.getRandomWaifusIm(isNsfw, tag, isGif, getOrientation(orientation))
-            .fold(ifLeft = { return it.left() }) {
-                localImDataSource.saveIm(it)
-                return it.right()
-            }
+    suspend fun requestNewWaifusIm(isNsfw: Boolean, tag: String, isGif: Boolean, orientation: Boolean): Error? {
+        val waifus = remoteImDataSource.getRandomWaifusIm(isNsfw, tag, isGif, getOrientation(orientation))
+        waifus.fold(ifLeft = {return it}) {
+            localImDataSource.saveIm(it)
+        }
+        return null
+    }
 
     suspend fun requestOnlyWaifuIm(): WaifuImItem {
         val waifuIm = remoteImDataSource.getOnlyWaifuIm()

@@ -27,7 +27,7 @@ class WaifuImAdapter(private val listener: (WaifuImItem) -> Unit ): ListAdapter<
         holder.itemView.setOnClickListener { listener(waifuItem) }
     }
 
-    class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
+    inner class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
 
         private val binding = ViewMediaItemBinding.bind(view)
         fun bind(waifu: WaifuImItem) = with(binding) {

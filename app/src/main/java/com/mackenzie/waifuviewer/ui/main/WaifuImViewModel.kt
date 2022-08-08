@@ -29,7 +29,7 @@ class WaifuImViewModel @Inject constructor(
         viewModelScope.launch {
             getWaifuImUseCase()
                 .catch { cause -> _state.update { it.copy(error = cause.toError()) }}
-                .collect{ WaifusIm -> _state.update { UiState(waifus = WaifusIm) } }
+                .collect{ WaifusIm -> _state.update { UiState(isLoading = false, waifus = WaifusIm) } }
         }
     }
 
@@ -53,26 +53,20 @@ class WaifuImViewModel @Inject constructor(
 
     fun onRequestMore(isNsfw: Boolean, isGif: Boolean, tag: String, orientation: Boolean) {
         viewModelScope.launch {
-            _state.value = _state.value.copy(isLoading = true)
+            // _state.value = _state.value.copy(isLoading = true)
             if (tag == "all") {
                 if (isNsfw) {
                     val error = requestMoreImUseCase(isNsfw,"ecchi",isGif,orientation)
-                    error.fold(
-                        ifLeft = { cause -> _state.update{ it.copy(error = cause) } },
-                        ifRight = { waifusIm -> _state.update{ it.copy(isLoading = false, waifus = waifusIm) } })
+                    _state.update { _state.value.copy(error = error) }
 
                 } else {
                     val error = requestMoreImUseCase(isNsfw,"waifu",isGif,orientation)
-                    error.fold(
-                        ifLeft = { cause -> _state.update{ it.copy(error = cause) } },
-                        ifRight = { waifusIm -> _state.update{ it.copy(isLoading = false, waifus = waifusIm) } })
+                    _state.update { _state.value.copy(error = error) }
 
                 }
             } else {
                 val error = requestMoreImUseCase(isNsfw, tag, isGif,  orientation)
-                error.fold(
-                    ifLeft = { cause -> _state.update{ it.copy(error = cause) } },
-                    ifRight = { waifusIm -> _state.update{ it.copy(isLoading = false, waifus = waifusIm) } })
+                _state.update { _state.value.copy(error = error) }
 
             }
         }
