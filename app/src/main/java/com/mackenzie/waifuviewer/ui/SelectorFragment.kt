@@ -31,7 +31,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class SelectorFragment : Fragment(R.layout.fragment_selector) {
 
-    private val picsViewModel: SelectorPicViewModel by viewModels()
+    // private val picsViewModel: SelectorPicViewModel by viewModels()
     private val imViewModel: SelectorImViewModel by viewModels()
     private lateinit var binding: FragmentSelectorBinding
     private var backgroudImage: ImageView? = null
@@ -52,7 +52,6 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
                 Toast.makeText(requireContext(), "IM server loaded", Toast.LENGTH_SHORT).show()
             }
         }
-
         /*viewLifecycleOwner.launchAndCollect(picsViewModel.state) { updatePicWaifu(it) }
         mainState.requestPermissionLauncher {
             if (!loaded) {
@@ -108,11 +107,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
     private fun setUpElements() = with(binding) {
         btnWaifu.setOnClickListener {
             navigateTo()
-            // Toast.makeText(this, "Mostrando Waifus", Toast.LENGTH_SHORT).show()
         }
-        /*btnSearch.setOnClickListener {
-            // Toast.makeText(this, "Buscando Waifu", Toast.LENGTH_SHORT).show()
-        }*/
         sOrientation.setOnClickListener {
             if (sOrientation.isChecked) {
                 sOrientation.text = "Landscape"
@@ -129,7 +124,6 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
             updateSpinner(sServer.isChecked)
         }
         fab.setOnClickListener {
-            // viewLifecycleOwner.launchAndCollect(viewModel.state) { updateWaifu(it) }
             imViewModel.loadErrorOrWaifu()
             // picsViewModel.loadErrorOrWaifu()
         }
@@ -138,7 +132,6 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
 
     private fun updateSpinner(state: Boolean) = with(binding) {
         val spinnerContent: Array<String>
-        // val spinnerIsNsfw: Boolean = sNsfw.isEnabled
         if (state) {
             spinnerContent = if (sNsfw.isChecked) {
                 arrayOf("all", "waifu", "neko", "trap", "blowjob")
