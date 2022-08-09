@@ -31,7 +31,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class SelectorFragment : Fragment(R.layout.fragment_selector) {
 
-    // private val picsViewModel: SelectorPicViewModel by viewModels()
+    private val picsViewModel: SelectorPicViewModel by viewModels()
     private val imViewModel: SelectorImViewModel by viewModels()
     private lateinit var binding: FragmentSelectorBinding
     private var backgroudImage: ImageView? = null
@@ -49,6 +49,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
         mainState.requestPermissionLauncher {
             if (!loaded) {
                 imViewModel.loadErrorOrWaifu()
+                Toast.makeText(requireContext(), "IM server loaded", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -56,6 +57,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
         mainState.requestPermissionLauncher {
             if (!loaded) {
                 picsViewModel.loadErrorOrWaifu()
+                Toast.makeText(requireContext(), "PICS server loaded", Toast.LENGTH_SHORT).show()
             }
         }*/
     }

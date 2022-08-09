@@ -37,10 +37,10 @@ class WaifusImRepository @Inject constructor(
         return null
     }
 
-    suspend fun requestOnlyWaifuIm(): WaifuImItem {
+    suspend fun requestOnlyWaifuIm(): WaifuImItem? {
         val waifuIm = remoteImDataSource.getOnlyWaifuIm()
+        if (waifuIm != null) return waifuIm else return null
         // localImDataSource.saveOnlyIm(waifuIm)
-        return waifuIm
     }
 
     private fun getOrientation(ori: Boolean): String {

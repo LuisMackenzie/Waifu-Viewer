@@ -25,21 +25,17 @@ class SelectorImViewModel @Inject constructor(
                 .catch { cause -> _state.update { it.copy(error = cause.toError()) }}
                 .collect{ waifuIm -> _state.update { UiState(waifu = waifuIm.first()) } }*/
             val waifu = requestOnlyImWaifu()
-
-            _state.update { UiState(waifu = waifu) }
-            /*waifu.fold(ifLeft = {
-                _state.update { it.copy(error = it.error) }
-            }, ifRight = {
-                _state.update { it.copy(waifu = it.waifu) }
-            })*/
+            if (waifu != null) {
+                _state.update { UiState(waifu = waifu) }
+            } else {
+                _state.update { UiState(error = Error.Connectivity) }
+            }
 
         }
     }
 
     fun loadErrorOrWaifu() {
-        viewModelScope.launch {
             loadWaifu()
-        }
     }
 
     data class UiState(
@@ -48,13 +44,3 @@ class SelectorImViewModel @Inject constructor(
     )
 
 }
-
-/*
-@Suppress("UNCHECKED_CAST")
-class SelectorImViewModelFactory(
-    private val getOnlyWaifuImUseCase: GetOnlyWaifuImUseCase,
-    private val requestOnlyImWaifu: RequestOnlyWaifuImUseCase): ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return SelectorImViewModel(getOnlyWaifuImUseCase, requestOnlyImWaifu) as T
-    }
-}*/

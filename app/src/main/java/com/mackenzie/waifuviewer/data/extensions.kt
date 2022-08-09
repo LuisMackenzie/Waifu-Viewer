@@ -26,7 +26,7 @@ suspend fun <T> tryCall(action: suspend () -> T): Either<Error, T> = try {
     e.toError()
 }*/
 
-inline fun <T> trySave(action: () -> T): Error? = try {
+inline fun <T> tryGet(action: () -> T): Error? = try {
     action()
     null
 } catch (e: Exception) {

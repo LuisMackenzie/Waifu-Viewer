@@ -1,7 +1,6 @@
 package com.mackenzie.waifuviewer.data.server
 
 import arrow.core.Either
-import arrow.core.right
 import com.mackenzie.waifuviewer.data.datasource.WaifusImRemoteDataSource
 import com.mackenzie.waifuviewer.data.server.RemoteConnection.serviceIm
 import com.mackenzie.waifuviewer.data.tryCall
@@ -18,10 +17,21 @@ class ServerImDataSource @Inject constructor(): WaifusImRemoteDataSource {
             .toDomainModel()
     }
 
-    override suspend fun getOnlyWaifuIm(): WaifuImItem {
+    override suspend fun getOnlyWaifuIm(): WaifuImItem? {
+        var waifu: WaifuImItem? = null
+        try {
+            waifu = serviceIm.getOnlyRandomWaifuIm().waifus.first().toDomainModel()
+        } catch (e: Exception) {
+            return null
+        } finally {
+            if (waifu != null) return waifu else return null
+        }
+    }
+
+    /*override suspend fun getOnlyWaifuIm(): WaifuImItem {
         val waifu = serviceIm.getOnlyRandomWaifuIm().waifus.first().toDomainModel()
         return waifu
-    }
+    }*/
 
 }
 

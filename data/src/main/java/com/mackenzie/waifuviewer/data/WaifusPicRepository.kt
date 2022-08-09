@@ -38,10 +38,10 @@ class WaifusPicRepository @Inject constructor(
         return null
     }
 
-    suspend fun requestOnlyWaifuPic(): WaifuPicItem {
+    suspend fun requestOnlyWaifuPic(): WaifuPicItem? {
         val waifuPic = remotePicDataSource.getOnlyWaifuPics()
+        if (waifuPic != null) return waifuPic else return null
         // localPicDataSource.saveOnlyPics(waifuPic)
-        return waifuPic
     }
 
     suspend fun switchPicsFavorite(picsItem: WaifuPicItem) :Error? {

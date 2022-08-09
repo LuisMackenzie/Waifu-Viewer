@@ -10,5 +10,5 @@ interface WaifusPicRemoteDataSource {
         tag: String
     ): Either<Error, List<WaifuPicItem>>
 
-    suspend fun getOnlyWaifuPics(): WaifuPicItem
+    suspend fun getOnlyWaifuPics(): WaifuPicItem?
 }

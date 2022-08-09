@@ -13,5 +13,5 @@ interface WaifusImRemoteDataSource {
         orientation: String
     ): Either<Error, List<WaifuImItem>>
 
-    suspend fun getOnlyWaifuIm(): WaifuImItem
+    suspend fun getOnlyWaifuIm(): WaifuImItem?
 }
