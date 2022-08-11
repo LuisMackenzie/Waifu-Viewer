@@ -45,7 +45,7 @@ private fun FavoriteDbItem.toDomainModel(): FavoriteItem =
 
 private fun WaifuPicItem.fromPicDomainModel(): FavoriteDbItem =
     FavoriteDbItem(
-        id,
+        id = 0,
         url,
         isFavorite
     )
@@ -54,7 +54,7 @@ private fun WaifuPicItem.fromPicDomainModel(): FavoriteDbItem =
 
 private fun WaifuImItem.fromImDomainModel(): FavoriteDbItem =
     FavoriteDbItem(
-        id,
+        id = 0,
         url,
         isFavorite
     )
