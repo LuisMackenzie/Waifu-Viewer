@@ -26,6 +26,10 @@ class FavoriteDataSource @Inject constructor(private val favDao: FavoriteDao): F
         favDao.insertFavorite(waifu.fromPicDomainModel())
     }.fold(ifLeft = { it }, ifRight = { null })
 
+    override suspend fun save(waifu: FavoriteItem): Error? = tryCall {
+        favDao.insertFavorite(waifu.fromDomainModel())
+    }.fold(ifLeft = { it }, ifRight = { null })
+
 }
 
 private fun List<FavoriteDbItem>.toDomainModel(): List<FavoriteItem> = map { it.toDomainModel() }
@@ -49,6 +53,13 @@ private fun WaifuPicItem.fromPicDomainModel(): FavoriteDbItem =
 // private fun List<WaifuImItem>.fromImDomainModel(): List<FavoriteDbItem> = map { it.fromImDomainModel() }
 
 private fun WaifuImItem.fromImDomainModel(): FavoriteDbItem =
+    FavoriteDbItem(
+        id,
+        url,
+        isFavorite
+    )
+
+private fun FavoriteItem.fromDomainModel(): FavoriteDbItem =
     FavoriteDbItem(
         id,
         url,

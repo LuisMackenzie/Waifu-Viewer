@@ -3,6 +3,7 @@ package com.mackenzie.waifuviewer.data
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
+import com.mackenzie.waifuviewer.data.datasource.FavoriteLocalDataSource
 import com.mackenzie.waifuviewer.data.datasource.WaifusImLocalDataSource
 import com.mackenzie.waifuviewer.data.datasource.WaifusImRemoteDataSource
 import com.mackenzie.waifuviewer.domain.WaifuImItem
@@ -12,6 +13,7 @@ import javax.inject.Inject
 
 class WaifusImRepository @Inject constructor(
     private val localImDataSource: WaifusImLocalDataSource,
+    private val favDataSource: FavoriteLocalDataSource,
     private val remoteImDataSource: WaifusImRemoteDataSource
 ) {
 
@@ -53,6 +55,7 @@ class WaifusImRepository @Inject constructor(
 
     suspend fun switchImFavorite(imItem: WaifuImItem): Error? {
         val updatedWaifu = imItem.copy(isFavorite = !imItem.isFavorite)
+        favDataSource.saveIm(updatedWaifu)
         return localImDataSource.saveOnlyIm(updatedWaifu)
     }
 }

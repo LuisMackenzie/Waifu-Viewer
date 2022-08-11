@@ -12,4 +12,5 @@ interface FavoriteLocalDataSource {
     fun findFavById(id: Int): Flow<FavoriteItem>
     suspend fun saveIm(waifu: WaifuImItem): Error?
     suspend fun savePic(waifu: WaifuPicItem): Error?
+    suspend fun save(waifu: FavoriteItem): Error?
 }
