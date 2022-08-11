@@ -1,25 +1,23 @@
 package com.mackenzie.waifuviewer.ui
 
-import androidx.lifecycle.*
-import com.mackenzie.waifuviewer.WaifuPicsViewModel
-import com.mackenzie.waifuviewer.data.server.WaifuPic
-import com.mackenzie.waifuviewer.data.toError
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.mackenzie.waifuviewer.domain.Error
 import com.mackenzie.waifuviewer.domain.WaifuPicItem
-import com.mackenzie.waifuviewer.usecases.RequestOnlyWaifuPicUseCase
 import com.mackenzie.waifuviewer.ui.common.Scope
-import com.mackenzie.waifuviewer.ui.main.SelectorImViewModel
-import com.mackenzie.waifuviewer.usecases.GetOnlyWaifuPicUseCase
-import com.mackenzie.waifuviewer.usecases.GetWaifuPicUseCase
+import com.mackenzie.waifuviewer.usecases.RequestOnlyWaifuPicUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SelectorPicViewModel @Inject constructor(
-    private val getOnlyWaifuPicUseCase: GetOnlyWaifuPicUseCase,
-    private val requestOnlyPicWaifu: RequestOnlyWaifuPicUseCase): ViewModel(), Scope by Scope.Impl() {
+    private val requestOnlyPicWaifu: RequestOnlyWaifuPicUseCase
+    ): ViewModel(), Scope by Scope.Impl() {
 
     private val _state = MutableStateFlow(UiState())
     val state: StateFlow<UiState> = _state.asStateFlow()

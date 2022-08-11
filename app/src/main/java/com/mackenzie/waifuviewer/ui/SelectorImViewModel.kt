@@ -5,7 +5,6 @@ import com.mackenzie.waifuviewer.domain.Error
 import com.mackenzie.waifuviewer.domain.WaifuImItem
 import com.mackenzie.waifuviewer.usecases.RequestOnlyWaifuImUseCase
 import com.mackenzie.waifuviewer.ui.common.Scope
-import com.mackenzie.waifuviewer.usecases.GetOnlyWaifuImUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -13,8 +12,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SelectorImViewModel @Inject constructor(
-    private val getOnlyWaifuImUseCase: GetOnlyWaifuImUseCase,
-    private val requestOnlyImWaifu: RequestOnlyWaifuImUseCase): ViewModel(), Scope by Scope.Impl() {
+    private val requestOnlyImWaifu: RequestOnlyWaifuImUseCase
+    ): ViewModel(), Scope by Scope.Impl() {
 
     private val _state = MutableStateFlow(UiState())
     val state: StateFlow<UiState> = _state.asStateFlow()

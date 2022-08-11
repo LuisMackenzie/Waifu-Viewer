@@ -32,3 +32,11 @@ data class WaifuPicDbItem(
     val url: String,
     val isFavorite: Boolean
 ) : Parcelable
+
+@Parcelize
+@Entity
+data class FavoriteDbItem(
+    @PrimaryKey(autoGenerate = true) val id: Int,
+    val url: String,
+    val isFavorite: Boolean
+) : Parcelable

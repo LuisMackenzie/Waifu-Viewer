@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.room.Room
 import com.mackenzie.waifuviewer.data.*
 import com.mackenzie.waifuviewer.data.datasource.*
+import com.mackenzie.waifuviewer.data.db.FavoriteDataSource
 import com.mackenzie.waifuviewer.data.db.RoomImDataSource
 import com.mackenzie.waifuviewer.data.db.RoomPicDataSource
 import com.mackenzie.waifuviewer.data.db.WaifuDataBase
@@ -32,17 +33,13 @@ object AppModule {
     @Singleton
     fun provideImDao(db: WaifuDataBase) = db.waifuImDao()
 
-    /*@Provides
-    @Singleton
-    fun providePicDatabase(app: Application) = Room.databaseBuilder(
-        app,
-        WaifuDataBase::class.java,
-        "waifu-pic-database"
-    ).build()*/
-
     @Provides
     @Singleton
     fun providePicDao(db: WaifuDataBase) = db.waifuPicDao()
+
+    @Provides
+    @Singleton
+    fun provideFavoriteDao(db: WaifuDataBase) = db.favoriteDao()
 
 }
 
@@ -57,10 +54,15 @@ abstract class AppDataModule {
     abstract fun bindLocalPicDataSource(localPicDataSource: RoomPicDataSource): WaifusPicLocalDataSource
 
     @Binds
+    abstract fun bindFavoriteDataSource(favoriteDataSource: FavoriteDataSource): FavoriteLocalDataSource
+
+    @Binds
     abstract fun bindRemoteImDataSource(remoteImDataSource: ServerImDataSource): WaifusImRemoteDataSource
 
     @Binds
     abstract fun bindRemotePicDataSource(remotePicDataSource: ServerPicDataSource): WaifusPicRemoteDataSource
+
+
 
     @Binds
     abstract fun bindLocationDataSource(locationDataSource: PlayServicesLocationDataSource): LocationDataSource
