@@ -28,6 +28,10 @@ class RoomImDataSource @Inject constructor(private val ImDao: WaifuImDao) : Waif
         ImDao.insertWaifuIm(waifu.fromDomainModel())
     }.fold(ifLeft = { it }, ifRight = { null })
 
+    override suspend fun deleteAll(): Error? = tryCall {
+        ImDao.deleteAll()
+    }.fold(ifLeft = { it }, ifRight = { null })
+
 }
 
 private fun List<WaifuImDbItem>.toDomainModel(): List<WaifuImItem> = map { it.toDomainModel() }

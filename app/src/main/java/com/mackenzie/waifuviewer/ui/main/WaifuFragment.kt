@@ -18,7 +18,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
     private val safeArgs: WaifuFragmentArgs by navArgs()
     private val picsViewModel: WaifuPicsViewModel by viewModels()
     private val imViewModel: WaifuImViewModel by viewModels()
-    private val waifuImAdapter = WaifuImAdapter{ mainState.onWaifuClicked(it) }
+    private val waifuImAdapter = WaifuImAdapter{ mainState.onWaifuImClicked(it) }
     private val waifuPicsAdapter = WaifuPicsAdapter{ mainState.onWaifuPicsClicked(it) }
     private lateinit var mainState: MainState
     private lateinit var bun :Bundle

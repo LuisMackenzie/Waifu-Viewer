@@ -8,6 +8,7 @@
         <entry key="..\:/Users/Mackenzie/AndroidStudioProjects/WaifuViewer/app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.21" />
         <entry key="..\:/Users/Mackenzie/AndroidStudioProjects/WaifuViewer/app/src/main/res/drawable/ic_failed.xml" value="0.2155" />
         <entry key="..\:/Users/Mackenzie/AndroidStudioProjects/WaifuViewer/app/src/main/res/drawable/ic_failed_white.xml" value="0.2155" />
+        <entry key="..\:/Users/Mackenzie/AndroidStudioProjects/WaifuViewer/app/src/main/res/drawable/ic_favorite_off.xml" value="0.233" />
         <entry key="..\:/Users/Mackenzie/AndroidStudioProjects/WaifuViewer/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1545" />
         <entry key="..\:/Users/Mackenzie/AndroidStudioProjects/WaifuViewer/app/src/main/res/layout/activity_detail.xml" value="0.2682291666666667" />
         <entry key="..\:/Users/Mackenzie/AndroidStudioProjects/WaifuViewer/app/src/main/res/layout/activity_main.xml" value="0.24351851851851852" />
@@ -15,6 +16,7 @@
         <entry key="..\:/Users/Mackenzie/AndroidStudioProjects/WaifuViewer/app/src/main/res/layout/activity_selector.xml" value="0.33" />
         <entry key="..\:/Users/Mackenzie/AndroidStudioProjects/WaifuViewer/app/src/main/res/layout/activity_waifu.xml" value="0.1983695652173913" />
         <entry key="..\:/Users/Mackenzie/AndroidStudioProjects/WaifuViewer/app/src/main/res/layout/fragment_detail.xml" value="0.1" />
+        <entry key="..\:/Users/Mackenzie/AndroidStudioProjects/WaifuViewer/app/src/main/res/layout/fragment_favorite.xml" value="0.24003623188405798" />
         <entry key="..\:/Users/Mackenzie/AndroidStudioProjects/WaifuViewer/app/src/main/res/layout/fragment_selector.xml" value="0.22" />
         <entry key="..\:/Users/Mackenzie/AndroidStudioProjects/WaifuViewer/app/src/main/res/layout/fragment_waifu.xml" value="0.213768115942029" />
         <entry key="..\:/Users/Mackenzie/AndroidStudioProjects/WaifuViewer/app/src/main/res/layout/spinner_item_calc.xml" value="0.2682291666666667" />

@@ -10,4 +10,5 @@ interface WaifusPicLocalDataSource {
     fun findPicById(id: Int): Flow<WaifuPicItem>
     suspend fun savePics(waifus: List<WaifuPicItem>): Error?
     suspend fun saveOnlyPics(waifu: WaifuPicItem): Error?
+    suspend fun deleteAll(): Error?
 }

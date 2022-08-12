@@ -30,6 +30,14 @@ class FavoriteDataSource @Inject constructor(private val favDao: FavoriteDao): F
         favDao.insertFavorite(waifu.fromDomainModel())
     }.fold(ifLeft = { it }, ifRight = { null })
 
+    override suspend fun delete(waifu: FavoriteItem): Error? = tryCall {
+        favDao.deleteFav(waifu.fromDomainModel())
+    }.fold(ifLeft = { it }, ifRight = { null })
+
+    override suspend fun deleteAll(): Error? = tryCall {
+        favDao.deleteAll()
+    }.fold(ifLeft = { it }, ifRight = { null })
+
 }
 
 private fun List<FavoriteDbItem>.toDomainModel(): List<FavoriteItem> = map { it.toDomainModel() }

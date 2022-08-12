@@ -106,7 +106,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
 
     private fun setUpElements() = with(binding) {
         btnWaifu.setOnClickListener {
-            navigateTo()
+            navigateTo(false)
         }
         sOrientation.setOnClickListener {
             if (sOrientation.isChecked) {
@@ -126,6 +126,10 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
         fab.setOnClickListener {
             imViewModel.loadErrorOrWaifu()
             // picsViewModel.loadErrorOrWaifu()
+        }
+        favorites.setOnClickListener {
+            navigateTo(true)
+            Toast.makeText(requireContext(), "Cargando Favoritos", Toast.LENGTH_SHORT).show()
         }
         backgroudImage = ivBackdrop
     }
@@ -166,7 +170,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
 
     }
 
-    private fun navigateTo() = with(binding) {
+    private fun navigateTo(favorite :Boolean) = with(binding) {
         val bun = bundleOf()
         bun.putBoolean(IS_SERVER_SELECTED, sServer.isChecked)
         bun.putBoolean(IS_NSFW_WAIFU, sNsfw.isChecked)
@@ -186,7 +190,14 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
             apply()
         }
 
-        mainState.onButtonGetWaifuClicked(bun)
+        if (favorite) {
+            // findNavController().navigate(R.id.action_mainFragment_to_favoritesFragment, bun)
+            mainState.onButtonFavoritesClicked(bun)
+        } else {
+            mainState.onButtonGetWaifuClicked(bun)
+        }
+
+        // mainState.onButtonGetWaifuClicked(bun)
 
     }
 

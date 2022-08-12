@@ -26,6 +26,10 @@ class RoomPicDataSource @Inject constructor(private val PicDao: WaifuPicDao) : W
         PicDao.insertWaifuPics(waifu.fromDomainModel())
     }.fold(ifLeft = { it }, ifRight = { null })
 
+    override suspend fun deleteAll(): Error? = tryCall {
+        PicDao.deleteAll()
+    }.fold(ifLeft = { it }, ifRight = { null })
+
 }
 
 private fun List<WaifuPicDbItem>.toDomainModel(): List<WaifuPicItem> = map { it.toDomainModel() }

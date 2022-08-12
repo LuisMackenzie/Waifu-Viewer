@@ -27,4 +27,7 @@ interface WaifuPicDao {
     @Delete
     fun deletePics(waifu: WaifuPicDbItem)
 
+    @Query("DELETE FROM WaifuPicDbItem")
+    suspend fun deleteAll()
+
 }

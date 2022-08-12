@@ -27,4 +27,7 @@ interface FavoriteDao {
     @Delete
     fun deleteFav(waifu: FavoriteDbItem)
 
+    @Query("DELETE FROM FavoriteDbItem")
+    suspend fun deleteAll()
+
 }

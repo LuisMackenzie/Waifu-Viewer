@@ -22,7 +22,7 @@ class MainState(
     private val navController: NavController,
     private val permissionRequester: PermissionRequester
 ) {
-    fun onWaifuClicked(waifu: WaifuImItem) {
+    fun onWaifuImClicked(waifu: WaifuImItem) {
         val action = WaifuFragmentDirections.actionWaifuImToDetail(waifu.id)
         navController.navigate(action)
     }
@@ -34,6 +34,11 @@ class MainState(
 
     fun onButtonGetWaifuClicked(bun: Bundle) {
         val action = SelectorFragmentDirections.actionSelectorToWaifu(bun)
+        navController.navigate(action)
+    }
+
+    fun onButtonFavoritesClicked(bun: Bundle) {
+        val action = SelectorFragmentDirections.actionSelectorToFavorites(bun)
         navController.navigate(action)
     }
 

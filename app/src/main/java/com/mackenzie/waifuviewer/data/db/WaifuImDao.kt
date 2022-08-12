@@ -27,4 +27,7 @@ interface WaifuImDao {
     @Delete
     fun deleteIm(waifu: WaifuImDbItem)
 
+    @Query("DELETE FROM WaifuImDbItem")
+    suspend fun deleteAll()
+
 }

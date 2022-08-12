@@ -18,6 +18,14 @@
             app:launchSingleTop="false"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@android:anim/slide_out_right" />
+        <action
+            android:id="@+id/action_selector_to_favorites"
+            app:destination="@id/favorites_dest"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:launchSingleTop="false"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@android:anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/waifu_dest"
@@ -42,6 +50,24 @@
             android:name="bundleInfo"
             app:argType="android.os.Bundle" />
     </fragment>
+
+    <fragment
+        android:id="@+id/favorites_dest"
+        android:name="com.mackenzie.waifuviewer.ui.favs.FavoriteFragment"
+        android:label="fragment_favorites"
+        tools:layout="@layout/fragment_favorite" >
+        <action
+            android:id="@+id/action_favorites_to_detail"
+            app:destination="@id/detail_dest"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@android:anim/slide_out_right" />
+        <argument
+            android:name="bundleInfo"
+            app:argType="android.os.Bundle" />
+    </fragment>
+
     <fragment
         android:id="@+id/detail_dest"
         android:name="com.mackenzie.waifuviewer.ui.detail.DetailFragment"
