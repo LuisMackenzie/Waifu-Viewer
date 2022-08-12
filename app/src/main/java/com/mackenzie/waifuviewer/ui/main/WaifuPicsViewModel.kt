@@ -11,6 +11,7 @@ import com.mackenzie.waifuviewer.usecases.GetWaifuPicUseCase
 import com.mackenzie.waifuviewer.usecases.RequestWaifuPicUseCase
 import com.mackenzie.waifuviewer.ui.common.Scope
 import com.mackenzie.waifuviewer.ui.main.WaifuImViewModel
+import com.mackenzie.waifuviewer.usecases.ClearWaifuPicUseCase
 import com.mackenzie.waifuviewer.usecases.RequestMoreWaifuPicUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -21,7 +22,8 @@ import javax.inject.Inject
 class WaifuPicsViewModel @Inject constructor(
     getWaifuPicUseCase: GetWaifuPicUseCase,
     private val requestWaifuPicUseCase: RequestWaifuPicUseCase,
-    private val requestMorePicUseCase: RequestMoreWaifuPicUseCase
+    private val requestMorePicUseCase: RequestMoreWaifuPicUseCase,
+    private val clearWaifuPicUseCase: ClearWaifuPicUseCase
     ): ViewModel(), Scope by Scope.Impl() {
 
     private val _state = MutableStateFlow(UiState())
@@ -53,9 +55,10 @@ class WaifuPicsViewModel @Inject constructor(
         }
     }
 
-    fun onClearPicsDatabase(favoriteItem: FavoriteItem) {
+    fun onClearPicsDatabase() {
         viewModelScope.launch {
-
+            val error = clearWaifuPicUseCase()
+            _state.update { _state.value.copy(error = error) }
         }
     }
 

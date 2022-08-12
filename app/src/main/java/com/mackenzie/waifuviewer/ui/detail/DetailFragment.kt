@@ -14,12 +14,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.databinding.FragmentDetailBinding
-import com.mackenzie.waifuviewer.domain.WaifuImItem
-import com.mackenzie.waifuviewer.domain.WaifuPicItem
+import com.mackenzie.waifuviewer.domain.DownloadModel
 import com.mackenzie.waifuviewer.ui.common.SaveImage
 import com.mackenzie.waifuviewer.ui.common.loadUrl
 import com.mackenzie.waifuviewer.ui.common.visible
-import com.mackenzie.waifuviewer.ui.favs.FavoriteViewModel
 import com.mackenzie.waifuviewer.ui.main.MainState
 import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_FAVORITES
 import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_SERVER_SELECTED
@@ -228,9 +226,3 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
 
 
 }
-
-data class DownloadModel(
-    val title: String,
-    val link: String,
-    val imageExt: String
-)

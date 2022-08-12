@@ -124,7 +124,8 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
             Toast.makeText(requireContext(), "More Waifus are coming.", Toast.LENGTH_SHORT).show()
         }
         fabDelete.setOnClickListener {
-            Toast.makeText(requireContext(), "Delete Pics server is not implemented yet", Toast.LENGTH_SHORT).show()
+            picsViewModel.onClearPicsDatabase()
+            Toast.makeText(requireContext(), "Some waifus are gone. PICS", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -173,7 +174,8 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
             Toast.makeText(requireContext(), "More Waifus are coming.", Toast.LENGTH_SHORT).show()
         }
         fabDelete.setOnClickListener {
-            Toast.makeText(requireContext(), "Delete IM server is not implemented yet", Toast.LENGTH_SHORT).show()
+            imViewModel.onClearImDatabase()
+            Toast.makeText(requireContext(), "Some waifus are gone. IM", Toast.LENGTH_SHORT).show()
         }
     }
 

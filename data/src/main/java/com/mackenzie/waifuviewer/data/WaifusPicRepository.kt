@@ -46,6 +46,11 @@ class WaifusPicRepository @Inject constructor(
         // localPicDataSource.saveOnlyPics(waifuPic)
     }
 
+    suspend fun requestClearWaifusPic(): Error? {
+        val error = localPicDataSource.deleteAll()
+        if (error != null) return error else return null
+    }
+
     suspend fun switchPicsFavorite(picsItem: WaifuPicItem) :Error? {
         val updatedWaifu = picsItem.copy(isFavorite = !picsItem.isFavorite)
         favDataSource.savePic(updatedWaifu)

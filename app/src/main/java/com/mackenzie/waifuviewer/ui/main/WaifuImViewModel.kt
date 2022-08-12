@@ -10,6 +10,7 @@ import com.mackenzie.waifuviewer.domain.WaifuImItem
 import com.mackenzie.waifuviewer.usecases.GetWaifuImUseCase
 import com.mackenzie.waifuviewer.usecases.RequestWaifuImUseCase
 import com.mackenzie.waifuviewer.ui.common.Scope
+import com.mackenzie.waifuviewer.usecases.ClearWaifuImUseCase
 import com.mackenzie.waifuviewer.usecases.RequestMoreWaifuImUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -20,7 +21,8 @@ import javax.inject.Inject
 class WaifuImViewModel @Inject constructor(
     getWaifuImUseCase: GetWaifuImUseCase,
     private val requestWaifuImUseCase: RequestWaifuImUseCase,
-    private val requestMoreImUseCase: RequestMoreWaifuImUseCase
+    private val requestMoreImUseCase: RequestMoreWaifuImUseCase,
+    private val clearWaifuImUseCase: ClearWaifuImUseCase
     ): ViewModel(), Scope by Scope.Impl() {
 
     private val _state = MutableStateFlow(UiState())
@@ -73,9 +75,10 @@ class WaifuImViewModel @Inject constructor(
         }
     }
 
-    fun onClearImDatabase(favoriteItem: FavoriteItem) {
+    fun onClearImDatabase() {
         viewModelScope.launch {
-
+            val error = clearWaifuImUseCase()
+            _state.update { _state.value.copy(error = error) }
         }
     }
 
