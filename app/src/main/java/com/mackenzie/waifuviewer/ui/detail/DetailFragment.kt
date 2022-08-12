@@ -92,6 +92,8 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
             ivDetail.loadUrl(it.url)
             if (it.isFavorite) {
                 fabFavorites.setImageResource(R.drawable.ic_favorite_on)
+            } else {
+                fabFavorites.setImageResource(R.drawable.ic_favorite_off)
             }
             prepareDownload(it.title, it.url, it.url.substringAfterLast('.'))
         }
@@ -111,6 +113,8 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
             ivDetail.loadUrl(it.url)
             if (it.isFavorite) {
                 fabPics.setImageResource(R.drawable.ic_favorite_on)
+            } else {
+                fabPics.setImageResource(R.drawable.ic_favorite_off)
             }
             prepareDownload(title, it.url, it.url.substringAfterLast('.'))
         }
@@ -130,6 +134,8 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
             ivDetail.loadUrl(it.url)
             if (it.isFavorite) {
                 fabIm.setImageResource(R.drawable.ic_favorite_on)
+            } else {
+                fabIm.setImageResource(R.drawable.ic_favorite_off)
             }
             prepareDownload(it.imageId.toString(), it.url, it.url.substringAfterLast('.'))
         }

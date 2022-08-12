@@ -120,12 +120,12 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
 
         fabRecycler.setOnClickListener {
             picsViewModel.onRequestMore(isNsfw, categoryTag)
-            Toast.makeText(requireContext(), "More Waifus are coming.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "More Waifus are coming", Toast.LENGTH_SHORT).show()
         }
         fabDelete.setOnClickListener {
             picsViewModel.onClearPicsDatabase()
             activity?.onBackPressed()
-            Toast.makeText(requireContext(), "Some waifus are gone. PICS", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Some waifus are gone", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -161,12 +161,12 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
 
         fabRecycler.setOnClickListener {
             imViewModel.onRequestMore(isNsfw, isGif, categoryTag, orientation)
-            Toast.makeText(requireContext(), "More Waifus are coming.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "More Waifus are coming", Toast.LENGTH_SHORT).show()
         }
         fabDelete.setOnClickListener {
             imViewModel.onClearImDatabase()
             activity?.onBackPressed()
-            Toast.makeText(requireContext(), "Some waifus are gone. IM", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Some waifus are gone", Toast.LENGTH_SHORT).show()
         }
     }
 
