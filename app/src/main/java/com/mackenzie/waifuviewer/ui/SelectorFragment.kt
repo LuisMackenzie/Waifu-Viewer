@@ -22,6 +22,7 @@ import com.mackenzie.waifuviewer.ui.common.loadUrl
 import com.mackenzie.waifuviewer.ui.main.MainState
 import com.mackenzie.waifuviewer.ui.main.SelectorImViewModel
 import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.CATEGORY_TAG
+import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_FAVORITES
 import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_GIF_WAIFU
 import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_LANDS_WAIFU
 import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_NSFW_WAIFU
@@ -129,7 +130,6 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
         }
         favorites.setOnClickListener {
             navigateTo(true)
-            Toast.makeText(requireContext(), "Cargando Favoritos", Toast.LENGTH_SHORT).show()
         }
         backgroudImage = ivBackdrop
     }
@@ -187,17 +187,16 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
         with (sharedPref.edit()) {
             putBoolean(IS_SERVER_SELECTED, sServer.isChecked)
+            putBoolean(IS_FAVORITES, favorite)
             apply()
         }
 
         if (favorite) {
-            // findNavController().navigate(R.id.action_mainFragment_to_favoritesFragment, bun)
             mainState.onButtonFavoritesClicked(bun)
         } else {
             mainState.onButtonGetWaifuClicked(bun)
         }
 
-        // mainState.onButtonGetWaifuClicked(bun)
 
     }
 

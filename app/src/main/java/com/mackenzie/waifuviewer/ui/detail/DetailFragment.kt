@@ -14,10 +14,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.databinding.FragmentDetailBinding
+import com.mackenzie.waifuviewer.domain.WaifuImItem
+import com.mackenzie.waifuviewer.domain.WaifuPicItem
 import com.mackenzie.waifuviewer.ui.common.SaveImage
 import com.mackenzie.waifuviewer.ui.common.loadUrl
 import com.mackenzie.waifuviewer.ui.common.visible
+import com.mackenzie.waifuviewer.ui.favs.FavoriteViewModel
 import com.mackenzie.waifuviewer.ui.main.MainState
+import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_FAVORITES
 import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_SERVER_SELECTED
 import com.mackenzie.waifuviewer.ui.main.buildMainState
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,11 +35,14 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
 
     private val picsViewModel: DetailPicsViewModel by viewModels()
     private val imViewModel: DetailImViewModel by viewModels()
+    private val favsViewModel: DetailFavsViewModel by viewModels()
     private lateinit var mainState: MainState
+    private lateinit var download: DownloadModel
     private var mainServer: Boolean = false
-    private var title: String? = null
-    private var link: String? = null
-    private var imageExt:String? = null
+    private var favoriteView: Boolean = false
+    // private var title: String? = null
+    // private var link: String? = null
+    // private var imageExt:String? = null
     private var isWritePermissionGranted: Boolean = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -44,6 +51,7 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
         val binding = FragmentDetailBinding.bind(view)
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
         mainServer = sharedPref.getBoolean(IS_SERVER_SELECTED, false)
+        favoriteView = sharedPref.getBoolean(IS_FAVORITES, false)
         binding.setUpElements()
 
     }
@@ -68,16 +76,45 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
         }
     }
 
+    private fun FragmentDetailBinding.launchFavoriteCollect() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                favsViewModel.state.collect {
+                    withFavsUpdateUI(it)
+                }
+            }
+        }
+    }
+
+    private fun FragmentDetailBinding.withFavsUpdateUI(state: DetailFavsViewModel.UiState) {
+
+        pbLoading.visibility = View.GONE
+        state.waifu?.let {
+            tvDetail.text = it.url.substringAfterLast('/').substringBeforeLast('.')
+            ivDetail.loadUrl(it.url)
+            if (it.isFavorite) {
+                fabFavorites.setImageResource(R.drawable.ic_favorite_on)
+            }
+            prepareDownload(it.title, it.url, it.url.substringAfterLast('.'))
+        }
+
+        state.error?.let {
+            tvDetail.text = "Hubo algun Error"
+            ivDetail.setImageResource(R.drawable.ic_offline_background)
+        }
+    }
+
     private fun FragmentDetailBinding.withPicsUpdateUI(state: DetailPicsViewModel.UiState) {
 
         pbLoading.visibility = View.GONE
         state.waifuPic?.let {
-            tvDetail.text = it.url.substringAfterLast('/').substringBeforeLast('.')
+            val title = it.url.substringAfterLast('/').substringBeforeLast('.')
+            tvDetail.text = title
             ivDetail.loadUrl(it.url)
             if (it.isFavorite) {
-                favPics.setImageResource(R.drawable.ic_favorite_on)
+                fabPics.setImageResource(R.drawable.ic_favorite_on)
             }
-            prepareDownloadPic(it)
+            prepareDownload(title, it.url, it.url.substringAfterLast('.'))
         }
 
         state.error?.let {
@@ -94,9 +131,9 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
             tvDetail.text = it.imageId.toString()
             ivDetail.loadUrl(it.url)
             if (it.isFavorite) {
-                favIm.setImageResource(R.drawable.ic_favorite_on)
+                fabIm.setImageResource(R.drawable.ic_favorite_on)
             }
-            prepareDownloadIm(it)
+            prepareDownload(it.imageId.toString(), it.url, it.url.substringAfterLast('.'))
         }
 
         state.error?.let {
@@ -105,33 +142,34 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
         }
     }
 
-    private fun prepareDownloadPic(waifuPic: com.mackenzie.waifuviewer.domain.WaifuPicItem) {
-        title = waifuPic.url.substringAfterLast('/')
-        link = waifuPic.url
-        imageExt = waifuPic.url.substringAfterLast('.')
-    }
-
-    private fun prepareDownloadIm(waifuIm: com.mackenzie.waifuviewer.domain.WaifuImItem) {
-        title = waifuIm.file
-        link = waifuIm.url
-        imageExt = waifuIm.url.substringAfterLast('.')
+    private fun prepareDownload(title: String, link: String, imageExt: String) {
+        download = DownloadModel(title, link, imageExt)
     }
 
     private fun FragmentDetailBinding.setUpElements() {
-        if (mainServer) {
-            launchPicsCollect()
-            favPics.visible = true
-            favIm.visible = false
+        if (favoriteView) {
+            launchFavoriteCollect()
+            fabFavorites.visible = true
+            fabPics.visible = false
+            fabIm.visible = false
         } else {
-            launchImCollect()
-            favPics.visible = false
-            favIm.visible = true
-
+            if (mainServer) {
+                launchPicsCollect()
+                fabPics.visible = true
+                fabIm.visible = false
+                fabFavorites.visible = false
+            } else {
+                launchImCollect()
+                fabIm.visible = true
+                fabPics.visible = false
+                fabFavorites.visible = false
+            }
         }
 
-        favIm.setOnClickListener { imViewModel.onFavoriteClicked() }
-        favPics.setOnClickListener { picsViewModel.onFavoriteClicked() }
-        fab.setOnClickListener {
+        fabIm.setOnClickListener { imViewModel.onFavoriteClicked() }
+        fabPics.setOnClickListener { picsViewModel.onFavoriteClicked() }
+        fabFavorites.setOnClickListener { favsViewModel.onFavoriteClicked() }
+        fabDownload.setOnClickListener {
             if (isWritePermissionGranted != true ) {
                 RequestPermision()
             }
@@ -146,7 +184,7 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
     }
 
     private fun requestDownload() {
-        downloadImage(title!!, link!!, imageExt!!)
+        downloadImage(download.title, download.link, download.imageExt)
     }
 
     private fun downloadImage(title: String, link: String, fileType: String) {
@@ -190,3 +228,9 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
 
 
 }
+
+data class DownloadModel(
+    val title: String,
+    val link: String,
+    val imageExt: String
+)

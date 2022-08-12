@@ -51,14 +51,3 @@ class DetailImViewModel @Inject constructor (
 
 }
 
-/*
-@Suppress("UNCHECKED_CAST")
-class DetailImViewModelFactory(
-    private val waifuId: Int,
-    private val findWaifuImUseCase: FindWaifuImUseCase,
-    private val switchImFavoriteUseCase : SwitchImFavoriteUseCase
-    ) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return DetailImViewModel(waifuId, findWaifuImUseCase, switchImFavoriteUseCase) as T
-    }
-}*/

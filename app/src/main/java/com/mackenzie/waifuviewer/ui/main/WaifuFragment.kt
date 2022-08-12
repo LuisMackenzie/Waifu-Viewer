@@ -98,10 +98,6 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         val isNsfw = bun.getBoolean(IS_NSFW_WAIFU)
         val categoryTag = bun.getString(CATEGORY_TAG)!!
 
-
-
-        // binding.recyclerIm.visibility = View.GONE
-
         state.waifus?.let { savedPicWaifus ->
             waifuPicsAdapter.submitList(savedPicWaifus.reversed())
             // waifuPic = savedPicWaifus
@@ -126,6 +122,9 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
             picsViewModel.onRequestMore(isNsfw, categoryTag)
             activity?.onBackPressed()
             Toast.makeText(requireContext(), "More Waifus are coming.", Toast.LENGTH_SHORT).show()
+        }
+        fabDelete.setOnClickListener {
+            Toast.makeText(requireContext(), "Delete Pics server is not implemented yet", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -156,21 +155,6 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
                 Toast.makeText(requireContext(), "Total Waifus = $count", Toast.LENGTH_SHORT).show()
                 numIsShowed = true
             }
-
-            /*if (waifuImAdapter.itemCount == 0) {
-                waifuImAdapter.submitList(savedImWaifus)
-                count = savedImWaifus.size
-                Toast.makeText(requireContext(), "Total Waifus = $count", Toast.LENGTH_SHORT).show()
-                Toast.makeText(requireContext(), "IM Waifus ID First ${savedImWaifus.first().id}", Toast.LENGTH_SHORT).show()
-                Toast.makeText(requireContext(), "IM Waifus ID Last ${savedImWaifus.last().id}", Toast.LENGTH_SHORT).show()
-            }*/
-
-            // waifuImAdapter.submitList(waifuImAdapter.currentList + savedImWaifus)
-            // waifuImAdapter.submitList(savedImWaifus)
-            // waifuImAdapter.imAdapter.addAll(savedImWaifus)
-            // waifuImAdapter.currentList.addAll(savedImWaifus)
-            // Toast.makeText(requireContext(), "Showing IM Waifus $savedImWaifus", Toast.LENGTH_SHORT).show()
-
         }
 
         state.error?.let {
@@ -188,10 +172,14 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
             activity?.onBackPressed()
             Toast.makeText(requireContext(), "More Waifus are coming.", Toast.LENGTH_SHORT).show()
         }
+        fabDelete.setOnClickListener {
+            Toast.makeText(requireContext(), "Delete IM server is not implemented yet", Toast.LENGTH_SHORT).show()
+        }
     }
 
     companion object {
         const val IS_SERVER_SELECTED = "WaifuFragment:server"
+        const val IS_FAVORITES = "WaifuFragment:favorites"
         const val IS_NSFW_WAIFU = "WaifuFragment:nsfw"
         const val IS_GIF_WAIFU = "WaifuFragment:gif"
         const val IS_LANDS_WAIFU = "WaifuFragment:lands"

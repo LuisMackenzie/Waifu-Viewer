@@ -52,11 +52,11 @@
         tools:text="Waifu Name ID" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fav_pics"
+        android:id="@+id/fab_pics"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|start"
-        android:layout_margin="32dp"
+        android:layout_margin="12dp"
         android:clickable="true"
         android:visibility="gone"
         android:src="@drawable/ic_favorite_off"
@@ -64,11 +64,11 @@
         android:focusable="true" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fav_im"
+        android:id="@+id/fab_im"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|start"
-        android:layout_margin="32dp"
+        android:layout_margin="12dp"
         android:clickable="true"
         android:visibility="gone"
         android:src="@drawable/ic_favorite_off"
@@ -76,11 +76,23 @@
         android:focusable="true" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
+        android:id="@+id/fab_favorites"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:layout_margin="12dp"
+        android:clickable="true"
+        android:visibility="gone"
+        android:src="@drawable/ic_favorite_off"
+        android:contentDescription="@string/download_image"
+        android:focusable="true" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_download"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="32dp"
+        android:layout_margin="12dp"
         android:clickable="true"
         android:src="@drawable/ic_baseline_download"
         android:contentDescription="@string/download_image"

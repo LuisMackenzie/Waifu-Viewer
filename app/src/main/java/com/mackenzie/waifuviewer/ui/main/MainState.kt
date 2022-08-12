@@ -9,10 +9,12 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.domain.Error
+import com.mackenzie.waifuviewer.domain.FavoriteItem
 import com.mackenzie.waifuviewer.domain.WaifuImItem
 import com.mackenzie.waifuviewer.domain.WaifuPicItem
 import com.mackenzie.waifuviewer.ui.SelectorFragmentDirections
 import com.mackenzie.waifuviewer.ui.common.PermissionRequester
+import com.mackenzie.waifuviewer.ui.favs.FavoriteFragmentDirections
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -29,6 +31,11 @@ class MainState(
 
     fun onWaifuPicsClicked(waifu: WaifuPicItem) {
         val action = WaifuFragmentDirections.actionWaifuPicsToDetail(waifu.id)
+        navController.navigate(action)
+    }
+
+    fun onWaifuFavoriteClicked(waifu: FavoriteItem) {
+        val action = FavoriteFragmentDirections.actionFavoritesToDetail(waifu.id)
         navController.navigate(action)
     }
 

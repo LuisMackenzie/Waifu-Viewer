@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.mackenzie.waifuviewer.data.toError
 import com.mackenzie.waifuviewer.domain.Error
+import com.mackenzie.waifuviewer.domain.FavoriteItem
 import com.mackenzie.waifuviewer.domain.WaifuPicItem
 import com.mackenzie.waifuviewer.usecases.GetWaifuPicUseCase
 import com.mackenzie.waifuviewer.usecases.RequestWaifuPicUseCase
@@ -52,36 +53,11 @@ class WaifuPicsViewModel @Inject constructor(
         }
     }
 
-    /*fun onRequestMore(isNsfw: Boolean, tag: String) {
+    fun onClearPicsDatabase(favoriteItem: FavoriteItem) {
         viewModelScope.launch {
-            _state.value = _state.value.copy(isLoading = true)
-            if (isNsfw) {
-                if (tag == "all") {
-                    val error = requestMorePicUseCase("nsfw", "waifu")
-                    error.fold(
-                        ifLeft = { cause -> _state.update{ it.copy(error = cause) } },
-                        ifRight = { waifusPics -> _state.update{ it.copy(isLoading = false, waifus = waifusPics) } })
-                } else {
-                    val error = requestMorePicUseCase("nsfw", tag)
-                    error.fold(
-                        ifLeft = { cause -> _state.update{ it.copy(error = cause) } },
-                        ifRight = { waifusPics -> _state.update{ it.copy(isLoading = false, waifus = waifusPics) } })
-                }
-            } else {
-                if (tag == "all") {
-                    val error = requestMorePicUseCase("sfw", "waifu")
-                    error.fold(
-                        ifLeft = { cause -> _state.update{ it.copy(error = cause) } },
-                        ifRight = { waifusPics -> _state.update{ it.copy(isLoading = false, waifus = waifusPics) } })
-                } else {
-                    val error = requestMorePicUseCase("sfw", tag)
-                    error.fold(
-                        ifLeft = { cause -> _state.update{ it.copy(error = cause) } },
-                        ifRight = { waifusPics -> _state.update{ it.copy(isLoading = false, waifus = waifusPics) } })
-                }
-            }
+
         }
-    }*/
+    }
 
     private fun waifusGetter(isNsfw: String, tag: String) {
         viewModelScope.launch {
@@ -116,14 +92,3 @@ class WaifuPicsViewModel @Inject constructor(
     )
 }
 
-/*
-@Suppress("UNCHECKED_CAST")
-class WaifuPicsViewModelFactory(
-    private val getWaifuPicUseCase: GetWaifuPicUseCase,
-    private val requestWaifuPicUseCase: RequestWaifuPicUseCase,
-    private val requestMorePicUseCase: RequestMoreWaifuPicUseCase
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return WaifuPicsViewModel(getWaifuPicUseCase, requestWaifuPicUseCase, requestMorePicUseCase) as T
-    }
-}*/

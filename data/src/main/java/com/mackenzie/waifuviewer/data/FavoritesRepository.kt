@@ -12,9 +12,9 @@ class FavoritesRepository @Inject constructor(
 
     val savedFavorites = favDataSource.favoriteWaifus
 
-    fun findImById(id: Int): Flow<FavoriteItem> = favDataSource.findFavById(id)
+    fun findFavoriteById(id: Int): Flow<FavoriteItem> = favDataSource.findFavById(id)
 
-    suspend fun switchImFavorite(imItem: FavoriteItem): Error? {
+    suspend fun switchFavorite(imItem: FavoriteItem): Error? {
         val updatedWaifu = imItem.copy(isFavorite = !imItem.isFavorite)
         return favDataSource.save(updatedWaifu)
     }

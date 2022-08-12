@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.mackenzie.waifuviewer.data.toError
 import com.mackenzie.waifuviewer.domain.Error
+import com.mackenzie.waifuviewer.domain.FavoriteItem
 import com.mackenzie.waifuviewer.domain.WaifuImItem
 import com.mackenzie.waifuviewer.usecases.GetWaifuImUseCase
 import com.mackenzie.waifuviewer.usecases.RequestWaifuImUseCase
@@ -72,17 +73,11 @@ class WaifuImViewModel @Inject constructor(
         }
     }
 
-    /*private fun getWaifusIm() {
+    fun onClearImDatabase(favoriteItem: FavoriteItem) {
         viewModelScope.launch {
-            getWaifuImUseCase()
-                .catch { cause -> _state.update { UiState(error = cause.toError()) }}
-                .collect{ WaifusIm -> _state.update { UiState(waifus = WaifusIm) } }
-        }
-    }*/
 
-    /*private fun getWaifusIm(): Flow<List<WaifuImItem>> {
-        return _state.map { it.waifus }
-    }*/
+        }
+    }
 
     data class UiState(
         val isLoading: Boolean = false,
@@ -90,15 +85,3 @@ class WaifuImViewModel @Inject constructor(
         val error: Error? = null
     )
 }
-
-/*
-@Suppress("UNCHECKED_CAST")
-class WaifuImViewModelFactory(
-    private val getWaifuImUseCase: GetWaifuImUseCase,
-    private val requestWaifuImUseCase: RequestWaifuImUseCase,
-    private val requestMoreImUseCase: RequestMoreWaifuImUseCase
-    ) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return WaifuImViewModel(getWaifuImUseCase, requestWaifuImUseCase, requestMoreImUseCase) as T
-    }
-}*/

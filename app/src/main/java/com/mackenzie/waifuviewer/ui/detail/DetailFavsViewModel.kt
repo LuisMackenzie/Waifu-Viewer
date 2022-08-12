@@ -2,12 +2,12 @@ package com.mackenzie.waifuviewer.ui.detail
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.mackenzie.waifuviewer.domain.WaifuPicItem
 import com.mackenzie.waifuviewer.domain.Error
-import com.mackenzie.waifuviewer.usecases.FindWaifuPicUseCase
-import com.mackenzie.waifuviewer.usecases.SwitchPicFavoriteUseCase
+import com.mackenzie.waifuviewer.domain.FavoriteItem
+import com.mackenzie.waifuviewer.domain.WaifuImItem
+import com.mackenzie.waifuviewer.usecases.FindFavoriteUseCase
+import com.mackenzie.waifuviewer.usecases.SwitchFavoriteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,37 +17,35 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class DetailPicsViewModel @Inject constructor(
+class DetailFavsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    findWaifuPicUseCase: FindWaifuPicUseCase,
-    private val switchPicFavoriteUseCase: SwitchPicFavoriteUseCase
+    findFavoriteUseCase: FindFavoriteUseCase,
+    private val switchFavoriteUseCase : SwitchFavoriteUseCase
     ): ViewModel() {
 
     private val _state = MutableStateFlow(UiState())
     val state: StateFlow<UiState> = _state.asStateFlow()
     private val waifuId = DetailFragmentArgs.fromSavedStateHandle(savedStateHandle).waifuId
 
-
     init {
         viewModelScope.launch {
-            findWaifuPicUseCase(waifuId).collect {
-                _state.value = UiState(waifuPic = it)
+            findFavoriteUseCase(waifuId).collect {
+                _state.value = UiState(waifu = it)
             }
         }
     }
 
     fun onFavoriteClicked() {
         viewModelScope.launch {
-            _state.value.waifuPic?.let { waifu ->
-                val error = switchPicFavoriteUseCase(waifu)
+            _state.value.waifu?.let { waifu ->
+                val error = switchFavoriteUseCase(waifu)
                 _state.update { it.copy(error = error) }
             }
         }
     }
 
     data class UiState(
-        val waifuPic: WaifuPicItem? = null,
+        val waifu: FavoriteItem? = null,
         val error: Error? = null
     )
-
 }
