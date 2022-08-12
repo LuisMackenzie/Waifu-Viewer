@@ -38,6 +38,7 @@ private fun FavoriteDbItem.toDomainModel(): FavoriteItem =
     FavoriteItem(
         id,
         url,
+        title,
         isFavorite
     )
 
@@ -47,6 +48,7 @@ private fun WaifuPicItem.fromPicDomainModel(): FavoriteDbItem =
     FavoriteDbItem(
         id = 0,
         url,
+        title = url.substringAfterLast('/').substringBeforeLast('.'),
         isFavorite
     )
 
@@ -56,6 +58,7 @@ private fun WaifuImItem.fromImDomainModel(): FavoriteDbItem =
     FavoriteDbItem(
         id = 0,
         url,
+        title = imageId.toString(),
         isFavorite
     )
 
@@ -63,5 +66,6 @@ private fun FavoriteItem.fromDomainModel(): FavoriteDbItem =
     FavoriteDbItem(
         id,
         url,
+        title,
         isFavorite
     )
