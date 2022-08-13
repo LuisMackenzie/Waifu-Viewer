@@ -8,19 +8,21 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.databinding.FragmentFavoriteBinding
+import com.mackenzie.waifuviewer.domain.FavoriteItem
 import com.mackenzie.waifuviewer.ui.common.launchAndCollect
 import com.mackenzie.waifuviewer.ui.main.MainState
 import com.mackenzie.waifuviewer.ui.main.buildMainState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
+class FavoriteFragment : Fragment(R.layout.fragment_favorite), FavoriteAdapter.OnItemClickListener {
 
-    // private val safeArgs: FavoriteFragmentArgs by navArgs()
     private val viewModel: FavoriteViewModel by viewModels()
     private lateinit var mainState: MainState
     private var numIsShowed : Boolean = false
-    private val favoriteAdapter = FavoriteAdapter{ mainState.onWaifuFavoriteClicked(it) }
+    // private val favoriteAdapter = FavoriteAdapter { mainState.onWaifuFavoriteClicked(it) }
+    private val favoriteAdapter = FavoriteAdapter(this)
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -34,6 +36,10 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
         viewLifecycleOwner.launchAndCollect(viewModel.state) { binding.updateUI(it) }
 
 
+    }
+
+    fun onDeleteFavorite(waifu: FavoriteItem) {
+       viewModel.onDeleteFavorite(waifu)
     }
 
     private fun FragmentFavoriteBinding.updateUI(state: FavoriteViewModel.UiState) {
@@ -54,6 +60,7 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
             mainState.errorToString(it)
             ivError.visibility = View.VISIBLE
             tvError.visibility = View.VISIBLE
+            Toast.makeText(requireContext(), it.toString(), Toast.LENGTH_SHORT).show()
         }
 
         state.isLoading.let {
@@ -61,9 +68,18 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
         }
 
         fabRecycler.setOnClickListener {
-            Toast.makeText(requireContext(), "Delete Favorites no implemented yet", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Delete All Favorites no implemented yet. Try Long Press on a waifu", Toast.LENGTH_SHORT).show()
         }
 
+    }
+
+    override fun onClick(waifu: FavoriteItem) {
+        mainState.onWaifuFavoriteClicked(waifu)
+    }
+
+    override fun onLongClick(waifu: FavoriteItem) {
+        viewModel.onDeleteFavorite(waifu)
+        Toast.makeText(requireContext(), "Waifu Deleted", Toast.LENGTH_SHORT).show()
     }
 
 }

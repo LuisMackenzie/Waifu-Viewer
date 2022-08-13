@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -101,6 +102,7 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
         state.error?.let {
             tvDetail.text = "Hubo algun Error"
             ivDetail.setImageResource(R.drawable.ic_offline_background)
+            Toast.makeText(requireContext(), it.toString(), Toast.LENGTH_SHORT).show()
         }
     }
 

@@ -12,7 +12,7 @@ import com.mackenzie.waifuviewer.ui.common.inflate
 import com.mackenzie.waifuviewer.ui.common.loadUrl
 
 class FavoriteAdapter(
-    private val listener: (FavoriteItem) -> Unit
+    private val listener: OnItemClickListener
     ): ListAdapter<FavoriteItem, FavoriteAdapter.ViewHolder>(
     basicDiffUtil { old, new -> old.id == new.id }) {
 
@@ -24,11 +24,14 @@ class FavoriteAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val waifuItem = getItem(position)
         holder.bind(waifuItem)
-        holder.itemView.setOnClickListener { listener(waifuItem) }
-        // holder.itemView.setOnLongClickListener { viewModel.onDeleteFavorite(waifuItem) }
+        holder.itemView.setOnClickListener { listener.onClick(waifuItem) }
+        holder.itemView.setOnLongClickListener { listener.onLongClick(waifuItem); true }
+        // holder.itemView.setOnLongClickListener { viewModel.onDeleteFavorite(waifuItem); true }
     }
 
     inner class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
+
+
 
         private val binding = ViewMediaItemBinding.bind(view)
         fun bind(waifu: FavoriteItem) = with(binding) {
@@ -37,6 +40,11 @@ class FavoriteAdapter(
             waifuThumb.loadUrl(waifu.url)
             ivFavs.visibility = if (waifu.isFavorite) View.VISIBLE else View.GONE
         }
+    }
+
+    interface OnItemClickListener{
+        fun onClick(waifu: FavoriteItem)
+        fun onLongClick(waifu: FavoriteItem)
     }
 
 }

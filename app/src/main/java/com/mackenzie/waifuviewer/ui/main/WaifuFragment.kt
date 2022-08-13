@@ -112,6 +112,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
             mainState.errorToString(it)
             ivError.visibility = View.VISIBLE
             tvError.visibility = View.VISIBLE
+            Toast.makeText(requireContext(), it.toString(), Toast.LENGTH_SHORT).show()
         }
 
         state.isLoading.let {
@@ -153,6 +154,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
             mainState.errorToString(it)
             ivError.visibility = View.VISIBLE
             tvError.visibility = View.VISIBLE
+            Toast.makeText(requireContext(), it.toString(), Toast.LENGTH_SHORT).show()
         }
 
         state.isLoading.let {

@@ -19,4 +19,13 @@ class FavoritesRepository @Inject constructor(
         return favDataSource.save(updatedWaifu)
     }
 
+    suspend fun saveFavorite(imItem: FavoriteItem): Error? {
+        return favDataSource.save(imItem)
+    }
+
+    suspend fun deleteFavorite(imItem: FavoriteItem): Error? {
+        return favDataSource.delete(imItem)
+    }
+
+
 }
