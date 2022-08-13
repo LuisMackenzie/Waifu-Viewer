@@ -22,10 +22,10 @@ interface WaifuImDao {
     suspend fun insertAllWaifuIm(waifus: List<WaifuImDbItem>)
 
     @Update
-    fun updateWaifuIm(waifu: WaifuImDbItem)
+    suspend fun updateWaifuIm(waifu: WaifuImDbItem)
 
     @Delete
-    fun deleteIm(waifu: WaifuImDbItem)
+    suspend fun deleteIm(waifu: WaifuImDbItem)
 
     @Query("DELETE FROM WaifuImDbItem")
     suspend fun deleteAll()

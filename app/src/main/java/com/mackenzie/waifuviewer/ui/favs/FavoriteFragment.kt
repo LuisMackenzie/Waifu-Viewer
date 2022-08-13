@@ -28,6 +28,7 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
 
         val binding = FragmentFavoriteBinding.bind(view).apply {
             recycler.adapter = favoriteAdapter
+
         }
 
         viewLifecycleOwner.launchAndCollect(viewModel.state) { binding.updateUI(it) }
@@ -40,7 +41,7 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
         var count: Int
 
         state.waifus?.let { favoritesWaifus ->
-            favoriteAdapter.submitList(favoritesWaifus)
+            favoriteAdapter.submitList(favoritesWaifus.reversed())
             // waifuPic = savedPicWaifus
             count = favoritesWaifus.size
             if (count != 0 && !numIsShowed) {

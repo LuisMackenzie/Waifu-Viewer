@@ -13,6 +13,8 @@ interface FavoriteLocalDataSource {
     suspend fun saveIm(waifu: WaifuImItem): Error?
     suspend fun savePic(waifu: WaifuPicItem): Error?
     suspend fun save(waifu: FavoriteItem): Error?
+    suspend fun deleteIm(waifu: WaifuImItem): Error?
+    suspend fun deletePic(waifu: WaifuPicItem): Error?
     suspend fun delete(waifu: FavoriteItem): Error?
     suspend fun deleteAll(): Error?
 }

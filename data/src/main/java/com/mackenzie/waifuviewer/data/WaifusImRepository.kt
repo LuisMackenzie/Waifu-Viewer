@@ -59,7 +59,10 @@ class WaifusImRepository @Inject constructor(
 
     suspend fun switchImFavorite(imItem: WaifuImItem): Error? {
         val updatedWaifu = imItem.copy(isFavorite = !imItem.isFavorite)
-        favDataSource.saveIm(updatedWaifu)
+        if (updatedWaifu.isFavorite) {
+            val error = favDataSource.saveIm(updatedWaifu)
+            if (error != null) return error
+        }
         return localImDataSource.saveOnlyIm(updatedWaifu)
     }
 }

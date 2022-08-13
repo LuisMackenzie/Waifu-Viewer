@@ -11,7 +11,9 @@ import com.mackenzie.waifuviewer.ui.common.basicDiffUtil
 import com.mackenzie.waifuviewer.ui.common.inflate
 import com.mackenzie.waifuviewer.ui.common.loadUrl
 
-class FavoriteAdapter(private val listener: (FavoriteItem) -> Unit ): ListAdapter<FavoriteItem, FavoriteAdapter.ViewHolder>(
+class FavoriteAdapter(
+    private val listener: (FavoriteItem) -> Unit
+    ): ListAdapter<FavoriteItem, FavoriteAdapter.ViewHolder>(
     basicDiffUtil { old, new -> old.id == new.id }) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -23,6 +25,7 @@ class FavoriteAdapter(private val listener: (FavoriteItem) -> Unit ): ListAdapte
         val waifuItem = getItem(position)
         holder.bind(waifuItem)
         holder.itemView.setOnClickListener { listener(waifuItem) }
+        // holder.itemView.setOnLongClickListener { viewModel.onDeleteFavorite(waifuItem) }
     }
 
     inner class ViewHolder(view: View): RecyclerView.ViewHolder(view) {

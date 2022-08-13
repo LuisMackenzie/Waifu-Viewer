@@ -22,10 +22,10 @@ interface FavoriteDao {
     suspend fun insertAllFavorite(waifus: List<FavoriteDbItem>)
 
     @Update
-    fun updateFav(waifu: FavoriteDbItem)
+    suspend fun updateFav(waifu: FavoriteDbItem)
 
     @Delete
-    fun deleteFav(waifu: FavoriteDbItem)
+    suspend fun deleteFav(waifu: FavoriteDbItem)
 
     @Query("DELETE FROM FavoriteDbItem")
     suspend fun deleteAll()
