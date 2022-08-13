@@ -20,9 +20,7 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite), FavoriteAdapter.O
     private val viewModel: FavoriteViewModel by viewModels()
     private lateinit var mainState: MainState
     private var numIsShowed : Boolean = false
-    // private val favoriteAdapter = FavoriteAdapter { mainState.onWaifuFavoriteClicked(it) }
     private val favoriteAdapter = FavoriteAdapter(this)
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -30,16 +28,10 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite), FavoriteAdapter.O
 
         val binding = FragmentFavoriteBinding.bind(view).apply {
             recycler.adapter = favoriteAdapter
-
         }
 
         viewLifecycleOwner.launchAndCollect(viewModel.state) { binding.updateUI(it) }
 
-
-    }
-
-    fun onDeleteFavorite(waifu: FavoriteItem) {
-       viewModel.onDeleteFavorite(waifu)
     }
 
     private fun FragmentFavoriteBinding.updateUI(state: FavoriteViewModel.UiState) {

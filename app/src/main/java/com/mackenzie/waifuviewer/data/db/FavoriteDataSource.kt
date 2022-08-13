@@ -18,6 +18,14 @@ class FavoriteDataSource @Inject constructor(private val favDao: FavoriteDao): F
 
     override fun findFavById(id: Int): Flow<FavoriteItem> = favDao.findFavById(id).map { it.toDomainModel() }
 
+    override suspend fun updateIm(waifu: WaifuImItem): Error? = tryCall {
+        favDao.updateFav(waifu.fromImDomainModel())
+    }.fold(ifLeft = { it }, ifRight = { null })
+
+    override suspend fun updatePic(waifu: WaifuImItem): Error? = tryCall {
+        favDao.updateFav(waifu.fromImDomainModel())
+    }.fold(ifLeft = { it }, ifRight = { null })
+
     override suspend fun saveIm(waifu: WaifuImItem): Error? = tryCall {
         favDao.insertFavorite(waifu.fromImDomainModel())
     }.fold(ifLeft = { it }, ifRight = { null })

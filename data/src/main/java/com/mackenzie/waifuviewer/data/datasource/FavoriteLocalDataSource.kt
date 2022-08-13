@@ -10,6 +10,8 @@ interface FavoriteLocalDataSource {
     val favoriteWaifus: Flow<List<FavoriteItem>>
     suspend fun isFavEmpty(): Boolean
     fun findFavById(id: Int): Flow<FavoriteItem>
+    suspend fun updateIm(waifu: WaifuImItem): Error?
+    suspend fun updatePic(waifu: WaifuImItem): Error?
     suspend fun saveIm(waifu: WaifuImItem): Error?
     suspend fun savePic(waifu: WaifuPicItem): Error?
     suspend fun save(waifu: FavoriteItem): Error?
