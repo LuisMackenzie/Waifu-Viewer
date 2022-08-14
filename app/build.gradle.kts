@@ -9,16 +9,16 @@ plugins {
 }
 
 android {
-    compileSdk = 32
+    compileSdk = AppConfig.compileSdk
 
     defaultConfig {
-        applicationId = "com.mackenzie.waifuviewer"
-        minSdk = 24
-        targetSdk = 32
-        versionCode = 1
-        versionName = "0.0.7"
+        applicationId = AppConfig.applicationId
+        minSdk = AppConfig.minSdk
+        targetSdk = AppConfig.targetSdk
+        versionCode = AppConfig.versionCode
+        versionName = AppConfig.versionName
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = AppConfig.testInstrumentationRunner
     }
 
     buildTypes {
@@ -52,13 +52,13 @@ dependencies {
 
 
     implementation ("androidx.core:core-ktx:1.8.0")
-    implementation ("androidx.appcompat:appcompat:1.4.2")
+    implementation ("androidx.appcompat:appcompat:1.5.0")
     implementation ("com.google.android.material:material:1.6.1")
     implementation ("androidx.constraintlayout:constraintlayout:2.1.4")
 
     // Permisions request
     implementation("androidx.activity:activity-ktx:1.5.1")
-    implementation("androidx.fragment:fragment-ktx:1.5.1")
+    implementation("androidx.fragment:fragment-ktx:1.5.2")
 
     // Navigation
     implementation("androidx.navigation:navigation-fragment-ktx:2.5.1")
