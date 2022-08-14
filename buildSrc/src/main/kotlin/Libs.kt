@@ -81,6 +81,11 @@ object Libs {
         const val ktxSerialize = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3" // updated
     }
 
+    object Coroutines {
+        private const val version = "1.6.4"
+        const val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version" // updated
+    }
+
     object Shimmer {
         private const val version = "0.5.0" // updated
         const val shimmer = "com.facebook.shimmer:shimmer:$version"
@@ -112,6 +117,12 @@ object Libs {
         private const val version = "4.13.2" // updated
         const val junit = "junit:junit:$version"
     }
+
+    object Mockito {
+        const val kotlin = "org.mockito.kotlin:mockito-kotlin:4.0.0"
+        const val inline = "org.mockito:mockito-inline:4.6.1"
+    }
+
 
     object JavaX {
         const val inject = "javax.inject:javax.inject:1"

@@ -9,11 +9,15 @@ java {
 }
 
 dependencies {
-    implementation (project(":data"))
-    implementation (project(":domain"))
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
-    implementation ("javax.inject:javax.inject:1")
-    // library to use Either Class in Kotlin
-    implementation ("io.arrow-kt:arrow-core:1.1.2")
+    implementation (project(Modules.data))
+    implementation (project(Modules.domain))
+    implementation (Libs.Coroutines.core)
+    implementation (Libs.JavaX.inject)
+    implementation (Libs.Arrow.core)
+
+    // JUnit y Mockito
+    testImplementation (Libs.Mockito.kotlin)
+    testImplementation (Libs.Mockito.inline)
+    testImplementation (Libs.JUnit.junit)
 
 }

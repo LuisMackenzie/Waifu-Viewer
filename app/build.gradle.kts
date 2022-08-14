@@ -46,9 +46,9 @@ dependencies {
     val roomVersion = "2.4.3"
 
     // modules Implementation
-    implementation (project(":domain"))
-    implementation (project(":data"))
-    implementation (project(":usecases"))
+    implementation (project(Modules.domain))
+    implementation (project(Modules.data))
+    implementation (project(Modules.usecases))
 
 
     implementation ("androidx.core:core-ktx:1.8.0")
@@ -94,7 +94,7 @@ dependencies {
     implementation ("com.beust:klaxon:5.6")
 
     // library to use Either Class in Kotlin
-    implementation ("io.arrow-kt:arrow-core:1.1.2")
+    implementation (Libs.Arrow.core)
 
 
     // Serialization
@@ -119,7 +119,11 @@ dependencies {
     testImplementation ("com.google.dagger:hilt-android-testing:2.43.2")
     kaptTest("com.google.dagger:hilt-android-compiler:2.43.2")
 
-    testImplementation ("junit:junit:4.13.2")
-    androidTestImplementation ("androidx.test.ext:junit:1.1.3")
-    androidTestImplementation ("androidx.test.espresso:espresso-core:3.4.0")
+    // Mockito
+    testImplementation (Libs.Mockito.kotlin)
+    testImplementation (Libs.Mockito.inline)
+
+    testImplementation (Libs.JUnit.junit)
+    androidTestImplementation (Libs.AndroidX.Test.Ext.junit)
+    androidTestImplementation (Libs.AndroidX.Test.Espresso.core)
 }
