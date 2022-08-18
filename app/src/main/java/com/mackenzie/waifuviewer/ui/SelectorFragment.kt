@@ -2,6 +2,7 @@ package com.mackenzie.waifuviewer.ui
 
 import android.Manifest
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
@@ -32,7 +33,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class SelectorFragment : Fragment(R.layout.fragment_selector) {
 
-    // private val picsViewModel: SelectorPicViewModel by viewModels()
+    private val picsViewModel: SelectorPicViewModel by viewModels()
     private val imViewModel: SelectorImViewModel by viewModels()
     private lateinit var binding: FragmentSelectorBinding
     private var backgroudImage: ImageView? = null
@@ -46,20 +47,23 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
         setUpElements()
         updateSpinner(binding.sServer.isChecked)
 
-        viewLifecycleOwner.launchAndCollect(imViewModel.state) { updateImWaifu(it) }
-        mainState.requestPermissionLauncher {
-            if (!loaded) {
-                imViewModel.loadErrorOrWaifu()
-                Toast.makeText(requireContext(), "IM server loaded", Toast.LENGTH_SHORT).show()
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
+            viewLifecycleOwner.launchAndCollect(imViewModel.state) { updateImWaifu(it) }
+            mainState.requestPermissionLauncher {
+                if (!loaded) {
+                    imViewModel.loadErrorOrWaifu()
+                    Toast.makeText(requireContext(), "IM server loaded", Toast.LENGTH_SHORT).show()
+                }
+            }
+        } else {
+            viewLifecycleOwner.launchAndCollect(picsViewModel.state) { updatePicWaifu(it) }
+            mainState.requestPermissionLauncher {
+                if (!loaded) {
+                    picsViewModel.loadErrorOrWaifu()
+                    Toast.makeText(requireContext(), "PICS server loaded", Toast.LENGTH_SHORT).show()
+                }
             }
         }
-        /*viewLifecycleOwner.launchAndCollect(picsViewModel.state) { updatePicWaifu(it) }
-        mainState.requestPermissionLauncher {
-            if (!loaded) {
-                picsViewModel.loadErrorOrWaifu()
-                Toast.makeText(requireContext(), "PICS server loaded", Toast.LENGTH_SHORT).show()
-            }
-        }*/
     }
 
 
@@ -125,8 +129,11 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
             updateSpinner(sServer.isChecked)
         }
         fab.setOnClickListener {
-            imViewModel.loadErrorOrWaifu()
-            // picsViewModel.loadErrorOrWaifu()
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
+                imViewModel.loadErrorOrWaifu()
+            } else {
+                picsViewModel.loadErrorOrWaifu()
+            }
         }
         favorites.setOnClickListener {
             navigateTo(true)

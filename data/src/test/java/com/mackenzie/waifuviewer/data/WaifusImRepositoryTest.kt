@@ -3,7 +3,6 @@ package com.mackenzie.waifuviewer.data
 import com.mackenzie.waifuviewer.data.datasource.FavoriteLocalDataSource
 import com.mackenzie.waifuviewer.data.datasource.WaifusImLocalDataSource
 import com.mackenzie.waifuviewer.data.datasource.WaifusImRemoteDataSource
-import com.mackenzie.waifuviewer.domain.FavoriteItem
 import com.mackenzie.waifuviewer.domain.WaifuImItem
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
@@ -32,11 +31,11 @@ class WaifusImRepositoryTest {
 
     private lateinit var repo: WaifusImRepository
 
-    private val localWaifus = flowOf(listOf(sampleImWaifu.copy(id = 1)))
+    private val localImWaifus = flowOf(listOf(sampleImWaifu.copy(id = 1)))
 
     @Before
     fun setUp() {
-        whenever(localDataSource.waifusIm).thenReturn(localWaifus)
+        whenever(localDataSource.waifusIm).thenReturn(localImWaifus)
         repo = WaifusImRepository(localDataSource, favDataSource, remoteDataSource)
     }
 
@@ -47,14 +46,14 @@ class WaifusImRepositoryTest {
     @Test
     fun `waifus are taken from local datasource if available`(): Unit = runBlocking {
         val result = repo.savedWaifusIm
-        assertEquals(localWaifus, result)
+        assertEquals(localImWaifus, result)
     }
 
     @Test
     fun `Switching favorite marks as favorite an unfavorite waifu`(): Unit = runBlocking {
         val waifu = sampleImWaifu.copy(isFavorite = false)
         repo.switchImFavorite(waifu)
-        verify(localDataSource).saveIm(argThat { get(0).isFavorite })
+        verify(localDataSource).saveOnlyIm(argThat { this.isFavorite })
     }
 
     @Test
