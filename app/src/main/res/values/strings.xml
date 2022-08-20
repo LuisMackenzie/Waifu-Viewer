@@ -16,5 +16,6 @@
     <string name="no_waifu_found">No waifu found :( Try again later</string>
     <string name="connectivity_error">Connection Error</string>
     <string name="unknown_error">Unknown Error</string>
+    <string name="give_me_waifus">Give me Waifus!</string>
 
 </resources>

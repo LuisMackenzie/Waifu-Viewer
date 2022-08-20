@@ -22,24 +22,20 @@ class SelectorPicViewModel @Inject constructor(
 
     private val _state = MutableStateFlow(UiState())
     val state: StateFlow<UiState> = _state.asStateFlow()
-    // private val _events = Channel<UiEvent> ()
-    // val events = _events.receiveAsFlow()
 
     private fun loadWaifu() {
         viewModelScope.launch {
             val waifu = requestOnlyPicWaifu()
             if (waifu != null) {
-                _state.update { UiState(waifu = waifu) }
+                _state.update { it.copy(waifu = waifu) }
             } else {
                 _state.update { UiState(error = Error.Connectivity) }
             }
         }
     }
 
-    fun onChangeType(type: ServerType?) {
-        type?.let {
-            _state.update { state -> state.copy(type = it) }
-        }
+    fun onChangeType(type: ServerType) {
+        _state.update { it.copy(type = type) }
     }
 
     fun loadErrorOrWaifu() {

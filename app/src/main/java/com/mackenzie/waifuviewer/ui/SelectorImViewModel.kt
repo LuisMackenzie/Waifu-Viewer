@@ -26,7 +26,7 @@ class SelectorImViewModel @Inject constructor(
                 .collect{ waifuIm -> _state.update { UiState(waifu = waifuIm.first()) } }*/
             val waifu = requestOnlyImWaifu()
             if (waifu != null) {
-                _state.update { UiState(waifu = waifu) }
+                _state.update { it.copy(waifu = waifu) }
             } else {
                 _state.update { UiState(error = Error.Connectivity) }
             }
@@ -34,10 +34,8 @@ class SelectorImViewModel @Inject constructor(
         }
     }
 
-    fun onChangeType(type: ServerType?) {
-        type?.let {
-            _state.update { state -> state.copy(type = it) }
-        }
+    fun onChangeType(type: ServerType) {
+            _state.update { it.copy(type = type) }
     }
 
     fun loadErrorOrWaifu() {

@@ -140,10 +140,10 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
             }
 
         }
-        cGroup.setOnClickListener {
+        /*cGroup.setOnClickListener {
             updateSwitches()
             updateSpinner()
-        }
+        }*/
         sNsfw.setOnClickListener {
             updateSpinner()
         }
@@ -227,7 +227,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         updateSwitches()
     }
 
-    override fun onChooseTypeChanged(type: ServerType?) {
+    override fun onChooseTypeChanged(type: ServerType) {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
             imViewModel.onChangeType(type)
         } else {

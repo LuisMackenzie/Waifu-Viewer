@@ -32,8 +32,7 @@ fun ChipGroup.onChooseTypeChanged(listener: OnChooseTypeChanged?) {
             if (chip.id == checkedId) {
                 val type = when (chip.text) {
                     context.getString(R.string.server_normal) -> ServerType.NORMAL
-                    context.getString(R.string.server_enhanced) -> ServerType.ENHANCED
-                    else -> null
+                    else -> ServerType.ENHANCED
                 }
                 listener?.onChooseTypeChanged(type)
             }
@@ -42,5 +41,5 @@ fun ChipGroup.onChooseTypeChanged(listener: OnChooseTypeChanged?) {
 }
 
 interface OnChooseTypeChanged {
-    fun onChooseTypeChanged(type: ServerType?)
+    fun onChooseTypeChanged(type: ServerType)
 }
