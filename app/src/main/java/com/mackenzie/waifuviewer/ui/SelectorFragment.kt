@@ -80,6 +80,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         state.type.let { type ->
             binding.type = type
             serverMode = type
+            updateSpinner()
         }
 
         state.error?.let { error ->
@@ -103,6 +104,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         state.type.let { type ->
             binding.type = type
             serverMode = type
+            updateSpinner()
         }
 
         state.error?.let { error ->
@@ -189,7 +191,6 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
 
     private fun navigateTo(favorite :Boolean) = with(binding) {
         val bun = bundleOf()
-        // bun.putBoolean(IS_SERVER_SELECTED, sServer.isChecked)
         bun.putString(SERVER_MODE, serverMode.value)
         bun.putBoolean(IS_NSFW_WAIFU, sNsfw.isChecked)
         bun.putBoolean(IS_GIF_WAIFU, sGifs.isChecked)

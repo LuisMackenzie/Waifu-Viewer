@@ -42,7 +42,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.chip.ChipGroup
-        android:id="@+id/cGroup"
+        android:id="@+id/c_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -57,6 +57,7 @@
         app:onChooseTypeChanged="@{onChooseTypeChanged}">
 
         <com.google.android.material.chip.Chip
+            android:id="@+id/c_normal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.Chip.Choice"
@@ -67,6 +68,7 @@
             android:text="@string/server_normal" />
 
         <com.google.android.material.chip.Chip
+            android:id="@+id/c_enhanced"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.Chip.Choice"
@@ -87,7 +89,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cGroup" />
+        app:layout_constraintTop_toBottomOf="@+id/c_group" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/s_gifs"
@@ -99,7 +101,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.20"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cGroup" />
+        app:layout_constraintTop_toBottomOf="@+id/c_group" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/s_orientation"
@@ -111,7 +113,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.80"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cGroup" />
+        app:layout_constraintTop_toBottomOf="@+id/c_group" />
 
     <Button
         android:id="@+id/btn_waifu"
