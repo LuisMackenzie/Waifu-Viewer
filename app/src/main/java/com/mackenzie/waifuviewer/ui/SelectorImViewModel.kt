@@ -2,6 +2,7 @@ package com.mackenzie.waifuviewer.ui.main
 
 import androidx.lifecycle.*
 import com.mackenzie.waifuviewer.domain.Error
+import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.domain.WaifuImItem
 import com.mackenzie.waifuviewer.usecases.RequestOnlyWaifuImUseCase
 import com.mackenzie.waifuviewer.ui.common.Scope
@@ -33,12 +34,19 @@ class SelectorImViewModel @Inject constructor(
         }
     }
 
+    fun onChangeType(type: ServerType?) {
+        type?.let {
+            _state.update { state -> state.copy(type = it) }
+        }
+    }
+
     fun loadErrorOrWaifu() {
             loadWaifu()
     }
 
     data class UiState(
         val waifu: WaifuImItem? = null,
+        val type: ServerType = ServerType.NORMAL,
         val error: Error? = null
     )
 

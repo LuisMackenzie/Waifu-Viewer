@@ -9,6 +9,7 @@ import androidx.navigation.fragment.navArgs
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.WaifuPicsViewModel
 import com.mackenzie.waifuviewer.databinding.FragmentWaifuBinding
+import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.ui.common.launchAndCollect
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -21,32 +22,29 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
     private val waifuImAdapter = WaifuImAdapter{ mainState.onWaifuImClicked(it) }
     private val waifuPicsAdapter = WaifuPicsAdapter{ mainState.onWaifuPicsClicked(it) }
     private lateinit var mainState: MainState
-    private lateinit var bun :Bundle
-    private var mainServer: Boolean = false
-    private var numIsShowed : Boolean= false
+    private lateinit var bun: Bundle
+    private var serverMode: String = ""
+    private var numIsShowed: Boolean= false
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mainState = buildMainState()
-        mainServer = safeArgs.bundleInfo.getBoolean(IS_SERVER_SELECTED)
+        serverMode = safeArgs.bundleInfo.getString(SERVER_MODE)!!
         bun = safeArgs.bundleInfo
-        val binding = FragmentWaifuBinding.bind(view).apply {
-            if (mainServer) {
-                recycler.adapter = waifuPicsAdapter
-            } else {
-                recycler.adapter = waifuImAdapter
+        val binding = FragmentWaifuBinding.bind(view)
+        when (serverMode) {
+            "enhanced" -> {
+                binding.recycler.adapter = waifuPicsAdapter
+                viewLifecycleOwner.launchAndCollect(picsViewModel.state) { binding.withPicsUpdateUI(it) }
+            }
+            else -> {
+                binding.recycler.adapter = waifuImAdapter
+                viewLifecycleOwner.launchAndCollect(imViewModel.state) { binding.withImUpdateUI(it) }
             }
         }
 
-        if (mainServer) {
-            viewLifecycleOwner.launchAndCollect(picsViewModel.state) { binding.withPicsUpdateUI(it) }
-        } else {
-            viewLifecycleOwner.launchAndCollect(imViewModel.state) { binding.withImUpdateUI(it) }
-        }
-
         loadCustomResult(bun)
-
     }
 
     private fun loadCustomResult(bun: Bundle) {
@@ -55,7 +53,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         val orientation = bun.getBoolean(IS_LANDS_WAIFU)
         val categoryTag = bun.getString(CATEGORY_TAG)!!
 
-        if (!mainServer) {
+        if (serverMode == "normal") {
             when (categoryTag) {
                 "uniform" -> {
                     imViewModel.onImReady(isNsfw, isGif = false, categoryTag, orientation)
@@ -142,7 +140,6 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
 
         state.waifus?.let { savedImWaifus ->
             waifuImAdapter.submitList(savedImWaifus)
-            // waifuIm = savedImWaifus
             count = savedImWaifus.size
             if (count != 0 && !numIsShowed) {
                 Toast.makeText(requireContext(), "Total Waifus = $count", Toast.LENGTH_SHORT).show()
@@ -173,7 +170,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
     }
 
     companion object {
-        const val IS_SERVER_SELECTED = "WaifuFragment:server"
+        const val SERVER_MODE = "WaifuFragment:server_mode"
         const val IS_FAVORITES = "WaifuFragment:favorites"
         const val IS_NSFW_WAIFU = "WaifuFragment:nsfw"
         const val IS_GIF_WAIFU = "WaifuFragment:gif"

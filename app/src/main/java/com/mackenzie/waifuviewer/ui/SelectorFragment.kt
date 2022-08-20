@@ -17,21 +17,23 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.databinding.FragmentSelectorBinding
+import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.ui.common.PermissionRequester
 import com.mackenzie.waifuviewer.ui.common.launchAndCollect
 import com.mackenzie.waifuviewer.ui.common.loadUrl
 import com.mackenzie.waifuviewer.ui.main.MainState
+import com.mackenzie.waifuviewer.ui.main.OnChooseTypeChanged
 import com.mackenzie.waifuviewer.ui.main.SelectorImViewModel
 import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.CATEGORY_TAG
 import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_FAVORITES
 import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_GIF_WAIFU
 import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_LANDS_WAIFU
 import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_NSFW_WAIFU
-import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_SERVER_SELECTED
+import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.SERVER_MODE
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SelectorFragment : Fragment(R.layout.fragment_selector) {
+class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChanged {
 
     private val picsViewModel: SelectorPicViewModel by viewModels()
     private val imViewModel: SelectorImViewModel by viewModels()
@@ -39,20 +41,20 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
     private var backgroudImage: ImageView? = null
     private var loaded: Boolean = false
     private lateinit var mainState: MainState
+    private var serverMode = ServerType.NORMAL
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mainState = MainState(requireContext(), viewLifecycleOwner.lifecycleScope, findNavController(), PermissionRequester(this , Manifest.permission.ACCESS_COARSE_LOCATION))
         binding = FragmentSelectorBinding.bind(view)
         setUpElements()
-        updateSpinner(binding.sServer.isChecked)
+        updateSpinner()
 
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
             viewLifecycleOwner.launchAndCollect(imViewModel.state) { updateImWaifu(it) }
             mainState.requestPermissionLauncher {
                 if (!loaded) {
                     imViewModel.loadErrorOrWaifu()
-                    Toast.makeText(requireContext(), "IM server loaded", Toast.LENGTH_SHORT).show()
                 }
             }
         } else {
@@ -60,7 +62,6 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
             mainState.requestPermissionLauncher {
                 if (!loaded) {
                     picsViewModel.loadErrorOrWaifu()
-                    Toast.makeText(requireContext(), "PICS server loaded", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -70,9 +71,15 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
 
 
     private fun updateImWaifu(state: SelectorImViewModel.UiState) {
+
         state.waifu?.let { waifu ->
             setBackground(waifu.url)
             loaded = true
+        }
+
+        state.type.let { type ->
+            binding.type = type
+            serverMode = type
         }
 
         state.error?.let { error ->
@@ -93,6 +100,11 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
             loaded = true
         }
 
+        state.type.let { type ->
+            binding.type = type
+            serverMode = type
+        }
+
         state.error?.let { error ->
             mainState.errorToString(error)
             Glide.with(requireContext())
@@ -110,6 +122,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
     }
 
     private fun setUpElements() = with(binding) {
+        onChooseTypeChanged = this@SelectorFragment
         btnWaifu.setOnClickListener {
             navigateTo(false)
         }
@@ -121,12 +134,12 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
             }
 
         }
-        sServer.setOnClickListener {
-            updateSwitches(sServer.isChecked)
-            updateSpinner(sServer.isChecked)
+        cGroup.setOnClickListener {
+            updateSwitches()
+            updateSpinner()
         }
         sNsfw.setOnClickListener {
-            updateSpinner(sServer.isChecked)
+            updateSpinner()
         }
         fab.setOnClickListener {
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
@@ -141,9 +154,9 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
         backgroudImage = ivBackdrop
     }
 
-    private fun updateSpinner(state: Boolean) = with(binding) {
+    private fun updateSpinner() = with(binding) {
         val spinnerContent: Array<String>
-        if (state) {
+        if (serverMode == ServerType.ENHANCED) {
             spinnerContent = if (sNsfw.isChecked) {
                 arrayOf("all", "waifu", "neko", "trap", "blowjob")
             } else {
@@ -163,14 +176,11 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
         adapter.notifyDataSetChanged()
     }
 
-    private fun updateSwitches(state: Boolean) = with(binding) {
+    private fun updateSwitches() = with(binding) {
         val view : Int
-        if (state) {
-            view = View.GONE
-            sServer.text = "Enhanced Mode"
-        } else{
-            view = View.VISIBLE
-            sServer.text = "Fancy Mode"
+        when (serverMode.value) {
+            "enhanced" -> view = View.GONE
+            else -> view = View.VISIBLE
         }
         sGifs.visibility = view
         sOrientation.visibility = view
@@ -179,13 +189,11 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
 
     private fun navigateTo(favorite :Boolean) = with(binding) {
         val bun = bundleOf()
-        bun.putBoolean(IS_SERVER_SELECTED, sServer.isChecked)
+        // bun.putBoolean(IS_SERVER_SELECTED, sServer.isChecked)
+        bun.putString(SERVER_MODE, serverMode.value)
         bun.putBoolean(IS_NSFW_WAIFU, sNsfw.isChecked)
         bun.putBoolean(IS_GIF_WAIFU, sGifs.isChecked)
         bun.putBoolean(IS_LANDS_WAIFU, sOrientation.isChecked)
-        /*if (tietId.text != null) {
-            bun.putString(ID_WAIFU, tietId.text.toString())
-        }*/
         val selectedTag = spinner.selectedItem.toString()
         if (!selectedTag.isEmpty()) {
             bun.putString(CATEGORY_TAG, selectedTag)
@@ -193,7 +201,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
 
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
         with (sharedPref.edit()) {
-            putBoolean(IS_SERVER_SELECTED, sServer.isChecked)
+            putString(SERVER_MODE, serverMode.value)
             putBoolean(IS_FAVORITES, favorite)
             apply()
         }
@@ -210,8 +218,16 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
     override fun onResume() {
         super.onResume()
         binding.sNsfw.isChecked = false
-        updateSpinner(binding.sServer.isChecked)
-        updateSwitches(binding.sServer.isChecked)
+        updateSpinner()
+        updateSwitches()
+    }
+
+    override fun onChooseTypeChanged(type: ServerType?) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
+            imViewModel.onChangeType(type)
+        } else {
+            picsViewModel.onChangeType(type)
+        }
     }
 
 

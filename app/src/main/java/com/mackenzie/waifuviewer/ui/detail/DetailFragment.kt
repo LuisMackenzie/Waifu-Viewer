@@ -21,7 +21,7 @@ import com.mackenzie.waifuviewer.ui.common.loadUrl
 import com.mackenzie.waifuviewer.ui.common.visible
 import com.mackenzie.waifuviewer.ui.main.MainState
 import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_FAVORITES
-import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_SERVER_SELECTED
+import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.SERVER_MODE
 import com.mackenzie.waifuviewer.ui.main.buildMainState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers.IO
@@ -37,11 +37,8 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
     private val favsViewModel: DetailFavsViewModel by viewModels()
     private lateinit var mainState: MainState
     private lateinit var download: DownloadModel
-    private var mainServer: Boolean = false
+    private var serverMode: String = ""
     private var favoriteView: Boolean = false
-    // private var title: String? = null
-    // private var link: String? = null
-    // private var imageExt:String? = null
     private var isWritePermissionGranted: Boolean = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -49,10 +46,9 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
         mainState = buildMainState()
         val binding = FragmentDetailBinding.bind(view)
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
-        mainServer = sharedPref.getBoolean(IS_SERVER_SELECTED, false)
+        serverMode = sharedPref.getString(SERVER_MODE, "")!!
         favoriteView = sharedPref.getBoolean(IS_FAVORITES, false)
         binding.setUpElements()
-
     }
 
     private fun FragmentDetailBinding.launchPicsCollect() {
@@ -159,7 +155,7 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
             fabPics.visible = false
             fabIm.visible = false
         } else {
-            if (mainServer) {
+            if (serverMode == "enhanced") {
                 launchPicsCollect()
                 fabPics.visible = true
                 fabIm.visible = false

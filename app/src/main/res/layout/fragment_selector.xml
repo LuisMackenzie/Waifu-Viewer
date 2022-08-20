@@ -6,8 +6,12 @@
     <data>
         <import type="com.mackenzie.waifuviewer.domain.WaifuPicItem"/>
         <import type="com.mackenzie.waifuviewer.domain.WaifuImItem"/>
+        <import type="com.mackenzie.waifuviewer.domain.ServerType"/>
+        <import type="com.mackenzie.waifuviewer.ui.main.OnChooseTypeChanged"/>
         <variable name="waifuPic" type="WaifuPicItem" />
         <variable name="waifuIm" type="WaifuImItem"/>
+        <variable name="type" type="ServerType" />
+        <variable name="onChooseTypeChanged" type="OnChooseTypeChanged" />
     </data>
 
 <androidx.constraintlayout.widget.ConstraintLayout
@@ -37,17 +41,41 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/s_server"
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/cGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/server_mode"
-        android:textColor="@color/grey"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="48dp"
         app:layout_constraintBottom_toTopOf="@+id/spinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:singleSelection="true"
+        app:onChooseTypeChanged="@{onChooseTypeChanged}">
+
+        <com.google.android.material.chip.Chip
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            app:chipBackgroundColor="@color/chip_bg_states"
+            android:clickable="@{type != ServerType.NORMAL}"
+            android:checked="@{type == ServerType.NORMAL}"
+            android:textColor="@{type == ServerType.NORMAL ? @color/white : @color/black}"
+            android:text="@string/server_normal" />
+
+        <com.google.android.material.chip.Chip
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            app:chipBackgroundColor="@color/chip_bg_states"
+            android:clickable="@{type != ServerType.ENHANCED}"
+            android:checked="@{type == ServerType.ENHANCED}"
+            android:textColor="@{type == ServerType.ENHANCED ? @color/white : @color/black}"
+            android:text="@string/server_enhanced" />
+    </com.google.android.material.chip.ChipGroup>
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/s_nsfw"
@@ -59,7 +87,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/s_server" />
+        app:layout_constraintTop_toBottomOf="@+id/cGroup" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/s_gifs"
@@ -71,7 +99,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.20"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/s_server" />
+        app:layout_constraintTop_toBottomOf="@+id/cGroup" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/s_orientation"
@@ -83,47 +111,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.80"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/s_server" />
-
-    <!--<LinearLayout
-        android:id="@+id/l_search"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/s_orientation">
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_id"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/tiet_id"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Insert the waifu ID" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <Button
-            android:id="@+id/btn_search"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Search!"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent" />
-
-    </LinearLayout>-->
+        app:layout_constraintTop_toBottomOf="@+id/cGroup" />
 
     <Button
         android:id="@+id/btn_waifu"
