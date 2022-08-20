@@ -121,6 +121,17 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
                 .into(binding.ivBackdrop)
             Toast.makeText(requireContext(), "Se requiere conexion para funcionar", Toast.LENGTH_SHORT).show()
         }
+
+        /*state.error?.let { error ->
+            mainState.errorToString(error)
+            Glide.with(requireContext())
+                .load(R.drawable.ic_offline_background)
+                .centerCrop()
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .error(R.drawable.ic_error_grey)
+                .into(binding.ivBackdrop)
+            Toast.makeText(requireContext(), "Se requiere conexion para funcionar", Toast.LENGTH_SHORT).show()
+        }*/
     }
 
     private fun setBackground(url: String) {
