@@ -55,6 +55,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
             mainState.requestPermissionLauncher {
                 if (!loaded) {
                     imViewModel.loadErrorOrWaifu()
+                    Toast.makeText(requireContext(), "IM Server", Toast.LENGTH_SHORT).show()
                 }
             }
         } else {
@@ -62,6 +63,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
             mainState.requestPermissionLauncher {
                 if (!loaded) {
                     picsViewModel.loadErrorOrWaifu()
+                    Toast.makeText(requireContext(), "PICS Server", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -80,6 +82,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         state.type.let { type ->
             binding.type = type
             serverMode = type
+            updateSwitches()
             updateSpinner()
         }
 
@@ -104,6 +107,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         state.type.let { type ->
             binding.type = type
             serverMode = type
+            updateSwitches()
             updateSpinner()
         }
 
