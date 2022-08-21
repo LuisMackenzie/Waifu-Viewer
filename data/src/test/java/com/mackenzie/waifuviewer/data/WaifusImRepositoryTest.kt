@@ -57,6 +57,13 @@ class WaifusImRepositoryTest {
     }
 
     @Test
+    fun `Switching favorite marks as unfavorite an favorite waifu`(): Unit = runBlocking {
+        val waifu = sampleImWaifu.copy(isFavorite = true)
+        repo.switchImFavorite(waifu)
+        verify(localDataSource).saveOnlyIm(argThat { !this.isFavorite })
+    }
+
+    @Test
     fun getSavedWaifusIm() {
     }
 
