@@ -119,11 +119,12 @@ dependencies {
     testImplementation ("com.google.dagger:hilt-android-testing:2.43.2")
     kaptTest("com.google.dagger:hilt-android-compiler:2.43.2")
 
-    // Mockito
+    // JUnit y Mockito
+    testImplementation (Libs.JUnit.junit)
     testImplementation (Libs.Mockito.kotlin)
     testImplementation (Libs.Mockito.inline)
+    testImplementation (Libs.Coroutines.test)
 
-    testImplementation (Libs.JUnit.junit)
     androidTestImplementation (Libs.AndroidX.Test.Ext.junit)
     androidTestImplementation (Libs.AndroidX.Test.Espresso.core)
 }

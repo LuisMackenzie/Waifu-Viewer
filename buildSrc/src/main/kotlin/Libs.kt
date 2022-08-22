@@ -77,44 +77,45 @@ object Libs {
     }
 
     object Serialization {
-        const val retrofitSerialize = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0" // updated
-        const val ktxSerialize = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3" // updated
+        const val retrofitSerialize = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0"
+        const val ktxSerialize = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3"
     }
 
     object Coroutines {
         private const val version = "1.6.4"
-        const val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version" // updated
+        const val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version"
+        const val test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$version"
     }
 
     object Shimmer {
-        private const val version = "0.5.0" // updated
+        private const val version = "0.5.0"
         const val shimmer = "com.facebook.shimmer:shimmer:$version"
     }
 
     object PhotoView {
-        private const val version = "2.3.0" // updated
+        private const val version = "2.3.0"
         const val shimmer = "com.github.chrisbanes:PhotoView:$version"
     }
 
     object Arrow {
-        private const val version = "1.1.2" // updated
+        private const val version = "1.1.2"
         const val core = "io.arrow-kt:arrow-core:$version"
     }
 
     object Klaxon {
-        private const val version = "5.6" // updated
+        private const val version = "5.6"
         const val core = "com.beust:klaxon:$version"
     }
 
     object Hilt {
-        private const val version = "2.43.2" // updated
+        private const val version = "2.43.2"
         const val android = "com.google.dagger:hilt-android:$version"
         const val compiler = "com.google.dagger:hilt-android-compiler:$version"
         const val gradlePlugin = "com.google.dagger:hilt-android-gradle-plugin:$version"
     }
 
     object JUnit {
-        private const val version = "4.13.2" // updated
+        private const val version = "4.13.2"
         const val junit = "junit:junit:$version"
     }
 
