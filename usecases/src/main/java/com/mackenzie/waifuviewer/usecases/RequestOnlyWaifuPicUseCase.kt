@@ -7,6 +7,4 @@ class RequestOnlyWaifuPicUseCase @Inject constructor(private val repo: WaifusPic
 
     suspend operator fun invoke() = repo.requestOnlyWaifuPic()
 
-    // suspend fun get(): Either<Error, WaifuPicItem> = repo.requestOnlyWaifuPic()
-
 }

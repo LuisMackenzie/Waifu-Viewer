@@ -7,7 +7,5 @@ class RequestOnlyWaifuImUseCase @Inject constructor(private val repo: WaifusImRe
 
     suspend operator fun invoke() = repo.requestOnlyWaifuIm()
 
-    // suspend fun get() = repo.requestOnlyWaifuIm()
-
 }
 
