@@ -1,6 +1,7 @@
 package com.mackenzie.waifuviewer.data
 
 import arrow.core.right
+import com.mackenzie.testshared.sampleFavWaifu
 import com.mackenzie.waifuviewer.data.datasource.FavoriteLocalDataSource
 import com.mackenzie.waifuviewer.domain.FavoriteItem
 import kotlinx.coroutines.flow.flowOf
@@ -100,10 +101,3 @@ class FavoritesRepositoryTest {
     }
 
 }
-
-private val sampleFavWaifu = FavoriteItem(
-    id = 0,
-    title = "Waifu Test",
-    url = "https://cdn.waifu.im/5f7e656343cb7be1.jpg",
-    isFavorite = true
-)

@@ -1,7 +1,7 @@
 package usecases
 
+import com.mackenzie.testshared.sampleFavWaifu
 import com.mackenzie.waifuviewer.usecases.GetFavoritesUseCase
-import com.mackenzie.waifuviewer.usecases.GetWaifuImUseCase
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*

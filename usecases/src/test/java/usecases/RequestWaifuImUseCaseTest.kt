@@ -3,7 +3,6 @@ package usecases
 import com.mackenzie.waifuviewer.data.WaifusImRepository
 import com.mackenzie.waifuviewer.usecases.RequestWaifuImUseCase
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.*
 import org.junit.Test
 import org.mockito.Mockito.verify
 import org.mockito.kotlin.any

@@ -16,6 +16,7 @@ dependencies {
     implementation (Libs.Arrow.core)
 
     // JUnit y Mockito
+    testImplementation (project(Modules.testShared))
     testImplementation (Libs.Mockito.kotlin)
     testImplementation (Libs.Mockito.inline)
     testImplementation (Libs.JUnit.junit)

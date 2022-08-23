@@ -32,7 +32,7 @@ class WaifuImViewModel @Inject constructor(
         viewModelScope.launch {
             getWaifuImUseCase()
                 .catch { cause -> _state.update { it.copy(error = cause.toError()) }}
-                .collect{ WaifusIm -> _state.update { UiState(isLoading = false, waifus = WaifusIm) } }
+                .collect{ WaifusIm -> _state.update { UiState(waifus = WaifusIm) } }
         }
     }
 
@@ -42,14 +42,14 @@ class WaifuImViewModel @Inject constructor(
             if (tag == "all") {
                 if (isNsfw) {
                     val error = requestWaifuImUseCase(isNsfw,"ecchi",isGif,orientation)
-                    _state.update { _state.value.copy( error = error) }
+                    _state.update { it.copy(isLoading = false, error = error) }
                 } else {
                     val error = requestWaifuImUseCase(isNsfw,"waifu",isGif,orientation)
-                    _state.update { _state.value.copy(error = error) }
+                    _state.update { it.copy(isLoading = false, error = error) }
                 }
             } else {
                 val error = requestWaifuImUseCase(isNsfw, tag, isGif,  orientation)
-                _state.update { _state.value.copy(error = error) }
+                _state.update { it.copy(isLoading = false, error = error) }
             }
         }
     }
@@ -60,16 +60,16 @@ class WaifuImViewModel @Inject constructor(
             if (tag == "all") {
                 if (isNsfw) {
                     val error = requestMoreImUseCase(isNsfw,"ecchi",isGif,orientation)
-                    _state.update { _state.value.copy(error = error) }
+                    _state.update { it.copy(error = error) }
 
                 } else {
                     val error = requestMoreImUseCase(isNsfw,"waifu",isGif,orientation)
-                    _state.update { _state.value.copy(error = error) }
+                    _state.update { it.copy(error = error) }
 
                 }
             } else {
                 val error = requestMoreImUseCase(isNsfw, tag, isGif,  orientation)
-                _state.update { _state.value.copy(error = error) }
+                _state.update { it.copy(error = error) }
 
             }
         }
@@ -78,7 +78,7 @@ class WaifuImViewModel @Inject constructor(
     fun onClearImDatabase() {
         viewModelScope.launch {
             val error = clearWaifuImUseCase()
-            _state.update { _state.value.copy(error = error) }
+            _state.update { it.copy(error = error) }
         }
     }
 

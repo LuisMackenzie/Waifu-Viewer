@@ -1,15 +1,14 @@
 package com.mackenzie.waifuviewer.data
 
 import arrow.core.right
+import com.mackenzie.testshared.sampleImWaifu
 import com.mackenzie.waifuviewer.data.datasource.FavoriteLocalDataSource
 import com.mackenzie.waifuviewer.data.datasource.WaifusImLocalDataSource
 import com.mackenzie.waifuviewer.data.datasource.WaifusImRemoteDataSource
-import com.mackenzie.waifuviewer.domain.WaifuImItem
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.After
-import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -132,15 +131,3 @@ class WaifusImRepositoryTest {
     }
 
 }
-
-private val sampleImWaifu = WaifuImItem(
-    id = 0,
-    dominantColor = "",
-    file = "",
-    height = "",
-    width = "",
-    imageId = 6969,
-    isNsfw = false,
-    url = "https://cdn.waifu.im/5f7e656343cb7be1.jpg",
-    isFavorite = true
-)

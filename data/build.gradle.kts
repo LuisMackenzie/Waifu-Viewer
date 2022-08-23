@@ -10,11 +10,13 @@ java {
 
 dependencies {
     implementation (project(Modules.domain))
+
     implementation (Libs.Coroutines.core)
     implementation (Libs.JavaX.inject)
     implementation (Libs.Arrow.core)
 
     // JUnit y Mockito
+    testImplementation (project(Modules.testShared))
     testImplementation (Libs.JUnit.junit)
     testImplementation (Libs.Mockito.kotlin)
     testImplementation (Libs.Mockito.inline)

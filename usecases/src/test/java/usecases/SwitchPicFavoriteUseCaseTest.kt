@@ -1,10 +1,9 @@
 package usecases
 
+import com.mackenzie.testshared.samplePicWaifu
 import com.mackenzie.waifuviewer.data.WaifusPicRepository
-import com.mackenzie.waifuviewer.usecases.SwitchImFavoriteUseCase
 import com.mackenzie.waifuviewer.usecases.SwitchPicFavoriteUseCase
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.*
 import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify

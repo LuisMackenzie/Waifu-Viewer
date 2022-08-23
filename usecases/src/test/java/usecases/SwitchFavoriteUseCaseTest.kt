@@ -1,5 +1,6 @@
 package usecases
 
+import com.mackenzie.testshared.sampleFavWaifu
 import com.mackenzie.waifuviewer.data.FavoritesRepository
 import com.mackenzie.waifuviewer.usecases.SwitchFavoriteUseCase
 import kotlinx.coroutines.runBlocking

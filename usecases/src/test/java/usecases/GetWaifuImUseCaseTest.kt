@@ -1,10 +1,10 @@
 package usecases
 
+import com.mackenzie.testshared.sampleImWaifu
 import com.mackenzie.waifuviewer.usecases.GetWaifuImUseCase
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
-
 import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock

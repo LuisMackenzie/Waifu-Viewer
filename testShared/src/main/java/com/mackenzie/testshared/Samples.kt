@@ -1,10 +1,10 @@
-package usecases
+package com.mackenzie.testshared
 
 import com.mackenzie.waifuviewer.domain.FavoriteItem
 import com.mackenzie.waifuviewer.domain.WaifuImItem
 import com.mackenzie.waifuviewer.domain.WaifuPicItem
 
-internal val sampleImWaifu = WaifuImItem(
+val sampleImWaifu = WaifuImItem(
     id = 0,
     dominantColor = "",
     file = "",
@@ -16,13 +16,13 @@ internal val sampleImWaifu = WaifuImItem(
     isFavorite = true
 )
 
-internal val samplePicWaifu = WaifuPicItem(
+val samplePicWaifu = WaifuPicItem(
     id = 0,
     url = "https://cdn.waifu.im/5f7e656343cb7be1.jpg",
     isFavorite = true
 )
 
-internal val sampleFavWaifu = FavoriteItem(
+val sampleFavWaifu = FavoriteItem(
     id = 0,
     title = "Waifu Test",
     url = "https://cdn.waifu.im/5f7e656343cb7be1.jpg",
