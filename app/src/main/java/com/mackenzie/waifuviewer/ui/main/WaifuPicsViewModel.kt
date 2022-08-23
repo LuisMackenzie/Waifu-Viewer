@@ -28,14 +28,12 @@ class WaifuPicsViewModel @Inject constructor(
 
     private val _state = MutableStateFlow(UiState())
     val state: StateFlow<UiState> = _state.asStateFlow()
-    // private val _events = Channel<UiEvent> ()
-    // val events = _events.receiveAsFlow()
 
     init {
         viewModelScope.launch {
             getWaifuPicUseCase()
                 .catch { cause -> _state.update { it.copy(error = cause.toError()) }}
-                .collect{ waifusPics -> _state.update { UiState(isLoading = false, waifus = waifusPics) } }
+                .collect{ waifusPics -> _state.update { UiState( waifus = waifusPics) } }
         }
     }
 
@@ -65,19 +63,18 @@ class WaifuPicsViewModel @Inject constructor(
     private fun waifusGetter(isNsfw: String, tag: String) {
         viewModelScope.launch {
             _state.value = _state.value.copy(isLoading = true)
+            val error: Error?
             if (tag == "all") {
-                val error = requestWaifuPicUseCase(isNsfw, "waifu")
-                _state.update { _state.value.copy(error = error) }
+                error = requestWaifuPicUseCase(isNsfw, "waifu")
             } else {
-                val error = requestWaifuPicUseCase(isNsfw, tag)
-                _state.update { _state.value.copy(error = error) }
+                error = requestWaifuPicUseCase(isNsfw, tag)
             }
+            _state.value = _state.value.copy(error = error)
         }
     }
 
     private fun moreWaifusGetter(isNsfw: String, tag: String) {
         viewModelScope.launch {
-            // _state.value = _state.value.copy(isLoading = true)
             if (tag == "all") {
                 val error = requestMorePicUseCase(isNsfw, "waifu")
                 _state.update { _state.value.copy(error = error) }

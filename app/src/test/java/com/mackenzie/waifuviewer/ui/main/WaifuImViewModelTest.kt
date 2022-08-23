@@ -71,11 +71,13 @@ class WaifuImViewModelTest {
         vm.state.test {
             assertEquals(UiState(), awaitItem())
             assertEquals(UiState(waifus = imSample), awaitItem())
-            val job = launch { assertEquals(UiState(waifus = imSample, isLoading = true), awaitItem()) }
+            assertEquals(UiState(waifus = imSample, isLoading = true), awaitItem())
+            assertEquals(UiState(waifus = imSample, isLoading = false), awaitItem())
+            /*val job = launch { assertEquals(UiState(waifus = imSample, isLoading = true), awaitItem()) }
             val job2 = launch { assertEquals(UiState(waifus = imSample, isLoading = false), awaitItem()) }
             runCurrent()
             job.cancel()
-            job2.cancel()
+            job2.cancel()*/
             cancel()
         }
     }

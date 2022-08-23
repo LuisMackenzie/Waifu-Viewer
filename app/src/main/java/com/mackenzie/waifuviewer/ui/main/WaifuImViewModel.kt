@@ -1,11 +1,10 @@
 package com.mackenzie.waifuviewer.ui.main
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.mackenzie.waifuviewer.WaifuPicsViewModel
 import com.mackenzie.waifuviewer.data.toError
 import com.mackenzie.waifuviewer.domain.Error
-import com.mackenzie.waifuviewer.domain.FavoriteItem
 import com.mackenzie.waifuviewer.domain.WaifuImItem
 import com.mackenzie.waifuviewer.usecases.GetWaifuImUseCase
 import com.mackenzie.waifuviewer.usecases.RequestWaifuImUseCase
@@ -32,45 +31,42 @@ class WaifuImViewModel @Inject constructor(
         viewModelScope.launch {
             getWaifuImUseCase()
                 .catch { cause -> _state.update { it.copy(error = cause.toError()) }}
-                .collect{ WaifusIm -> _state.update { UiState(waifus = WaifusIm) } }
+                .collect{ waifusIm -> _state.update { UiState( waifus = waifusIm) } }
         }
     }
 
     fun onImReady(isNsfw: Boolean, isGif: Boolean, tag: String, orientation: Boolean) {
         viewModelScope.launch {
             _state.value = _state.value.copy(isLoading = true)
+            val error : Error?
             if (tag == "all") {
                 if (isNsfw) {
-                    val error = requestWaifuImUseCase(isNsfw,"ecchi",isGif,orientation)
-                    _state.update { it.copy(isLoading = false, error = error) }
+                    error = requestWaifuImUseCase(isNsfw,"ecchi",isGif,orientation)
                 } else {
-                    val error = requestWaifuImUseCase(isNsfw,"waifu",isGif,orientation)
-                    _state.update { it.copy(isLoading = false, error = error) }
+                    error = requestWaifuImUseCase(isNsfw,"waifu",isGif,orientation)
                 }
             } else {
-                val error = requestWaifuImUseCase(isNsfw, tag, isGif,  orientation)
-                _state.update { it.copy(isLoading = false, error = error) }
+                error = requestWaifuImUseCase(isNsfw, tag, isGif,  orientation)
             }
+            _state.value = _state.value.copy(error = error)
         }
     }
 
     fun onRequestMore(isNsfw: Boolean, isGif: Boolean, tag: String, orientation: Boolean) {
         viewModelScope.launch {
-            // _state.value = _state.value.copy(isLoading = true)
             if (tag == "all") {
                 if (isNsfw) {
                     val error = requestMoreImUseCase(isNsfw,"ecchi",isGif,orientation)
-                    _state.update { it.copy(error = error) }
+                    _state.value = _state.value.copy(error = error)
 
                 } else {
                     val error = requestMoreImUseCase(isNsfw,"waifu",isGif,orientation)
-                    _state.update { it.copy(error = error) }
+                    _state.value = _state.value.copy(error = error)
 
                 }
             } else {
                 val error = requestMoreImUseCase(isNsfw, tag, isGif,  orientation)
-                _state.update { it.copy(error = error) }
-
+                _state.value = _state.value.copy(error = error)
             }
         }
     }
@@ -78,7 +74,7 @@ class WaifuImViewModel @Inject constructor(
     fun onClearImDatabase() {
         viewModelScope.launch {
             val error = clearWaifuImUseCase()
-            _state.update { it.copy(error = error) }
+            _state.value = _state.value.copy(error = error)
         }
     }
 

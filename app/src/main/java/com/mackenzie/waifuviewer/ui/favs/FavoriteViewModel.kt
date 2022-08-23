@@ -24,9 +24,10 @@ class FavoriteViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
+            _state.value = _state.value.copy(isLoading = true)
             getFavoritesUseCase()
                 .catch { cause -> _state.update { it.copy(error = cause.toError()) }}
-                .collect{ favoriteWaifus -> _state.update { UiState(isLoading = false, waifus = favoriteWaifus) } }
+                .collect{ favoriteWaifus -> _state.update { UiState(waifus = favoriteWaifus) } }
         }
     }
 
