@@ -34,6 +34,10 @@ class WaifuPicsAdapter(private val listener: (WaifuPicItem) -> Unit ): ListAdapt
             waifuTitle.text = waifu.url.substringAfterLast('/').substringBeforeLast('.')
             waifuThumb.loadUrl(waifu.url)
             ivFavs.visibility = if (waifu.isFavorite) View.VISIBLE else View.GONE
+
+            /*if (waifu.url.substringAfterLast('.') == "png") {
+                preview.visibility = View.GONE
+            }*/
         }
 
     }

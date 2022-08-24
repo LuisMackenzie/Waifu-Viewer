@@ -42,6 +42,8 @@ class SelectorImViewModelTest {
     fun `State is updated with current cached content inmediately`() = runTest {
         whenever(requestOnlyWaifuImUseCase()).thenReturn(imSample)
 
+        vm.loadErrorOrWaifu()
+
         vm.state.test {
             assertEquals(UiState(), awaitItem())
             assertEquals(UiState(waifu = imSample), awaitItem())

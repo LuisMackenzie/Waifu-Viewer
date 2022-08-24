@@ -26,7 +26,6 @@ class FavoriteAdapter(
         holder.bind(waifuItem)
         holder.itemView.setOnClickListener { listener.onClick(waifuItem) }
         holder.itemView.setOnLongClickListener { listener.onLongClick(waifuItem); true }
-        // holder.itemView.setOnLongClickListener { viewModel.onDeleteFavorite(waifuItem); true }
     }
 
     inner class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
@@ -39,6 +38,10 @@ class FavoriteAdapter(
             waifuTitle.text = waifu.title
             waifuThumb.loadUrl(waifu.url)
             ivFavs.visibility = if (waifu.isFavorite) View.VISIBLE else View.GONE
+
+            if (waifu.url.substringAfterLast('.') == "png") {
+                preview.visibility = View.GONE
+            }
         }
     }
 

@@ -50,9 +50,6 @@ class FavoriteViewModelTest {
 
     @Test
     fun `State is updated with current cached content inmediately`() = runTest {
-        /*viewModel.state.collect {
-            assertEquals(FavoriteViewModel.UiState(waifus = favoriteSample), it)
-        }*/
         val results = mutableListOf<FavoriteViewModel.UiState>()
         val job = launch { vm.state.toList(results) }
         runCurrent()

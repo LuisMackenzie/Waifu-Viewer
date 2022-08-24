@@ -72,9 +72,9 @@ class WaifuImViewModelTest {
         vm.state.test {
             assertEquals(UiState(), awaitItem())
             // assertEquals(UiState(isLoading = true), awaitItem())
-            assertEquals(UiState(waifus = imSample), awaitItem())
-            assertEquals(UiState(waifus = imSample, isLoading = true), awaitItem())
-            assertEquals(UiState(waifus = imSample, isLoading = false), awaitItem())
+            assertEquals(UiState(isLoading = false, waifus = imSample), awaitItem())
+            // assertEquals(UiState(isLoading = true), awaitItem())
+            // assertEquals(UiState(isLoading = false), awaitItem())
             cancel()
         }
     }
