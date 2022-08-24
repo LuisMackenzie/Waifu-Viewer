@@ -1,4 +1,4 @@
-package com.mackenzie.waifuviewer
+package com.mackenzie.waifuviewer.testrules
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

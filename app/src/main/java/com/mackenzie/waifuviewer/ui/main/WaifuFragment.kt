@@ -95,8 +95,6 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         val isNsfw = bun.getBoolean(IS_NSFW_WAIFU)
         val categoryTag = bun.getString(CATEGORY_TAG)!!
 
-        loading = state.isLoading
-
         state.waifus?.let { savedPicWaifus ->
             // waifuPicsAdapter.submitList(savedPicWaifus.reversed())
             waifuPicsAdapter.submitList(savedPicWaifus)
@@ -115,10 +113,9 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
             Toast.makeText(requireContext(), it.toString(), Toast.LENGTH_SHORT).show()
         }
 
-        state.isLoading.let {
-            // loading = it
+        state.isLoading?.let {
+            loading = it
             // progress.visibility = if (it) View.VISIBLE else View.GONE
-            Toast.makeText(requireContext(), "isLoading: $it", Toast.LENGTH_SHORT).show()
         }
 
         fabRecycler.setOnClickListener {
@@ -142,8 +139,6 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         val orientation = bun.getBoolean(IS_LANDS_WAIFU)
         val categoryTag = bun.getString(CATEGORY_TAG)!!
 
-        loading = state.isLoading
-
         state.waifus?.let { savedImWaifus ->
             waifuImAdapter.submitList(savedImWaifus)
             count = savedImWaifus.size
@@ -160,10 +155,8 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
             Toast.makeText(requireContext(), it.toString(), Toast.LENGTH_SHORT).show()
         }
 
-        state.isLoading.let {
-            // loading = it
-            // progress.visibility = if (it) View.VISIBLE else View.GONE
-            Toast.makeText(requireContext(), "isLoading: $it", Toast.LENGTH_SHORT).show()
+        state.isLoading?.let {
+            loading = it
 
         }
 

@@ -3,6 +3,7 @@ package com.mackenzie.waifuviewer.ui.detail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mackenzie.waifuviewer.di.WaifuId
 import com.mackenzie.waifuviewer.domain.Error
 import com.mackenzie.waifuviewer.domain.FavoriteItem
 import com.mackenzie.waifuviewer.domain.WaifuImItem
@@ -18,14 +19,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailFavsViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
+    @WaifuId private val waifuId: Int,
     findFavoriteUseCase: FindFavoriteUseCase,
     private val switchFavoriteUseCase : SwitchFavoriteUseCase
     ): ViewModel() {
 
     private val _state = MutableStateFlow(UiState())
     val state: StateFlow<UiState> = _state.asStateFlow()
-    private val waifuId = DetailFragmentArgs.fromSavedStateHandle(savedStateHandle).waifuId
 
     init {
         viewModelScope.launch {

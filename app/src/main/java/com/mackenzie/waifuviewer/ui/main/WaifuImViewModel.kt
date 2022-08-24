@@ -48,7 +48,7 @@ class WaifuImViewModel @Inject constructor(
             } else {
                 error = requestWaifuImUseCase(isNsfw, tag, isGif,  orientation)
             }
-            _state.value = _state.value.copy(error = error)
+            _state.value = _state.value.copy(isLoading = false, error = error)
         }
     }
 
@@ -79,7 +79,7 @@ class WaifuImViewModel @Inject constructor(
     }
 
     data class UiState(
-        val isLoading: Boolean = false,
+        val isLoading: Boolean? = null,
         val waifus: List<WaifuImItem>? = null,
         val error: Error? = null
     )

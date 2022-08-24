@@ -69,7 +69,7 @@ class WaifuPicsViewModel @Inject constructor(
             } else {
                 error = requestWaifuPicUseCase(isNsfw, tag)
             }
-            _state.value = _state.value.copy(error = error)
+            _state.value = _state.value.copy(isLoading = false, error = error)
         }
     }
 
@@ -86,7 +86,7 @@ class WaifuPicsViewModel @Inject constructor(
     }
 
     data class UiState(
-        val isLoading: Boolean = false,
+        val isLoading: Boolean? = null,
         val waifus: List<WaifuPicItem>? = null,
         val error: Error? = null
     )

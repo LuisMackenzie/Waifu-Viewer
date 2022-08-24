@@ -62,8 +62,6 @@ abstract class AppDataModule {
     @Binds
     abstract fun bindRemotePicDataSource(remotePicDataSource: ServerPicDataSource): WaifusPicRemoteDataSource
 
-
-
     @Binds
     abstract fun bindLocationDataSource(locationDataSource: PlayServicesLocationDataSource): LocationDataSource
 

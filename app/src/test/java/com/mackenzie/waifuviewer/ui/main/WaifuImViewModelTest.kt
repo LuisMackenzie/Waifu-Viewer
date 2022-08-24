@@ -2,7 +2,7 @@ package com.mackenzie.waifuviewer.ui.main
 
 import app.cash.turbine.test
 import com.mackenzie.testshared.sampleImWaifu
-import com.mackenzie.waifuviewer.CoroutinesTestRule
+import com.mackenzie.waifuviewer.testrules.CoroutinesTestRule
 import com.mackenzie.waifuviewer.ui.main.WaifuImViewModel.UiState
 import com.mackenzie.waifuviewer.usecases.ClearWaifuImUseCase
 import com.mackenzie.waifuviewer.usecases.GetWaifuImUseCase
@@ -10,13 +10,14 @@ import com.mackenzie.waifuviewer.usecases.RequestMoreWaifuImUseCase
 import com.mackenzie.waifuviewer.usecases.RequestWaifuImUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.*
 import org.junit.*
 import org.junit.Assert.assertEquals
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
+import org.mockito.kotlin.any
+import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
 @ExperimentalCoroutinesApi
@@ -70,51 +71,40 @@ class WaifuImViewModelTest {
 
         vm.state.test {
             assertEquals(UiState(), awaitItem())
+            // assertEquals(UiState(isLoading = true), awaitItem())
             assertEquals(UiState(waifus = imSample), awaitItem())
             assertEquals(UiState(waifus = imSample, isLoading = true), awaitItem())
             assertEquals(UiState(waifus = imSample, isLoading = false), awaitItem())
-            /*val job = launch { assertEquals(UiState(waifus = imSample, isLoading = true), awaitItem()) }
-            val job2 = launch { assertEquals(UiState(waifus = imSample, isLoading = false), awaitItem()) }
-            runCurrent()
-            job.cancel()
-            job2.cancel()*/
             cancel()
         }
     }
 
     @Test
-    fun getState() {
+    fun `Waifus are requested when UI screen starts`() = runTest {
+        vm.onImReady(false, false, "waifu", false)
+
+        runCurrent()
+
+        verify(requestWaifuImUseCase).invoke(any(), any(), any(), any())
     }
 
     @Test
-    fun onImReady() {
+    fun `More Waifus are requested when press Button`() = runTest {
+        vm.onRequestMore(false, false, "waifu", false)
+
+        runCurrent()
+
+        verify(requestMoreWaifuImUseCase).invoke(any(), any(), any(), any())
     }
 
     @Test
-    fun onRequestMore() {
+    fun `Clear Waifus when press Button`() = runTest {
+        vm.onClearImDatabase()
+
+        runCurrent()
+
+        verify(clearWaifuImUseCase).invoke()
     }
 
-    @Test
-    fun onClearImDatabase() {
-    }
 
-    @Test
-    fun getCoroutineContext() {
-    }
-
-    @Test
-    fun getJob() {
-    }
-
-    @Test
-    fun setJob() {
-    }
-
-    @Test
-    fun destroyScope() {
-    }
-
-    @Test
-    fun initScope() {
-    }
 }
