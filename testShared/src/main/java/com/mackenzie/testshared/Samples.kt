@@ -13,18 +13,18 @@ val sampleImWaifu = WaifuImItem(
     imageId = 6969,
     isNsfw = false,
     url = "https://cdn.waifu.im/5f7e656343cb7be1.jpg",
-    isFavorite = true
+    isFavorite = false
 )
 
 val samplePicWaifu = WaifuPicItem(
     id = 0,
     url = "https://cdn.waifu.im/5f7e656343cb7be1.jpg",
-    isFavorite = true
+    isFavorite = false
 )
 
 val sampleFavWaifu = FavoriteItem(
     id = 0,
     title = "Waifu Test",
     url = "https://cdn.waifu.im/5f7e656343cb7be1.jpg",
-    isFavorite = true
+    isFavorite = false
 )
