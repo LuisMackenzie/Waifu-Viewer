@@ -2,17 +2,14 @@ package com.mackenzie.waifuviewer.ui.main
 
 import app.cash.turbine.test
 import com.mackenzie.testshared.sampleImWaifu
-import com.mackenzie.waifuviewer.data.RegionRepository
 import com.mackenzie.waifuviewer.data.WaifusImRepository
 import com.mackenzie.waifuviewer.domain.WaifuImItem
 import com.mackenzie.waifuviewer.testrules.CoroutinesTestRule
-import com.mackenzie.waifuviewer.ui.FakeLocationDataSource
-import com.mackenzie.waifuviewer.ui.FakePermissionChecker
 import com.mackenzie.waifuviewer.ui.fakes.FakeFavoriteDataSource
 import com.mackenzie.waifuviewer.ui.fakes.FakeLocalImDataSource
 import com.mackenzie.waifuviewer.ui.fakes.FakeRemoteImDataSource
-import com.mackenzie.waifuviewer.ui.main.WaifuImViewModel.*
-import com.mackenzie.waifuviewer.usecases.*
+import com.mackenzie.waifuviewer.ui.main.SelectorImViewModel.UiState
+import com.mackenzie.waifuviewer.usecases.RequestOnlyWaifuImUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -20,53 +17,47 @@ import org.junit.Rule
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
-class WaifuImIntegrationTests  {
+class SelectorImIntegrationTests {
 
     @get:Rule
     val coroutinesTestRule = CoroutinesTestRule()
 
     @Test
     fun `Data is loaded from IM server when local source is empty`() = runTest {
-        val remoteData = listOf(sampleImWaifu.copy(1), sampleImWaifu.copy(2), sampleImWaifu.copy(3))
+        val remoteData = sampleImWaifu.copy(1)
 
-        val vm = buildModelWith(remoteData = remoteData)
+        val vm = buildModelWith(remoteData = listOf(remoteData))
 
-        vm.onImReady(false, false, "waifu", false)
-
+        vm.loadErrorOrWaifu()
 
         vm.state.test {
             assertEquals(UiState(), awaitItem())
             // Assert.assertEquals(UiState(waifus = emptyList()), awaitItem())
             // Assert.assertEquals(UiState(waifus = emptyList(), isLoading = true), awaitItem())
-            assertEquals(UiState(waifus = emptyList(), isLoading = false), awaitItem())
-            assertEquals(UiState(waifus = remoteData), awaitItem())
+            // assertEquals(UiState(waifu = emptyList(), isLoading = false), awaitItem())
+            assertEquals(UiState(waifu = remoteData), awaitItem())
         }
 
     }
 
     @Test
     fun `Data is loaded from local IM database when available`() = runTest {
-        val localData = listOf(sampleImWaifu.copy(7), sampleImWaifu.copy(8), sampleImWaifu.copy(9))
+        val localData = sampleImWaifu.copy(7)
         val remoteData = listOf(sampleImWaifu.copy(4), sampleImWaifu.copy(5), sampleImWaifu.copy(6))
 
-        val vm = buildModelWith(localData, remoteData)
+        val vm = buildModelWith(listOf(localData), remoteData)
 
-        vm.onImReady(false, false, "waifu", false)
+        vm.loadErrorOrWaifu()
 
 
         vm.state.test {
             assertEquals(UiState(), awaitItem())
-            assertEquals(UiState(waifus = localData, isLoading = false), awaitItem())
+            assertEquals(UiState(waifu = remoteData[0]), awaitItem())
         }
 
     }
 
-
-
-    private fun buildModelWith(localData:List<WaifuImItem> = emptyList(), remoteData: List<WaifuImItem> = emptyList()): WaifuImViewModel {
-        val permissionChecker = FakePermissionChecker()
-        val locationDataSource = FakeLocationDataSource()
-        val regionRepository = RegionRepository(locationDataSource, permissionChecker)
+    private fun buildModelWith(localData:List<WaifuImItem> = emptyList(), remoteData: List<WaifuImItem> = emptyList()): SelectorImViewModel {
 
         val favoriteDataSource = FakeFavoriteDataSource()
         val imLocalDataSource = FakeLocalImDataSource().apply { waifusIm.value = localData }
@@ -75,11 +66,8 @@ class WaifuImIntegrationTests  {
 
         // val Repository = buildRepositoryWith(localData, remoteData)
 
-        val getWaifuImUseCase = GetWaifuImUseCase(repo)
-        val requestWaifuImUseCase = RequestWaifuImUseCase(repo)
-        val requestMoreWaifuImUseCase = RequestMoreWaifuImUseCase(repo)
-        val clearWaifuImUseCase = ClearWaifuImUseCase(repo)
-        val vm = WaifuImViewModel(getWaifuImUseCase, requestWaifuImUseCase, requestMoreWaifuImUseCase, clearWaifuImUseCase)
+        val requestOnlyWaifuImUseCase = RequestOnlyWaifuImUseCase(repo)
+        val vm = SelectorImViewModel(requestOnlyWaifuImUseCase)
         return vm
     }
 
