@@ -15,7 +15,7 @@ data class Waifu(
     @SerializedName("is_nsfw") val isNsfw: Boolean,
     @SerializedName("preview_url") val previewUrl: String,
     val source: String,
-    val tags: List<Tag>,
+    // val tags: List<Tag>,
     @SerializedName("uploaded_at") val uploadedAt: String,
     val url: String,
     val width: String

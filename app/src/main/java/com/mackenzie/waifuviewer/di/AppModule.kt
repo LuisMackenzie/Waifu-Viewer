@@ -15,6 +15,11 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
 import javax.inject.Singleton
 
 @Module
@@ -40,6 +45,45 @@ object AppModule {
     @Provides
     @Singleton
     fun provideFavoriteDao(db: WaifuDataBase) = db.favoriteDao()
+
+    @Provides
+    @Singleton
+    fun provideWaifuImService() {
+        // val baseUrlWaifuIm = "https://api.waifu.im/"
+        val okHttpClient = HttpLoggingInterceptor().run {
+            level = HttpLoggingInterceptor.Level.BODY
+            OkHttpClient.Builder().addInterceptor(this).build()
+        }
+
+
+        val builderIm = Retrofit.Builder()
+            .baseUrl("https://api.waifu.im/")
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+
+        return builderIm.create()
+    }
+
+    @Provides
+    @Singleton
+    fun provideWaifuPicService() {
+        // private val baseUrlWaifuPics = "https://api.waifu.pics/"
+        val okHttpClient = HttpLoggingInterceptor().run {
+            level = HttpLoggingInterceptor.Level.BODY
+            OkHttpClient.Builder().addInterceptor(this).build()
+        }
+
+        val builderPics = Retrofit.Builder()
+            .baseUrl("https://api.waifu.pics/")
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+
+        return builderPics.create()
+    }
 
 }
 

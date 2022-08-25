@@ -1,6 +1,13 @@
 package com.mackenzie.waifuviewer.ui.fakes
 
 import com.mackenzie.waifuviewer.data.datasource.FavoriteLocalDataSource
+import com.mackenzie.waifuviewer.data.db.FavoriteDao
+import com.mackenzie.waifuviewer.data.db.FavoriteDbItem
+import com.mackenzie.waifuviewer.data.db.WaifuImDao
+import com.mackenzie.waifuviewer.data.db.WaifuImDbItem
+import com.mackenzie.waifuviewer.data.server.Waifu
+import com.mackenzie.waifuviewer.data.server.WaifuImService
+import com.mackenzie.waifuviewer.data.server.WaifuResult
 import com.mackenzie.waifuviewer.domain.Error
 import com.mackenzie.waifuviewer.domain.FavoriteItem
 import com.mackenzie.waifuviewer.domain.WaifuImItem
@@ -8,6 +15,50 @@ import com.mackenzie.waifuviewer.domain.WaifuPicItem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
+
+class FakeFavoriteDao(waifusIm: List<FavoriteDbItem> = emptyList()) : FavoriteDao {
+
+    private val inMemoryMovies = MutableStateFlow(waifusIm)
+
+    private lateinit var findWaifuFlow: MutableStateFlow<FavoriteDbItem>
+
+    override fun getAllFavs(): Flow<List<FavoriteDbItem>> = inMemoryMovies
+
+    override fun findFavById(id: Int): Flow<FavoriteDbItem> {
+        findWaifuFlow = MutableStateFlow(inMemoryMovies.value.first { it.id == id })
+        return findWaifuFlow
+    }
+
+    override suspend fun favoriteCount(): Int = inMemoryMovies.value.size
+
+    override suspend fun insertFavorite(waifu: FavoriteDbItem) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun insertAllFavorite(waifus: List<FavoriteDbItem>) {
+        inMemoryMovies.value = waifus
+
+        if (::findWaifuFlow.isInitialized) {
+            waifus.firstOrNull() { it.id == findWaifuFlow.value.id }
+                ?.let { findWaifuFlow.value = it }
+        }
+
+    }
+
+    override suspend fun updateFav(waifu: FavoriteDbItem) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteFav(waifu: FavoriteDbItem) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteAll() {
+        TODO("Not yet implemented")
+    }
+
+}
+/*
 class FakeFavoriteDataSource : FavoriteLocalDataSource {
 
     val inMemoryWaifus = MutableStateFlow<List<FavoriteItem>>(emptyList())
@@ -58,4 +109,4 @@ class FakeFavoriteDataSource : FavoriteLocalDataSource {
     override suspend fun deleteAll(): Error? {
         return null
     }
-}
+}*/

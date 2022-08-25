@@ -29,17 +29,7 @@ object RemoteConnection {
         .client(okHttpClient)
         .build()
 
-    fun <T> buildServiceIm(service: Class<T>): T {
-        return builderIm.create(service)
-    }
 
-    fun <T> buildServicePics(service: Class<T>): T {
-        return builderPics.create(service)
-    }
-
-    val serviceIm = builderIm.create(WaifuService::class.java)
-    val servicePics = builderPics.create(WaifuService::class.java)
-    // val servicePics = buildServicePics(WaifuManager::class.java)
-    // val serviceIm = buildServiceIm(WaifuService::class.java)
-    // val servicePics = builderPics.create(WaifuService::class.java)
+    val serviceIm = builderIm.create(WaifuImService::class.java)
+    val servicePics = builderPics.create(WaifuImService::class.java)
 }
