@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class Waifu(
+data class WaifuIm(
     @SerializedName("dominant_color") val dominant_color: String,
     val extension: String,
     val favourites: Int,
@@ -23,7 +23,7 @@ data class Waifu(
 
 
 data class WaifuResult(
-    @SerializedName("images")val waifus: List<Waifu>
+    @SerializedName("images")val waifus: List<WaifuIm>
 )
 
 @Parcelize
@@ -45,6 +45,11 @@ data class Tag(
 
 data class TagResult(
     @SerializedName("nsfw") val categories: List<Tag>
+)
+
+data class RemoteConnect(
+    val serviceIm: WaifuImService,
+    val servicePic: WaifuPicService
 )
 
 

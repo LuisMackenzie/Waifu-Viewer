@@ -1,17 +1,7 @@
 package com.mackenzie.waifuviewer.ui.fakes
 
-import com.mackenzie.waifuviewer.data.datasource.FavoriteLocalDataSource
 import com.mackenzie.waifuviewer.data.db.FavoriteDao
 import com.mackenzie.waifuviewer.data.db.FavoriteDbItem
-import com.mackenzie.waifuviewer.data.db.WaifuImDao
-import com.mackenzie.waifuviewer.data.db.WaifuImDbItem
-import com.mackenzie.waifuviewer.data.server.Waifu
-import com.mackenzie.waifuviewer.data.server.WaifuImService
-import com.mackenzie.waifuviewer.data.server.WaifuResult
-import com.mackenzie.waifuviewer.domain.Error
-import com.mackenzie.waifuviewer.domain.FavoriteItem
-import com.mackenzie.waifuviewer.domain.WaifuImItem
-import com.mackenzie.waifuviewer.domain.WaifuPicItem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 

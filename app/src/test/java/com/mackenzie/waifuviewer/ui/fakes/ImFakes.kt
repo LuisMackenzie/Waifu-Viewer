@@ -2,7 +2,7 @@ package com.mackenzie.waifuviewer.ui.fakes
 
 import com.mackenzie.waifuviewer.data.db.WaifuImDao
 import com.mackenzie.waifuviewer.data.db.WaifuImDbItem
-import com.mackenzie.waifuviewer.data.server.Waifu
+import com.mackenzie.waifuviewer.data.server.WaifuIm
 import com.mackenzie.waifuviewer.data.server.WaifuImService
 import com.mackenzie.waifuviewer.data.server.WaifuResult
 import kotlinx.coroutines.flow.Flow
@@ -51,7 +51,7 @@ class FakeWaifuImDao(waifusIm: List<WaifuImDbItem> = emptyList()) : WaifuImDao {
 
 }
 
-class FakeRemoteImService(private val waifus: List<Waifu> = emptyList()) : WaifuImService {
+class FakeRemoteImService(private val waifus: List<WaifuIm> = emptyList()) : WaifuImService {
 
     override suspend fun getRandomWaifuIm(
         isNsfw: Boolean,

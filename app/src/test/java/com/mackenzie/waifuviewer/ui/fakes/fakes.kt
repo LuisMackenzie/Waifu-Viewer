@@ -5,13 +5,6 @@ import com.mackenzie.testshared.sampleImWaifu
 import com.mackenzie.testshared.samplePicWaifu
 import com.mackenzie.waifuviewer.data.PermissionChecker
 import com.mackenzie.waifuviewer.data.datasource.LocationDataSource
-import com.mackenzie.waifuviewer.data.db.WaifuImDao
-import com.mackenzie.waifuviewer.data.db.WaifuImDbItem
-import com.mackenzie.waifuviewer.data.server.Waifu
-import com.mackenzie.waifuviewer.data.server.WaifuResult
-import com.mackenzie.waifuviewer.data.server.WaifuImService
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 
 val defaultFakeImWaifus = listOf(
     sampleImWaifu.copy(1),

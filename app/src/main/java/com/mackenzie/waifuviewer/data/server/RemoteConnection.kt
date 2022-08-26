@@ -31,5 +31,5 @@ object RemoteConnection {
 
 
     val serviceIm = builderIm.create(WaifuImService::class.java)
-    val servicePics = builderPics.create(WaifuImService::class.java)
+    val servicePics = builderPics.create(WaifuPicService::class.java)
 }

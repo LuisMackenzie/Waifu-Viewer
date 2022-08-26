@@ -8,10 +8,11 @@ import com.mackenzie.waifuviewer.domain.WaifuImItem
 import javax.inject.Inject
 
 
-class ServerImDataSource @Inject constructor(private val remoteService: WaifuImService): WaifusImRemoteDataSource {
+class ServerImDataSource @Inject constructor(private val remoteService: RemoteConnect): WaifusImRemoteDataSource {
 
     override suspend fun getRandomWaifusIm(isNsfw: Boolean, tag: String, isGif: Boolean, orientation: String): Either<Error, List<WaifuImItem>> = tryCall {
-        remoteService.getRandomWaifuIm(isNsfw, tag, isGif,  orientation)
+        remoteService.serviceIm
+            .getRandomWaifuIm(isNsfw, tag, isGif,  orientation)
             .waifus
             .toDomainModel()
     }
@@ -19,7 +20,8 @@ class ServerImDataSource @Inject constructor(private val remoteService: WaifuImS
     override suspend fun getOnlyWaifuIm(): WaifuImItem? {
         val waifu: WaifuImItem?
         try {
-            waifu = remoteService.getOnlyRandomWaifuIm().waifus.first().toDomainModel()
+            waifu = remoteService.serviceIm
+                .getOnlyRandomWaifuIm().waifus.first().toDomainModel()
         } catch (e: Exception) {
             return null
         }
@@ -28,9 +30,9 @@ class ServerImDataSource @Inject constructor(private val remoteService: WaifuImS
 
 }
 
-private fun List<Waifu>.toDomainModel(): List<WaifuImItem> = map { it.toDomainModel() }
+private fun List<WaifuIm>.toDomainModel(): List<WaifuImItem> = map { it.toDomainModel() }
 
-private fun Waifu.toDomainModel(): WaifuImItem =
+private fun WaifuIm.toDomainModel(): WaifuImItem =
     WaifuImItem(
         id = 0,
         dominant_color,

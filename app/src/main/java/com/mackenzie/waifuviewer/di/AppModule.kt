@@ -8,8 +8,7 @@ import com.mackenzie.waifuviewer.data.db.FavoriteDataSource
 import com.mackenzie.waifuviewer.data.db.RoomImDataSource
 import com.mackenzie.waifuviewer.data.db.RoomPicDataSource
 import com.mackenzie.waifuviewer.data.db.WaifuDataBase
-import com.mackenzie.waifuviewer.data.server.ServerImDataSource
-import com.mackenzie.waifuviewer.data.server.ServerPicDataSource
+import com.mackenzie.waifuviewer.data.server.*
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -48,7 +47,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideWaifuImService() {
+    fun provideWaifuService(): RemoteConnect {
         // val baseUrlWaifuIm = "https://api.waifu.im/"
         val okHttpClient = HttpLoggingInterceptor().run {
             level = HttpLoggingInterceptor.Level.BODY
@@ -62,27 +61,18 @@ object AppModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-
-        return builderIm.create()
-    }
-
-    @Provides
-    @Singleton
-    fun provideWaifuPicService() {
-        // private val baseUrlWaifuPics = "https://api.waifu.pics/"
-        val okHttpClient = HttpLoggingInterceptor().run {
-            level = HttpLoggingInterceptor.Level.BODY
-            OkHttpClient.Builder().addInterceptor(this).build()
-        }
-
         val builderPics = Retrofit.Builder()
             .baseUrl("https://api.waifu.pics/")
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
+        val serviceIm = builderIm.create(WaifuImService::class.java)
+        val servicePics = builderPics.create(WaifuPicService::class.java)
 
-        return builderPics.create()
+        val connection = RemoteConnect(serviceIm, servicePics)
+
+        return connection
     }
 
 }

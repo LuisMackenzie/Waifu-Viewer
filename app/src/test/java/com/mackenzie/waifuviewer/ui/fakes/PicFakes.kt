@@ -57,7 +57,7 @@ class FakeWaifuPicDao(waifusPic: List<WaifuPicDbItem> = emptyList()) : WaifuPicD
 
 }
 
-class FakeRemotePicsService(private val waifus: List<WaifuPic> = emptyList()) : WaifuPicService {
+class FakeRemotePicsService(private val waifus: List<String>) : WaifuPicService {
 
     override suspend fun getRandomWaifuPics(
         many: String,
@@ -65,11 +65,11 @@ class FakeRemotePicsService(private val waifus: List<WaifuPic> = emptyList()) : 
         category: String,
         body: JsonObject
     ): Response <WaifuPicsResult> {
-        // return WaifuPicsResult(waifus)
-        TODO("Not yet implemented")
+        val waifuPicsResult = WaifuPicsResult(waifus)
+        return Response.success(waifuPicsResult)
     }
 
-    override suspend fun getOnlyWaifuPic(type: String, category: String) = WaifuPic(waifus[0].url)
+    override suspend fun getOnlyWaifuPic(type: String, category: String) = WaifuPic(waifus[0])
 
 }
 

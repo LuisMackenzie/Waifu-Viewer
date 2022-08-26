@@ -8,10 +8,10 @@ import com.mackenzie.waifuviewer.domain.Error
 import com.mackenzie.waifuviewer.domain.WaifuPicItem
 import javax.inject.Inject
 
-class ServerPicDataSource @Inject constructor(private val remoteService: WaifuPicService) : WaifusPicRemoteDataSource {
+class ServerPicDataSource @Inject constructor(private val remoteService: RemoteConnect) : WaifusPicRemoteDataSource {
 
     override suspend fun getRandomWaifusPics(isNsfw: String, tag: String): Either<Error, List<WaifuPicItem>> = tryCall {
-        remoteService
+        remoteService.servicePic
             .getRandomWaifuPics(type = isNsfw, category = tag, body = getJson(isNsfw, tag))
             .body()!!
             .images
@@ -21,7 +21,8 @@ class ServerPicDataSource @Inject constructor(private val remoteService: WaifuPi
     override suspend fun getOnlyWaifuPics(): WaifuPicItem? {
         var waifu: WaifuPicItem? = null
         try {
-            waifu = remoteService.getOnlyWaifuPic().url.toDomainModel()
+            waifu = remoteService.servicePic
+                .getOnlyWaifuPic().url.toDomainModel()
         } catch (e: Exception) {
             return null
         }
