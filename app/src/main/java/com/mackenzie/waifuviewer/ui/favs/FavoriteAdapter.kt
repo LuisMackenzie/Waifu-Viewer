@@ -39,9 +39,9 @@ class FavoriteAdapter(
             waifuThumb.loadUrl(waifu.url)
             ivFavs.visibility = if (waifu.isFavorite) View.VISIBLE else View.GONE
 
-            if (waifu.url.substringAfterLast('.') == "png") {
+            /*if (waifu.url.substringAfterLast('.') == "png") {
                 preview.visibility = View.GONE
-            }
+            }*/
         }
     }
 
