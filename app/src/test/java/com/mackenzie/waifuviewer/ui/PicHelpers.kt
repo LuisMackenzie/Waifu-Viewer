@@ -1,13 +1,9 @@
 package com.mackenzie.waifuviewer.ui
 
 import com.mackenzie.waifuviewer.data.WaifusPicRepository
-import com.mackenzie.waifuviewer.data.db.FavoriteDataSource
-import com.mackenzie.waifuviewer.data.db.RoomPicDataSource
-import com.mackenzie.waifuviewer.data.db.WaifuPicDbItem
-import com.mackenzie.waifuviewer.data.server.ServerPicDataSource
-import com.mackenzie.waifuviewer.ui.fakes.FakeFavoriteDao
-import com.mackenzie.waifuviewer.ui.fakes.FakeRemotePicsService
-import com.mackenzie.waifuviewer.ui.fakes.FakeWaifuPicDao
+import com.mackenzie.waifuviewer.data.db.*
+import com.mackenzie.waifuviewer.data.server.*
+import com.mackenzie.waifuviewer.ui.fakes.*
 
 fun buildPicRepositoryWith(
     localData: List<WaifuPicDbItem>,
@@ -15,11 +11,11 @@ fun buildPicRepositoryWith(
 ): WaifusPicRepository {
     val localPicDataSource = RoomPicDataSource(FakeWaifuPicDao(localData))
     val favoriteDataSource = FavoriteDataSource(FakeFavoriteDao())
-    val remotePicDataSource = ServerPicDataSource( FakeRemotePicsService(remoteData))
+    val remotePicDataSource = ServerPicDataSource( RemoteConnect(FakeRemoteImService(listOf()), FakeRemotePicsService(remoteData)))
     return WaifusPicRepository(localPicDataSource, favoriteDataSource , remotePicDataSource)
 }
 
-fun buildDatabasePicMovies(vararg id: Int) = id.map {
+fun buildPicDatabaseWaifus(vararg id: Int) = id.map {
     WaifuPicDbItem(
         id = it,
         url = "https://cdn.waifu.im/5f7e656343cb7be1.jpg",
@@ -27,6 +23,6 @@ fun buildDatabasePicMovies(vararg id: Int) = id.map {
     )
 }
 
-fun buildRemotePicMovies(vararg id: Int) = id.map {
+fun buildPicRemoteWaifus(vararg id: Int) = id.map {
     "https://cdn.waifu.im/5f7e656343cb7be1.jpg"
 }

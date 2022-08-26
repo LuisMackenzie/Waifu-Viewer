@@ -4,11 +4,12 @@ import com.mackenzie.waifuviewer.data.db.FavoriteDao
 import com.mackenzie.waifuviewer.data.db.FavoriteDbItem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 
 
-class FakeFavoriteDao(waifusIm: List<FavoriteDbItem> = emptyList()) : FavoriteDao {
+class FakeFavoriteDao(waifus: List<FavoriteDbItem> = emptyList()) : FavoriteDao {
 
-    private val inMemoryMovies = MutableStateFlow(waifusIm)
+    private val inMemoryMovies = MutableStateFlow(waifus)
 
     private lateinit var findWaifuFlow: MutableStateFlow<FavoriteDbItem>
 
@@ -22,7 +23,7 @@ class FakeFavoriteDao(waifusIm: List<FavoriteDbItem> = emptyList()) : FavoriteDa
     override suspend fun favoriteCount(): Int = inMemoryMovies.value.size
 
     override suspend fun insertFavorite(waifu: FavoriteDbItem) {
-        TODO("Not yet implemented")
+        inMemoryMovies.update { it }
     }
 
     override suspend fun insertAllFavorite(waifus: List<FavoriteDbItem>) {
@@ -36,15 +37,15 @@ class FakeFavoriteDao(waifusIm: List<FavoriteDbItem> = emptyList()) : FavoriteDa
     }
 
     override suspend fun updateFav(waifu: FavoriteDbItem) {
-        TODO("Not yet implemented")
+        inMemoryMovies.update { it }
     }
 
     override suspend fun deleteFav(waifu: FavoriteDbItem) {
-        TODO("Not yet implemented")
+        inMemoryMovies.update { it }
     }
 
     override suspend fun deleteAll() {
-        TODO("Not yet implemented")
+        inMemoryMovies.update { it }
     }
 
 }

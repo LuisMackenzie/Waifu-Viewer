@@ -1,17 +1,14 @@
 package com.mackenzie.waifuviewer.ui.fakes
 
-import arrow.core.right
 import com.google.gson.JsonObject
-import com.mackenzie.waifuviewer.data.datasource.WaifusPicLocalDataSource
-import com.mackenzie.waifuviewer.data.datasource.WaifusPicRemoteDataSource
-import com.mackenzie.waifuviewer.data.db.*
-import com.mackenzie.waifuviewer.data.server.*
-import com.mackenzie.waifuviewer.domain.Error
-import com.mackenzie.waifuviewer.domain.WaifuPicItem
-import com.mackenzie.waifuviewer.ui.defaultFakePicWaifus
+import com.mackenzie.waifuviewer.data.db.WaifuPicDao
+import com.mackenzie.waifuviewer.data.db.WaifuPicDbItem
+import com.mackenzie.waifuviewer.data.server.WaifuPic
+import com.mackenzie.waifuviewer.data.server.WaifuPicService
+import com.mackenzie.waifuviewer.data.server.WaifuPicsResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import org.mockito.kotlin.stub
+import kotlinx.coroutines.flow.update
 import retrofit2.Response
 
 class FakeWaifuPicDao(waifusPic: List<WaifuPicDbItem> = emptyList()) : WaifuPicDao {
@@ -30,7 +27,7 @@ class FakeWaifuPicDao(waifusPic: List<WaifuPicDbItem> = emptyList()) : WaifuPicD
     override suspend fun waifuPicsCount(): Int = inMemoryMovies.value.size
 
     override suspend fun insertWaifuPics(waifu: WaifuPicDbItem) {
-        TODO("Not yet implemented")
+        inMemoryMovies.update { it }
     }
 
     override suspend fun insertAllWaifuPics(waifus: List<WaifuPicDbItem>) {
@@ -44,15 +41,15 @@ class FakeWaifuPicDao(waifusPic: List<WaifuPicDbItem> = emptyList()) : WaifuPicD
     }
 
     override suspend fun updateWaifuPics(waifu: WaifuPicDbItem) {
-        TODO("Not yet implemented")
+        inMemoryMovies.update { it }
     }
 
     override suspend fun deletePics(waifu: WaifuPicDbItem) {
-        TODO("Not yet implemented")
+        inMemoryMovies.update { it }
     }
 
     override suspend fun deleteAll() {
-        TODO("Not yet implemented")
+        inMemoryMovies.update { it }
     }
 
 }

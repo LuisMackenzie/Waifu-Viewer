@@ -76,24 +76,4 @@ class FavoriteViewModelTest {
     @Test
     fun onDeleteFavorite() {
     }
-
-    @Test
-    fun getCoroutineContext() {
-    }
-
-    @Test
-    fun getJob() {
-    }
-
-    @Test
-    fun setJob() {
-    }
-
-    @Test
-    fun destroyScope() {
-    }
-
-    @Test
-    fun initScope() {
-    }
 }

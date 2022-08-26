@@ -1,17 +1,11 @@
 package com.mackenzie.waifuviewer.ui.main
 
 import app.cash.turbine.test
-import com.mackenzie.testshared.samplePicWaifu
 import com.mackenzie.waifuviewer.WaifuPicsViewModel
 import com.mackenzie.waifuviewer.WaifuPicsViewModel.UiState
-import com.mackenzie.waifuviewer.data.RegionRepository
-import com.mackenzie.waifuviewer.data.WaifusPicRepository
 import com.mackenzie.waifuviewer.data.db.WaifuPicDbItem
-import com.mackenzie.waifuviewer.data.server.WaifuPic
-import com.mackenzie.waifuviewer.domain.WaifuPicItem
 import com.mackenzie.waifuviewer.testrules.CoroutinesTestRule
 import com.mackenzie.waifuviewer.ui.*
-import com.mackenzie.waifuviewer.ui.fakes.*
 import com.mackenzie.waifuviewer.usecases.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -27,7 +21,7 @@ class WaifuPicIntegrationTests {
 
     @Test
     fun `Data is loaded from PICS server when local source is empty`() = runTest {
-        val remoteData = buildRemotePicMovies(4, 5, 6)
+        val remoteData = buildPicRemoteWaifus(4, 5, 6)
 
         val vm = buildModelWith(remoteData = remoteData)
 
@@ -51,8 +45,8 @@ class WaifuPicIntegrationTests {
 
     @Test
     fun `Data is loaded from local IM database when available`() = runTest {
-        val localData = buildDatabasePicMovies(1, 2, 3)
-        val remoteData = buildRemotePicMovies(4, 5, 6)
+        val localData = buildPicDatabaseWaifus(1, 2, 3)
+        val remoteData = buildPicRemoteWaifus(4, 5, 6)
 
         val vm = buildModelWith(localData, remoteData)
 

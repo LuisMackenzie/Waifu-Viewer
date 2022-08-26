@@ -2,7 +2,6 @@ package com.mackenzie.waifuviewer.ui.detail
 
 import app.cash.turbine.test
 import com.mackenzie.testshared.sampleFavWaifu
-import com.mackenzie.testshared.sampleImWaifu
 import com.mackenzie.waifuviewer.testrules.CoroutinesTestRule
 import com.mackenzie.waifuviewer.ui.detail.DetailFavsViewModel.UiState
 import com.mackenzie.waifuviewer.usecases.*
@@ -11,7 +10,6 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
-
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

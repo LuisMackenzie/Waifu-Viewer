@@ -4,9 +4,9 @@ import app.cash.turbine.test
 import com.mackenzie.waifuviewer.data.db.WaifuImDbItem
 import com.mackenzie.waifuviewer.data.server.WaifuIm
 import com.mackenzie.waifuviewer.testrules.CoroutinesTestRule
-import com.mackenzie.waifuviewer.ui.buildDatabaseImMovies
+import com.mackenzie.waifuviewer.ui.buildImDatabaseWaifus
 import com.mackenzie.waifuviewer.ui.buildImRepositoryWith
-import com.mackenzie.waifuviewer.ui.buildRemoteImMovies
+import com.mackenzie.waifuviewer.ui.buildImRemoteWaifus
 import com.mackenzie.waifuviewer.ui.main.WaifuImViewModel.UiState
 import com.mackenzie.waifuviewer.usecases.ClearWaifuImUseCase
 import com.mackenzie.waifuviewer.usecases.GetWaifuImUseCase
@@ -26,7 +26,7 @@ class WaifuImIntegrationTests  {
 
     @Test
     fun `Data is loaded from IM server when local source is empty`() = runTest {
-        val remoteData = buildRemoteImMovies(4, 5, 6)
+        val remoteData = buildImRemoteWaifus(4, 5, 6)
 
         val vm = buildModelWith(localData = emptyList(), remoteData = remoteData)
 
@@ -52,8 +52,8 @@ class WaifuImIntegrationTests  {
 
     @Test
     fun `Data is loaded from local IM database when available`() = runTest {
-        val localData = buildDatabaseImMovies(1, 2, 3)
-        val remoteData = buildRemoteImMovies(4, 5, 6)
+        val localData = buildImDatabaseWaifus(1, 2, 3)
+        val remoteData = buildImRemoteWaifus(4, 5, 6)
 
         val vm = buildModelWith(localData, remoteData)
 

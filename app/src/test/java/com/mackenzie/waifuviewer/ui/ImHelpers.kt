@@ -11,11 +11,11 @@ fun buildImRepositoryWith(
 ): WaifusImRepository {
     val localImDataSource = RoomImDataSource(FakeWaifuImDao(localData))
     val favoriteDataSource = FavoriteDataSource(FakeFavoriteDao())
-    val remoteImDataSource = ServerImDataSource( FakeRemoteImService(remoteData))
+    val remoteImDataSource = ServerImDataSource( RemoteConnect(FakeRemoteImService(remoteData), FakeRemotePicsService(listOf())))
     return WaifusImRepository(localImDataSource, favoriteDataSource , remoteImDataSource)
 }
 
-fun buildDatabaseImMovies(vararg id: Int) = id.map {
+fun buildImDatabaseWaifus(vararg id: Int) = id.map {
     WaifuImDbItem(
         id = it,
         dominantColor = "",
@@ -29,7 +29,7 @@ fun buildDatabaseImMovies(vararg id: Int) = id.map {
     )
 }
 
-fun buildRemoteImMovies(vararg id: Int) = id.map {
+fun buildImRemoteWaifus(vararg id: Int) = id.map {
     WaifuIm(
         dominant_color = "",
         extension = "",

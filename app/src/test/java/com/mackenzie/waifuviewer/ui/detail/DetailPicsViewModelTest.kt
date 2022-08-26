@@ -1,20 +1,16 @@
 package com.mackenzie.waifuviewer.ui.detail
 
 import app.cash.turbine.test
-import com.mackenzie.testshared.sampleImWaifu
 import com.mackenzie.testshared.samplePicWaifu
 import com.mackenzie.waifuviewer.testrules.CoroutinesTestRule
 import com.mackenzie.waifuviewer.ui.detail.DetailPicsViewModel.UiState
-import com.mackenzie.waifuviewer.usecases.FindWaifuImUseCase
 import com.mackenzie.waifuviewer.usecases.FindWaifuPicUseCase
-import com.mackenzie.waifuviewer.usecases.SwitchImFavoriteUseCase
 import com.mackenzie.waifuviewer.usecases.SwitchPicFavoriteUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.*
-
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

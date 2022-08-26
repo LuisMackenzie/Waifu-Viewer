@@ -48,7 +48,6 @@ object AppModule {
     @Provides
     @Singleton
     fun provideWaifuService(): RemoteConnect {
-        // val baseUrlWaifuIm = "https://api.waifu.im/"
         val okHttpClient = HttpLoggingInterceptor().run {
             level = HttpLoggingInterceptor.Level.BODY
             OkHttpClient.Builder().addInterceptor(this).build()

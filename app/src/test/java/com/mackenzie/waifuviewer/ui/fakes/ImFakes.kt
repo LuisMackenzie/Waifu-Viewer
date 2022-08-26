@@ -7,6 +7,7 @@ import com.mackenzie.waifuviewer.data.server.WaifuImService
 import com.mackenzie.waifuviewer.data.server.WaifuResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 
 class FakeWaifuImDao(waifusIm: List<WaifuImDbItem> = emptyList()) : WaifuImDao {
 
@@ -24,7 +25,7 @@ class FakeWaifuImDao(waifusIm: List<WaifuImDbItem> = emptyList()) : WaifuImDao {
     override suspend fun waifuImCount(): Int = inMemoryMovies.value.size
 
     override suspend fun insertWaifuIm(waifu: WaifuImDbItem) {
-        TODO("Not yet implemented")
+        inMemoryMovies.update { it }
     }
 
     override suspend fun insertAllWaifuIm(waifus: List<WaifuImDbItem>) {
@@ -38,15 +39,15 @@ class FakeWaifuImDao(waifusIm: List<WaifuImDbItem> = emptyList()) : WaifuImDao {
     }
 
     override suspend fun updateWaifuIm(waifu: WaifuImDbItem) {
-        TODO("Not yet implemented")
+        inMemoryMovies.update { it }
     }
 
     override suspend fun deleteIm(waifu: WaifuImDbItem) {
-        TODO("Not yet implemented")
+        inMemoryMovies.update { it }
     }
 
     override suspend fun deleteAll() {
-        TODO("Not yet implemented")
+        inMemoryMovies.update { it }
     }
 
 }
