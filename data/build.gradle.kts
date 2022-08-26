@@ -20,4 +20,5 @@ dependencies {
     testImplementation (Libs.JUnit.junit)
     testImplementation (Libs.Mockito.kotlin)
     testImplementation (Libs.Mockito.inline)
+    testImplementation (Libs.Coroutines.test)
 }

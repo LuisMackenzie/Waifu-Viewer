@@ -1,24 +1,21 @@
 package com.mackenzie.waifuviewer.data
 
-import arrow.core.right
 import com.mackenzie.testshared.sampleFavWaifu
 import com.mackenzie.waifuviewer.data.datasource.FavoriteLocalDataSource
-import com.mackenzie.waifuviewer.domain.FavoriteItem
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.runBlocking
-import org.junit.Assert.*
-
-import org.junit.After
+import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
-import org.mockito.kotlin.any
 import org.mockito.kotlin.argThat
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
+@ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
 class FavoritesRepositoryTest {
 
@@ -35,19 +32,14 @@ class FavoritesRepositoryTest {
         repo = FavoritesRepository(favDataSource)
     }
 
-    @After
-    fun tearDown() {
-    }
-
-
     @Test
-    fun `waifus are taken from local datasource if available`(): Unit = runBlocking {
+    fun `waifus are taken from local datasource if available`() = runTest {
         val result = repo.savedFavorites
         assertEquals(localFavWaifu, result)
     }
 
     @Test
-    fun `Finding a waifu by id is done in local data source`(): Unit = runBlocking {
+    fun `Finding a waifu by id is done in local data source`() = runTest {
         val waifu = flowOf(sampleFavWaifu.copy(id = 2))
         whenever(favDataSource.findFavById(2)).thenReturn(waifu)
 
@@ -57,7 +49,7 @@ class FavoritesRepositoryTest {
     }
 
     @Test
-    fun `Waifus are saved in local data source`(): Unit = runBlocking {
+    fun `Waifus are saved in local data source`() = runTest {
         val waifu = sampleFavWaifu.copy(id = 3)
         // whenever(favDataSource.delete(any())).thenReturn(waifu)
 
@@ -67,7 +59,7 @@ class FavoritesRepositoryTest {
     }
 
     @Test
-    fun `Waifus are delete from local data source`(): Unit = runBlocking {
+    fun `Waifus are delete from local data source`() = runTest {
         val waifu = sampleFavWaifu.copy(id = 4)
         // whenever(favDataSource.delete(any())).thenReturn(waifu)
 
@@ -77,7 +69,7 @@ class FavoritesRepositoryTest {
     }
 
     @Test
-    fun `Switching favorite updates local data source`(): Unit = runBlocking {
+    fun `Switching favorite updates local data source`() = runTest {
 
         val movie = sampleFavWaifu.copy(id = 5)
 
@@ -87,14 +79,14 @@ class FavoritesRepositoryTest {
     }
 
     @Test
-    fun `Switching favorite marks as favorite an unfavorite waifu`(): Unit = runBlocking {
+    fun `Switching favorite marks as favorite an unfavorite waifu`() = runTest {
         val waifu = sampleFavWaifu.copy(isFavorite = false)
         repo.switchFavorite(waifu)
         verify(favDataSource).save(argThat { this.isFavorite })
     }
 
     @Test
-    fun `Switching favorite marks as unfavorite an favorite waifu`(): Unit = runBlocking {
+    fun `Switching favorite marks as unfavorite an favorite waifu`() = runTest {
         val waifu = sampleFavWaifu.copy(isFavorite = true)
         repo.switchFavorite(waifu)
         verify(favDataSource).save(argThat { !this.isFavorite })

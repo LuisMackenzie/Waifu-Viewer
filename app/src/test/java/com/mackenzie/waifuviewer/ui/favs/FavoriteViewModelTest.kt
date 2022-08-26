@@ -2,6 +2,7 @@ package com.mackenzie.waifuviewer.ui.favs
 
 import com.mackenzie.testshared.sampleFavWaifu
 import com.mackenzie.waifuviewer.testrules.CoroutinesTestRule
+import com.mackenzie.waifuviewer.ui.favs.FavoriteViewModel.UiState
 import com.mackenzie.waifuviewer.usecases.DeleteFavoriteUseCase
 import com.mackenzie.waifuviewer.usecases.GetFavoritesUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -17,7 +18,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
-import org.mockito.kotlin.any
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
@@ -50,20 +50,20 @@ class FavoriteViewModelTest {
 
     @Test
     fun `State is updated with current cached content inmediately`() = runTest {
-        val results = mutableListOf<FavoriteViewModel.UiState>()
+        val results = mutableListOf<UiState>()
         val job = launch { vm.state.toList(results) }
         runCurrent()
         job.cancel()
-        assertEquals(FavoriteViewModel.UiState(waifus = favoriteSample), results[0])
+        assertEquals(UiState(waifus = favoriteSample), results[0])
     }
 
     @Test
     fun `Progress is shown when screen start and hidden when it finishes`() = runTest {
-        val results = mutableListOf<FavoriteViewModel.UiState>()
+        val results = mutableListOf<UiState>()
         val job = launch { vm.state.toList(results) }
         runCurrent()
         job.cancel()
-        assertEquals(FavoriteViewModel.UiState(waifus = favoriteSample), results[0])
+        assertEquals(UiState(waifus = favoriteSample), results[0])
     }
 
     @Test

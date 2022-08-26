@@ -5,8 +5,9 @@ import com.mackenzie.testshared.samplePicWaifu
 import com.mackenzie.waifuviewer.data.datasource.FavoriteLocalDataSource
 import com.mackenzie.waifuviewer.data.datasource.WaifusPicLocalDataSource
 import com.mackenzie.waifuviewer.data.datasource.WaifusPicRemoteDataSource
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
 import org.junit.After
 import org.junit.Before
@@ -19,6 +20,7 @@ import org.mockito.kotlin.argThat
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
+@ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
 class WaifusPicRepositoryTest {
 
@@ -41,18 +43,14 @@ class WaifusPicRepositoryTest {
         repo = WaifusPicRepository(localDataSource, favDataSource, remoteDataSource)
     }
 
-    @After
-    fun tearDown() {
-    }
-
     @Test
-    fun `Waifus are taken from local datasource if available`(): Unit = runBlocking {
+    fun `Waifus are taken from local datasource if available`() = runTest {
         val result = repo.savedWaifusPic
         assertEquals(localPicWaifus, result)
     }
 
     @Test
-    fun `Finding a waifu by id is done in local data source`(): Unit = runBlocking {
+    fun `Finding a waifu by id is done in local data source`() = runTest {
         val waifu = flowOf(samplePicWaifu.copy(id = 2))
         whenever(localDataSource.findPicById(2)).thenReturn(waifu)
 
@@ -62,7 +60,7 @@ class WaifusPicRepositoryTest {
     }
 
     @Test
-    fun `Waifus are saved to local data source when it's empty`(): Unit = runBlocking {
+    fun `Waifus are saved to local data source when it's empty`() = runTest {
         val remoteWaifu = listOf(samplePicWaifu.copy(3))
         whenever(localDataSource.isPicsEmpty()).thenReturn(true)
         whenever(remoteDataSource.getRandomWaifusPics(any(), any())).thenReturn(remoteWaifu.right())
@@ -73,7 +71,7 @@ class WaifusPicRepositoryTest {
     }
 
     @Test
-    fun `More waifus are saved to local data source`(): Unit = runBlocking {
+    fun `More waifus are saved to local data source`() = runTest {
         val remoteWaifu = listOf(samplePicWaifu.copy(4))
         whenever(remoteDataSource.getRandomWaifusPics(any(), any())).thenReturn(remoteWaifu.right())
 
@@ -83,7 +81,7 @@ class WaifusPicRepositoryTest {
     }
 
     @Test
-    fun `Waifus are delete from local data source`(): Unit = runBlocking {
+    fun `Waifus are delete from local data source`() = runTest {
 
         repo.requestClearWaifusPic()
 
@@ -91,7 +89,7 @@ class WaifusPicRepositoryTest {
     }
 
     @Test
-    fun `Only waifu are taken to server data source`(): Unit = runBlocking {
+    fun `Only waifu are taken to server data source`() = runTest {
         val remoteWaifu = samplePicWaifu.copy(5)
         whenever(remoteDataSource.getOnlyWaifuPics()).thenReturn(remoteWaifu)
 
@@ -101,7 +99,7 @@ class WaifusPicRepositoryTest {
     }
 
     @Test
-    fun `Switching favorite updates local data source`(): Unit = runBlocking {
+    fun `Switching favorite updates local data source`() = runTest {
 
         val movie = samplePicWaifu.copy(id = 6)
 
@@ -111,14 +109,14 @@ class WaifusPicRepositoryTest {
     }
 
     @Test
-    fun `Switching favorite marks as favorite an unfavorite waifu`(): Unit = runBlocking {
+    fun `Switching favorite marks as favorite an unfavorite waifu`() = runTest {
         val waifu = samplePicWaifu.copy(isFavorite = false)
         repo.switchPicsFavorite(waifu)
         verify(localDataSource).saveOnlyPics(argThat { this.isFavorite })
     }
 
     @Test
-    fun `Switching favorite marks as unfavorite an favorite waifu`(): Unit = runBlocking {
+    fun `Switching favorite marks as unfavorite an favorite waifu`() = runTest {
         val waifu = samplePicWaifu.copy(isFavorite = true)
         repo.switchPicsFavorite(waifu)
         verify(localDataSource).saveOnlyPics(argThat { !this.isFavorite })
