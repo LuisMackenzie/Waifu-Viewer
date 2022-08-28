@@ -144,6 +144,7 @@ dependencies {
     androidTestImplementation (Libs.AndroidX.Test.Espresso.contrib)
     androidTestImplementation (Libs.AndroidX.Test.Runner.runner)
     androidTestImplementation (Libs.AndroidX.Test.Runner.rules)
+    androidTestImplementation (Libs.Coroutines.test)
     // For instrumentation tests
     androidTestImplementation (Libs.Hilt.test)
     kaptAndroidTest(Libs.Hilt.compiler)

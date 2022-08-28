@@ -1,6 +1,9 @@
 package com.mackenzie.waifuviewer.di
 
+import android.app.Application
+import androidx.room.Room
 import com.mackenzie.waifuviewer.data.db.FavoriteDao
+import com.mackenzie.waifuviewer.data.db.WaifuDataBase
 import com.mackenzie.waifuviewer.data.db.WaifuImDao
 import com.mackenzie.waifuviewer.data.db.WaifuPicDao
 import com.mackenzie.waifuviewer.data.server.RemoteConnect
@@ -22,21 +25,28 @@ object TestAppModule {
 
     @Provides
     @Singleton
-    fun provideImDao(): WaifuImDao = FakeWaifuImDao()
+    fun provideDatabase(app: Application) = Room.inMemoryDatabaseBuilder(
+        app,
+        WaifuDataBase::class.java
+    ).build()
 
     @Provides
     @Singleton
-    fun providePicDao(): WaifuPicDao = FakeWaifuPicDao()
+    fun provideImDao(db: WaifuDataBase): WaifuImDao  = db.waifuImDao()
 
     @Provides
     @Singleton
-    fun provideFavoriteDao(): FavoriteDao = FakeFavoriteDao()
+    fun providePicDao(db: WaifuDataBase): WaifuPicDao = db.waifuPicDao()
+
+    @Provides
+    @Singleton
+    fun provideFavoriteDao(db: WaifuDataBase): FavoriteDao = db.favoriteDao()
 
     @Provides
     @Singleton
     fun provideWaifuService(): RemoteConnect = RemoteConnect(
-        FakeRemoteImService(buildImRemoteWaifus(1, 2, 3, 4, 5, 6)),
-        FakeRemotePicsService(buildPicRemoteWaifus(1, 2, 3, 4, 5, 6)))
+        FakeRemoteImService(listOf()),
+        FakeRemotePicsService(listOf()))
 
 
 }
