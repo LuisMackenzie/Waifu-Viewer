@@ -48,12 +48,19 @@ object Libs {
         object Test {
             object Ext {
                 private const val version = "1.1.3" // updated
-                const val junit = "androidx.test.ext:junit:$version"
+                const val junit = "androidx.test.ext:junit-ktx:$version"
             }
             object Espresso{
                 private const val version="3.4.0" // updated
                 const val core = "androidx.test.espresso:espresso-core:$version"
+                const val contrib = "androidx.test.espresso:espresso-contrib:$version"
             }
+            object Runner{
+                private const val version="1.4.0" // updated
+                const val runner = "androidx.test:runner:$version"
+                const val rules = "androidx.test:rules:$version"
+            }
+
         }
     }
 
@@ -112,6 +119,7 @@ object Libs {
         const val android = "com.google.dagger:hilt-android:$version"
         const val compiler = "com.google.dagger:hilt-android-compiler:$version"
         const val gradlePlugin = "com.google.dagger:hilt-android-gradle-plugin:$version"
+        const val test = "com.google.dagger:hilt-android-testing:$version"
     }
 
     object JUnit {

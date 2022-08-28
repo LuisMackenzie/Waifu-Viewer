@@ -37,6 +37,16 @@ android {
     buildFeatures {
         dataBinding = true
     }
+
+    sourceSets.getByName("androidTest") {
+        java.srcDir("$projectDir/src/testShared/java")
+        // java.srcDir("$projectDir/src/testShared/kotlin")
+    }
+    sourceSets.getByName("test") {
+        // java.srcDir("$projectDir/src/testShared/java")
+        java.srcDir("$projectDir/src/testShared/kotlin")
+    }
+
     namespace = "com.mackenzie.waifuviewer"
 }
 
@@ -111,14 +121,6 @@ dependencies {
     // Location Play services
     implementation("com.google.android.gms:play-services-location:20.0.0")
 
-    // For instrumentation tests
-    androidTestImplementation ("com.google.dagger:hilt-android-testing:2.43.2")
-    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.43.2")
-
-    // For local unit tests
-    testImplementation ("com.google.dagger:hilt-android-testing:2.43.2")
-    kaptTest("com.google.dagger:hilt-android-compiler:2.43.2")
-
     // JUnit y Mockito
     testImplementation (project(Modules.testShared))
     
@@ -129,5 +131,11 @@ dependencies {
     testImplementation (Libs.Turbine.core)
 
     androidTestImplementation (Libs.AndroidX.Test.Ext.junit)
-    androidTestImplementation (Libs.AndroidX.Test.Espresso.core)
+    androidTestImplementation (Libs.AndroidX.Test.Espresso.contrib)
+    androidTestImplementation (Libs.AndroidX.Test.Runner.runner)
+    androidTestImplementation (Libs.AndroidX.Test.Runner.rules)
+    // For instrumentation tests
+    androidTestImplementation (Libs.Hilt.test)
+    kaptAndroidTest(Libs.Hilt.compiler)
+
 }
