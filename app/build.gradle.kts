@@ -18,7 +18,7 @@ android {
         versionCode = AppConfig.versionCode
         versionName = AppConfig.versionName
 
-        testInstrumentationRunner = AppConfig.testInstrumentationRunner
+        testInstrumentationRunner = AppConfig.testInstrumentationRunnerHilt
     }
 
     buildTypes {
@@ -38,14 +38,24 @@ android {
         dataBinding = true
     }
 
-    sourceSets.getByName("androidTest") {
-        java.srcDir("$projectDir/src/testShared/java")
+    sourceSets {
+        this.getByName("androidTest"){
+            //Adds the given source directory to this set.
+            this.java.srcDir("$projectDir/src/testShared/androidTest")
+        }
+        this.getByName("test"){
+            this.java.srcDir("$projectDir/src/testShared/test")
+        }
+    }
+
+    /*sourceSets.getByName("androidTest") {
+        java.srcDir("$projectDir/src/testShared/androidTest")
         // java.srcDir("$projectDir/src/testShared/kotlin")
     }
     sourceSets.getByName("test") {
         // java.srcDir("$projectDir/src/testShared/java")
-        java.srcDir("$projectDir/src/testShared/kotlin")
-    }
+        java.srcDir("$projectDir/src/testShared/test")
+    }*/
 
     namespace = "com.mackenzie.waifuviewer"
 }

@@ -6,7 +6,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 
-
 class FakeFavoriteDao(waifus: List<FavoriteDbItem> = emptyList()) : FavoriteDao {
 
     private val inMemoryMovies = MutableStateFlow(waifus)
@@ -49,55 +48,3 @@ class FakeFavoriteDao(waifus: List<FavoriteDbItem> = emptyList()) : FavoriteDao 
     }
 
 }
-/*
-class FakeFavoriteDataSource : FavoriteLocalDataSource {
-
-    val inMemoryWaifus = MutableStateFlow<List<FavoriteItem>>(emptyList())
-
-    override val favoriteWaifus = inMemoryWaifus
-
-    private lateinit var findWaifuFlow: MutableStateFlow<FavoriteItem>
-
-    override suspend fun isFavEmpty() = favoriteWaifus.value.isEmpty()
-
-    override fun findFavById(id: Int): Flow<FavoriteItem> {
-        findWaifuFlow = MutableStateFlow(inMemoryWaifus.value.first { it.id == id })
-        return findWaifuFlow
-    }
-
-    override suspend fun updateIm(waifu: WaifuImItem): Error? {
-        return null
-    }
-
-    override suspend fun updatePic(waifu: WaifuImItem): Error? {
-        return null
-    }
-
-    override suspend fun save(waifu: FavoriteItem): Error? {
-        return null
-    }
-
-    override suspend fun saveIm(waifu: WaifuImItem): Error? {
-        return null
-    }
-
-    override suspend fun savePic(waifu: WaifuPicItem): Error? {
-        return null
-    }
-
-    override suspend fun deleteIm(waifu: WaifuImItem): Error? {
-        return null
-    }
-
-    override suspend fun deletePic(waifu: WaifuPicItem): Error? {
-        return null
-    }
-
-    override suspend fun delete(waifu: FavoriteItem): Error? {
-        return null
-    }
-
-    override suspend fun deleteAll(): Error? {
-        return null
-    }
-}*/
