@@ -1,5 +1,8 @@
 package com.mackenzie.waifuviewer
 
+import androidx.test.espresso.Espresso
+import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.rule.GrantPermissionRule
 import com.mackenzie.waifuviewer.data.db.WaifuPicDao
@@ -52,6 +55,15 @@ class WaifuPicsInstrumentationTests {
     }
 
     @Test
+    fun check_button_navigates_to_waifus() = runTest {
+        Espresso.onView(ViewMatchers.withId(R.id.btn_waifu))
+            .perform(ViewActions.click())
+
+        Thread.sleep(3000)
+        /// onView(withId(R.id.btn_waifu)).check(matches())
+    }
+
+    /*@Test
     fun check_PICS_mock_server_is_working() = runTest {
         val imWaifus = picDataSource.getRandomWaifusPics("sfw", "waifu")
         imWaifus.fold({ throw Exception(it.toString()) }) {
@@ -77,6 +89,6 @@ class WaifuPicsInstrumentationTests {
     fun check_6_PICS_items_db()  = runTest {
         picDao.insertAllWaifuPics(buildPicDatabaseWaifus(5, 6, 7, 8, 9, 10))
         Assert.assertEquals(6, picDao.waifuPicsCount())
-    }
+    }*/
 
 }
