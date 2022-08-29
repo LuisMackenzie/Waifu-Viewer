@@ -73,6 +73,7 @@ object Libs {
     object OkHttp3 {
         private const val version = "4.9.3" // updated
         const val okhttp3 = "com.squareup.okhttp3:okhttp:$version"
+        const val mockWebServer = "com.squareup.okhttp3:mockwebserver:$version"
         const val loginInterceptor = "com.squareup.okhttp3:logging-interceptor:$version"
     }
 

@@ -107,9 +107,10 @@ dependencies {
     implementation ("com.squareup.retrofit2:retrofit:$retrofit_version")
     implementation ("com.google.code.gson:gson:2.9.1")
     implementation ("com.squareup.retrofit2:converter-gson:$retrofit_version")
-    // OKHttp3 Logging interceptor
-    implementation ("com.squareup.okhttp3:okhttp:4.9.3")
-    implementation ("com.squareup.okhttp3:logging-interceptor:4.9.3")
+    // OKHttp3
+    implementation (Libs.OkHttp3.okhttp3)
+    // Logging interceptor
+    implementation (Libs.OkHttp3.loginInterceptor)
     // library to parse JSON in Kotlin
     implementation ("com.beust:klaxon:5.6")
 
@@ -148,5 +149,7 @@ dependencies {
     // For instrumentation tests
     androidTestImplementation (Libs.Hilt.test)
     kaptAndroidTest(Libs.Hilt.compiler)
+    // For MockwebServer
+    androidTestImplementation (Libs.OkHttp3.mockWebServer)
 
 }

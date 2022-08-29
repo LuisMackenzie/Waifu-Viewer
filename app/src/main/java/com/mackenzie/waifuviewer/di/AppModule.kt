@@ -9,6 +9,7 @@ import com.mackenzie.waifuviewer.data.db.RoomImDataSource
 import com.mackenzie.waifuviewer.data.db.RoomPicDataSource
 import com.mackenzie.waifuviewer.data.db.WaifuDataBase
 import com.mackenzie.waifuviewer.data.server.*
+import com.mackenzie.waifuviewer.domain.ApiUrl
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -47,7 +48,11 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideWaifuService(): RemoteConnect {
+    fun provideApiUrl(): ApiUrl = ApiUrl()
+
+    @Provides
+    @Singleton
+    fun provideWaifuService(apiUrl: ApiUrl): RemoteConnect {
         val okHttpClient = HttpLoggingInterceptor().run {
             level = HttpLoggingInterceptor.Level.BODY
             OkHttpClient.Builder().addInterceptor(this).build()
@@ -55,13 +60,13 @@ object AppModule {
 
 
         val builderIm = Retrofit.Builder()
-            .baseUrl("https://api.waifu.im/")
+            .baseUrl(apiUrl.imBaseUrl)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
         val builderPics = Retrofit.Builder()
-            .baseUrl("https://api.waifu.pics/")
+            .baseUrl(apiUrl.picsBaseUrl)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
