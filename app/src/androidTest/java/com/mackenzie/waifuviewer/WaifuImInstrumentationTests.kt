@@ -1,17 +1,28 @@
 package com.mackenzie.waifuviewer
 
+import androidx.recyclerview.widget.RecyclerView
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.IdlingRegistry
+import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.rule.GrantPermissionRule
 import com.mackenzie.waifuviewer.data.db.WaifuImDao
 import com.mackenzie.waifuviewer.data.server.MockWebServerRule
+import com.mackenzie.waifuviewer.data.server.OkHttp3IdlingResource
 import com.mackenzie.waifuviewer.data.server.ServerImDataSource
 import com.mackenzie.waifuviewer.data.server.fromJson
 import com.mackenzie.waifuviewer.ui.NavHostActivity
 import com.mackenzie.waifuviewer.ui.buildImDatabaseWaifus
+import com.mackenzie.waifuviewer.ui.main.WaifuFragment
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockResponse
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -43,22 +54,36 @@ class WaifuImInstrumentationTests {
     @Inject
     lateinit var imDataSource: ServerImDataSource
 
+    @Inject
+    lateinit var okHttpClient: OkHttpClient
+
     @Before
     fun setUp() {
         mockWebServerRule.server.enqueue(MockResponse().fromJson("response_im.json"))
-        /*server.dispatcher = object : Dispatcher() {
-            override fun dispatch(request: RecordedRequest): MockResponse {
-                val path = request.path
-                when {
-                    path.contains("/api.waifu.im") -> MockResponse().fromJson("response_im.json")
-                    path.contains("/api.waifu.pics") -> MockResponse().fromJson("response_pics.json")
-                }
-            }
-        }*/
         hiltRule.inject()
+        val resource = OkHttp3IdlingResource.create("okHttp", okHttpClient)
+        IdlingRegistry.getInstance().register(resource)
     }
 
     @Test
+    fun check_button_navigates_to_waifus() = runTest {
+        onView(withId(R.id.btn_waifu))
+            .perform(click())
+
+        Thread.sleep(3000)
+        /// onView(withId(R.id.btn_waifu)).check(matches())
+    }
+
+    /*@Test
+    fun check_IM_waifu_navigates_to_detail() = runTest {
+        onView(withId(R.id.recycler))
+            .perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(1, click()))
+
+        onView(withId(R.id.tv_detail)).check(matches(hasDescendant(withText("633"))))
+    }*/
+
+
+    /*@Test
     fun check_IM_mock_server_is_working() = runTest {
         val imWaifus = imDataSource.getRandomWaifusIm(false, "waifu", false, "PORTRAIT")
         imWaifus.fold({ throw Exception(it.toString()) }) {
@@ -84,6 +109,6 @@ class WaifuImInstrumentationTests {
     fun check_6_IM_items_db()  = runTest {
         imDao.insertAllWaifuIm(buildImDatabaseWaifus(5, 6, 7, 8, 9, 10))
         assertEquals(6, imDao.waifuImCount())
-    }
+    }*/
 
 }

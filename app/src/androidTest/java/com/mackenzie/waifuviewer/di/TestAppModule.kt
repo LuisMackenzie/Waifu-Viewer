@@ -55,22 +55,24 @@ object TestAppModule {
 
     @Provides
     @Singleton
-    fun provideWaifuService(apiUrl: ApiUrl): RemoteConnect {
-        val okHttpClient = HttpLoggingInterceptor().run {
-            level = HttpLoggingInterceptor.Level.BODY
-            OkHttpClient.Builder().addInterceptor(this).build()
-        }
+    fun provideOkHttpClient(): OkHttpClient = HttpLoggingInterceptor().run {
+        level = HttpLoggingInterceptor.Level.BODY
+        OkHttpClient.Builder().addInterceptor(this).build()
+    }
 
+    @Provides
+    @Singleton
+    fun provideWaifuService(apiUrl: ApiUrl, client: OkHttpClient): RemoteConnect {
 
         val builderIm = Retrofit.Builder()
             .baseUrl(apiUrl.imBaseUrl)
-            .client(okHttpClient)
+            .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
         val builderPics = Retrofit.Builder()
             .baseUrl(apiUrl.picsBaseUrl)
-            .client(okHttpClient)
+            .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
