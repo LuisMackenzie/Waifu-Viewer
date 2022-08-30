@@ -1,35 +1,44 @@
-package com.mackenzie.waifuviewer.data.db
+package com.mackenzie.waifuviewer.data.db.datasources
 
-import arrow.core.left
-import arrow.core.right
+import androidx.paging.*
 import com.mackenzie.waifuviewer.data.datasource.WaifusImLocalDataSource
+import com.mackenzie.waifuviewer.data.db.WaifuImDao
+import com.mackenzie.waifuviewer.data.db.WaifuImDbItem
 import com.mackenzie.waifuviewer.data.tryCall
 import com.mackenzie.waifuviewer.domain.WaifuImItem
 import com.mackenzie.waifuviewer.domain.Error
-import kotlinx.coroutines.Dispatchers
+import com.mackenzie.waifuviewer.ui.common.Scope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import kotlin.coroutines.coroutineContext
 
-class RoomImDataSource @Inject constructor(private val ImDao: WaifuImDao) : WaifusImLocalDataSource {
+class RoomImDataSource @Inject constructor(private val imDao: WaifuImDao) : WaifusImLocalDataSource {
 
-    override val waifusIm: Flow<List<WaifuImItem>> = ImDao.getAllIm().map { it.toDomainModel() }
+    override val waifusIm: Flow<List<WaifuImItem>> = imDao.getAllIm().map { it.toDomainModel() }
 
-    override suspend fun isImEmpty(): Boolean = ImDao.waifuImCount() == 0
+    override val waifusImPaged: Flow<PagingData<WaifuImItem>> = Pager(
+        config = PagingConfig(pageSize = 10, enablePlaceholders = true, maxSize = 200)) {
+        imDao.getAllImPaged()
+    }.flow.map {
+        it.map { it.toDomainModel() }
+    }
 
-    override fun findImById(id: Int): Flow<WaifuImItem> = ImDao.findImById(id).map { it.toDomainModel() }
+    override suspend fun isImEmpty(): Boolean = imDao.waifuImCount() == 0
+
+    override fun findImById(id: Int): Flow<WaifuImItem> = imDao.findImById(id).map { it.toDomainModel() }
 
     override suspend fun saveIm(waifus: List<WaifuImItem>): Error? = tryCall {
-        ImDao.insertAllWaifuIm(waifus.fromDomainModel())
+        imDao.insertAllWaifuIm(waifus.fromDomainModel())
     }.fold(ifLeft = { it }, ifRight = { null })
 
     override suspend fun saveOnlyIm(waifu: WaifuImItem): Error? = tryCall {
-        ImDao.insertWaifuIm(waifu.fromDomainModel())
+        imDao.insertWaifuIm(waifu.fromDomainModel())
     }.fold(ifLeft = { it }, ifRight = { null })
 
     override suspend fun deleteAll(): Error? = tryCall {
-        ImDao.deleteAll()
+        imDao.deleteAll()
     }.fold(ifLeft = { it }, ifRight = { null })
 
 }

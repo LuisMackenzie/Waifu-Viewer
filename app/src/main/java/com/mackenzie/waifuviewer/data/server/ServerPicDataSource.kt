@@ -19,7 +19,7 @@ class ServerPicDataSource @Inject constructor(private val remoteService: RemoteC
     }
 
     override suspend fun getOnlyWaifuPics(): WaifuPicItem? {
-        var waifu: WaifuPicItem? = null
+        val waifu: WaifuPicItem?
         try {
             waifu = remoteService.servicePic
                 .getOnlyWaifuPic().url.toDomainModel()

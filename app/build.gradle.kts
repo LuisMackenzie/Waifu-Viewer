@@ -27,13 +27,16 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
     buildFeatures {
         dataBinding = true
     }
@@ -47,15 +50,6 @@ android {
             this.java.srcDir("$projectDir/src/testShared/test")
         }
     }
-
-    /*sourceSets.getByName("androidTest") {
-        java.srcDir("$projectDir/src/testShared/androidTest")
-        // java.srcDir("$projectDir/src/testShared/kotlin")
-    }
-    sourceSets.getByName("test") {
-        // java.srcDir("$projectDir/src/testShared/java")
-        java.srcDir("$projectDir/src/testShared/test")
-    }*/
 
     namespace = "com.mackenzie.waifuviewer"
 }
@@ -116,6 +110,12 @@ dependencies {
 
     // library to use Either Class in Kotlin
     implementation (Libs.Arrow.core)
+
+    // Paging library
+    implementation (Libs.AndroidX.Paging.runtime)
+    implementation (Libs.AndroidX.Paging.runtimeKtx)
+    implementation (Libs.AndroidX.Room.paging)
+    // implementation(Libs.AndroidX.Room.pagingAlpha)
 
 
     // Serialization

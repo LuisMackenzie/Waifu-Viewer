@@ -4,10 +4,10 @@ import android.app.Application
 import androidx.room.Room
 import com.mackenzie.waifuviewer.data.*
 import com.mackenzie.waifuviewer.data.datasource.*
-import com.mackenzie.waifuviewer.data.db.FavoriteDataSource
-import com.mackenzie.waifuviewer.data.db.RoomImDataSource
-import com.mackenzie.waifuviewer.data.db.RoomPicDataSource
 import com.mackenzie.waifuviewer.data.db.WaifuDataBase
+import com.mackenzie.waifuviewer.data.db.datasources.FavoriteDataSource
+import com.mackenzie.waifuviewer.data.db.datasources.RoomImDataSource
+import com.mackenzie.waifuviewer.data.db.datasources.RoomPicDataSource
 import com.mackenzie.waifuviewer.data.server.*
 import com.mackenzie.waifuviewer.domain.ApiUrl
 import dagger.Binds
@@ -19,7 +19,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 import javax.inject.Singleton
 
 @Module

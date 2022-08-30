@@ -1,8 +1,5 @@
 package com.mackenzie.waifuviewer.data
 
-import arrow.core.Either
-import arrow.core.left
-import arrow.core.right
 import com.mackenzie.waifuviewer.data.datasource.FavoriteLocalDataSource
 import com.mackenzie.waifuviewer.data.datasource.WaifusImLocalDataSource
 import com.mackenzie.waifuviewer.data.datasource.WaifusImRemoteDataSource
@@ -18,6 +15,10 @@ class WaifusImRepository @Inject constructor(
 ) {
 
     val savedWaifusIm = localImDataSource.waifusIm
+
+    val savedWaifusImPaged = localImDataSource.waifusImPaged
+
+    // fun articlePagingSource() = WaifuImPagingSource()
 
     fun findImById(id: Int): Flow<WaifuImItem> = localImDataSource.findImById(id)
 

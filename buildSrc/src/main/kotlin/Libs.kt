@@ -31,6 +31,14 @@ object Libs {
             const val runtimeKtx = "androidx.lifecycle:lifecycle-runtime-ktx:$version"
         }
 
+        object Paging {
+            private const val version = "3.1.1" // updated
+            const val runtime = "androidx.paging:paging-runtime:$version"
+            const val runtimeKtx = "androidx.paging:paging-runtime-ktx:$version"
+            const val pagingCommon = "androidx.paging:paging-common:$version"
+            const val pagingCommonKtx = "androidx.paging:paging-common-ktx:$version"
+        }
+
         object Navigation {
             private const val version = "2.5.1" // updated
             const val fragmentKtx = "androidx.navigation:navigation-fragment-ktx:$version"
@@ -41,6 +49,8 @@ object Libs {
         object Room {
             private const val version = "2.4.3" // updated
             const val runtime = "androidx.room:room-runtime:$version"
+            const val paging = "androidx.room:room-paging:$version"
+            const val pagingAlpha = "androidx.room:room-paging:2.5.0-alpha03"
             const val ktx = "androidx.room:room-ktx:$version"
             const val compiler = "androidx.room:room-compiler:$version"
         }

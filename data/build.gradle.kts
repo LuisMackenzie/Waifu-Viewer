@@ -14,6 +14,9 @@ dependencies {
     implementation (Libs.Coroutines.core)
     implementation (Libs.JavaX.inject)
     implementation (Libs.Arrow.core)
+    // Paging library
+
+    implementation (Libs.AndroidX.Paging.pagingCommonKtx)
 
     // JUnit y Mockito
     testImplementation (project(Modules.testShared))

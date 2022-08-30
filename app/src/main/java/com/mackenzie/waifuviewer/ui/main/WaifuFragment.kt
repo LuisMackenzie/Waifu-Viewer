@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.WaifuPicsViewModel
@@ -12,6 +13,8 @@ import com.mackenzie.waifuviewer.databinding.FragmentWaifuBinding
 import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.ui.common.launchAndCollect
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
 
 @AndroidEntryPoint
 class WaifuFragment: Fragment(R.layout.fragment_waifu) {
@@ -19,7 +22,8 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
     private val safeArgs: WaifuFragmentArgs by navArgs()
     private val picsViewModel: WaifuPicsViewModel by viewModels()
     private val imViewModel: WaifuImViewModel by viewModels()
-    private val waifuImAdapter = WaifuImAdapter{ mainState.onWaifuImClicked(it) }
+    // private val waifuImAdapter = WaifuImAdapter{ mainState.onWaifuImClicked(it) }
+    private val waifuImAdapter = WaifuImPagerAdapter{ if (it != null) mainState.onWaifuImClicked(it) }
     private val waifuPicsAdapter = WaifuPicsAdapter{ mainState.onWaifuPicsClicked(it) }
     private lateinit var mainState: MainState
     private lateinit var bun: Bundle
@@ -139,13 +143,21 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         val orientation = bun.getBoolean(IS_LANDS_WAIFU)
         val categoryTag = bun.getString(CATEGORY_TAG)!!
 
-        state.waifus?.let { savedImWaifus ->
+        /*state.waifus?.let { savedImWaifus ->
             waifuImAdapter.submitList(savedImWaifus)
             count = savedImWaifus.size
             if (count != 0 && !numIsShowed) {
                 Toast.makeText(requireContext(), "Total Waifus = $count", Toast.LENGTH_SHORT).show()
                 numIsShowed = true
             }
+        }*/
+
+        state.waifusPaged?.let{ waifusPaged ->
+            lifecycleScope.launch {
+                waifuImAdapter.submitData(waifusPaged)
+            }
+
+
         }
 
         state.error?.let {
