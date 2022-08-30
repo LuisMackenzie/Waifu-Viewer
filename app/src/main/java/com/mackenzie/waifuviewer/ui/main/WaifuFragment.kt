@@ -5,7 +5,9 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.WaifuPicsViewModel
@@ -154,7 +156,10 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
 
         state.waifusPaged?.let{ waifusPaged ->
             lifecycleScope.launch {
-                waifuImAdapter.submitData(waifusPaged)
+                repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    waifuImAdapter.submitData(waifusPaged)
+                }
+
             }
 
 
