@@ -2,9 +2,6 @@ package com.mackenzie.waifuviewer.ui.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
-import androidx.paging.cachedIn
-import com.mackenzie.waifuviewer.WaifuPicsViewModel
 import com.mackenzie.waifuviewer.data.toError
 import com.mackenzie.waifuviewer.domain.Error
 import com.mackenzie.waifuviewer.domain.WaifuImItem
@@ -17,8 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WaifuImViewModel @Inject constructor(
-    // getWaifuImUseCase: GetWaifuImUseCase,
-    getWaifuImPagedUseCase: GetWaifuImPagedUseCase,
+    getWaifuImUseCase: GetWaifuImUseCase,
     private val requestWaifuImUseCase: RequestWaifuImUseCase,
     private val requestMoreImUseCase: RequestMoreWaifuImUseCase,
     private val clearWaifuImUseCase: ClearWaifuImUseCase
@@ -29,10 +25,10 @@ class WaifuImViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            getWaifuImPagedUseCase()
-                .cachedIn(viewModelScope)
+            getWaifuImUseCase()
+                // .cachedIn(viewModelScope)
                 .catch { cause -> _state.update { it.copy(error = cause.toError()) }}
-                .collect{ waifusIm -> _state.update { UiState( waifusPaged = waifusIm) } }
+                .collect{ waifusIm -> _state.update { UiState( waifus = waifusIm) } }
         }
     }
 
@@ -82,7 +78,6 @@ class WaifuImViewModel @Inject constructor(
     data class UiState(
         val isLoading: Boolean? = null,
         val waifus: List<WaifuImItem>? = null,
-        val waifusPaged: PagingData<WaifuImItem>? = null,
         val error: Error? = null
     )
 }

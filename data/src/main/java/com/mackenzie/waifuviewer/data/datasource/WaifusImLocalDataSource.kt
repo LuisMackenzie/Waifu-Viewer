@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface WaifusImLocalDataSource {
     val waifusIm: Flow<List<WaifuImItem>>
-    val waifusImPaged: Flow<PagingData<WaifuImItem>>
+    // val waifusImPaged: Flow<PagingData<WaifuImItem>>
     suspend fun isImEmpty(): Boolean
     fun findImById(id: Int): Flow<WaifuImItem>
     suspend fun saveIm(waifus: List<WaifuImItem>): Error?

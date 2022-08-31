@@ -18,12 +18,12 @@ class RoomImDataSource @Inject constructor(private val imDao: WaifuImDao) : Waif
 
     override val waifusIm: Flow<List<WaifuImItem>> = imDao.getAllIm().map { it.toDomainModel() }
 
-    override val waifusImPaged: Flow<PagingData<WaifuImItem>> = Pager(
+    /*override val waifusImPaged: Flow<PagingData<WaifuImItem>> = Pager(
         config = PagingConfig(pageSize = 10, enablePlaceholders = true, maxSize = 200)) {
         imDao.getAllImPaged()
     }.flow.map {
         it.map { it.toDomainModel() }
-    }
+    }*/
 
     override suspend fun isImEmpty(): Boolean = imDao.waifuImCount() == 0
 

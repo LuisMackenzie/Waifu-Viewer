@@ -16,9 +16,7 @@ class WaifusImRepository @Inject constructor(
 
     val savedWaifusIm = localImDataSource.waifusIm
 
-    val savedWaifusImPaged = localImDataSource.waifusImPaged
-
-    // fun articlePagingSource() = WaifuImPagingSource()
+    // val savedWaifusImPaged = localImDataSource.waifusImPaged
 
     fun findImById(id: Int): Flow<WaifuImItem> = localImDataSource.findImById(id)
 
