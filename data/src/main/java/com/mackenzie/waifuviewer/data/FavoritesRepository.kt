@@ -14,16 +14,16 @@ class FavoritesRepository @Inject constructor(
 
     fun findFavoriteById(id: Int): Flow<FavoriteItem> = favDataSource.findFavById(id)
 
-    suspend fun saveFavorite(imItem: FavoriteItem): Error? {
-        return favDataSource.save(imItem)
+    suspend fun saveFavorite(favoriteItem: FavoriteItem): Error? {
+        return favDataSource.save(favoriteItem)
     }
 
-    suspend fun deleteFavorite(imItem: FavoriteItem): Error? {
-        return favDataSource.delete(imItem)
+    suspend fun deleteFavorite(favoriteItem: FavoriteItem): Error? {
+        return favDataSource.delete(favoriteItem)
     }
 
-    suspend fun switchFavorite(imItem: FavoriteItem): Error? {
-        val updatedWaifu = imItem.copy(isFavorite = !imItem.isFavorite)
+    suspend fun switchFavorite(favoriteItem: FavoriteItem): Error? {
+        val updatedWaifu = favoriteItem.copy(isFavorite = !favoriteItem.isFavorite)
         return favDataSource.save(updatedWaifu)
     }
 

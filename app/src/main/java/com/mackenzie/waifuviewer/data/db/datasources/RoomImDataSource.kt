@@ -1,6 +1,8 @@
 package com.mackenzie.waifuviewer.data.db.datasources
 
 import com.mackenzie.waifuviewer.data.datasource.WaifusImLocalDataSource
+import com.mackenzie.waifuviewer.data.db.FavoriteDao
+import com.mackenzie.waifuviewer.data.db.FavoriteDbItem
 import com.mackenzie.waifuviewer.data.db.WaifuImDao
 import com.mackenzie.waifuviewer.data.db.WaifuImDbItem
 import com.mackenzie.waifuviewer.data.tryCall
@@ -11,7 +13,9 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 
-class RoomImDataSource @Inject constructor(private val imDao: WaifuImDao) : WaifusImLocalDataSource {
+class RoomImDataSource @Inject constructor(
+    private val imDao: WaifuImDao,
+    private val favDao: FavoriteDao) : WaifusImLocalDataSource {
 
     override val waifusIm: Flow<List<WaifuImItem>> = imDao.getAllIm().map { it.toDomainModel() }
 
@@ -24,7 +28,12 @@ class RoomImDataSource @Inject constructor(private val imDao: WaifuImDao) : Waif
     }.fold(ifLeft = { it }, ifRight = { null })
 
     override suspend fun saveOnlyIm(waifu: WaifuImItem): Error? = tryCall {
-        imDao.insertWaifuIm(waifu.fromDomainModel())
+        if (!waifu.isFavorite) {
+            favDao.deleteFav(FavoriteDbItem(waifu.id, waifu.url, waifu.imageId.toString(), waifu.isFavorite))
+            imDao.updateWaifuIm(waifu.fromDomainModel())
+        } else {
+            imDao.updateWaifuIm(waifu.fromDomainModel())
+        }
     }.fold(ifLeft = { it }, ifRight = { null })
 
     override suspend fun deleteAll(): Error? = tryCall {
