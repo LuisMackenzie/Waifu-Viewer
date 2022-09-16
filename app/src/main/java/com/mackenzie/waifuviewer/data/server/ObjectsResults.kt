@@ -11,7 +11,7 @@ data class WaifuIm(
     @SerializedName("image_id") val imageId: Int,
     @SerializedName("favourites") val favourites: Int,
     @SerializedName("dominant_color") val dominant_color: String,
-    @SerializedName("source") val source: String,
+    @SerializedName("source") val source: String?,
     @SerializedName("uploaded_at") val uploadedAt: String,
     @SerializedName("is_nsfw") val isNsfw: Boolean,
     @SerializedName("width") val width: String,

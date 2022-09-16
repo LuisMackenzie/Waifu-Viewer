@@ -3,6 +3,7 @@ package com.mackenzie.waifuviewer.ui.main
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -115,6 +116,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
             ivError.visibility = View.VISIBLE
             tvError.visibility = View.VISIBLE
             Toast.makeText(requireContext(), mainState.errorToString(it), Toast.LENGTH_SHORT).show()
+            Log.e("PICS error", mainState.errorToString(it))
         }
 
         state.isLoading?.let {
@@ -172,6 +174,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
             ivError.visibility = View.VISIBLE
             tvError.visibility = View.VISIBLE
             Toast.makeText(requireContext(), mainState.errorToString(it), Toast.LENGTH_SHORT).show()
+            Log.e("IM error", mainState.errorToString(it))
         }
 
         state.isLoading?.let {

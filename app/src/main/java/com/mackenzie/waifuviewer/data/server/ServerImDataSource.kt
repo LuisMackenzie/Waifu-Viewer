@@ -38,7 +38,7 @@ private fun WaifuIm.toDomainModel(): WaifuImItem =
         signature,
         extension,
         dominant_color,
-        source,
+        source ?: "",
         uploadedAt,
         isNsfw,
         width,

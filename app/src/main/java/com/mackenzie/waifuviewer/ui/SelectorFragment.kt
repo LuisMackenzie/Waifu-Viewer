@@ -172,7 +172,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
             spinnerContent = if (sNsfw.isChecked) {
                 arrayOf("all", "ass", "hentai", "milf", "oral", "paizuri", "ecchi", "ero")
             } else {
-                arrayOf("all", "uniform", "maid", "waifu", "marin-kitagawa", "mori-calliope", "raiden-shogun", "oppai")
+                arrayOf("all", "uniform", "maid", "waifu", "marin-kitagawa", "mori-calliope", "raiden-shogun", "oppai", "selfies")
             }
         }
 
