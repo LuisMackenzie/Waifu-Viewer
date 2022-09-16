@@ -67,13 +67,17 @@ private fun List<WaifuImDbItem>.toDomainModel(): List<WaifuImItem> = map { it.to
 private fun WaifuImDbItem.toDomainModel(): WaifuImItem =
     WaifuImItem(
         id,
+        signature,
+        extension,
         dominantColor,
-        file,
+        source,
+        uploadedAt,
+        isNsfw,
+        width,
         height,
         imageId,
-        isNsfw,
         url,
-        width,
+        previewUrl,
         isFavorite
     )
 

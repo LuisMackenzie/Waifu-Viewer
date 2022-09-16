@@ -1,14 +1,10 @@
 package com.mackenzie.waifuviewer.data
 
-import arrow.core.Either
-import arrow.core.left
-import arrow.core.right
 import com.mackenzie.waifuviewer.data.datasource.FavoriteLocalDataSource
 import com.mackenzie.waifuviewer.data.datasource.WaifusPicLocalDataSource
 import com.mackenzie.waifuviewer.data.datasource.WaifusPicRemoteDataSource
 import com.mackenzie.waifuviewer.domain.WaifuPicItem
 import com.mackenzie.waifuviewer.domain.Error
-import com.mackenzie.waifuviewer.domain.WaifuImItem
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

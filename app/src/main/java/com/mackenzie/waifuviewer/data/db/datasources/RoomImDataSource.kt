@@ -1,29 +1,19 @@
 package com.mackenzie.waifuviewer.data.db.datasources
 
-import androidx.paging.*
 import com.mackenzie.waifuviewer.data.datasource.WaifusImLocalDataSource
 import com.mackenzie.waifuviewer.data.db.WaifuImDao
 import com.mackenzie.waifuviewer.data.db.WaifuImDbItem
 import com.mackenzie.waifuviewer.data.tryCall
 import com.mackenzie.waifuviewer.domain.WaifuImItem
 import com.mackenzie.waifuviewer.domain.Error
-import com.mackenzie.waifuviewer.ui.common.Scope
-import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
-import kotlin.coroutines.coroutineContext
+
 
 class RoomImDataSource @Inject constructor(private val imDao: WaifuImDao) : WaifusImLocalDataSource {
 
     override val waifusIm: Flow<List<WaifuImItem>> = imDao.getAllIm().map { it.toDomainModel() }
-
-    /*override val waifusImPaged: Flow<PagingData<WaifuImItem>> = Pager(
-        config = PagingConfig(pageSize = 10, enablePlaceholders = true, maxSize = 200)) {
-        imDao.getAllImPaged()
-    }.flow.map {
-        it.map { it.toDomainModel() }
-    }*/
 
     override suspend fun isImEmpty(): Boolean = imDao.waifuImCount() == 0
 
@@ -48,13 +38,17 @@ private fun List<WaifuImDbItem>.toDomainModel(): List<WaifuImItem> = map { it.to
 private fun WaifuImDbItem.toDomainModel(): WaifuImItem =
     WaifuImItem(
         id,
+        signature,
+        extension,
         dominantColor,
-        file,
+        source,
+        uploadedAt,
+        isNsfw,
+        width,
         height,
         imageId,
-        isNsfw,
         url,
-        width,
+        previewUrl,
         isFavorite
     )
 
@@ -62,12 +56,16 @@ private fun List<WaifuImItem>.fromDomainModel(): List<WaifuImDbItem> = map { it.
 
 private fun WaifuImItem.fromDomainModel(): WaifuImDbItem = WaifuImDbItem(
     id,
+    signature,
+    extension,
     dominantColor,
-    file,
+    source,
+    uploadedAt,
+    isNsfw,
+    width,
     height,
     imageId,
-    isNsfw,
     url,
-    width,
+    previewUrl,
     isFavorite
 )

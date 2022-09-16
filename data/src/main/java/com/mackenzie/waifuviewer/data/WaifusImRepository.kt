@@ -16,8 +16,6 @@ class WaifusImRepository @Inject constructor(
 
     val savedWaifusIm = localImDataSource.waifusIm
 
-    // val savedWaifusImPaged = localImDataSource.waifusImPaged
-
     fun findImById(id: Int): Flow<WaifuImItem> = localImDataSource.findImById(id)
 
     suspend fun requestWaifusIm(isNsfw: Boolean, tag: String, isGif: Boolean, orientation: Boolean): Error? {

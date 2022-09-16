@@ -9,19 +9,18 @@ import kotlinx.parcelize.Parcelize
 @Entity
 data class WaifuImDbItem(
     @PrimaryKey(autoGenerate = true) val id: Int,
+    val signature: String,
+    val extension: String,
     val dominantColor: String,
-    // val extension: String,
-    // val favourites: Int,
-    val file: String,
+    val source: String,
+    val uploadedAt: String,
+    val isNsfw: Boolean,
+    val width: String,
     val height: String,
     val imageId: Int,
-    val isNsfw: Boolean,
-    // val previewUrl: String,
-    // val source: String,
-    // val tags: List<Tag>,
-    // val uploadedAt: String,
     val url: String,
-    val width: String,
+    val previewUrl: String,
+    // val tags: List<Tag>,
     val isFavorite: Boolean
 ) : Parcelable
 

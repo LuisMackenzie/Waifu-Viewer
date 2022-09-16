@@ -6,19 +6,19 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class WaifuIm(
-    @SerializedName("dominant_color") val dominant_color: String,
-    val extension: String,
-    val favourites: Int,
-    @SerializedName("file") val `file`: String,
-    val height: String,
+    @SerializedName("signature") val signature: String,
+    @SerializedName("extension") val extension: String,
     @SerializedName("image_id") val imageId: Int,
-    @SerializedName("is_nsfw") val isNsfw: Boolean,
-    @SerializedName("preview_url") val previewUrl: String,
-    val source: String,
-    // val tags: List<Tag>,
+    @SerializedName("favourites") val favourites: Int,
+    @SerializedName("dominant_color") val dominant_color: String,
+    @SerializedName("source") val source: String,
     @SerializedName("uploaded_at") val uploadedAt: String,
-    val url: String,
-    val width: String
+    @SerializedName("is_nsfw") val isNsfw: Boolean,
+    @SerializedName("width") val width: String,
+    @SerializedName("height") val height: String,
+    @SerializedName("url") val url: String,
+    @SerializedName("preview_url") val previewUrl: String,
+    // val tags: List<Tag>
 ) : Parcelable
 
 

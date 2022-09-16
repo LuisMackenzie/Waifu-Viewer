@@ -68,8 +68,6 @@ private fun FavoriteDbItem.toDomainModel(): FavoriteItem =
         isFavorite
     )
 
-// private fun List<WaifuPicItem>.fromPicDomainModel(): List<FavoriteDbItem> = map { it.fromPicDomainModel() }
-
 private fun WaifuPicItem.fromPicDomainModel(): FavoriteDbItem =
     FavoriteDbItem(
         id = 0,
@@ -77,8 +75,6 @@ private fun WaifuPicItem.fromPicDomainModel(): FavoriteDbItem =
         title = url.substringAfterLast('/').substringBeforeLast('.'),
         isFavorite
     )
-
-// private fun List<WaifuImItem>.fromImDomainModel(): List<FavoriteDbItem> = map { it.fromImDomainModel() }
 
 private fun WaifuImItem.fromImDomainModel(): FavoriteDbItem =
     FavoriteDbItem(
