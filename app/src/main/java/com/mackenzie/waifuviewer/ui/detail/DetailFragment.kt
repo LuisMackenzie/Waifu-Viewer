@@ -225,8 +225,4 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
             }
         }
     }
-
-    // private fun isGif(imagen: String): Boolean = imagen.endsWith("gif")
-
-
 }

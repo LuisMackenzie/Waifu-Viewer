@@ -21,9 +21,6 @@ class SelectorImViewModel @Inject constructor(
 
     private fun loadWaifu() {
         viewModelScope.launch {
-            /*getWaifuImUseCase()
-                .catch { cause -> _state.update { it.copy(error = cause.toError()) }}
-                .collect{ waifuIm -> _state.update { UiState(waifu = waifuIm.first()) } }*/
             val waifu = requestOnlyImWaifu()
             if (waifu != null) {
                 _state.update { it.copy(waifu = waifu) }

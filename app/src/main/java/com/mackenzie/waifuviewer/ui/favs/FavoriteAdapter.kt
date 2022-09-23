@@ -34,7 +34,6 @@ class FavoriteAdapter(
 
         private val binding = ViewMediaItemBinding.bind(view)
         fun bind(waifu: FavoriteItem) = with(binding) {
-            // binding.waifuIm = waifu
             waifuTitle.text = waifu.title
             waifuThumb.loadUrl(waifu.url)
             ivFavs.visibility = if (waifu.isFavorite) View.VISIBLE else View.GONE

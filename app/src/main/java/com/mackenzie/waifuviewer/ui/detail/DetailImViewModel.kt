@@ -46,6 +46,5 @@ class DetailImViewModel @Inject constructor (
         val waifuIm: WaifuImItem? = null,
         val error: Error? = null
     )
-
 }
 

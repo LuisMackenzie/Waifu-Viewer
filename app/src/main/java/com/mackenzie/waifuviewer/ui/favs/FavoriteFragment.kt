@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.navArgs
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.databinding.FragmentFavoriteBinding
 import com.mackenzie.waifuviewer.domain.FavoriteItem
@@ -13,7 +12,6 @@ import com.mackenzie.waifuviewer.ui.common.launchAndCollect
 import com.mackenzie.waifuviewer.ui.main.MainState
 import com.mackenzie.waifuviewer.ui.main.buildMainState
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.properties.Delegates
 
 @AndroidEntryPoint
 class FavoriteFragment : Fragment(R.layout.fragment_favorite), FavoriteAdapter.OnItemClickListener {

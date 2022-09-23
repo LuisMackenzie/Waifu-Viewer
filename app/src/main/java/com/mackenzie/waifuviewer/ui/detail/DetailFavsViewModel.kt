@@ -1,12 +1,10 @@
 package com.mackenzie.waifuviewer.ui.detail
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mackenzie.waifuviewer.di.WaifuId
 import com.mackenzie.waifuviewer.domain.Error
 import com.mackenzie.waifuviewer.domain.FavoriteItem
-import com.mackenzie.waifuviewer.domain.WaifuImItem
 import com.mackenzie.waifuviewer.usecases.FindFavoriteUseCase
 import com.mackenzie.waifuviewer.usecases.SwitchFavoriteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel

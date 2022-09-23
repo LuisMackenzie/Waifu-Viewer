@@ -69,9 +69,6 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         }
     }
 
-
-
-
     private fun updateImWaifu(state: SelectorImViewModel.UiState) {
 
         state.waifu?.let { waifu ->
@@ -140,10 +137,6 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
             }
 
         }
-        /*cGroup.setOnClickListener {
-            updateSwitches()
-            updateSpinner()
-        }*/
         sNsfw.setOnClickListener {
             updateSpinner()
         }
@@ -216,8 +209,6 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         } else {
             mainState.onButtonGetWaifuClicked(bun)
         }
-
-
     }
 
     override fun onResume() {
@@ -234,6 +225,4 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
             picsViewModel.onChangeType(type)
         }
     }
-
-
 }

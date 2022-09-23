@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.databinding.ViewMediaItemBinding
-import com.mackenzie.waifuviewer.domain.WaifuImItem
 import com.mackenzie.waifuviewer.domain.WaifuPicItem
 import com.mackenzie.waifuviewer.ui.common.basicDiffUtil
 import com.mackenzie.waifuviewer.ui.common.inflate
@@ -30,7 +29,6 @@ class WaifuPicsAdapter(private val listener: (WaifuPicItem) -> Unit ): ListAdapt
 
         private val binding = ViewMediaItemBinding.bind(view)
         fun bind(waifu: WaifuPicItem) = with(binding) {
-            // waifuPic = waifu
             waifuTitle.text = waifu.url.substringAfterLast('/').substringBeforeLast('.')
             waifuThumb.loadUrl(waifu.url)
             ivFavs.visibility = if (waifu.isFavorite) View.VISIBLE else View.GONE

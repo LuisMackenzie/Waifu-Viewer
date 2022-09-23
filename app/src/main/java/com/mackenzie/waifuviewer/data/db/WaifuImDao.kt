@@ -1,6 +1,5 @@
 package com.mackenzie.waifuviewer.data.db
 
-import androidx.paging.PagingSource
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 
@@ -9,9 +8,6 @@ interface WaifuImDao {
 
     @Query("SELECT * FROM WaifuImDbItem")
     fun getAllIm(): Flow<List<WaifuImDbItem>>
-
-    /*@Query("SELECT * FROM WaifuImDbItem")
-    fun getAllImPaged(): PagingSource<Int, WaifuImDbItem>*/
 
     @Query("SELECT * FROM WaifuImDbItem WHERE id = :id")
     fun findImById(id: Int): Flow<WaifuImDbItem>

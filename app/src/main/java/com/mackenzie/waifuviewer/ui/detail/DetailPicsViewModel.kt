@@ -1,8 +1,6 @@
 package com.mackenzie.waifuviewer.ui.detail
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.mackenzie.waifuviewer.di.WaifuId
 import com.mackenzie.waifuviewer.domain.WaifuPicItem
@@ -27,7 +25,6 @@ class DetailPicsViewModel @Inject constructor(
     private val _state = MutableStateFlow(UiState())
     val state: StateFlow<UiState> = _state.asStateFlow()
 
-
     init {
         viewModelScope.launch {
             findWaifuPicUseCase(waifuId).collect {
@@ -49,5 +46,4 @@ class DetailPicsViewModel @Inject constructor(
         val waifuPic: WaifuPicItem? = null,
         val error: Error? = null
     )
-
 }

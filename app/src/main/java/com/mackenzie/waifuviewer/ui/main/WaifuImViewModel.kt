@@ -26,7 +26,6 @@ class WaifuImViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             getWaifuImUseCase()
-                // .cachedIn(viewModelScope)
                 .catch { cause -> _state.update { it.copy(error = cause.toError()) }}
                 .collect{ waifusIm -> _state.update { UiState( waifus = waifusIm) } }
         }

@@ -19,12 +19,12 @@ suspend fun <T> tryCall(action: suspend () -> T): Either<Error, T> = try {
     e.toError().left()
 }
 
-/*suspend fun <T> trySave(action: suspend () -> T): Error? = try {
+suspend fun <T> trySave(action: suspend () -> T): Error? = try {
     action()
     null
 } catch (e: Exception) {
     e.toError()
-}*/
+}
 
 inline fun <T> tryGet(action: () -> T): Error? = try {
     action()

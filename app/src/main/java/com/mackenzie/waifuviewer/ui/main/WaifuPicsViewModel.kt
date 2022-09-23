@@ -1,16 +1,13 @@
 package com.mackenzie.waifuviewer
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.mackenzie.waifuviewer.data.toError
 import com.mackenzie.waifuviewer.domain.Error
-import com.mackenzie.waifuviewer.domain.FavoriteItem
 import com.mackenzie.waifuviewer.domain.WaifuPicItem
 import com.mackenzie.waifuviewer.usecases.GetWaifuPicUseCase
 import com.mackenzie.waifuviewer.usecases.RequestWaifuPicUseCase
 import com.mackenzie.waifuviewer.ui.common.Scope
-import com.mackenzie.waifuviewer.ui.main.WaifuImViewModel
 import com.mackenzie.waifuviewer.usecases.ClearWaifuPicUseCase
 import com.mackenzie.waifuviewer.usecases.RequestMoreWaifuPicUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
