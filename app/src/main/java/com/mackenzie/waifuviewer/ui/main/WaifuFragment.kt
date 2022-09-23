@@ -23,7 +23,6 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
     private val picsViewModel: WaifuPicsViewModel by viewModels()
     private val imViewModel: WaifuImViewModel by viewModels()
     private val waifuImAdapter = WaifuImAdapter{ mainState.onWaifuImClicked(it) }
-    // private val waifuImAdapter = WaifuImPagerAdapter{ if (it != null) mainState.onWaifuImClicked(it) }
     private val waifuPicsAdapter = WaifuPicsAdapter{ mainState.onWaifuPicsClicked(it) }
     private lateinit var mainState: MainState
     private lateinit var bun: Bundle
@@ -135,10 +134,6 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
                         Handler(Looper.getMainLooper()).postDelayed({
                             loadingMore = false
                         }, 3000)
-                        /*Timer("SettingUp", false).schedule(3000) {
-                            loadingMore = false
-                            Toast.makeText(requireContext(), "loadingMore = $loadingMore", Toast.LENGTH_SHORT).show()
-                        }*/
                     }
                 }
             }
@@ -146,7 +141,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
 
         fabDelete.setOnClickListener {
             picsViewModel.onClearPicsDatabase()
-            activity?.onBackPressed()
+            requireActivity().onBackPressedDispatcher.onBackPressed()
             Toast.makeText(requireContext(), "Some waifus are gone", Toast.LENGTH_SHORT).show()
         }
     }
@@ -201,7 +196,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
 
         fabDelete.setOnClickListener {
             imViewModel.onClearImDatabase()
-            activity?.onBackPressed()
+            requireActivity().onBackPressedDispatcher.onBackPressed()
             Toast.makeText(requireContext(), "Some waifus are gone", Toast.LENGTH_SHORT).show()
         }
     }
