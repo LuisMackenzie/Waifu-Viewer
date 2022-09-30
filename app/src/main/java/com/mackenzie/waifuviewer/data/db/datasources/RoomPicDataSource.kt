@@ -54,7 +54,7 @@ private fun List<WaifuPicItem>.fromDomainModel(): List<WaifuPicDbItem> = map { i
 
 private fun WaifuPicItem.fromDomainModel(): WaifuPicDbItem =
     WaifuPicDbItem(
-    id = 0,
+    id,
     url,
     isFavorite
 )
