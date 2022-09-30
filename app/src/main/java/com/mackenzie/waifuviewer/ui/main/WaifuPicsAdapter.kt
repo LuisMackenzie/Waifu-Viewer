@@ -11,7 +11,7 @@ import com.mackenzie.waifuviewer.ui.common.basicDiffUtil
 import com.mackenzie.waifuviewer.ui.common.inflate
 import com.mackenzie.waifuviewer.ui.common.loadUrl
 
-class WaifuPicsAdapter(private val listener: (WaifuPicItem) -> Unit ): ListAdapter<WaifuPicItem, WaifuPicsAdapter.ViewHolder>(basicDiffUtil { old, new -> old.id == new.id }) {
+class WaifuPicsAdapter(private val listener: PicListener ): ListAdapter<WaifuPicItem, WaifuPicsAdapter.ViewHolder>(basicDiffUtil { old, new -> old.id == new.id }) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

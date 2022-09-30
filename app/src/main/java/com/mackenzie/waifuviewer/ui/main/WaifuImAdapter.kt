@@ -12,7 +12,7 @@ import com.mackenzie.waifuviewer.ui.common.inflate
 import com.mackenzie.waifuviewer.ui.common.loadUrl
 
 class WaifuImAdapter(
-    private val listener: (WaifuImItem) -> Unit
+    private val listener: ImListener
 ): ListAdapter<WaifuImItem, WaifuImAdapter.ViewHolder>(basicDiffUtil { old, new -> old.id == new.id }) {
 
 

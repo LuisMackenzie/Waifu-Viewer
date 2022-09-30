@@ -73,3 +73,6 @@ fun Fragment.buildMainState(
         Manifest.permission.READ_EXTERNAL_STORAGE
     )
 ) = MainState(context, scope, navController, locationPermissionRequester)
+
+typealias ImListener = (WaifuImItem) -> Unit
+typealias PicListener = (WaifuPicItem) -> Unit
