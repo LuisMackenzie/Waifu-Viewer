@@ -36,15 +36,15 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mainState = buildMainState()
-        serverMode = safeArgs.bundleInfo.getString(SERVER_MODE)!!
+        serverMode = safeArgs.bundleInfo.getString(SERVER_MODE) ?: ""
         bun = safeArgs.bundleInfo
         val binding = FragmentWaifuBinding.bind(view)
         when (serverMode) {
-            "enhanced" -> {
+            getString(R.string.server_enhanced_string) -> {
                 binding.recycler.adapter = waifuPicsAdapter
                 viewLifecycleOwner.launchAndCollect(picsViewModel.state) { binding.withPicsUpdateUI(it) }
             }
-            else -> {
+            getString(R.string.server_normal_string) -> {
                 binding.recycler.adapter = waifuImAdapter
                 viewLifecycleOwner.launchAndCollect(imViewModel.state) { binding.withImUpdateUI(it) }
             }
@@ -102,7 +102,6 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         val categoryTag = bun.getString(CATEGORY_TAG) ?: ""
 
         state.waifus?.let { savedPicWaifus ->
-            // waifuPicsAdapter.submitList(savedPicWaifus.reversed())
             appendProgress.visibility = View.GONE
             waifuPicsAdapter.submitList(savedPicWaifus)
             count = savedPicWaifus.size
@@ -207,7 +206,6 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
 
     companion object {
         const val SERVER_MODE = "WaifuFragment:server_mode"
-        const val IS_FAVORITES = "WaifuFragment:favorites"
         const val IS_NSFW_WAIFU = "WaifuFragment:nsfw"
         const val IS_GIF_WAIFU = "WaifuFragment:gif"
         const val IS_LANDS_WAIFU = "WaifuFragment:lands"

@@ -20,11 +20,10 @@ import com.mackenzie.waifuviewer.ui.common.SaveImage
 import com.mackenzie.waifuviewer.ui.common.loadUrl
 import com.mackenzie.waifuviewer.ui.common.visible
 import com.mackenzie.waifuviewer.ui.main.MainState
-import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_FAVORITES
 import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.SERVER_MODE
 import com.mackenzie.waifuviewer.ui.main.buildMainState
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.IOException
 import java.net.URL
@@ -38,7 +37,6 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
     private lateinit var mainState: MainState
     private lateinit var download: DownloadModel
     private var serverMode: String = ""
-    private var favoriteView: Boolean = false
     private var isWritePermissionGranted: Boolean = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -47,7 +45,7 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
         val binding = FragmentDetailBinding.bind(view)
         val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
         serverMode = sharedPref.getString(SERVER_MODE, "") ?: ""
-        favoriteView = sharedPref.getBoolean(IS_FAVORITES, false)
+        Toast.makeText(requireContext(), "Server = $serverMode", Toast.LENGTH_SHORT).show()
         binding.setUpElements()
     }
 
@@ -96,7 +94,7 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
         }
 
         state.error?.let {
-            tvDetail.text = "Hubo algun Error"
+            tvDetail.text = getString(R.string.waifu_error)
             ivDetail.setImageResource(R.drawable.ic_offline_background)
             Toast.makeText(requireContext(), it.toString(), Toast.LENGTH_SHORT).show()
         }
@@ -118,7 +116,7 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
         }
 
         state.error?.let {
-            tvDetail.text = "Hubo algun Error"
+            tvDetail.text = getString(R.string.waifu_error)
             ivDetail.setImageResource(R.drawable.ic_offline_background)
 
         }
@@ -139,7 +137,7 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
         }
 
         state.error?.let {
-            tvDetail.text = "Hubo algun Error"
+            tvDetail.text = getString(R.string.waifu_error)
             ivDetail.setImageResource(R.drawable.ic_offline_background)
         }
     }
@@ -149,22 +147,29 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
     }
 
     private fun FragmentDetailBinding.setUpElements() {
-        if (favoriteView) {
-            launchFavoriteCollect()
-            fabFavorites.visible = true
-            fabPics.visible = false
-            fabIm.visible = false
-        } else {
-            if (serverMode == "enhanced") {
-                launchPicsCollect()
-                fabPics.visible = true
-                fabIm.visible = false
-                fabFavorites.visible = false
-            } else {
+        when (serverMode) {
+            getString(R.string.server_normal_string) -> {
                 launchImCollect()
                 fabIm.visible = true
                 fabPics.visible = false
                 fabFavorites.visible = false
+            }
+            getString(R.string.server_enhanced_string) -> {
+                launchPicsCollect()
+                fabPics.visible = true
+                fabIm.visible = false
+                fabFavorites.visible = false
+            }
+            getString(R.string.server_favorite_string) -> {
+                launchFavoriteCollect()
+                fabFavorites.visible = true
+                fabPics.visible = false
+                fabIm.visible = false
+            }
+            else -> {
+                fabFavorites.visible = false
+                fabPics.visible = false
+                fabIm.visible = false
             }
         }
 
@@ -192,7 +197,7 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
     private fun downloadImage(title: String, link: String, fileType: String) {
 
         val type: String = selectMimeType(fileType)
-        lifecycleScope.launch(IO) {
+        lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val url = URL(link)
 

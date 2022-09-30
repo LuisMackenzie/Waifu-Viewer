@@ -64,7 +64,7 @@ private fun WaifuImDbItem.toDomainModel(): WaifuImItem =
 private fun List<WaifuImItem>.fromDomainModel(): List<WaifuImDbItem> = map { it.fromDomainModel() }
 
 private fun WaifuImItem.fromDomainModel(): WaifuImDbItem = WaifuImDbItem(
-    id,
+    id = 0,
     signature,
     extension,
     dominantColor,

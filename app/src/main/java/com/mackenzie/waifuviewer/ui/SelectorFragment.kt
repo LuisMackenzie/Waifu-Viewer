@@ -25,13 +25,11 @@ import com.mackenzie.waifuviewer.ui.main.MainState
 import com.mackenzie.waifuviewer.ui.main.OnChooseTypeChanged
 import com.mackenzie.waifuviewer.ui.main.SelectorImViewModel
 import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.CATEGORY_TAG
-import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_FAVORITES
 import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_GIF_WAIFU
 import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_LANDS_WAIFU
 import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_NSFW_WAIFU
 import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.SERVER_MODE
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.async
 
 @AndroidEntryPoint
 class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChanged {
@@ -128,13 +126,13 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
     private fun setUpElements() = with(binding) {
         onChooseTypeChanged = this@SelectorFragment
         btnWaifu.setOnClickListener {
-            navigateTo(false)
+            navigateTo(serverMode)
         }
         sOrientation.setOnClickListener {
             if (sOrientation.isChecked) {
-                sOrientation.text = "Landscape"
+                sOrientation.text = getString(R.string.landscape)
             } else {
-                sOrientation.text = "Portrait"
+                sOrientation.text = getString(R.string.portrait_default)
             }
 
         }
@@ -149,7 +147,8 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
             }
         }
         favorites.setOnClickListener {
-            navigateTo(true)
+            serverMode = ServerType.FAVORITE
+            navigateTo(serverMode)
         }
         backgroudImage = ivBackdrop
     }
@@ -179,7 +178,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
     private fun updateSwitches() = with(binding) {
         val view : Int
         when (serverMode.value) {
-            "enhanced" -> view = View.GONE
+            ServerType.ENHANCED.toString() -> view = View.GONE
             else -> view = View.VISIBLE
         }
         sGifs.visibility = view
@@ -187,28 +186,28 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
 
     }
 
-    private fun navigateTo(favorite :Boolean) = with(binding) {
+    private fun navigateTo(mode: ServerType) = with(binding) {
         val bun = bundleOf()
         bun.putString(SERVER_MODE, serverMode.value)
         bun.putBoolean(IS_NSFW_WAIFU, sNsfw.isChecked)
         bun.putBoolean(IS_GIF_WAIFU, sGifs.isChecked)
         bun.putBoolean(IS_LANDS_WAIFU, sOrientation.isChecked)
         val selectedTag = spinner.selectedItem.toString()
-        if (!selectedTag.isEmpty()) {
+        if (selectedTag.isNotEmpty()) {
             bun.putString(CATEGORY_TAG, selectedTag)
         }
 
         val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
         with (sharedPref.edit()) {
             putString(SERVER_MODE, serverMode.value)
-            putBoolean(IS_FAVORITES, favorite)
             apply()
         }
 
-        if (favorite) {
-            mainState.onButtonFavoritesClicked(bun)
-        } else {
-            mainState.onButtonGetWaifuClicked(bun)
+        when (mode) {
+            ServerType.ENHANCED -> mainState.onButtonGetWaifuClicked(bun)
+            ServerType.NORMAL -> mainState.onButtonGetWaifuClicked(bun)
+            ServerType.FAVORITE -> mainState.onButtonFavoritesClicked(bun)
+            else -> mainState.onButtonGetWaifuClicked(bun)
         }
     }
 
