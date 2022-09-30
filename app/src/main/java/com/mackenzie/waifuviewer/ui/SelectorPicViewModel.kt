@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.mackenzie.waifuviewer.domain.Error
 import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.domain.WaifuPicItem
-import com.mackenzie.waifuviewer.ui.common.Scope
 import com.mackenzie.waifuviewer.usecases.RequestOnlyWaifuPicUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SelectorPicViewModel @Inject constructor(
     private val requestOnlyPicWaifu: RequestOnlyWaifuPicUseCase
-    ): ViewModel(), Scope by Scope.Impl() {
+    ): ViewModel() {
 
     private val _state = MutableStateFlow(UiState())
     val state: StateFlow<UiState> = _state.asStateFlow()

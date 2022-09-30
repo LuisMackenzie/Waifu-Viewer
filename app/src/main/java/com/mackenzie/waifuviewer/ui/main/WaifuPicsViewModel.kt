@@ -7,7 +7,6 @@ import com.mackenzie.waifuviewer.domain.Error
 import com.mackenzie.waifuviewer.domain.WaifuPicItem
 import com.mackenzie.waifuviewer.usecases.GetWaifuPicUseCase
 import com.mackenzie.waifuviewer.usecases.RequestWaifuPicUseCase
-import com.mackenzie.waifuviewer.ui.common.Scope
 import com.mackenzie.waifuviewer.usecases.ClearWaifuPicUseCase
 import com.mackenzie.waifuviewer.usecases.RequestMoreWaifuPicUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +20,7 @@ class WaifuPicsViewModel @Inject constructor(
     private val requestWaifuPicUseCase: RequestWaifuPicUseCase,
     private val requestMorePicUseCase: RequestMoreWaifuPicUseCase,
     private val clearWaifuPicUseCase: ClearWaifuPicUseCase
-    ): ViewModel(), Scope by Scope.Impl() {
+    ): ViewModel() {
 
     private val _state = MutableStateFlow(UiState())
     val state: StateFlow<UiState> = _state.asStateFlow()

@@ -1,11 +1,13 @@
 package com.mackenzie.waifuviewer.ui.main
 
+import android.app.NotificationManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -55,7 +57,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         val isNsfw = bun.getBoolean(IS_NSFW_WAIFU)
         val isGif = bun.getBoolean(IS_GIF_WAIFU)
         val orientation = bun.getBoolean(IS_LANDS_WAIFU)
-        val categoryTag = bun.getString(CATEGORY_TAG)!!
+        val categoryTag = bun.getString(CATEGORY_TAG) ?: ""
 
         if (serverMode == "normal") {
             when (categoryTag) {
@@ -97,7 +99,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
 
         var count: Int
         val isNsfw = bun.getBoolean(IS_NSFW_WAIFU)
-        val categoryTag = bun.getString(CATEGORY_TAG)!!
+        val categoryTag = bun.getString(CATEGORY_TAG) ?: ""
 
         state.waifus?.let { savedPicWaifus ->
             // waifuPicsAdapter.submitList(savedPicWaifus.reversed())
@@ -152,7 +154,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         val isNsfw = bun.getBoolean(IS_NSFW_WAIFU)
         val isGif = bun.getBoolean(IS_GIF_WAIFU)
         val orientation = bun.getBoolean(IS_LANDS_WAIFU)
-        val categoryTag = bun.getString(CATEGORY_TAG)!!
+        val categoryTag = bun.getString(CATEGORY_TAG) ?: ""
 
         state.waifus?.let { savedImWaifus ->
             appendProgress.visibility = View.GONE
@@ -183,7 +185,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
                 if (!recycler.canScrollVertically(1)) {
                     if (loadingMore == false) {
                         appendProgress.visibility = View.VISIBLE
-                        imViewModel.onRequestMore(isNsfw, isGif, categoryTag, orientation)
+                        imViewModel.onRequestMore(isNsfw, isGif, categoryTag , orientation)
                         loadingMore = true
                         Toast.makeText(requireContext(), "More Waifus are coming $loadingMore", Toast.LENGTH_SHORT).show()
                         Handler(Looper.getMainLooper()).postDelayed({

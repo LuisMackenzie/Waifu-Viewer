@@ -45,8 +45,8 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
         super.onViewCreated(view, savedInstanceState)
         mainState = buildMainState()
         val binding = FragmentDetailBinding.bind(view)
-        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
-        serverMode = sharedPref.getString(SERVER_MODE, "")!!
+        val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
+        serverMode = sharedPref.getString(SERVER_MODE, "") ?: ""
         favoriteView = sharedPref.getBoolean(IS_FAVORITES, false)
         binding.setUpElements()
     }

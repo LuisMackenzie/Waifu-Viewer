@@ -31,6 +31,7 @@ import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_LANDS_WAIFU
 import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_NSFW_WAIFU
 import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.SERVER_MODE
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.async
 
 @AndroidEntryPoint
 class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChanged {
@@ -197,7 +198,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
             bun.putString(CATEGORY_TAG, selectedTag)
         }
 
-        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
+        val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
         with (sharedPref.edit()) {
             putString(SERVER_MODE, serverMode.value)
             putBoolean(IS_FAVORITES, favorite)
