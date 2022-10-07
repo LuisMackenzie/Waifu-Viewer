@@ -28,12 +28,13 @@ class RoomImDataSource @Inject constructor(
     }.fold(ifLeft = { it }, ifRight = { null })
 
     override suspend fun saveOnlyIm(waifu: WaifuImItem): Error? = tryCall {
-        if (!waifu.isFavorite) {
+        imDao.updateWaifuIm(waifu.fromDomainModel())
+       /* if (!waifu.isFavorite) {
             favDao.deleteFav(FavoriteDbItem(waifu.id, waifu.url, waifu.imageId.toString(), waifu.isFavorite))
-            imDao.updateWaifuIm(waifu.fromDomainModel())
+
         } else {
             imDao.updateWaifuIm(waifu.fromDomainModel())
-        }
+        }*/
     }.fold(ifLeft = { it }, ifRight = { null })
 
     override suspend fun deleteAll(): Error? = tryCall {

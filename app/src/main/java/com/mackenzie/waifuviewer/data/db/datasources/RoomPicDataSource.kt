@@ -27,12 +27,13 @@ class RoomPicDataSource @Inject constructor(
     }.fold(ifLeft = { it }, ifRight = { null })
 
     override suspend fun saveOnlyPics(waifu: WaifuPicItem): Error? = tryCall {
-        if (!waifu.isFavorite) {
+        PicDao.insertWaifuPics(waifu.fromDomainModel())
+        /*if (!waifu.isFavorite) {
             favDao.deleteFav(FavoriteDbItem(waifu.id, waifu.url, waifu.url.substringAfterLast('/').substringBeforeLast('.'), waifu.isFavorite))
             PicDao.insertWaifuPics(waifu.fromDomainModel())
         } else {
             PicDao.insertWaifuPics(waifu.fromDomainModel())
-        }
+        }*/
     }.fold(ifLeft = { it }, ifRight = { null })
 
     override suspend fun deleteAll(): Error? = tryCall {

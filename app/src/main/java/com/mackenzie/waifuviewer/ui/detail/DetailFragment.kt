@@ -45,7 +45,6 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
         val binding = FragmentDetailBinding.bind(view)
         val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
         serverMode = sharedPref.getString(SERVER_MODE, "") ?: ""
-        Toast.makeText(requireContext(), "Server = $serverMode", Toast.LENGTH_SHORT).show()
         binding.setUpElements()
     }
 

@@ -106,7 +106,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
             waifuPicsAdapter.submitList(savedPicWaifus)
             count = savedPicWaifus.size
             if (count != 0 && !numIsShowed) {
-                Toast.makeText(requireContext(), "Total Waifus = $count", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "${getString(R.string.waifus_size)} $count", Toast.LENGTH_SHORT).show()
                 numIsShowed = true
             }
         }
@@ -128,7 +128,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!recycler.canScrollVertically(1)) {
                     if (loadingMore == false) {
-                        Toast.makeText(requireContext(), "More Waifus are coming", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), getString(R.string.waifus_coming), Toast.LENGTH_SHORT).show()
                         appendProgress.visibility = View.VISIBLE
                         picsViewModel.onRequestMore(isNsfw, categoryTag)
                         loadingMore = true
@@ -143,7 +143,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         fabDelete.setOnClickListener {
             picsViewModel.onClearPicsDatabase()
             requireActivity().onBackPressedDispatcher.onBackPressed()
-            Toast.makeText(requireContext(), "Some waifus are gone", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.waifus_gone), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -160,7 +160,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
             waifuImAdapter.submitList(savedImWaifus)
             count = savedImWaifus.size
             if (count != 0 && !numIsShowed) {
-                Toast.makeText(requireContext(), "Total Waifus = $count", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "${getString(R.string.waifus_size)} $count", Toast.LENGTH_SHORT).show()
                 numIsShowed = true
             }
         }
@@ -186,7 +186,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
                         appendProgress.visibility = View.VISIBLE
                         imViewModel.onRequestMore(isNsfw, isGif, categoryTag , orientation)
                         loadingMore = true
-                        Toast.makeText(requireContext(), "More Waifus are coming $loadingMore", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), getString(R.string.waifus_coming), Toast.LENGTH_SHORT).show()
                         Handler(Looper.getMainLooper()).postDelayed({
                             loadingMore = false
                         }, 3000)
@@ -198,7 +198,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         fabDelete.setOnClickListener {
             imViewModel.onClearImDatabase()
             requireActivity().onBackPressedDispatcher.onBackPressed()
-            Toast.makeText(requireContext(), "Some waifus are gone", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.waifus_gone), Toast.LENGTH_SHORT).show()
         }
     }
 
