@@ -3,8 +3,10 @@ package com.mackenzie.waifuviewer.ui
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.ViewGroup
 import android.view.WindowInsets
 import android.view.WindowManager
+import android.widget.Button
 import com.mackenzie.waifuviewer.R
 import dagger.hilt.android.AndroidEntryPoint
 

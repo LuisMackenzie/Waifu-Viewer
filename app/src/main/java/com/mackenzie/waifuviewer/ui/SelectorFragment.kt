@@ -55,6 +55,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
 
         firebaseAnalytics = Firebase.analytics
 
+
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
             viewLifecycleOwner.launchAndCollect(imViewModel.state) { updateImWaifu(it) }
             mainState.requestPermissionLauncher {
