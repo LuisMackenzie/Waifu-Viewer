@@ -27,6 +27,7 @@ import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.ui.common.PermissionRequester
 import com.mackenzie.waifuviewer.ui.common.launchAndCollect
 import com.mackenzie.waifuviewer.ui.common.loadUrlCenterCrop
+import com.mackenzie.waifuviewer.ui.common.visible
 import com.mackenzie.waifuviewer.ui.main.MainState
 import com.mackenzie.waifuviewer.ui.main.OnChooseTypeChanged
 import com.mackenzie.waifuviewer.ui.main.SelectorImViewModel
@@ -55,33 +56,15 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         setUpElements()
         updateSpinner()
         getRemoteConfig()
-        // loadInitialServer()
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
-            viewLifecycleOwner.launchAndCollect(imViewModel.state) { updateImWaifu(it) }
-            mainState.requestPermissionLauncher {
-                if (!loaded) {
-                    imViewModel.loadErrorOrWaifu()
-                    // Toast.makeText(requireContext(), "IM Server", Toast.LENGTH_SHORT).show()
-                }
-            }
-        } else {
-            viewLifecycleOwner.launchAndCollect(picsViewModel.state) { updatePicWaifu(it) }
-            mainState.requestPermissionLauncher {
-                if (!loaded) {
-                    picsViewModel.loadErrorOrWaifu()
-                    // Toast.makeText(requireContext(), "PICS Server", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
+        loadInitialServer()
     }
 
     private fun getRemoteConfig() {
         val remoteConfig: FirebaseRemoteConfig = Firebase.remoteConfig
         val configSettings = remoteConfigSettings {
-            minimumFetchIntervalInSeconds = 6
+            minimumFetchIntervalInSeconds = 3600
         }
         remoteConfig.setConfigSettingsAsync(configSettings)
-        // remoteConfig.setDefaultsAsync()
         remoteConfig.fetchAndActivate().addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val updated = task.result
@@ -210,19 +193,16 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
 
     private fun updateSwitches() = with(binding) {
         when (serverMode.value) {
-            ServerType.ENHANCED.toString() -> {
-                sGifs.visibility = View.INVISIBLE
-                sOrientation.visibility = View.INVISIBLE
-                Toast.makeText(requireContext(), "ENHANCED Mode", Toast.LENGTH_SHORT).show()
+            ServerType.ENHANCED.value -> {
+                sGifs.visible = false
+                sOrientation.visible = false
             }
-            ServerType.NORMAL.toString() -> {
+            ServerType.NORMAL.value -> {
                 sGifs.visibility = View.VISIBLE
                 sOrientation.visibility = View.VISIBLE
-                Toast.makeText(requireContext(), "NORMAL Mode", Toast.LENGTH_SHORT).show()
             }
             else -> {
-                sGifs.visibility = View.VISIBLE
-                sOrientation.visibility = View.VISIBLE
+                Toast.makeText(requireContext(), "Unknown Mode ${serverMode.value}", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -258,7 +238,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
             mainState.requestPermissionLauncher {
                 if (!loaded) {
                     imViewModel.loadErrorOrWaifu()
-                    // Toast.makeText(requireContext(), "IM Server", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "IM Server", Toast.LENGTH_SHORT).show()
                 }
             }
         } else {
@@ -266,18 +246,18 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
             mainState.requestPermissionLauncher {
                 if (!loaded) {
                     picsViewModel.loadErrorOrWaifu()
-                    // Toast.makeText(requireContext(), "PICS Server", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "PICS Server", Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
 
-    override fun onResume() {
+    /*override fun onResume() {
         super.onResume()
         binding.sNsfw.isChecked = false
         updateSpinner()
         updateSwitches()
-    }
+    }*/
 
     override fun onChooseTypeChanged(type: ServerType) {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
