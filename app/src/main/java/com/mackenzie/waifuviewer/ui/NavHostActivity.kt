@@ -3,19 +3,22 @@ package com.mackenzie.waifuviewer.ui
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.ViewGroup
 import android.view.WindowInsets
 import android.view.WindowManager
-import android.widget.Button
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
 import com.mackenzie.waifuviewer.R
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class NavHostActivity : AppCompatActivity() {
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_nav_host)
         setFullscreen()
+        firebaseAnalytics = Firebase.analytics
     }
 
     @Suppress("DEPRECATION")

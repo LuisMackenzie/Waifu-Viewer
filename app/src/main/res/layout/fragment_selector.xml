@@ -81,6 +81,7 @@
         android:layout_height="wrap_content"
         android:text="@string/nsfw_content"
         android:textColor="@color/grey"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -90,22 +91,20 @@
         android:id="@+id/s_gifs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:text="@string/gif_content"
         android:textColor="@color/grey"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.20"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/s_nsfw"
         app:layout_constraintTop_toBottomOf="@+id/c_group" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/s_orientation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:text="@string/portrait_default"
         android:textColor="@color/grey"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.80"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/s_nsfw"
         app:layout_constraintTop_toBottomOf="@+id/c_group" />
 
     <Button

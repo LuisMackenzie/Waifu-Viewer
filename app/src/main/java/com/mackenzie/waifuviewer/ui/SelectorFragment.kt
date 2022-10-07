@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ImageView
@@ -15,9 +16,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.ktx.get
+import com.google.firebase.remoteconfig.ktx.remoteConfig
+import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.databinding.FragmentSelectorBinding
 import com.mackenzie.waifuviewer.domain.ServerType
@@ -40,7 +43,6 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
     private val picsViewModel: SelectorPicViewModel by viewModels()
     private val imViewModel: SelectorImViewModel by viewModels()
     private lateinit var binding: FragmentSelectorBinding
-    private lateinit var firebaseAnalytics: FirebaseAnalytics
     private var backgroudImage: ImageView? = null
     private var loaded: Boolean = false
     private lateinit var mainState: MainState
@@ -52,16 +54,14 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         binding = FragmentSelectorBinding.bind(view)
         setUpElements()
         updateSpinner()
-
-        firebaseAnalytics = Firebase.analytics
-
-
+        getRemoteConfig()
+        // loadInitialServer()
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
             viewLifecycleOwner.launchAndCollect(imViewModel.state) { updateImWaifu(it) }
             mainState.requestPermissionLauncher {
                 if (!loaded) {
                     imViewModel.loadErrorOrWaifu()
-                    Toast.makeText(requireContext(), "IM Server", Toast.LENGTH_SHORT).show()
+                    // Toast.makeText(requireContext(), "IM Server", Toast.LENGTH_SHORT).show()
                 }
             }
         } else {
@@ -69,11 +69,38 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
             mainState.requestPermissionLauncher {
                 if (!loaded) {
                     picsViewModel.loadErrorOrWaifu()
-                    Toast.makeText(requireContext(), "PICS Server", Toast.LENGTH_SHORT).show()
+                    // Toast.makeText(requireContext(), "PICS Server", Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
+
+    private fun getRemoteConfig() {
+        val remoteConfig: FirebaseRemoteConfig = Firebase.remoteConfig
+        val configSettings = remoteConfigSettings {
+            minimumFetchIntervalInSeconds = 6
+        }
+        remoteConfig.setConfigSettingsAsync(configSettings)
+        // remoteConfig.setDefaultsAsync()
+        remoteConfig.fetchAndActivate().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val updated = task.result
+                Log.d("Remote config", "Config params updated: $updated")
+                val nsfw = remoteConfig.getBoolean("nsfw_mode")
+                setNsfwMode(nsfw)
+            } else {
+                Toast.makeText(requireContext(), "Fetch failed",
+                    Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun setNsfwMode(nsfw: Boolean) {
+        if (nsfw) {
+            binding.sNsfw.visibility = View.VISIBLE
+        }
+    }
+
 
     private fun updateImWaifu(state: SelectorImViewModel.UiState) {
 
@@ -141,7 +168,6 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
             } else {
                 sOrientation.text = getString(R.string.portrait_default)
             }
-
         }
         sNsfw.setOnClickListener {
             updateSpinner()
@@ -183,14 +209,22 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
     }
 
     private fun updateSwitches() = with(binding) {
-        val view : Int
         when (serverMode.value) {
-            ServerType.ENHANCED.toString() -> view = View.GONE
-            else -> view = View.VISIBLE
+            ServerType.ENHANCED.toString() -> {
+                sGifs.visibility = View.INVISIBLE
+                sOrientation.visibility = View.INVISIBLE
+                Toast.makeText(requireContext(), "ENHANCED Mode", Toast.LENGTH_SHORT).show()
+            }
+            ServerType.NORMAL.toString() -> {
+                sGifs.visibility = View.VISIBLE
+                sOrientation.visibility = View.VISIBLE
+                Toast.makeText(requireContext(), "NORMAL Mode", Toast.LENGTH_SHORT).show()
+            }
+            else -> {
+                sGifs.visibility = View.VISIBLE
+                sOrientation.visibility = View.VISIBLE
+            }
         }
-        sGifs.visibility = view
-        sOrientation.visibility = view
-
     }
 
     private fun navigateTo(mode: ServerType) = with(binding) {
@@ -215,6 +249,26 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
             ServerType.NORMAL -> mainState.onButtonGetWaifuClicked(bun)
             ServerType.FAVORITE -> mainState.onButtonFavoritesClicked(bun)
             else -> mainState.onButtonGetWaifuClicked(bun)
+        }
+    }
+
+    private fun loadInitialServer() {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
+            viewLifecycleOwner.launchAndCollect(imViewModel.state) { updateImWaifu(it) }
+            mainState.requestPermissionLauncher {
+                if (!loaded) {
+                    imViewModel.loadErrorOrWaifu()
+                    // Toast.makeText(requireContext(), "IM Server", Toast.LENGTH_SHORT).show()
+                }
+            }
+        } else {
+            viewLifecycleOwner.launchAndCollect(picsViewModel.state) { updatePicWaifu(it) }
+            mainState.requestPermissionLauncher {
+                if (!loaded) {
+                    picsViewModel.loadErrorOrWaifu()
+                    // Toast.makeText(requireContext(), "PICS Server", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
