@@ -29,6 +29,15 @@ fun ImageView.loadUrl(url: String) {
         .into(this)
 }
 
+fun ImageView.loadUrlCenterCrop(url: String) {
+    Glide.with(context)
+        .load(url)
+        .centerCrop()
+        .transition(DrawableTransitionOptions.withCrossFade())
+        .error(R.drawable.ic_error_grey)
+        .into(this)
+}
+
 inline fun <T> basicDiffUtil(
     crossinline areItemsTheSame: (T, T) -> Boolean = { old, new -> old == new },
     crossinline areContentsTheSame: (T, T) -> Boolean = { old, new -> old == new }

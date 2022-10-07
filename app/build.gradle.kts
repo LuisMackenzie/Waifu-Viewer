@@ -6,6 +6,8 @@ plugins {
     id ("kotlin-parcelize")
     id ("androidx.navigation.safeargs.kotlin")
     id ("dagger.hilt.android.plugin")
+    id ("com.google.gms.google-services")
+    id ("com.google.firebase.crashlytics")
 }
 
 android {
@@ -55,6 +57,7 @@ android {
 }
 
 dependencies {
+
 
     val retrofit_version = "2.9.0"
     val roomVersion = "2.4.3"
@@ -116,6 +119,11 @@ dependencies {
     implementation (Libs.AndroidX.Paging.runtimeKtx)
     implementation (Libs.AndroidX.Room.paging)
     // implementation(Libs.AndroidX.Room.pagingAlpha)
+
+    // Firebase
+    implementation (platform("com.google.firebase:firebase-bom:30.5.0"))
+    implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation("com.google.firebase:firebase-crashlytics-ktx")
 
 
     // Serialization

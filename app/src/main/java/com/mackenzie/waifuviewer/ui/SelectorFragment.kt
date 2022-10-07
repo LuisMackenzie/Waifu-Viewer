@@ -15,12 +15,15 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.databinding.FragmentSelectorBinding
 import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.ui.common.PermissionRequester
 import com.mackenzie.waifuviewer.ui.common.launchAndCollect
-import com.mackenzie.waifuviewer.ui.common.loadUrl
+import com.mackenzie.waifuviewer.ui.common.loadUrlCenterCrop
 import com.mackenzie.waifuviewer.ui.main.MainState
 import com.mackenzie.waifuviewer.ui.main.OnChooseTypeChanged
 import com.mackenzie.waifuviewer.ui.main.SelectorImViewModel
@@ -37,6 +40,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
     private val picsViewModel: SelectorPicViewModel by viewModels()
     private val imViewModel: SelectorImViewModel by viewModels()
     private lateinit var binding: FragmentSelectorBinding
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
     private var backgroudImage: ImageView? = null
     private var loaded: Boolean = false
     private lateinit var mainState: MainState
@@ -48,6 +52,8 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         binding = FragmentSelectorBinding.bind(view)
         setUpElements()
         updateSpinner()
+
+        firebaseAnalytics = Firebase.analytics
 
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
             viewLifecycleOwner.launchAndCollect(imViewModel.state) { updateImWaifu(it) }
@@ -120,7 +126,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
     }
 
     private fun setBackground(url: String) {
-        backgroudImage?.loadUrl(url)
+        backgroudImage?.loadUrlCenterCrop(url)
     }
 
     private fun setUpElements() = with(binding) {
