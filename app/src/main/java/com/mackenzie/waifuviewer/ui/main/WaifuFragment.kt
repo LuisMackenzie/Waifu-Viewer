@@ -42,11 +42,11 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         when (serverMode) {
             getString(R.string.server_enhanced_string) -> {
                 binding.recycler.adapter = waifuPicsAdapter
-                viewLifecycleOwner.launchAndCollect(picsViewModel.state) { binding.withPicsUpdateUI(it) }
+                viewLifecycleOwner.launchAndCollect(picsViewModel.state) { binding withPicsUpdateUI it }
             }
             getString(R.string.server_normal_string) -> {
                 binding.recycler.adapter = waifuImAdapter
-                viewLifecycleOwner.launchAndCollect(imViewModel.state) { binding.withImUpdateUI(it) }
+                viewLifecycleOwner.launchAndCollect(imViewModel.state) { binding withImUpdateUI it }
             }
         }
 
@@ -95,7 +95,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         }
     }
 
-    private fun FragmentWaifuBinding.withPicsUpdateUI(state: WaifuPicsViewModel.UiState) {
+    private infix fun FragmentWaifuBinding.withPicsUpdateUI(state: WaifuPicsViewModel.UiState) {
 
         var count: Int
         val isNsfw = bun.getBoolean(IS_NSFW_WAIFU)
@@ -147,7 +147,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         }
     }
 
-    private fun FragmentWaifuBinding.withImUpdateUI(state: WaifuImViewModel.UiState) {
+    private infix fun FragmentWaifuBinding.withImUpdateUI(state: WaifuImViewModel.UiState) {
 
         var count: Int
         val isNsfw = bun.getBoolean(IS_NSFW_WAIFU)

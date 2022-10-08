@@ -29,11 +29,11 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite), FavoriteAdapter.O
             recycler.adapter = favoriteAdapter
         }
 
-        viewLifecycleOwner.launchAndCollect(viewModel.state) { binding.updateUI(it) }
+        viewLifecycleOwner.launchAndCollect(viewModel.state) { binding updateUI it }
 
     }
 
-    private fun FragmentFavoriteBinding.updateUI(state: FavoriteViewModel.UiState) {
+    private infix fun FragmentFavoriteBinding.updateUI(state: FavoriteViewModel.UiState) {
 
         var count: Int
 

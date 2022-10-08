@@ -62,7 +62,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
     private fun getRemoteConfig() {
         val remoteConfig: FirebaseRemoteConfig = Firebase.remoteConfig
         val configSettings = remoteConfigSettings {
-            minimumFetchIntervalInSeconds = 3600
+            minimumFetchIntervalInSeconds = 43200
         }
         remoteConfig.setConfigSettingsAsync(configSettings)
         remoteConfig.fetchAndActivate().addOnCompleteListener { task ->
