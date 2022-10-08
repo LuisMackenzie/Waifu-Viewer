@@ -21,6 +21,7 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.ktx.get
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
+import com.mackenzie.waifuviewer.BuildConfig
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.databinding.FragmentSelectorBinding
 import com.mackenzie.waifuviewer.domain.ServerType
@@ -62,14 +63,12 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
     private fun getRemoteConfig() {
         val remoteConfig: FirebaseRemoteConfig = Firebase.remoteConfig
         val configSettings = remoteConfigSettings {
-            // minimumFetchIntervalInSeconds = 43200
-            minimumFetchIntervalInSeconds = 10
+            minimumFetchIntervalInSeconds = releaseIntervalInSeconds
+            // minimumFetchIntervalInSeconds = debugIntervalInSeconds
         }
         remoteConfig.setConfigSettingsAsync(configSettings)
         remoteConfig.fetchAndActivate().addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                val updated = task.result
-                Log.d("Remote config", "Config params updated: $updated")
                 val nsfw = remoteConfig.getBoolean("nsfw_mode")
                 val isAutomatic = remoteConfig.getBoolean("automatic_server")
                 val mode = remoteConfig.getLong("server_mode")
@@ -87,9 +86,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         }
     }
 
-
     private fun updateImWaifu(state: SelectorImViewModel.UiState) {
-
         state.waifu?.let { waifu ->
             setBackground(waifu.url)
             loaded = true
@@ -263,13 +260,6 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         }
     }
 
-    /*override fun onResume() {
-        super.onResume()
-        binding.sNsfw.isChecked = false
-        updateSpinner()
-        updateSwitches()
-    }*/
-
     override fun onChooseTypeChanged(type: ServerType) {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
             imViewModel.onChangeType(type)
@@ -277,4 +267,10 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
             picsViewModel.onChangeType(type)
         }
     }
+
+    companion object {
+        const val debugIntervalInSeconds = 10L
+        const val releaseIntervalInSeconds = 43200L
+    }
+
 }

@@ -15,6 +15,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.mackenzie.waifuviewer.App
 import com.mackenzie.waifuviewer.R
+import com.mackenzie.waifuviewer.domain.WaifuImItem
+import com.mackenzie.waifuviewer.domain.WaifuPicItem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
@@ -61,7 +63,6 @@ fun <T> LifecycleOwner.launchAndCollect(
     body: (T) -> Unit) {
     lifecycleScope.launch {
         this@launchAndCollect.repeatOnLifecycle(state) {
-            // viewModel.state.collect(::updateWaifu)
             flow.collect(body)
         }
     }

@@ -18,6 +18,9 @@ import com.mackenzie.waifuviewer.ui.favs.FavoriteFragmentDirections
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
+typealias ImListener = (WaifuImItem) -> Unit
+typealias PicListener = (WaifuPicItem) -> Unit
+
 class MainState(
     private val context: Context,
     private val scope: CoroutineScope,
@@ -74,5 +77,5 @@ fun Fragment.buildMainState(
     )
 ) = MainState(context, scope, navController, locationPermissionRequester)
 
-typealias ImListener = (WaifuImItem) -> Unit
-typealias PicListener = (WaifuPicItem) -> Unit
+
+

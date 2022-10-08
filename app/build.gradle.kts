@@ -19,7 +19,6 @@ android {
         targetSdk = AppConfig.targetSdk
         versionCode = AppConfig.versionCode
         versionName = AppConfig.versionName
-
         testInstrumentationRunner = AppConfig.testInstrumentationRunnerHilt
     }
 
