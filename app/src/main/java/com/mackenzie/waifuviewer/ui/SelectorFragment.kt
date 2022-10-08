@@ -62,7 +62,8 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
     private fun getRemoteConfig() {
         val remoteConfig: FirebaseRemoteConfig = Firebase.remoteConfig
         val configSettings = remoteConfigSettings {
-            minimumFetchIntervalInSeconds = 43200
+            // minimumFetchIntervalInSeconds = 43200
+            minimumFetchIntervalInSeconds = 10
         }
         remoteConfig.setConfigSettingsAsync(configSettings)
         remoteConfig.fetchAndActivate().addOnCompleteListener { task ->
@@ -70,6 +71,8 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
                 val updated = task.result
                 Log.d("Remote config", "Config params updated: $updated")
                 val nsfw = remoteConfig.getBoolean("nsfw_mode")
+                val isAutomatic = remoteConfig.getBoolean("automatic_server")
+                val mode = remoteConfig.getLong("server_mode")
                 setNsfwMode(nsfw)
             } else {
                 Toast.makeText(requireContext(), "Fetch failed",
@@ -234,20 +237,28 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
 
     private fun loadInitialServer() {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
-            viewLifecycleOwner.launchAndCollect(imViewModel.state) { updateImWaifu(it) }
-            mainState.requestPermissionLauncher {
-                if (!loaded) {
-                    imViewModel.loadErrorOrWaifu()
-                    Toast.makeText(requireContext(), "IM Server", Toast.LENGTH_SHORT).show()
-                }
-            }
+            loadIm()
         } else {
-            viewLifecycleOwner.launchAndCollect(picsViewModel.state) { updatePicWaifu(it) }
-            mainState.requestPermissionLauncher {
-                if (!loaded) {
-                    picsViewModel.loadErrorOrWaifu()
-                    Toast.makeText(requireContext(), "PICS Server", Toast.LENGTH_SHORT).show()
-                }
+            loadPics()
+        }
+    }
+
+    private fun loadIm() {
+        viewLifecycleOwner.launchAndCollect(imViewModel.state) { updateImWaifu(it) }
+        mainState.requestPermissionLauncher {
+            if (!loaded) {
+                imViewModel.loadErrorOrWaifu()
+                Toast.makeText(requireContext(), "IM Server", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun loadPics() {
+        viewLifecycleOwner.launchAndCollect(picsViewModel.state) { updatePicWaifu(it) }
+        mainState.requestPermissionLauncher {
+            if (!loaded) {
+                picsViewModel.loadErrorOrWaifu()
+                Toast.makeText(requireContext(), "PICS Server", Toast.LENGTH_SHORT).show()
             }
         }
     }
