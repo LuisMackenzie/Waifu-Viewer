@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ImageView
@@ -18,10 +17,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
-import com.google.firebase.remoteconfig.ktx.get
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
-import com.mackenzie.waifuviewer.BuildConfig
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.databinding.FragmentSelectorBinding
 import com.mackenzie.waifuviewer.domain.ServerType
@@ -73,10 +70,21 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
                 val isAutomatic = remoteConfig.getBoolean("automatic_server")
                 val mode = remoteConfig.getLong("server_mode")
                 setNsfwMode(nsfw)
+                setAutoMode(isAutomatic)
             } else {
                 Toast.makeText(requireContext(), "Fetch failed",
                     Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    private fun setAutoMode(isAutomatic: Boolean) {
+        if (isAutomatic) {
+            // TODO
+            // Toast.makeText(requireContext(), "Automatic Mode Selected", Toast.LENGTH_SHORT).show()
+        } else {
+            // TODO
+            // Toast.makeText(requireContext(), "Manual Mode Selected", Toast.LENGTH_SHORT).show()
         }
     }
 
