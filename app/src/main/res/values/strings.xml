@@ -24,6 +24,9 @@
     <string name="waifus_coming">More Waifus are coming</string>
     <string name="waifus_size">Total Waifus = </string>
 
+    <string name="waifus_content">Here is shown some waifus</string>
+
+
     <string name="server_normal_string">normal</string>
     <string name="server_enhanced_string">enhanced</string>
     <string name="server_favorite_string">favorite</string>

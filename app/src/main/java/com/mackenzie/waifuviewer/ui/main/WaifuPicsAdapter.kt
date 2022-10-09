@@ -10,6 +10,7 @@ import com.mackenzie.waifuviewer.domain.WaifuPicItem
 import com.mackenzie.waifuviewer.ui.common.basicDiffUtil
 import com.mackenzie.waifuviewer.ui.common.inflate
 import com.mackenzie.waifuviewer.ui.common.loadUrl
+import com.mackenzie.waifuviewer.ui.common.loadUrlCenterCrop
 
 class WaifuPicsAdapter(
     private val listener: PicListener
@@ -32,7 +33,7 @@ class WaifuPicsAdapter(
         private val binding = ViewMediaItemBinding.bind(view)
         fun bind(waifu: WaifuPicItem) = with(binding) {
             waifuTitle.text = waifu.url.substringAfterLast('/').substringBeforeLast('.')
-            waifuThumb.loadUrl(waifu.url)
+            waifuThumb.loadUrlCenterCrop(waifu.url)
             ivFavs.visibility = if (waifu.isFavorite) View.VISIBLE else View.GONE
 
             /*if (waifu.url.substringAfterLast('.') == "png") {
