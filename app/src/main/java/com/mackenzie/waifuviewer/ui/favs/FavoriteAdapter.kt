@@ -10,6 +10,7 @@ import com.mackenzie.waifuviewer.domain.FavoriteItem
 import com.mackenzie.waifuviewer.ui.common.basicDiffUtil
 import com.mackenzie.waifuviewer.ui.common.inflate
 import com.mackenzie.waifuviewer.ui.common.loadUrl
+import com.mackenzie.waifuviewer.ui.common.loadUrlCenterCrop
 
 class FavoriteAdapter(
     private val listener: OnItemClickListener
@@ -35,7 +36,7 @@ class FavoriteAdapter(
         private val binding = ViewMediaItemBinding.bind(view)
         fun bind(waifu: FavoriteItem) = with(binding) {
             waifuTitle.text = waifu.title
-            waifuThumb.loadUrl(waifu.url)
+            waifuThumb.loadUrlCenterCrop(waifu.url)
             ivFavs.visibility = if (waifu.isFavorite) View.VISIBLE else View.GONE
 
             /*if (waifu.url.substringAfterLast('.') == "png") {

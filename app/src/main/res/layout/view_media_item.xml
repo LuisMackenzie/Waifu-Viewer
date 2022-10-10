@@ -11,9 +11,9 @@
     </data>
 
 <androidx.cardview.widget.CardView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_margin="4dp"
+    android:layout_width="match_parent"
+    android:layout_height="250sp"
+    android:layout_margin="6dp"
     app:cardCornerRadius="@dimen/default_corner">
 
     <RelativeLayout
@@ -38,7 +38,7 @@
         <ImageView
             android:id="@+id/waifuThumb"
             android:layout_width="match_parent"
-            android:layout_height="250sp"
+            android:layout_height="match_parent"
             tools:srcCompat="@tools:sample/avatars"
             android:contentDescription="@string/waifus_content" />
 
