@@ -213,7 +213,7 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
                     type
                 )
             } catch (e: IOException) {
-                Log.d(TAG, "error: ${e.localizedMessage}")
+                Log.d(Constants.CATEGORY_TAG_DETAIL, "error: ${e.localizedMessage}")
             }
         }
     }

@@ -12,6 +12,7 @@ class Constants {
         const val CATEGORY_TAG_SELECTOR_IM_ERROR = "SelectorFragment:Im Error"
         const val CATEGORY_TAG_SELECTOR_PICS_ERROR = "SelectorFragment:Pics Error"
         const val CATEGORY_TAG_FAVORITE = "FavoriteFragment:Fav Error"
+        const val CATEGORY_TAG_DETAIL = "DetailFragment:Detail Error"
 
         const val DEBUGINTERVALINSECONDS = 10L
         const val RELEASEINTERVALINSECONDS = 43200L
