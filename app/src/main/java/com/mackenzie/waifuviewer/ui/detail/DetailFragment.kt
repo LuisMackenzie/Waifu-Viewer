@@ -1,6 +1,5 @@
 package com.mackenzie.waifuviewer.ui.detail
 
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory

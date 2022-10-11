@@ -58,14 +58,14 @@ class WaifuPicsViewModel @Inject constructor(
 
     private fun waifusGetter(isNsfw: String, tag: String) {
         viewModelScope.launch {
-            _state.value = _state.value.copy(isLoading = true)
+            _state.update { it.copy(isLoading = true) }
             val error: Error?
             if (tag == "all") {
                 error = requestWaifuPicUseCase(isNsfw, "waifu")
             } else {
                 error = requestWaifuPicUseCase(isNsfw, tag)
             }
-            _state.value = _state.value.copy(isLoading = false, error = error)
+            _state.update { it.copy(isLoading = false, error = error) }
         }
     }
 
@@ -73,10 +73,10 @@ class WaifuPicsViewModel @Inject constructor(
         viewModelScope.launch {
             if (tag == "all") {
                 val error = requestMorePicUseCase(isNsfw, "waifu")
-                _state.update { _state.value.copy(error = error) }
+                _state.update { it.copy(error = error) }
             } else {
                 val error = requestMorePicUseCase(isNsfw, tag)
-                _state.update { _state.value.copy(error = error) }
+                _state.update { it.copy(error = error) }
             }
         }
     }
