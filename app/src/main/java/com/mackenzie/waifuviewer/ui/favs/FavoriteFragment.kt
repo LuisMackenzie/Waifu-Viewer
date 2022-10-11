@@ -1,6 +1,7 @@
 package com.mackenzie.waifuviewer.ui.favs
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.Toast
@@ -8,6 +9,7 @@ import androidx.fragment.app.viewModels
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.databinding.FragmentFavoriteBinding
 import com.mackenzie.waifuviewer.domain.FavoriteItem
+import com.mackenzie.waifuviewer.ui.common.Constants
 import com.mackenzie.waifuviewer.ui.common.launchAndCollect
 import com.mackenzie.waifuviewer.ui.main.MainState
 import com.mackenzie.waifuviewer.ui.main.buildMainState
@@ -42,16 +44,17 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite), FavoriteAdapter.O
             // waifuPic = savedPicWaifus
             count = favoritesWaifus.size
             if (count != 0 && !numIsShowed) {
-                Toast.makeText(requireContext(), "Total Waifus = $count", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "${getString(R.string.waifus_size)} $count", Toast.LENGTH_SHORT).show()
                 numIsShowed = true
             }
         }
 
         state.error?.let {
-            mainState.errorToString(it)
+            error = mainState.errorToString(it)
             ivError.visibility = View.VISIBLE
             tvError.visibility = View.VISIBLE
-            Toast.makeText(requireContext(), it.toString(), Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), mainState.errorToString(it), Toast.LENGTH_SHORT).show()
+            Log.e(Constants.CATEGORY_TAG_FAVORITE, mainState.errorToString(it))
         }
 
         state.isLoading.let {
@@ -59,7 +62,7 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite), FavoriteAdapter.O
         }
 
         fabRecycler.setOnClickListener {
-            Toast.makeText(requireContext(), "Delete All Favorites no implemented yet. Try Long Press on a waifu", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.waifu_favorite_delete), Toast.LENGTH_SHORT).show()
         }
 
     }
@@ -70,7 +73,7 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite), FavoriteAdapter.O
 
     override fun onLongClick(waifu: FavoriteItem) {
         viewModel.onDeleteFavorite(waifu)
-        Toast.makeText(requireContext(), "Waifu Deleted", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), getString(R.string.waifu_deleted), Toast.LENGTH_SHORT).show()
     }
 
 }

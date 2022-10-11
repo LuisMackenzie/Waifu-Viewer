@@ -1,13 +1,11 @@
 package com.mackenzie.waifuviewer.ui.main
 
-import android.app.NotificationManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -15,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.WaifuPicsViewModel
 import com.mackenzie.waifuviewer.databinding.FragmentWaifuBinding
+import com.mackenzie.waifuviewer.ui.common.Constants
 import com.mackenzie.waifuviewer.ui.common.launchAndCollect
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -36,7 +35,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mainState = buildMainState()
-        serverMode = safeArgs.bundleInfo.getString(SERVER_MODE) ?: ""
+        serverMode = safeArgs.bundleInfo.getString(Constants.SERVER_MODE) ?: ""
         bun = safeArgs.bundleInfo
         val binding = FragmentWaifuBinding.bind(view)
         when (serverMode) {
@@ -54,10 +53,10 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
     }
 
     private fun loadCustomResult(bun: Bundle) {
-        val isNsfw = bun.getBoolean(IS_NSFW_WAIFU)
-        val isGif = bun.getBoolean(IS_GIF_WAIFU)
-        val orientation = bun.getBoolean(IS_LANDS_WAIFU)
-        val categoryTag = bun.getString(CATEGORY_TAG) ?: ""
+        val isNsfw = bun.getBoolean(Constants.IS_NSFW_WAIFU)
+        val isGif = bun.getBoolean(Constants.IS_GIF_WAIFU)
+        val orientation = bun.getBoolean(Constants.IS_LANDS_WAIFU)
+        val categoryTag = bun.getString(Constants.CATEGORY_TAG_WAIFU) ?: ""
 
         if (serverMode == "normal") {
             when (categoryTag) {
@@ -98,8 +97,8 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
     private infix fun FragmentWaifuBinding.withPicsUpdateUI(state: WaifuPicsViewModel.UiState) {
 
         var count: Int
-        val isNsfw = bun.getBoolean(IS_NSFW_WAIFU)
-        val categoryTag = bun.getString(CATEGORY_TAG) ?: ""
+        val isNsfw = bun.getBoolean(Constants.IS_NSFW_WAIFU)
+        val categoryTag = bun.getString(Constants.CATEGORY_TAG_WAIFU) ?: ""
 
         state.waifus?.let { savedPicWaifus ->
             appendProgress.visibility = View.GONE
@@ -112,11 +111,11 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         }
 
         state.error?.let {
-            mainState.errorToString(it)
+            error = mainState.errorToString(it)
             ivError.visibility = View.VISIBLE
             tvError.visibility = View.VISIBLE
             Toast.makeText(requireContext(), mainState.errorToString(it), Toast.LENGTH_SHORT).show()
-            Log.e("PICS error", mainState.errorToString(it))
+            Log.e(Constants.CATEGORY_TAG_WAIFU_PICS_ERROR, mainState.errorToString(it))
         }
 
         state.isLoading?.let {
@@ -150,10 +149,10 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
     private infix fun FragmentWaifuBinding.withImUpdateUI(state: WaifuImViewModel.UiState) {
 
         var count: Int
-        val isNsfw = bun.getBoolean(IS_NSFW_WAIFU)
-        val isGif = bun.getBoolean(IS_GIF_WAIFU)
-        val orientation = bun.getBoolean(IS_LANDS_WAIFU)
-        val categoryTag = bun.getString(CATEGORY_TAG) ?: ""
+        val isNsfw = bun.getBoolean(Constants.IS_NSFW_WAIFU)
+        val isGif = bun.getBoolean(Constants.IS_GIF_WAIFU)
+        val orientation = bun.getBoolean(Constants.IS_LANDS_WAIFU)
+        val categoryTag = bun.getString(Constants.CATEGORY_TAG_WAIFU) ?: ""
 
         state.waifus?.let { savedImWaifus ->
             appendProgress.visibility = View.GONE
@@ -166,11 +165,11 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         }
 
         state.error?.let {
-            mainState.errorToString(it)
+            error = mainState.errorToString(it)
             ivError.visibility = View.VISIBLE
             tvError.visibility = View.VISIBLE
             Toast.makeText(requireContext(), mainState.errorToString(it), Toast.LENGTH_SHORT).show()
-            Log.e("IM error", mainState.errorToString(it))
+            Log.e(Constants.CATEGORY_TAG_WAIFU_IM_ERROR, mainState.errorToString(it))
         }
 
         state.isLoading?.let {
@@ -201,16 +200,5 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
             Toast.makeText(requireContext(), getString(R.string.waifus_gone), Toast.LENGTH_SHORT).show()
         }
     }
-
-    
-
-    companion object {
-        const val SERVER_MODE = "WaifuFragment:server_mode"
-        const val IS_NSFW_WAIFU = "WaifuFragment:nsfw"
-        const val IS_GIF_WAIFU = "WaifuFragment:gif"
-        const val IS_LANDS_WAIFU = "WaifuFragment:lands"
-        const val CATEGORY_TAG = "WaifuFragment:tag"
-    }
-
 }
 

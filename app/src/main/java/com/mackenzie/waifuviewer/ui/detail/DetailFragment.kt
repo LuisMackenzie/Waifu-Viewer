@@ -16,11 +16,11 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.databinding.FragmentDetailBinding
 import com.mackenzie.waifuviewer.domain.DownloadModel
+import com.mackenzie.waifuviewer.ui.common.Constants
 import com.mackenzie.waifuviewer.ui.common.SaveImage
 import com.mackenzie.waifuviewer.ui.common.loadUrl
 import com.mackenzie.waifuviewer.ui.common.visible
 import com.mackenzie.waifuviewer.ui.main.MainState
-import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.SERVER_MODE
 import com.mackenzie.waifuviewer.ui.main.buildMainState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -44,7 +44,7 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
         mainState = buildMainState()
         val binding = FragmentDetailBinding.bind(view)
         val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
-        serverMode = sharedPref.getString(SERVER_MODE, "") ?: ""
+        serverMode = sharedPref.getString(Constants.SERVER_MODE, "") ?: ""
         binding.setUpElements()
     }
 

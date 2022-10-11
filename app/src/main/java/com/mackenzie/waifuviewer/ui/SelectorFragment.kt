@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ImageView
@@ -22,18 +23,10 @@ import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.databinding.FragmentSelectorBinding
 import com.mackenzie.waifuviewer.domain.ServerType
-import com.mackenzie.waifuviewer.ui.common.PermissionRequester
-import com.mackenzie.waifuviewer.ui.common.launchAndCollect
-import com.mackenzie.waifuviewer.ui.common.loadUrlCenterCrop
-import com.mackenzie.waifuviewer.ui.common.visible
+import com.mackenzie.waifuviewer.ui.common.*
 import com.mackenzie.waifuviewer.ui.main.MainState
 import com.mackenzie.waifuviewer.ui.main.OnChooseTypeChanged
 import com.mackenzie.waifuviewer.ui.main.SelectorImViewModel
-import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.CATEGORY_TAG
-import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_GIF_WAIFU
-import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_LANDS_WAIFU
-import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.IS_NSFW_WAIFU
-import com.mackenzie.waifuviewer.ui.main.WaifuFragment.Companion.SERVER_MODE
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -60,8 +53,8 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
     private fun getRemoteConfig() {
         val remoteConfig: FirebaseRemoteConfig = Firebase.remoteConfig
         val configSettings = remoteConfigSettings {
-            minimumFetchIntervalInSeconds = releaseIntervalInSeconds
-            // minimumFetchIntervalInSeconds = debugIntervalInSeconds
+            minimumFetchIntervalInSeconds = Constants.RELEASEINTERVALINSECONDS
+            // minimumFetchIntervalInSeconds = Constants.DEBUGINTERVALINSECONDS
         }
         remoteConfig.setConfigSettingsAsync(configSettings)
         remoteConfig.fetchAndActivate().addOnCompleteListener { task ->
@@ -72,8 +65,8 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
                 setNsfwMode(nsfw)
                 setAutoMode(isAutomatic)
             } else {
-                Toast.makeText(requireContext(), "Fetch failed",
-                    Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Fetch failed", Toast.LENGTH_SHORT).show()
+
             }
         }
     }
@@ -108,14 +101,15 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         }
 
         state.error?.let { error ->
-            mainState.errorToString(error)
+            // mainState.errorToString(error)
             Glide.with(requireContext())
                 .load(R.drawable.ic_offline_background)
                 .centerCrop()
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .error(R.drawable.ic_error_grey)
                 .into(binding.ivBackdrop)
-            Toast.makeText(requireContext(), "Se requiere conexion para funcionar", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.require_connection), Toast.LENGTH_SHORT).show()
+            Log.e(Constants.CATEGORY_TAG_SELECTOR_IM_ERROR, mainState.errorToString(error))
         }
     }
 
@@ -133,14 +127,15 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         }
 
         state.error?.let { error ->
-            mainState.errorToString(error)
+            // mainState.errorToString(error)
             Glide.with(requireContext())
                 .load(R.drawable.ic_offline_background)
                 .centerCrop()
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .error(R.drawable.ic_error_grey)
                 .into(binding.ivBackdrop)
-            Toast.makeText(requireContext(), "Se requiere conexion para funcionar", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.require_connection), Toast.LENGTH_SHORT).show()
+            Log.e(Constants.CATEGORY_TAG_SELECTOR_PICS_ERROR, mainState.errorToString(error))
         }
     }
 
@@ -181,15 +176,15 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         val spinnerContent: Array<String>
         if (serverMode == ServerType.ENHANCED) {
             spinnerContent = if (sNsfw.isChecked) {
-                arrayOf("all", "waifu", "neko", "trap", "blowjob")
+                Constants.ENHANCEDNSFW
             } else {
-                arrayOf("all", "waifu", "neko", "shinobu", "megumin", "bully", "cuddle", "cry", "hug", "awoo", "kiss", "lick", "pat", "smug", "bonk", "yeet", "blush", "smile", "wave", "highfive", "handhold", "nom", "bite", "glomp", "slap", "kill", "kick", "happy", "wink", "poke", "dance", "cringe")
+                Constants.ENHANCEDSFW
             }
         } else {
             spinnerContent = if (sNsfw.isChecked) {
-                arrayOf("all", "ass", "hentai", "milf", "oral", "paizuri", "ecchi", "ero")
+                Constants.NORMALNSFW
             } else {
-                arrayOf("all", "uniform", "maid", "waifu", "marin-kitagawa", "mori-calliope", "raiden-shogun", "oppai", "selfies")
+                Constants.NORMALSFW
             }
         }
 
@@ -210,25 +205,25 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
                 sOrientation.visibility = View.VISIBLE
             }
             else -> {
-                Toast.makeText(requireContext(), "Unknown Mode ${serverMode.value}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "${getString(R.string.unknown_mode)} ${serverMode.value}", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
     private fun navigateTo(mode: ServerType) = with(binding) {
         val bun = bundleOf()
-        bun.putString(SERVER_MODE, serverMode.value)
-        bun.putBoolean(IS_NSFW_WAIFU, sNsfw.isChecked)
-        bun.putBoolean(IS_GIF_WAIFU, sGifs.isChecked)
-        bun.putBoolean(IS_LANDS_WAIFU, sOrientation.isChecked)
+        bun.putString(Constants.SERVER_MODE, serverMode.value)
+        bun.putBoolean(Constants.IS_NSFW_WAIFU, sNsfw.isChecked)
+        bun.putBoolean(Constants.IS_GIF_WAIFU, sGifs.isChecked)
+        bun.putBoolean(Constants.IS_LANDS_WAIFU, sOrientation.isChecked)
         val selectedTag = spinner.selectedItem.toString()
         if (selectedTag.isNotEmpty()) {
-            bun.putString(CATEGORY_TAG, selectedTag)
+            bun.putString(Constants.CATEGORY_TAG_WAIFU, selectedTag)
         }
 
         val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
         with (sharedPref.edit()) {
-            putString(SERVER_MODE, serverMode.value)
+            putString(Constants.SERVER_MODE, serverMode.value)
             apply()
         }
 
@@ -253,7 +248,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         mainState.requestPermissionLauncher {
             if (!loaded) {
                 imViewModel.loadErrorOrWaifu()
-                Toast.makeText(requireContext(), "IM Server", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.server_normal_toast), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -263,7 +258,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         mainState.requestPermissionLauncher {
             if (!loaded) {
                 picsViewModel.loadErrorOrWaifu()
-                Toast.makeText(requireContext(), "PICS Server", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.server_enhanced_toast), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -274,11 +269,6 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         } else {
             picsViewModel.onChangeType(type)
         }
-    }
-
-    companion object {
-        const val debugIntervalInSeconds = 10L
-        const val releaseIntervalInSeconds = 43200L
     }
 
 }

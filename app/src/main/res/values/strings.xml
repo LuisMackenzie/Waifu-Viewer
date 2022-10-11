@@ -2,7 +2,6 @@
     <string name="app_name">Waifu Viewer</string>
     <string name="waifu_viewer">Waifu Viewer</string>
 
-
     <string name="is_first_time">first_time</string>
     <string name="download_image">Download image</string>
     <string name="permission_request">Se Requiere el permiso para guardar la imagen en el dispositivo</string>
@@ -14,18 +13,22 @@
     <string name="server_mode">Server Mode</string>
     <string name="server_normal">Normal Mode</string>
     <string name="server_enhanced">Enhanced Mode</string>
+    <string name="server_normal_toast">IM Mode Server</string>
+    <string name="server_enhanced_toast">PICS Mode Server</string>
     <string name="no_waifu_found">No waifu found :( Try again later</string>
     <string name="waifu_error">Waifu Request Error</string>
     <string name="connectivity_error">Connection Error</string>
     <string name="unknown_error">Unknown Error</string>
+    <string name="unknown_mode">Unknown Mode </string>
     <string name="give_me_waifus">Give me Waifus!</string>
+    <string name="require_connection">Se requiere conexion para funcionar</string>
 
     <string name="waifus_gone">Some waifus are gone</string>
+    <string name="waifu_deleted">Waifu Deleted!</string>
+    <string name="waifu_favorite_delete">Delete All Favorites no implemented yet. Try Long Press on a waifu</string>
     <string name="waifus_coming">More Waifus are coming</string>
     <string name="waifus_size">Total Waifus = </string>
-
     <string name="waifus_content">Here is shown some waifus</string>
-
 
     <string name="server_normal_string">normal</string>
     <string name="server_enhanced_string">enhanced</string>
