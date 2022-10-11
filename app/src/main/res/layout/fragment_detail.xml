@@ -61,7 +61,8 @@
         android:visibility="gone"
         android:src="@drawable/ic_favorite_off"
         android:contentDescription="@string/download_image"
-        android:focusable="true" />
+        android:focusable="true"
+        app:backgroundTint="@color/purple_200" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_im"
@@ -73,7 +74,8 @@
         android:visibility="gone"
         android:src="@drawable/ic_favorite_off"
         android:contentDescription="@string/download_image"
-        android:focusable="true" />
+        android:focusable="true"
+        app:backgroundTint="@color/purple_200" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_favorites"
@@ -85,7 +87,8 @@
         android:visibility="gone"
         android:src="@drawable/ic_favorite_off"
         android:contentDescription="@string/download_image"
-        android:focusable="true" />
+        android:focusable="true"
+        app:backgroundTint="@color/purple_200" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_download"
@@ -96,7 +99,8 @@
         android:clickable="true"
         android:src="@drawable/ic_baseline_download"
         android:contentDescription="@string/download_image"
-        android:focusable="true" />
+        android:focusable="true"
+        app:backgroundTint="@color/purple_200" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

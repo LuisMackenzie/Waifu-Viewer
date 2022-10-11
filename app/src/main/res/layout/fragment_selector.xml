@@ -138,6 +138,7 @@
         android:contentDescription="@string/download_image"
         android:focusable="true"
         android:src="@drawable/ic_baseline_update"
+        app:backgroundTint="@color/purple_200"
         app:layout_constraintBottom_toTopOf="@+id/favorites"
         app:layout_constraintStart_toStartOf="parent"/>
 
@@ -152,6 +153,7 @@
         android:contentDescription="@string/download_image"
         android:focusable="true"
         android:src="@drawable/ic_favorite_off"
+        app:backgroundTint="@color/purple_200"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
