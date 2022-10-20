@@ -44,7 +44,7 @@
         android:text="@string/waifu_viewer"
         android:textSize="48sp"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/s_nsfw"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintVertical_bias="0.02"
         app:layout_constraintStart_toStartOf="parent"
@@ -100,7 +100,8 @@
         android:layout_height="wrap_content"
         android:text="@string/give_me_waifus"
         android:backgroundTint="@color/purple_200"
-        app:layout_constraintBottom_toTopOf="@+id/s_nsfw"
+        android:layout_marginBottom="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
@@ -113,41 +114,48 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
 
-
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/s_nsfw"
-        android:layout_width="wrap_content"
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/nsfw_content"
-        android:textColor="@color/white"
-        android:visibility="visible"
-        android:layout_marginBottom="5dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:gravity="center"
+        android:layout_marginBottom="4dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.55"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/favorites"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.50">
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/s_gifs"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="@string/gif_content"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="@+id/s_nsfw"
-        app:layout_constraintEnd_toStartOf="@+id/s_nsfw"
-        app:layout_constraintTop_toTopOf="@+id/s_nsfw" />
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/s_gifs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/gif_content"
+            android:textColor="@color/white" />
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/s_orientation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="@string/portrait_default"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="@+id/s_nsfw"
-        app:layout_constraintStart_toEndOf="@+id/s_nsfw"
-        app:layout_constraintTop_toTopOf="@+id/s_nsfw" />
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/s_nsfw"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/nsfw_content"
+            android:textColor="@color/white"
+            android:visibility="gone"
+            app:trackTint="@color/purple_500" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/s_orientation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/portrait_default"
+            android:textColor="@color/white" />
+
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
