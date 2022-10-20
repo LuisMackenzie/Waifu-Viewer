@@ -4,10 +4,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textSize="24sp"
-    android:padding="10sp"
+    android:textSize="18sp"
+    android:padding="4dp"
     android:gravity="center"
-    android:textColor="#817C7C"
+    style="@style/Theme.WaifuViewer"
     android:text="muestra" />
 
 

@@ -17,15 +17,25 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
     tools:context=".ui.SelectorFragment">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv_backdrop"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        tools:scaleType="centerCrop"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp" />
+        tools:layout_editor_absoluteY="0dp"
+
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:src="@drawable/title_gradient"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView"
@@ -33,7 +43,7 @@
         android:layout_height="wrap_content"
         android:text="@string/waifu_viewer"
         android:textSize="48sp"
-        android:textColor="@color/grey"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/s_nsfw"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintVertical_bias="0.02"
@@ -44,7 +54,6 @@
         android:id="@+id/c_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="28dp"
         app:layout_constraintBottom_toTopOf="@+id/spinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -75,17 +84,48 @@
             android:text="@string/server_enhanced" />
     </com.google.android.material.chip.ChipGroup>
 
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btn_waifu" />
+
+    <Button
+        android:id="@+id/btn_waifu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/give_me_waifus"
+        android:backgroundTint="@color/purple_200"
+        app:layout_constraintBottom_toTopOf="@+id/s_nsfw"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:src="@drawable/simple_gradient"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/s_nsfw"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/nsfw_content"
-        android:textColor="@color/grey"
-        android:visibility="gone"
+        android:textColor="@color/white"
+        android:visibility="visible"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/c_group" />
+        app:layout_constraintHorizontal_bias="0.55"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/s_gifs"
@@ -93,9 +133,10 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:text="@string/gif_content"
-        android:textColor="@color/grey"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/s_nsfw"
         app:layout_constraintEnd_toStartOf="@+id/s_nsfw"
-        app:layout_constraintTop_toBottomOf="@+id/c_group" />
+        app:layout_constraintTop_toTopOf="@+id/s_nsfw" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/s_orientation"
@@ -103,30 +144,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="@string/portrait_default"
-        android:textColor="@color/grey"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/s_nsfw"
         app:layout_constraintStart_toEndOf="@+id/s_nsfw"
-        app:layout_constraintTop_toBottomOf="@+id/c_group" />
-
-    <Button
-        android:id="@+id/btn_waifu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
-        android:text="@string/give_me_waifus"
-        android:backgroundTint="@color/purple_200"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="55dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/btn_waifu" />
+        app:layout_constraintTop_toTopOf="@+id/s_nsfw" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
@@ -138,6 +159,7 @@
         android:contentDescription="@string/download_image"
         android:focusable="true"
         android:src="@drawable/ic_baseline_update"
+        style="@style/Theme.AppCompat.DayNight"
         app:backgroundTint="@color/purple_200"
         app:layout_constraintBottom_toTopOf="@+id/favorites"
         app:layout_constraintStart_toStartOf="parent"/>

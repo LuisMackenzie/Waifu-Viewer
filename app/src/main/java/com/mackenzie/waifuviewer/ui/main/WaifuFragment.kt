@@ -84,7 +84,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
             }
         } else {
             when(categoryTag) {
-                "all" -> {
+                "All Categories" -> {
                     picsViewModel.onPicsReady(isNsfw, "waifu")
                 }
                 else -> {

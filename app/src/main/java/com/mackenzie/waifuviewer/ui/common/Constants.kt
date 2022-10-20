@@ -17,10 +17,10 @@ class Constants {
         const val DEBUGINTERVALINSECONDS = 10L
         const val RELEASEINTERVALINSECONDS = 43200L
 
-        val ENHANCEDSFW = arrayOf("all", "waifu", "neko", "shinobu", "megumin", "bully", "cuddle", "cry", "hug", "awoo", "kiss", "lick", "pat", "smug", "bonk", "yeet", "blush", "smile", "wave", "highfive", "handhold", "nom", "bite", "glomp", "slap", "kill", "kick", "happy", "wink", "poke", "dance", "cringe")
-        val ENHANCEDNSFW = arrayOf("all", "waifu", "neko", "trap", "blowjob")
-        val NORMALSFW = arrayOf("all", "uniform", "maid", "waifu", "marin-kitagawa", "mori-calliope", "raiden-shogun", "oppai", "selfies")
-        val NORMALNSFW = arrayOf("all", "ass", "hentai", "milf", "oral", "paizuri", "ecchi", "ero")
+        val ENHANCEDSFW = arrayOf("All Categories", "waifu", "neko", "shinobu", "megumin", "bully", "cuddle", "cry", "hug", "awoo", "kiss", "lick", "pat", "smug", "bonk", "yeet", "blush", "smile", "wave", "highfive", "handhold", "nom", "bite", "glomp", "slap", "kill", "kick", "happy", "wink", "poke", "dance", "cringe")
+        val ENHANCEDNSFW = arrayOf("All Categories", "waifu", "neko", "trap", "blowjob")
+        val NORMALSFW = arrayOf("All Categories", "uniform", "maid", "waifu", "marin-kitagawa", "mori-calliope", "raiden-shogun", "oppai", "selfies")
+        val NORMALNSFW = arrayOf("All Categories", "ass", "hentai", "milf", "oral", "paizuri", "ecchi", "ero")
 
     }
 }

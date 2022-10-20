@@ -34,7 +34,7 @@ class WaifuImViewModel @Inject constructor(
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
             val error : Error?
-            if (tag == "all") {
+            if (tag == "All Categories") {
                 if (isNsfw) {
                     error = requestWaifuImUseCase(isNsfw,"ecchi",isGif,orientation)
                 } else {
@@ -49,7 +49,7 @@ class WaifuImViewModel @Inject constructor(
 
     fun onRequestMore(isNsfw: Boolean, isGif: Boolean, tag: String, orientation: Boolean) {
         viewModelScope.launch {
-            if (tag == "all") {
+            if (tag == "All Categories") {
                 if (isNsfw) {
                     val error = requestMoreImUseCase(isNsfw,"ecchi",isGif,orientation)
                     _state.update { it.copy(error = error) }
