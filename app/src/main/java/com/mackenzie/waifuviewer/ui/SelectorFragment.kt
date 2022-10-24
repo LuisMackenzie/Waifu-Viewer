@@ -154,6 +154,11 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
             }
         }
         sNsfw.setOnClickListener {
+            if (sNsfw.isChecked) {
+                sNsfw.text = getString(R.string.nsfw_content)
+            } else {
+                sNsfw.text = getString(R.string.sfw_content)
+            }
             updateSpinner()
         }
         fab.setOnClickListener {

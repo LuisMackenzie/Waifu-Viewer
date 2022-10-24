@@ -26,7 +26,19 @@ fun RecyclerView.setImItems(waifus: List<WaifuImItem>?) {
 
 @BindingAdapter("onChooseTypeChanged")
 fun ChipGroup.onChooseTypeChanged(listener: OnChooseTypeChanged?) {
-    setOnCheckedChangeListener { group, checkedId ->
+    setOnCheckedStateChangeListener { group, checkedId ->
+        group.forEach {
+            val chip = it as Chip
+            if (chip.id == checkedId.first()) {
+                val type = when (chip.text) {
+                    context.getString(R.string.server_normal) -> ServerType.NORMAL
+                    else -> ServerType.ENHANCED
+                }
+                listener?.onChooseTypeChanged(type)
+            }
+        }
+    }
+    /*setOnCheckedChangeListener { group, checkedId ->
         group.forEach {
             val chip = it as Chip
             if (chip.id == checkedId) {
@@ -37,7 +49,7 @@ fun ChipGroup.onChooseTypeChanged(listener: OnChooseTypeChanged?) {
                 listener?.onChooseTypeChanged(type)
             }
         }
-    }
+    }*/
 }
 
 interface OnChooseTypeChanged {

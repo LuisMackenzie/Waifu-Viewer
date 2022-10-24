@@ -10,6 +10,7 @@
     <string name="portrait_default">Portrait</string>
     <string name="landscape">Landscape</string>
     <string name="nsfw_content">NSFW</string>
+    <string name="sfw_content">SFW</string>
     <string name="server_mode">Server Mode</string>
     <string name="server_normal">Normal Mode</string>
     <string name="server_enhanced">Enhanced Mode</string>
