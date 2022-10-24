@@ -53,8 +53,8 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
     private fun getRemoteConfig() {
         val remoteConfig: FirebaseRemoteConfig = Firebase.remoteConfig
         val configSettings = remoteConfigSettings {
-            // minimumFetchIntervalInSeconds = Constants.RELEASEINTERVALINSECONDS
-            minimumFetchIntervalInSeconds = Constants.DEBUGINTERVALINSECONDS
+            minimumFetchIntervalInSeconds = Constants.RELEASEINTERVALINSECONDS
+            // minimumFetchIntervalInSeconds = Constants.DEBUGINTERVALINSECONDS
         }
         remoteConfig.setConfigSettingsAsync(configSettings)
         remoteConfig.fetchAndActivate().addOnCompleteListener { task ->
@@ -101,7 +101,6 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         }
 
         state.error?.let { error ->
-            // mainState.errorToString(error)
             Glide.with(requireContext())
                 .load(R.drawable.ic_offline_background)
                 .centerCrop()
@@ -127,7 +126,6 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         }
 
         state.error?.let { error ->
-            // mainState.errorToString(error)
             Glide.with(requireContext())
                 .load(R.drawable.ic_offline_background)
                 .centerCrop()
