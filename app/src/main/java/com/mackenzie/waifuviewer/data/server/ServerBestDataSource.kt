@@ -59,7 +59,8 @@ private fun WaifuBestPng.toDomainModel(): WaifuBestItemPng =
         artistHref,
         artistName,
         sourceUrl,
-        url
+        url,
+        false
     )
 
 private fun List<WaifuBestGif>.toDomainModelGif(): List<WaifuBestItemGif> = map { it.toDomainModel() }
@@ -68,5 +69,6 @@ private fun WaifuBestGif.toDomainModel(): WaifuBestItemGif =
     WaifuBestItemGif(
         0,
         animeName,
-        url
+        url,
+        false
     )

@@ -46,5 +46,5 @@ private fun WaifuIm.toDomainModel(): WaifuImItem =
         imageId,
         url,
         previewUrl,
-        isFavorite = false
+        false
     )

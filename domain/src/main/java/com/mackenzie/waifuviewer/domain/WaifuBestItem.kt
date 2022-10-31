@@ -5,11 +5,13 @@ data class WaifuBestItemPng(
     val artistHref: String,
     val artistName: String,
     val sourceUrl: String,
-    val url: String
+    val url: String,
+    val isFavorite: Boolean
 )
 
 data class WaifuBestItemGif(
     val id: Int,
     val animeName: String,
-    val url: String
+    val url: String,
+    val isFavorite: Boolean
 )

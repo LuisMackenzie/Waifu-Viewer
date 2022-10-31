@@ -47,6 +47,10 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideBestDao(db: WaifuDataBase) = db.waifuBestDao()
+
+    @Provides
+    @Singleton
     fun provideApiUrl(): ApiUrl = ApiUrl()
 
     @Provides

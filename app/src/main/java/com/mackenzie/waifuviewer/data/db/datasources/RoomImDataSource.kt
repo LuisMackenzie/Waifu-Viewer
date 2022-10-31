@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-
 class RoomImDataSource @Inject constructor(
     private val imDao: WaifuImDao,
     private val favDao: FavoriteDao) : WaifusImLocalDataSource {
