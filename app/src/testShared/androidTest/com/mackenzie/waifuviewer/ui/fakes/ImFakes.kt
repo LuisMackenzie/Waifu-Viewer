@@ -4,7 +4,7 @@ import com.mackenzie.waifuviewer.data.db.WaifuImDao
 import com.mackenzie.waifuviewer.data.db.WaifuImDbItem
 import com.mackenzie.waifuviewer.data.server.WaifuIm
 import com.mackenzie.waifuviewer.data.server.WaifuImService
-import com.mackenzie.waifuviewer.data.server.WaifuResult
+import com.mackenzie.waifuviewer.data.server.WaifuImResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -60,7 +60,7 @@ class FakeRemoteImService(private val waifus: List<WaifuIm> = emptyList()) : Wai
         isGif: Boolean,
         orientation: String,
         manyWaifus: Boolean
-    ) = WaifuResult(waifus)
+    ) = WaifuImResult(waifus)
 
     override suspend fun getOnlyRandomWaifuIm(
         isNsfw: Boolean,
@@ -68,6 +68,6 @@ class FakeRemoteImService(private val waifus: List<WaifuIm> = emptyList()) : Wai
         isGif: Boolean,
         orientation: String,
         manyWaifus: Boolean
-    ) = WaifuResult(waifus)
+    ) = WaifuImResult(waifus)
 
 }

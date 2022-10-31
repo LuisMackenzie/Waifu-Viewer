@@ -11,7 +11,7 @@ interface WaifuImService {
         @Query("gif") isGif:Boolean = false,
         @Query("orientation") orientation:String = "PORTRAIT",
         @Query("many") manyWaifus:Boolean = true
-    ): WaifuResult
+    ): WaifuImResult
 
     @GET("random/")
     suspend fun getOnlyRandomWaifuIm(
@@ -20,5 +20,5 @@ interface WaifuImService {
         @Query("gif") isGif:Boolean = false,
         @Query("orientation") orientation:String = "PORTRAIT",
         @Query("many") manyWaifus:Boolean = false
-    ): WaifuResult
+    ): WaifuImResult
 }

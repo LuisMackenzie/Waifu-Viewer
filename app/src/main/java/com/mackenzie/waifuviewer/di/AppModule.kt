@@ -70,10 +70,17 @@ object AppModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
+        val builderBest = Retrofit.Builder()
+            .baseUrl(apiUrl.nekosBaseUrl)
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
         val serviceIm = builderIm.create(WaifuImService::class.java)
         val servicePics = builderPics.create(WaifuPicService::class.java)
+        val serviceBest = builderBest.create(WaifuBestService::class.java)
 
-        val connection = RemoteConnect(serviceIm, servicePics)
+        val connection = RemoteConnect(serviceIm, servicePics, serviceBest)
 
         return connection
     }

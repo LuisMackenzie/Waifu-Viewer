@@ -66,7 +66,6 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
                 setAutoMode(isAutomatic)
             } else {
                 Toast.makeText(requireContext(), "Fetch failed", Toast.LENGTH_SHORT).show()
-
             }
         }
     }
