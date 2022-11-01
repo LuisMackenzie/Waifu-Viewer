@@ -1,8 +1,6 @@
 package com.mackenzie.waifuviewer.data.db.datasources
 
 import com.mackenzie.waifuviewer.data.datasource.WaifusImLocalDataSource
-import com.mackenzie.waifuviewer.data.db.FavoriteDao
-import com.mackenzie.waifuviewer.data.db.FavoriteDbItem
 import com.mackenzie.waifuviewer.data.db.WaifuImDao
 import com.mackenzie.waifuviewer.data.db.WaifuImDbItem
 import com.mackenzie.waifuviewer.data.tryCall
