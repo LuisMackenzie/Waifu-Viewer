@@ -4,10 +4,7 @@ import com.mackenzie.waifuviewer.data.datasource.FavoriteLocalDataSource
 import com.mackenzie.waifuviewer.data.db.FavoriteDao
 import com.mackenzie.waifuviewer.data.db.FavoriteDbItem
 import com.mackenzie.waifuviewer.data.tryCall
-import com.mackenzie.waifuviewer.domain.Error
-import com.mackenzie.waifuviewer.domain.FavoriteItem
-import com.mackenzie.waifuviewer.domain.WaifuImItem
-import com.mackenzie.waifuviewer.domain.WaifuPicItem
+import com.mackenzie.waifuviewer.domain.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -34,6 +31,14 @@ class FavoriteDataSource @Inject constructor(private val favDao: FavoriteDao): F
 
     override suspend fun savePic(waifu: WaifuPicItem): Error? = tryCall {
         favDao.insertFavorite(waifu.fromPicDomainModel())
+    }.fold(ifLeft = { it }, ifRight = { null })
+
+    override suspend fun savePng(waifu: WaifuBestItemPng): Error? = tryCall {
+        favDao.insertFavorite(waifu.fromPngDomainModel())
+    }.fold(ifLeft = { it }, ifRight = { null })
+
+    override suspend fun saveGif(waifu: WaifuBestItemGif): Error? = tryCall {
+        favDao.insertFavorite(waifu.fromGifDomainModel())
     }.fold(ifLeft = { it }, ifRight = { null })
 
     override suspend fun save(waifu: FavoriteItem): Error? = tryCall {
@@ -81,6 +86,22 @@ private fun WaifuImItem.fromImDomainModel(): FavoriteDbItem =
         id = 0,
         url,
         title = imageId.toString(),
+        isFavorite
+    )
+
+private fun WaifuBestItemPng.fromPngDomainModel(): FavoriteDbItem =
+    FavoriteDbItem(
+        id = 0,
+        url,
+        title = artistName,
+        isFavorite
+    )
+
+private fun WaifuBestItemGif.fromGifDomainModel(): FavoriteDbItem =
+    FavoriteDbItem(
+        id = 0,
+        url,
+        title = animeName,
         isFavorite
     )
 

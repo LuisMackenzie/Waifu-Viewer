@@ -1,9 +1,6 @@
 package com.mackenzie.waifuviewer.data.datasource
 
-import com.mackenzie.waifuviewer.domain.Error
-import com.mackenzie.waifuviewer.domain.FavoriteItem
-import com.mackenzie.waifuviewer.domain.WaifuImItem
-import com.mackenzie.waifuviewer.domain.WaifuPicItem
+import com.mackenzie.waifuviewer.domain.*
 import kotlinx.coroutines.flow.Flow
 
 interface FavoriteLocalDataSource {
@@ -14,6 +11,8 @@ interface FavoriteLocalDataSource {
     suspend fun updatePic(waifu: WaifuImItem): Error?
     suspend fun saveIm(waifu: WaifuImItem): Error?
     suspend fun savePic(waifu: WaifuPicItem): Error?
+    suspend fun savePng(waifu: WaifuBestItemPng): Error?
+    suspend fun saveGif(waifu: WaifuBestItemGif): Error?
     suspend fun save(waifu: FavoriteItem): Error?
     suspend fun deleteIm(waifu: WaifuImItem): Error?
     suspend fun deletePic(waifu: WaifuPicItem): Error?
