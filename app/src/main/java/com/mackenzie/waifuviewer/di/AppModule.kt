@@ -5,9 +5,7 @@ import androidx.room.Room
 import com.mackenzie.waifuviewer.data.*
 import com.mackenzie.waifuviewer.data.datasource.*
 import com.mackenzie.waifuviewer.data.db.WaifuDataBase
-import com.mackenzie.waifuviewer.data.db.datasources.FavoriteDataSource
-import com.mackenzie.waifuviewer.data.db.datasources.RoomImDataSource
-import com.mackenzie.waifuviewer.data.db.datasources.RoomPicDataSource
+import com.mackenzie.waifuviewer.data.db.datasources.*
 import com.mackenzie.waifuviewer.data.server.*
 import com.mackenzie.waifuviewer.domain.ApiUrl
 import dagger.Binds
@@ -102,7 +100,16 @@ abstract class AppDataModule {
     abstract fun bindLocalPicDataSource(localPicDataSource: RoomPicDataSource): WaifusPicLocalDataSource
 
     @Binds
+    abstract fun bindLocalPngDataSource(localPngDataSource: RoomPngDataSource): WaifusBestPngLocalDataSource
+
+    @Binds
+    abstract fun bindLocalGifDataSource(localGifDataSource: RoomGifDataSource): WaifusBestGifLocalDataSource
+
+    @Binds
     abstract fun bindFavoriteDataSource(favoriteDataSource: FavoriteDataSource): FavoriteLocalDataSource
+
+    @Binds
+    abstract fun bindRemoteBestDataSource(remoteBestDataSource: ServerBestDataSource): WaifusBestRemoteDataSource
 
     @Binds
     abstract fun bindRemoteImDataSource(remoteImDataSource: ServerImDataSource): WaifusImRemoteDataSource
