@@ -8,10 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.mackenzie.waifuviewer.R
-import com.mackenzie.waifuviewer.domain.Error
-import com.mackenzie.waifuviewer.domain.FavoriteItem
-import com.mackenzie.waifuviewer.domain.WaifuImItem
-import com.mackenzie.waifuviewer.domain.WaifuPicItem
+import com.mackenzie.waifuviewer.domain.*
 import com.mackenzie.waifuviewer.ui.SelectorFragmentDirections
 import com.mackenzie.waifuviewer.ui.common.PermissionRequester
 import com.mackenzie.waifuviewer.ui.favs.FavoriteFragmentDirections
@@ -20,6 +17,8 @@ import kotlinx.coroutines.launch
 
 typealias ImListener = (WaifuImItem) -> Unit
 typealias PicListener = (WaifuPicItem) -> Unit
+typealias PngListener = (WaifuBestItemPng) -> Unit
+typealias GifListener = (WaifuBestItemGif) -> Unit
 
 class MainState(
     private val context: Context,
@@ -34,6 +33,16 @@ class MainState(
 
     fun onWaifuPicsClicked(waifu: WaifuPicItem) {
         val action = WaifuFragmentDirections.actionWaifuPicsToDetail(waifu.id)
+        navController.navigate(action)
+    }
+
+    fun onWaifuPngClicked(waifu: WaifuBestItemPng) {
+        val action = WaifuFragmentDirections.actionWaifuBestToDetail(waifu.id)
+        navController.navigate(action)
+    }
+
+    fun onWaifuGifClicked(waifu: WaifuBestItemGif) {
+        val action = WaifuFragmentDirections.actionWaifuBestToDetail(waifu.id)
         navController.navigate(action)
     }
 

@@ -23,8 +23,11 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
     private val safeArgs: WaifuFragmentArgs by navArgs()
     private val picsViewModel: WaifuPicsViewModel by viewModels()
     private val imViewModel: WaifuImViewModel by viewModels()
+    private val bestViewModel: WaifuBestViewModel by viewModels()
     private val waifuImAdapter = WaifuImAdapter{ mainState.onWaifuImClicked(it) }
     private val waifuPicsAdapter = WaifuPicsAdapter{ mainState.onWaifuPicsClicked(it) }
+    private val waifuPngAdapter = WaifuPngAdapter{ mainState.onWaifuPngClicked(it) }
+    private val waifuGifAdapter = WaifuGifAdapter{ mainState.onWaifuGifClicked(it) }
     private lateinit var mainState: MainState
     private lateinit var bun: Bundle
     private var serverMode: String = ""
@@ -47,6 +50,14 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
                 binding.recycler.adapter = waifuImAdapter
                 viewLifecycleOwner.launchAndCollect(imViewModel.state) { binding withImUpdateUI it }
             }
+            getString(R.string.server_nekos_string) -> {
+                binding.recycler.adapter = waifuPngAdapter
+                //TODO
+                viewLifecycleOwner.launchAndCollect(bestViewModel.state) { binding withBestUpdateUI it }
+            }
+            else -> {
+
+            }
         }
 
         loadCustomResult(bun)
@@ -58,7 +69,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         val orientation = bun.getBoolean(Constants.IS_LANDS_WAIFU)
         val categoryTag = bun.getString(Constants.CATEGORY_TAG_WAIFU) ?: ""
 
-        if (serverMode == "normal") {
+        if (serverMode == getString(R.string.server_normal_string)) {
             when (categoryTag) {
                 "uniform" -> {
                     imViewModel.onImReady(isNsfw, isGif = false, categoryTag, orientation)
@@ -82,7 +93,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
                     imViewModel.onImReady(isNsfw, isGif, categoryTag, orientation)
                 }
             }
-        } else {
+        } else if (serverMode == getString(R.string.server_enhanced_string)) {
             when(categoryTag) {
                 "All Categories" -> {
                     picsViewModel.onPicsReady(isNsfw, "waifu")
@@ -91,6 +102,76 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
                     picsViewModel.onPicsReady(isNsfw, categoryTag)
                 }
             }
+        } else {
+            when(categoryTag) {
+                "All Categories" -> {
+                    bestViewModel.onBestReady(false, "waifu")
+                }
+                else -> {
+                    bestViewModel.onBestReady(false, categoryTag)
+                }
+            }
+        }
+    }
+
+    private infix fun FragmentWaifuBinding.withBestUpdateUI(state: WaifuBestViewModel.UiState) {
+
+        var count: Int
+        val categoryTag = bun.getString(Constants.CATEGORY_TAG_WAIFU) ?: ""
+
+        state.waifusPng?.let { savedPngWaifus ->
+            appendProgress.visibility = View.GONE
+            waifuPngAdapter.submitList(savedPngWaifus)
+            count = savedPngWaifus.size
+            if (count != 0 && !numIsShowed) {
+                Toast.makeText(requireContext(), "${getString(R.string.waifus_size)} $count", Toast.LENGTH_SHORT).show()
+                numIsShowed = true
+            }
+        }
+
+        state.waifusGif?.let { savedGifWaifus ->
+            appendProgress.visibility = View.GONE
+            waifuGifAdapter.submitList(savedGifWaifus)
+            count = savedGifWaifus.size
+            if (count != 0 && !numIsShowed) {
+                Toast.makeText(requireContext(), "${getString(R.string.waifus_size)} $count", Toast.LENGTH_SHORT).show()
+                numIsShowed = true
+            }
+        }
+
+        state.error?.let {
+            error = mainState.errorToString(it)
+            ivError.visibility = View.VISIBLE
+            tvError.visibility = View.VISIBLE
+            Toast.makeText(requireContext(), mainState.errorToString(it), Toast.LENGTH_SHORT).show()
+            Log.e(Constants.CATEGORY_TAG_WAIFU_BEST_ERROR, mainState.errorToString(it))
+        }
+
+        state.isLoading?.let {
+            loading = it
+        }
+
+        recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (!recycler.canScrollVertically(1)) {
+                    if (loadingMore == false) {
+                        Toast.makeText(requireContext(), getString(R.string.waifus_coming), Toast.LENGTH_SHORT).show()
+                        appendProgress.visibility = View.VISIBLE
+                        bestViewModel.onRequestMore(false, categoryTag)
+                        loadingMore = true
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            loadingMore = false
+                        }, 3000)
+                    }
+                }
+            }
+        })
+
+        fabDelete.setOnClickListener {
+            bestViewModel.onClearDatabase(false)
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+            Toast.makeText(requireContext(), getString(R.string.waifus_gone), Toast.LENGTH_SHORT).show()
         }
     }
 

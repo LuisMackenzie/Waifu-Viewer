@@ -14,6 +14,7 @@
     <string name="server_mode">Server Mode</string>
     <string name="server_normal">Normal Mode</string>
     <string name="server_enhanced">Enhanced Mode</string>
+    <string name="server_best">Nekos Mode</string>
     <string name="server_normal_toast">IM Mode Server</string>
     <string name="server_enhanced_toast">PICS Mode Server</string>
     <string name="no_waifu_found">No waifu found :( Try again later</string>
@@ -33,6 +34,7 @@
 
     <string name="server_normal_string">normal</string>
     <string name="server_enhanced_string">enhanced</string>
+    <string name="server_nekos_string">nekos</string>
     <string name="server_favorite_string">favorite</string>
 
 </resources>

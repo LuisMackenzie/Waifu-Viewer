@@ -1,4 +1,4 @@
-package com.mackenzie.waifuviewer.usecases
+package com.mackenzie.waifuviewer.usecases.im
 
 import com.mackenzie.waifuviewer.data.WaifusImRepository
 import javax.inject.Inject

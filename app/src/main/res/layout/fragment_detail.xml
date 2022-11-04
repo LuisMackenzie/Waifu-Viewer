@@ -51,7 +51,7 @@
         android:textColor="@color/grey"
         tools:text="Waifu Name ID" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <!--<com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_pics"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -62,22 +62,21 @@
         android:src="@drawable/ic_favorite_off"
         android:contentDescription="@string/download_image"
         android:focusable="true"
-        app:backgroundTint="@color/purple_200" />
+        app:backgroundTint="@color/purple_200" />-->
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_im"
+        android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|start"
         android:layout_margin="12dp"
         android:clickable="true"
-        android:visibility="gone"
         android:src="@drawable/ic_favorite_off"
         android:contentDescription="@string/download_image"
         android:focusable="true"
         app:backgroundTint="@color/purple_200" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <!--<com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_favorites"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -88,7 +87,7 @@
         android:src="@drawable/ic_favorite_off"
         android:contentDescription="@string/download_image"
         android:focusable="true"
-        app:backgroundTint="@color/purple_200" />
+        app:backgroundTint="@color/purple_200" />-->
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_download"

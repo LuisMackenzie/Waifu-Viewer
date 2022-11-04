@@ -1,8 +1,6 @@
 package usecases
 
 import com.mackenzie.waifuviewer.data.FavoritesRepository
-import com.mackenzie.waifuviewer.data.WaifusPicRepository
-import com.mackenzie.waifuviewer.usecases.ClearWaifuPicUseCase
 import com.mackenzie.waifuviewer.usecases.DeleteFavoriteUseCase
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*

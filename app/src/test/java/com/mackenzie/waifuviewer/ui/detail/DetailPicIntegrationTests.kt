@@ -6,8 +6,8 @@ import com.mackenzie.waifuviewer.testrules.CoroutinesTestRule
 import com.mackenzie.waifuviewer.ui.buildPicDatabaseWaifus
 import com.mackenzie.waifuviewer.ui.buildPicRepositoryWith
 import com.mackenzie.waifuviewer.ui.detail.DetailPicsViewModel.UiState
-import com.mackenzie.waifuviewer.usecases.FindWaifuPicUseCase
-import com.mackenzie.waifuviewer.usecases.SwitchPicFavoriteUseCase
+import com.mackenzie.waifuviewer.usecases.pics.FindWaifuPicUseCase
+import com.mackenzie.waifuviewer.usecases.pics.SwitchPicFavoriteUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals

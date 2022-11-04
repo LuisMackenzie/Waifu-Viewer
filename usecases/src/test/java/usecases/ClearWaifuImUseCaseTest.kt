@@ -1,7 +1,7 @@
 package usecases
 
 import com.mackenzie.waifuviewer.data.WaifusImRepository
-import com.mackenzie.waifuviewer.usecases.ClearWaifuImUseCase
+import com.mackenzie.waifuviewer.usecases.im.ClearWaifuImUseCase
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.mockito.kotlin.mock

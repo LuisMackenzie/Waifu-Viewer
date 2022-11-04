@@ -5,7 +5,7 @@ import com.mackenzie.testshared.samplePicWaifu
 import com.mackenzie.waifuviewer.testrules.CoroutinesTestRule
 import com.mackenzie.waifuviewer.ui.SelectorPicViewModel
 import com.mackenzie.waifuviewer.ui.SelectorPicViewModel.UiState
-import com.mackenzie.waifuviewer.usecases.RequestOnlyWaifuPicUseCase
+import com.mackenzie.waifuviewer.usecases.pics.RequestOnlyWaifuPicUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest

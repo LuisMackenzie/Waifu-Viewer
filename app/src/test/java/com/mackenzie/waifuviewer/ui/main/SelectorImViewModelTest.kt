@@ -4,7 +4,7 @@ import app.cash.turbine.test
 import com.mackenzie.testshared.sampleImWaifu
 import com.mackenzie.waifuviewer.testrules.CoroutinesTestRule
 import com.mackenzie.waifuviewer.ui.main.SelectorImViewModel.UiState
-import com.mackenzie.waifuviewer.usecases.RequestOnlyWaifuImUseCase
+import com.mackenzie.waifuviewer.usecases.im.RequestOnlyWaifuImUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest

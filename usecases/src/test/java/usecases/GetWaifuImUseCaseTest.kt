@@ -1,7 +1,7 @@
 package usecases
 
 import com.mackenzie.testshared.sampleImWaifu
-import com.mackenzie.waifuviewer.usecases.GetWaifuImUseCase
+import com.mackenzie.waifuviewer.usecases.im.GetWaifuImUseCase
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*

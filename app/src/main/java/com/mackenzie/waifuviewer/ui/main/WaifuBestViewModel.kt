@@ -6,7 +6,7 @@ import com.mackenzie.waifuviewer.data.toError
 import com.mackenzie.waifuviewer.domain.Error
 import com.mackenzie.waifuviewer.domain.WaifuBestItemGif
 import com.mackenzie.waifuviewer.domain.WaifuBestItemPng
-import com.mackenzie.waifuviewer.usecases.*
+import com.mackenzie.waifuviewer.usecases.best.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -29,29 +29,29 @@ class WaifuBestViewModel @Inject constructor(
             getWaifuPngUseCase()
                 .catch { cause -> _state.update { it.copy(error = cause.toError()) }}
                 .collect{ waifusPng -> _state.update { UiState(waifusPng = waifusPng) } }
-            getWaifuGifUseCase()
+            /*getWaifuGifUseCase()
                 .catch { cause -> _state.update { it.copy(error = cause.toError()) }}
-                .collect{ waifusGif -> _state.update { UiState(waifusGif = waifusGif) } }
+                .collect{ waifusGif -> _state.update { UiState(waifusGif = waifusGif) } }*/
         }
     }
 
-    private fun onPicsReady(isGif: Boolean,tag: String) {
+    fun onBestReady(isGif: Boolean,tag: String) {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
-            val error: Error?
-            if (tag == "All Categories") {
+            val error = requestWaifuBestUseCase(isGif, tag)
+            /*if (tag == "All Categories") {
                 error = requestWaifuBestUseCase(isGif, "waifu")
             } else {
                 error = requestWaifuBestUseCase(isGif, tag)
-            }
+            }*/
             _state.update { it.copy(isLoading = false, error = error) }
         }
     }
 
-    private fun onRequestMore(isGif: Boolean, tag: String) {
+    fun onRequestMore(isGif: Boolean, tag: String) {
         viewModelScope.launch {
             if (tag == "All Categories") {
-                val error = requestMoreBestUseCase(isGif, "waifu")
+                val error = requestMoreBestUseCase(isGif, "neko")
                 _state.update { it.copy(error = error) }
             } else {
                 val error = requestMoreBestUseCase(isGif, tag)
@@ -60,7 +60,7 @@ class WaifuBestViewModel @Inject constructor(
         }
     }
 
-    fun onClearPicsDatabase(isGif: Boolean) {
+    fun onClearDatabase(isGif: Boolean) {
         viewModelScope.launch {
             val error = clearWaifuBestUseCase(isGif)
             _state.update { _state.value.copy(error = error) }

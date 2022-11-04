@@ -81,6 +81,17 @@
             android:checked="@{type == ServerType.ENHANCED}"
             android:textColor="@{type == ServerType.ENHANCED ? @color/white : @color/black}"
             android:text="@string/server_enhanced" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/c_nekos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            app:chipBackgroundColor="@color/chip_bg_states"
+            android:clickable="@{type != ServerType.NEKOS}"
+            android:checked="@{type == ServerType.NEKOS}"
+            android:textColor="@{type == ServerType.NEKOS ? @color/white : @color/black}"
+            android:text="@string/server_best" />
     </com.google.android.material.chip.ChipGroup>
 
     <Spinner

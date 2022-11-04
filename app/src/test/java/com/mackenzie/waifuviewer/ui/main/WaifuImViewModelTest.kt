@@ -4,10 +4,10 @@ import app.cash.turbine.test
 import com.mackenzie.testshared.sampleImWaifu
 import com.mackenzie.waifuviewer.testrules.CoroutinesTestRule
 import com.mackenzie.waifuviewer.ui.main.WaifuImViewModel.UiState
-import com.mackenzie.waifuviewer.usecases.ClearWaifuImUseCase
-import com.mackenzie.waifuviewer.usecases.GetWaifuImUseCase
-import com.mackenzie.waifuviewer.usecases.RequestMoreWaifuImUseCase
-import com.mackenzie.waifuviewer.usecases.RequestWaifuImUseCase
+import com.mackenzie.waifuviewer.usecases.im.ClearWaifuImUseCase
+import com.mackenzie.waifuviewer.usecases.im.GetWaifuImUseCase
+import com.mackenzie.waifuviewer.usecases.im.RequestMoreWaifuImUseCase
+import com.mackenzie.waifuviewer.usecases.im.RequestWaifuImUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.*

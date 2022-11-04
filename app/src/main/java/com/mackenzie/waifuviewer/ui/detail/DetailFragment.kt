@@ -32,6 +32,7 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
 
     private val picsViewModel: DetailPicsViewModel by viewModels()
     private val imViewModel: DetailImViewModel by viewModels()
+    private val bestViewModel: DetailBestViewModel by viewModels()
     private val favsViewModel: DetailFavsViewModel by viewModels()
     private lateinit var mainState: MainState
     private lateinit var download: DownloadModel
@@ -67,6 +68,16 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
         }
     }
 
+    private fun FragmentDetailBinding.launchBestCollect() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                bestViewModel.state.collect {
+                    withBestUpdateUI(it)
+                }
+            }
+        }
+    }
+
     private fun FragmentDetailBinding.launchFavoriteCollect() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -77,6 +88,28 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
         }
     }
 
+    private fun FragmentDetailBinding.withBestUpdateUI(state: DetailBestViewModel.UiState) {
+
+        pbLoading.visibility = View.GONE
+        state.waifu?.let {
+            val title = it.url.substringAfterLast('/').substringBeforeLast('.')
+            tvDetail.text = it.artistName
+            ivDetail.loadUrl(it.url)
+            if (it.isFavorite) {
+                fab.setImageResource(R.drawable.ic_favorite_on)
+            } else {
+                fab.setImageResource(R.drawable.ic_favorite_off)
+            }
+            prepareDownload(title , it.url, it.url.substringAfterLast('.'))
+        }
+
+        state.error?.let {
+            tvDetail.text = getString(R.string.waifu_error)
+            ivDetail.setImageResource(R.drawable.ic_offline_background)
+            Toast.makeText(requireContext(), it.toString(), Toast.LENGTH_SHORT).show()
+        }
+    }
+
     private fun FragmentDetailBinding.withFavsUpdateUI(state: DetailFavsViewModel.UiState) {
 
         pbLoading.visibility = View.GONE
@@ -84,9 +117,9 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
             tvDetail.text = it.url.substringAfterLast('/').substringBeforeLast('.')
             ivDetail.loadUrl(it.url)
             if (it.isFavorite) {
-                fabFavorites.setImageResource(R.drawable.ic_favorite_on)
+                fab.setImageResource(R.drawable.ic_favorite_on)
             } else {
-                fabFavorites.setImageResource(R.drawable.ic_favorite_off)
+                fab.setImageResource(R.drawable.ic_favorite_off)
             }
             prepareDownload(it.title, it.url, it.url.substringAfterLast('.'))
         }
@@ -106,9 +139,9 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
             tvDetail.text = title
             ivDetail.loadUrl(it.url)
             if (it.isFavorite) {
-                fabPics.setImageResource(R.drawable.ic_favorite_on)
+                fab.setImageResource(R.drawable.ic_favorite_on)
             } else {
-                fabPics.setImageResource(R.drawable.ic_favorite_off)
+                fab.setImageResource(R.drawable.ic_favorite_off)
             }
             prepareDownload(title, it.url, it.url.substringAfterLast('.'))
         }
@@ -127,9 +160,9 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
             tvDetail.text = it.imageId.toString()
             ivDetail.loadUrl(it.url)
             if (it.isFavorite) {
-                fabIm.setImageResource(R.drawable.ic_favorite_on)
+                fab.setImageResource(R.drawable.ic_favorite_on)
             } else {
-                fabIm.setImageResource(R.drawable.ic_favorite_off)
+                fab.setImageResource(R.drawable.ic_favorite_off)
             }
             prepareDownload(it.imageId.toString(), it.url, it.url.substringAfterLast('.'))
         }
@@ -148,32 +181,24 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
         when (serverMode) {
             getString(R.string.server_normal_string) -> {
                 launchImCollect()
-                fabIm.visible = true
-                fabPics.visible = false
-                fabFavorites.visible = false
+                fab.setOnClickListener { imViewModel.onFavoriteClicked() }
             }
             getString(R.string.server_enhanced_string) -> {
                 launchPicsCollect()
-                fabPics.visible = true
-                fabIm.visible = false
-                fabFavorites.visible = false
+                fab.setOnClickListener { picsViewModel.onFavoriteClicked() }
+            }
+            getString(R.string.server_nekos_string) -> {
+                launchBestCollect()
+                fab.setOnClickListener { bestViewModel.onFavoriteClicked() }
             }
             getString(R.string.server_favorite_string) -> {
                 launchFavoriteCollect()
-                fabFavorites.visible = true
-                fabPics.visible = false
-                fabIm.visible = false
+                fab.setOnClickListener { favsViewModel.onFavoriteClicked() }
             }
             else -> {
-                fabFavorites.visible = false
-                fabPics.visible = false
-                fabIm.visible = false
+                fab.visible = false
             }
         }
-
-        fabIm.setOnClickListener { imViewModel.onFavoriteClicked() }
-        fabPics.setOnClickListener { picsViewModel.onFavoriteClicked() }
-        fabFavorites.setOnClickListener { favsViewModel.onFavoriteClicked() }
         fabDownload.setOnClickListener {
             if (isWritePermissionGranted != true ) {
                 RequestPermision()

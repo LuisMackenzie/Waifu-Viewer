@@ -6,7 +6,10 @@ import com.mackenzie.waifuviewer.WaifuPicsViewModel.UiState
 import com.mackenzie.waifuviewer.data.db.WaifuPicDbItem
 import com.mackenzie.waifuviewer.testrules.CoroutinesTestRule
 import com.mackenzie.waifuviewer.ui.*
-import com.mackenzie.waifuviewer.usecases.*
+import com.mackenzie.waifuviewer.usecases.pics.ClearWaifuPicUseCase
+import com.mackenzie.waifuviewer.usecases.pics.GetWaifuPicUseCase
+import com.mackenzie.waifuviewer.usecases.pics.RequestMoreWaifuPicUseCase
+import com.mackenzie.waifuviewer.usecases.pics.RequestWaifuPicUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert

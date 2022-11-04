@@ -2,7 +2,7 @@ package usecases
 
 import com.mackenzie.testshared.samplePicWaifu
 import com.mackenzie.waifuviewer.data.WaifusPicRepository
-import com.mackenzie.waifuviewer.usecases.SwitchPicFavoriteUseCase
+import com.mackenzie.waifuviewer.usecases.pics.SwitchPicFavoriteUseCase
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.mockito.kotlin.mock

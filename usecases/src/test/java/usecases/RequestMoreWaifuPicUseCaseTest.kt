@@ -1,7 +1,7 @@
 package usecases
 
 import com.mackenzie.waifuviewer.data.WaifusPicRepository
-import com.mackenzie.waifuviewer.usecases.RequestMoreWaifuPicUseCase
+import com.mackenzie.waifuviewer.usecases.pics.RequestMoreWaifuPicUseCase
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.mockito.kotlin.any

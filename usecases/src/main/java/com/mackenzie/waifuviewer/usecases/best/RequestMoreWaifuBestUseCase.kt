@@ -1,16 +1,17 @@
-package com.mackenzie.waifuviewer.usecases
+package com.mackenzie.waifuviewer.usecases.best
 
 import com.mackenzie.waifuviewer.data.WaifusBestRepository
 import com.mackenzie.waifuviewer.domain.Error
 import javax.inject.Inject
 
-class RequestWaifuBestUseCase @Inject constructor(private val repo: WaifusBestRepository) {
+class RequestMoreWaifuBestUseCase @Inject constructor(private val repo: WaifusBestRepository) {
 
     suspend operator fun invoke(isGif:Boolean, tag:String): Error? {
         if (isGif) {
-            return repo.requestWaifusGif(tag)
+            return repo.requestNewWaifusGif(tag)
         } else {
-            return repo.requestWaifusPng(tag)
+            return repo.requestNewWaifusPng(tag)
         }
+
     }
 }

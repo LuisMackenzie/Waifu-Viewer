@@ -8,7 +8,7 @@ import com.mackenzie.waifuviewer.ui.SelectorPicViewModel.UiState
 import com.mackenzie.waifuviewer.ui.buildPicDatabaseWaifus
 import com.mackenzie.waifuviewer.ui.buildPicRepositoryWith
 import com.mackenzie.waifuviewer.ui.buildPicRemoteWaifus
-import com.mackenzie.waifuviewer.usecases.RequestOnlyWaifuPicUseCase
+import com.mackenzie.waifuviewer.usecases.pics.RequestOnlyWaifuPicUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert

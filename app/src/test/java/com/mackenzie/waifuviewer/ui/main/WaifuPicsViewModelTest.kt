@@ -5,10 +5,10 @@ import com.mackenzie.testshared.samplePicWaifu
 import com.mackenzie.waifuviewer.WaifuPicsViewModel
 import com.mackenzie.waifuviewer.WaifuPicsViewModel.UiState
 import com.mackenzie.waifuviewer.testrules.CoroutinesTestRule
-import com.mackenzie.waifuviewer.usecases.ClearWaifuPicUseCase
-import com.mackenzie.waifuviewer.usecases.GetWaifuPicUseCase
-import com.mackenzie.waifuviewer.usecases.RequestMoreWaifuPicUseCase
-import com.mackenzie.waifuviewer.usecases.RequestWaifuPicUseCase
+import com.mackenzie.waifuviewer.usecases.pics.ClearWaifuPicUseCase
+import com.mackenzie.waifuviewer.usecases.pics.GetWaifuPicUseCase
+import com.mackenzie.waifuviewer.usecases.pics.RequestMoreWaifuPicUseCase
+import com.mackenzie.waifuviewer.usecases.pics.RequestWaifuPicUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runCurrent

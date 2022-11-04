@@ -10,19 +10,19 @@ import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.domain.WaifuImItem
 import com.mackenzie.waifuviewer.domain.WaifuPicItem
 
-@BindingAdapter("itemsPics")
+/*@BindingAdapter("itemsPics")
 fun RecyclerView.setPicsItems(waifus: List<WaifuPicItem>?) {
     if (waifus != null) {
         (adapter as? WaifuPicsAdapter)?.submitList(waifus)
     }
-}
+}*/
 
-@BindingAdapter("itemsIm")
+/*@BindingAdapter("itemsIm")
 fun RecyclerView.setImItems(waifus: List<WaifuImItem>?) {
     if (waifus != null) {
         (adapter as? WaifuImAdapter)?.submitList(waifus)
     }
-}
+}*/
 
 @BindingAdapter("onChooseTypeChanged")
 fun ChipGroup.onChooseTypeChanged(listener: OnChooseTypeChanged?) {
@@ -32,6 +32,7 @@ fun ChipGroup.onChooseTypeChanged(listener: OnChooseTypeChanged?) {
             if (chip.id == checkedId.first()) {
                 val type = when (chip.text) {
                     context.getString(R.string.server_normal) -> ServerType.NORMAL
+                    context.getString(R.string.server_best) -> ServerType.NEKOS
                     else -> ServerType.ENHANCED
                 }
                 listener?.onChooseTypeChanged(type)

@@ -5,7 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.mackenzie.waifuviewer.data.toError
 import com.mackenzie.waifuviewer.domain.Error
 import com.mackenzie.waifuviewer.domain.WaifuImItem
-import com.mackenzie.waifuviewer.usecases.*
+import com.mackenzie.waifuviewer.usecases.im.ClearWaifuImUseCase
+import com.mackenzie.waifuviewer.usecases.im.GetWaifuImUseCase
+import com.mackenzie.waifuviewer.usecases.im.RequestMoreWaifuImUseCase
+import com.mackenzie.waifuviewer.usecases.im.RequestWaifuImUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch

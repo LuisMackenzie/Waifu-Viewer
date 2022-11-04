@@ -8,7 +8,7 @@ import com.mackenzie.waifuviewer.ui.buildImDatabaseWaifus
 import com.mackenzie.waifuviewer.ui.buildImRepositoryWith
 import com.mackenzie.waifuviewer.ui.buildImRemoteWaifus
 import com.mackenzie.waifuviewer.ui.main.SelectorImViewModel.UiState
-import com.mackenzie.waifuviewer.usecases.RequestOnlyWaifuImUseCase
+import com.mackenzie.waifuviewer.usecases.im.RequestOnlyWaifuImUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals

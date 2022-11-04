@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.mackenzie.waifuviewer.di.WaifuId
 import com.mackenzie.waifuviewer.domain.WaifuPicItem
 import com.mackenzie.waifuviewer.domain.Error
-import com.mackenzie.waifuviewer.usecases.FindWaifuPicUseCase
-import com.mackenzie.waifuviewer.usecases.SwitchPicFavoriteUseCase
+import com.mackenzie.waifuviewer.usecases.pics.FindWaifuPicUseCase
+import com.mackenzie.waifuviewer.usecases.pics.SwitchPicFavoriteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

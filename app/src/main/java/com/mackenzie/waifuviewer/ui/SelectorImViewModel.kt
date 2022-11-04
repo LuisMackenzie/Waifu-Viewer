@@ -4,7 +4,7 @@ import androidx.lifecycle.*
 import com.mackenzie.waifuviewer.domain.Error
 import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.domain.WaifuImItem
-import com.mackenzie.waifuviewer.usecases.RequestOnlyWaifuImUseCase
+import com.mackenzie.waifuviewer.usecases.im.RequestOnlyWaifuImUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch

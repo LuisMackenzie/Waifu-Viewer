@@ -46,6 +46,13 @@
             app:exitAnim="@anim/side_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/side_out_right" />
+        <action
+            android:id="@+id/action_waifu_best_to_detail"
+            app:destination="@id/detail_dest"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/side_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/side_out_right" />
         <argument
             android:name="bundleInfo"
             app:argType="android.os.Bundle" />

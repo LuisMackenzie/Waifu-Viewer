@@ -81,6 +81,11 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
     }
 
     private fun setNsfwMode(nsfw: Boolean) {
+        val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
+        with (sharedPref.edit()) {
+            putBoolean(Constants.WORK_MODE, nsfw)
+            apply()
+        }
         if (nsfw) {
             binding.sNsfw.visibility = View.VISIBLE
         }
@@ -176,17 +181,15 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
 
     private fun updateSpinner() = with(binding) {
         val spinnerContent: Array<String>
-        if (serverMode == ServerType.ENHANCED) {
-            spinnerContent = if (sNsfw.isChecked) {
-                Constants.ENHANCEDNSFW
-            } else {
-                Constants.ENHANCEDSFW
+        when (serverMode) {
+            ServerType.ENHANCED -> {
+                spinnerContent = if (sNsfw.isChecked) { Constants.ENHANCEDNSFW } else { Constants.ENHANCEDSFW }
             }
-        } else {
-            spinnerContent = if (sNsfw.isChecked) {
-                Constants.NORMALNSFW
-            } else {
-                Constants.NORMALSFW
+            ServerType.NORMAL -> {
+                spinnerContent = if (sNsfw.isChecked) { Constants.NORMALNSFW } else { Constants.NORMALSFW }
+            }
+            else -> {
+                spinnerContent = Constants.NEKOS
             }
         }
 
@@ -197,14 +200,23 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
     }
 
     private fun updateSwitches() = with(binding) {
+        val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
+        val workMode = sharedPref.getBoolean(Constants.WORK_MODE, false)
         when (serverMode.value) {
             ServerType.ENHANCED.value -> {
+                sNsfw.visible = workMode
                 sGifs.visible = false
                 sOrientation.visible = false
             }
             ServerType.NORMAL.value -> {
+                sNsfw.visible = workMode
                 sGifs.visibility = View.VISIBLE
                 sOrientation.visibility = View.VISIBLE
+            }
+            ServerType.NEKOS.value -> {
+                sGifs.visible = false
+                sNsfw.visible = false
+                sOrientation.visible = false
             }
             else -> {
                 Toast.makeText(requireContext(), "${getString(R.string.unknown_mode)} ${serverMode.value}", Toast.LENGTH_SHORT).show()
@@ -230,8 +242,8 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         }
 
         when (mode) {
-            ServerType.ENHANCED -> mainState.onButtonGetWaifuClicked(bun)
-            ServerType.NORMAL -> mainState.onButtonGetWaifuClicked(bun)
+            // ServerType.ENHANCED -> mainState.onButtonGetWaifuClicked(bun)
+            // ServerType.NORMAL -> mainState.onButtonGetWaifuClicked(bun)
             ServerType.FAVORITE -> mainState.onButtonFavoritesClicked(bun)
             else -> mainState.onButtonGetWaifuClicked(bun)
         }

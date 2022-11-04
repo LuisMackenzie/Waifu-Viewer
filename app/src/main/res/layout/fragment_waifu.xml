@@ -7,9 +7,13 @@
         <import type="java.util.List" />
         <import type="com.mackenzie.waifuviewer.domain.WaifuPicItem"/>
         <import type="com.mackenzie.waifuviewer.domain.WaifuImItem"/>
+        <import type="com.mackenzie.waifuviewer.domain.WaifuBestItemPng"/>
+        <import type="com.mackenzie.waifuviewer.domain.WaifuBestItemGif"/>
         <variable name="loading" type="boolean" />
         <variable name="waifuPic" type="List&lt;WaifuPicItem>" />
         <variable name="waifuIm" type="List&lt;WaifuImItem>"/>
+        <variable name="waifuPng" type="List&lt;WaifuBestItemPng>"/>
+        <variable name="waifuGif" type="List&lt;WaifuBestItemGif>"/>
         <variable name="error" type="String" />
     </data>
 

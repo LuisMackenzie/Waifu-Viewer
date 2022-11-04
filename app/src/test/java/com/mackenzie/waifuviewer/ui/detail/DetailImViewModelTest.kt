@@ -4,8 +4,8 @@ import app.cash.turbine.test
 import com.mackenzie.testshared.sampleImWaifu
 import com.mackenzie.waifuviewer.testrules.CoroutinesTestRule
 import com.mackenzie.waifuviewer.ui.detail.DetailImViewModel.UiState
-import com.mackenzie.waifuviewer.usecases.FindWaifuImUseCase
-import com.mackenzie.waifuviewer.usecases.SwitchImFavoriteUseCase
+import com.mackenzie.waifuviewer.usecases.im.FindWaifuImUseCase
+import com.mackenzie.waifuviewer.usecases.im.SwitchImFavoriteUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runCurrent
