@@ -29,9 +29,14 @@ class WaifuBestViewModel @Inject constructor(
             getWaifuPngUseCase()
                 .catch { cause -> _state.update { it.copy(error = cause.toError()) }}
                 .collect{ waifusPng -> _state.update { UiState(waifusPng = waifusPng) } }
-            /*getWaifuGifUseCase()
+        }
+    }
+
+    init {
+        viewModelScope.launch {
+            getWaifuGifUseCase()
                 .catch { cause -> _state.update { it.copy(error = cause.toError()) }}
-                .collect{ waifusGif -> _state.update { UiState(waifusGif = waifusGif) } }*/
+                .collect{ waifusGif -> _state.update { UiState(waifusGif = waifusGif) } }
         }
     }
 
@@ -39,24 +44,14 @@ class WaifuBestViewModel @Inject constructor(
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
             val error = requestWaifuBestUseCase(isGif, tag)
-            /*if (tag == "All Categories") {
-                error = requestWaifuBestUseCase(isGif, "waifu")
-            } else {
-                error = requestWaifuBestUseCase(isGif, tag)
-            }*/
             _state.update { it.copy(isLoading = false, error = error) }
         }
     }
 
     fun onRequestMore(isGif: Boolean, tag: String) {
         viewModelScope.launch {
-            if (tag == "All Categories") {
-                val error = requestMoreBestUseCase(isGif, "neko")
-                _state.update { it.copy(error = error) }
-            } else {
-                val error = requestMoreBestUseCase(isGif, tag)
-                _state.update { it.copy(error = error) }
-            }
+            val error = requestMoreBestUseCase(isGif, tag)
+            _state.update { it.copy(error = error) }
         }
     }
 

@@ -55,9 +55,6 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
                 //TODO
                 viewLifecycleOwner.launchAndCollect(bestViewModel.state) { binding withBestUpdateUI it }
             }
-            else -> {
-
-            }
         }
 
         loadCustomResult(bun)
@@ -71,6 +68,13 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
 
         if (serverMode == getString(R.string.server_normal_string)) {
             when (categoryTag) {
+                "All Categories" -> {
+                    if (isNsfw) {
+                        imViewModel.onImReady(isNsfw, isGif, "ecchi", orientation)
+                    } else {
+                        imViewModel.onImReady(isNsfw, isGif, "waifu", orientation)
+                    }
+                }
                 "uniform" -> {
                     imViewModel.onImReady(isNsfw, isGif = false, categoryTag, orientation)
                 }
@@ -105,10 +109,10 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         } else {
             when(categoryTag) {
                 "All Categories" -> {
-                    bestViewModel.onBestReady(false, "waifu")
+                    bestViewModel.onBestReady(isGif, "neko")
                 }
                 else -> {
-                    bestViewModel.onBestReady(false, categoryTag)
+                    bestViewModel.onBestReady(isGif, categoryTag)
                 }
             }
         }

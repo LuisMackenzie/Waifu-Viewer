@@ -62,7 +62,9 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
                 val nsfw = remoteConfig.getBoolean("nsfw_mode")
                 val isAutomatic = remoteConfig.getBoolean("automatic_server")
                 val mode = remoteConfig.getLong("server_mode")
-                setNsfwMode(nsfw)
+                if (serverMode != ServerType.NEKOS) {
+                    setNsfwMode(nsfw)
+                }
                 setAutoMode(isAutomatic)
             } else {
                 Toast.makeText(requireContext(), "Fetch failed", Toast.LENGTH_SHORT).show()
@@ -165,6 +167,15 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
             }
             updateSpinner()
         }
+        sGifs.setOnClickListener {
+            if (serverMode == ServerType.NEKOS) {
+                if (sGifs.isChecked) {
+                    Toast.makeText(requireContext(), "Not implemented yet!", Toast.LENGTH_SHORT).show()
+                }
+                btnWaifu.isEnabled = !sGifs.isChecked
+                updateSpinner()
+            }
+        }
         fab.setOnClickListener {
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
                 imViewModel.loadErrorOrWaifu()
@@ -189,7 +200,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
                 spinnerContent = if (sNsfw.isChecked) { Constants.NORMALNSFW } else { Constants.NORMALSFW }
             }
             else -> {
-                spinnerContent = Constants.NEKOS
+                spinnerContent = if (sGifs.isChecked) { Constants.NEKOSGIF } else { Constants.NEKOSPNG }
             }
         }
 
@@ -210,11 +221,11 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
             }
             ServerType.NORMAL.value -> {
                 sNsfw.visible = workMode
-                sGifs.visibility = View.VISIBLE
-                sOrientation.visibility = View.VISIBLE
+                sGifs.visible = true
+                sOrientation.visible = true
             }
             ServerType.NEKOS.value -> {
-                sGifs.visible = false
+                sGifs.visible = true
                 sNsfw.visible = false
                 sOrientation.visible = false
             }
@@ -242,8 +253,6 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         }
 
         when (mode) {
-            // ServerType.ENHANCED -> mainState.onButtonGetWaifuClicked(bun)
-            // ServerType.NORMAL -> mainState.onButtonGetWaifuClicked(bun)
             ServerType.FAVORITE -> mainState.onButtonFavoritesClicked(bun)
             else -> mainState.onButtonGetWaifuClicked(bun)
         }

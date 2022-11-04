@@ -24,6 +24,7 @@
     <string name="unknown_mode">Unknown Mode </string>
     <string name="give_me_waifus">Give me Waifus!</string>
     <string name="require_connection">Se requiere conexion para funcionar</string>
+    <string name="function_not_implemented">Not implemented yet!</string>
 
     <string name="waifus_gone">Some waifus are gone</string>
     <string name="waifu_deleted">Waifu Deleted!</string>
