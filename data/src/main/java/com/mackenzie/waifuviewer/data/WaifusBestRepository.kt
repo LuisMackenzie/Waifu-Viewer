@@ -75,11 +75,6 @@ class WaifusBestRepository @Inject constructor(
         if (error != null && error2 != null) return error else return null
     }
 
-    /*suspend fun requestClearWaifusGif(): Error? {
-        val error = localGifDataSource.deleteAllGif()
-        if (error != null) return error else return null
-    }*/
-
     suspend fun switchPngFavorite(pngItem: WaifuBestItemPng) :Error? {
         val updatedWaifu = pngItem.copy(isFavorite = !pngItem.isFavorite)
         if (updatedWaifu.isFavorite) {

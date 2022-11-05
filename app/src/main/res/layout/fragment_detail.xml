@@ -14,12 +14,22 @@
     android:orientation="vertical"
     tools:context=".ui.detail.DetailFragment">
 
-    <ProgressBar
+    <!--<ProgressBar
         android:id="@+id/pb_loading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|center_horizontal"
-        android:visibility="visible" />
+        android:visibility="visible" />-->
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/pb_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:lottie_rawRes="@raw/loading_animation"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        android:layout_gravity="center_vertical|center_horizontal" />
 
     <!--<me.relex.photodraweeview.PhotoDraweeView
         android:id="@+id/iv_detail"

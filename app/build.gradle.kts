@@ -130,6 +130,8 @@ dependencies {
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
 
+    // Lottie files
+    implementation("com.airbnb.android:lottie:5.2.0")
 
     // Shimmer
     implementation("com.facebook.shimmer:shimmer:0.5.0")

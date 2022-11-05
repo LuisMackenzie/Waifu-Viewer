@@ -40,6 +40,9 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite), FavoriteAdapter.O
         var count: Int
 
         state.waifus?.let { favoritesWaifus ->
+            if (favoritesWaifus.isEmpty()) {
+                ivError.visibility = View.VISIBLE
+            }
             favoriteAdapter.submitList(favoritesWaifus.reversed())
             // waifuPic = savedPicWaifus
             count = favoritesWaifus.size
