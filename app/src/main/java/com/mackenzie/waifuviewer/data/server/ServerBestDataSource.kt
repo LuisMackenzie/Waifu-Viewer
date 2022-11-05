@@ -17,6 +17,13 @@ class ServerBestDataSource @Inject constructor(private val remoteService: Remote
             .toDomainModelPng()
     }
 
+    override suspend fun getRandomWaifusBestGif(tag: String): Either<Error, List<WaifuBestItemGif>> = tryCall {
+        remoteService.serviceBest
+            .getRandomWaifuBestGif(tag)
+            .waifus
+            .toDomainModelGif()
+    }
+
     override suspend fun getOnlyWaifuBestPng(): WaifuBestItemPng? {
         val waifu: WaifuBestItemPng?
         try {
@@ -28,13 +35,6 @@ class ServerBestDataSource @Inject constructor(private val remoteService: Remote
             return null
         }
         return waifu
-    }
-
-    override suspend fun getRandomWaifusBestGif(tag: String): Either<Error, List<WaifuBestItemGif>> = tryCall {
-        remoteService.serviceBest
-            .getRandomWaifuBestGif(tag)
-            .waifus
-            .toDomainModelGif()
     }
 
     override suspend fun getOnlyWaifuBestGif(): WaifuBestItemGif? {

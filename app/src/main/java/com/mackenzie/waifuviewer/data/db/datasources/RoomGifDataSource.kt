@@ -47,7 +47,7 @@ private fun List<WaifuBestItemGif>.fromDomainModel(): List<WaifuBestGifDbItem> =
 private fun WaifuBestItemGif.fromDomainModel(): WaifuBestGifDbItem =
     WaifuBestGifDbItem(
         id,
-        url,
         animeName,
+        url,
         isFavorite
     )

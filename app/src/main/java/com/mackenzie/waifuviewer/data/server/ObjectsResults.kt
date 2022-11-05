@@ -163,6 +163,12 @@ data class RemoteConnect(
     val serviceBest: WaifuBestService
 )
 
+@Serializable
+sealed class WaifuBestResult {
+    data class WaifuBestPngResult(val results: List<WaifuBestPng>)
+    data class WaifuBestGifResult(val results: List<WaifuBestGif>)
+}
+
 
 
 

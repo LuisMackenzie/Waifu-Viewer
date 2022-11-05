@@ -170,9 +170,9 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         sGifs.setOnClickListener {
             if (serverMode == ServerType.NEKOS) {
                 if (sGifs.isChecked) {
-                    Toast.makeText(requireContext(), "Not implemented yet!", Toast.LENGTH_SHORT).show()
+                    // Toast.makeText(requireContext(), "Not implemented yet!", Toast.LENGTH_SHORT).show()
                 }
-                btnWaifu.isEnabled = !sGifs.isChecked
+                // btnWaifu.isEnabled = !sGifs.isChecked
                 updateSpinner()
             }
         }

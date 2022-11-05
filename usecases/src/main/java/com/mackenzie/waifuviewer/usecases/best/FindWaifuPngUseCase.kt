@@ -5,7 +5,7 @@ import com.mackenzie.waifuviewer.domain.WaifuBestItemPng
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class FindWaifuBestUseCase @Inject constructor(private val repo: WaifusBestRepository) {
+class FindWaifuPngUseCase @Inject constructor(private val repo: WaifusBestRepository) {
 
     operator fun invoke(id: Int): Flow<WaifuBestItemPng> = repo.findPngById(id)
 }
