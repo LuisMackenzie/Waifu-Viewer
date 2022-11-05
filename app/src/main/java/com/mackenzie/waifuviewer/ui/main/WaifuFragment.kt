@@ -184,7 +184,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         })
 
         fabDelete.setOnClickListener {
-            bestViewModel.onClearDatabase(bun.getBoolean(Constants.IS_GIF_WAIFU))
+            bestViewModel.onClearDatabase()
             requireActivity().onBackPressedDispatcher.onBackPressed()
             Toast.makeText(requireContext(), getString(R.string.waifus_gone), Toast.LENGTH_SHORT).show()
         }

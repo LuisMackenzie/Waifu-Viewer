@@ -55,9 +55,9 @@ class WaifuBestViewModel @Inject constructor(
         }
     }
 
-    fun onClearDatabase(isGif: Boolean) {
+    fun onClearDatabase() {
         viewModelScope.launch {
-            val error = clearWaifuBestUseCase(isGif)
+            val error = clearWaifuBestUseCase()
             _state.update { _state.value.copy(error = error) }
         }
     }
