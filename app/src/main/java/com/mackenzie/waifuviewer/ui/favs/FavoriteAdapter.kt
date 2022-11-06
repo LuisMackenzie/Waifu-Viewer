@@ -9,7 +9,6 @@ import com.mackenzie.waifuviewer.databinding.ViewMediaItemBinding
 import com.mackenzie.waifuviewer.domain.FavoriteItem
 import com.mackenzie.waifuviewer.ui.common.basicDiffUtil
 import com.mackenzie.waifuviewer.ui.common.inflate
-import com.mackenzie.waifuviewer.ui.common.loadUrl
 import com.mackenzie.waifuviewer.ui.common.loadUrlCenterCrop
 
 class FavoriteAdapter(
@@ -30,8 +29,6 @@ class FavoriteAdapter(
     }
 
     inner class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
-
-
 
         private val binding = ViewMediaItemBinding.bind(view)
         fun bind(waifu: FavoriteItem) = with(binding) {
