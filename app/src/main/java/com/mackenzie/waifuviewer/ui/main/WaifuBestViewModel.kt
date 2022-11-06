@@ -4,8 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mackenzie.waifuviewer.data.toError
 import com.mackenzie.waifuviewer.domain.Error
-import com.mackenzie.waifuviewer.domain.WaifuBestItemGif
-import com.mackenzie.waifuviewer.domain.WaifuBestItemPng
+import com.mackenzie.waifuviewer.domain.WaifuBestItem
 import com.mackenzie.waifuviewer.usecases.best.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -14,8 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WaifuBestViewModel @Inject constructor(
-    getWaifuPngUseCase: GetWaifuPngUseCase,
-    getWaifuGifUseCase: GetWaifuGifUseCase,
+    getWaifuBestUseCase: GetWaifuBestUseCase,
     private val requestWaifuBestUseCase: RequestWaifuBestUseCase,
     private val requestMoreBestUseCase: RequestMoreWaifuBestUseCase,
     private val clearWaifuBestUseCase: ClearWaifuBestUseCase
@@ -26,31 +24,23 @@ class WaifuBestViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            getWaifuPngUseCase()
+            getWaifuBestUseCase()
                 .catch { cause -> _state.update { it.copy(error = cause.toError()) }}
-                .collect{ waifusPng -> _state.update { UiState(waifusPng = waifusPng) } }
+                .collect{ waifusPng -> _state.update { UiState(waifus = waifusPng) } }
         }
     }
 
-    init {
-        viewModelScope.launch {
-            getWaifuGifUseCase()
-                .catch { cause -> _state.update { it.copy(error = cause.toError()) }}
-                .collect{ waifusGif -> _state.update { UiState(waifusGif = waifusGif) } }
-        }
-    }
-
-    fun onBestReady(isGif: Boolean,tag: String) {
+    fun onBestReady(tag: String) {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
-            val error = requestWaifuBestUseCase(isGif, tag)
+            val error = requestWaifuBestUseCase(tag)
             _state.update { it.copy(isLoading = false, error = error) }
         }
     }
 
-    fun onRequestMore(isGif: Boolean, tag: String) {
+    fun onRequestMore(tag: String) {
         viewModelScope.launch {
-            val error = requestMoreBestUseCase(isGif, tag)
+            val error = requestMoreBestUseCase(tag)
             _state.update { it.copy(error = error) }
         }
     }
@@ -64,8 +54,7 @@ class WaifuBestViewModel @Inject constructor(
 
     data class UiState(
         val isLoading: Boolean? = null,
-        val waifusPng: List<WaifuBestItemPng>? = null,
-        val waifusGif: List<WaifuBestItemGif>? = null,
+        val waifus: List<WaifuBestItem>? = null,
         val error: Error? = null
     )
 

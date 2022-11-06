@@ -14,13 +14,6 @@
     android:orientation="vertical"
     tools:context=".ui.detail.DetailFragment">
 
-    <!--<ProgressBar
-        android:id="@+id/pb_loading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|center_horizontal"
-        android:visibility="visible" />-->
-
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/pb_loading"
         android:layout_width="wrap_content"
@@ -31,26 +24,10 @@
         app:lottie_loop="true"
         android:layout_gravity="center_vertical|center_horizontal" />
 
-    <!--<me.relex.photodraweeview.PhotoDraweeView
-        android:id="@+id/iv_detail"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:failureImage="@drawable/ic_error_grey"
-        app:failureImageScaleType="fitCenter" />-->
-
     <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/iv_detail"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
-    <!--<com.facebook.drawee.view.SimpleDraweeView
-        android:id="@+id/iv_detail"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_vertical|center_horizontal"
-        fresco:fadeDuration="1000"
-        fresco:actualImageScaleType="centerCrop"/>-->
-
 
     <TextView
         android:id="@+id/tv_detail"
@@ -60,19 +37,6 @@
         android:textSize="25sp"
         android:textColor="@color/grey"
         tools:text="Waifu Name ID" />
-
-    <!--<com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_pics"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|start"
-        android:layout_margin="12dp"
-        android:clickable="true"
-        android:visibility="gone"
-        android:src="@drawable/ic_favorite_off"
-        android:contentDescription="@string/download_image"
-        android:focusable="true"
-        app:backgroundTint="@color/purple_200" />-->
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
@@ -85,19 +49,6 @@
         android:contentDescription="@string/download_image"
         android:focusable="true"
         app:backgroundTint="@color/purple_200" />
-
-    <!--<com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_favorites"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|start"
-        android:layout_margin="12dp"
-        android:clickable="true"
-        android:visibility="gone"
-        android:src="@drawable/ic_favorite_off"
-        android:contentDescription="@string/download_image"
-        android:focusable="true"
-        app:backgroundTint="@color/purple_200" />-->
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_download"

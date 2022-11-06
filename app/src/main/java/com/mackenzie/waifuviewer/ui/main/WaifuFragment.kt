@@ -15,10 +15,9 @@ import com.mackenzie.waifuviewer.WaifuPicsViewModel
 import com.mackenzie.waifuviewer.databinding.FragmentWaifuBinding
 import com.mackenzie.waifuviewer.ui.common.Constants
 import com.mackenzie.waifuviewer.ui.common.launchAndCollect
-import com.mackenzie.waifuviewer.ui.main.adapters.WaifuGifAdapter
 import com.mackenzie.waifuviewer.ui.main.adapters.WaifuImAdapter
 import com.mackenzie.waifuviewer.ui.main.adapters.WaifuPicsAdapter
-import com.mackenzie.waifuviewer.ui.main.adapters.WaifuPngAdapter
+import com.mackenzie.waifuviewer.ui.main.adapters.WaifuBestAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -30,8 +29,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
     private val bestViewModel: WaifuBestViewModel by viewModels()
     private val waifuImAdapter = WaifuImAdapter{ mainState.onWaifuImClicked(it) }
     private val waifuPicsAdapter = WaifuPicsAdapter{ mainState.onWaifuPicsClicked(it) }
-    private val waifuPngAdapter = WaifuPngAdapter{ mainState.onWaifuPngClicked(it) }
-    private val waifuGifAdapter = WaifuGifAdapter{ mainState.onWaifuGifClicked(it) }
+    private val waifuBestAdapter = WaifuBestAdapter{ mainState.onWaifuBestClicked(it) }
     private lateinit var mainState: MainState
     private lateinit var bun: Bundle
     private var serverMode: String = ""
@@ -55,11 +53,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
                 viewLifecycleOwner.launchAndCollect(imViewModel.state) { binding withImUpdateUI it }
             }
             getString(R.string.server_nekos_string) -> {
-                if (bun.getBoolean(Constants.IS_GIF_WAIFU)) {
-                    binding.recycler.adapter = waifuGifAdapter
-                } else {
-                    binding.recycler.adapter = waifuPngAdapter
-                }
+                binding.recycler.adapter = waifuBestAdapter
                 viewLifecycleOwner.launchAndCollect(bestViewModel.state) { binding withBestUpdateUI it }
             }
         }
@@ -117,13 +111,13 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
             when(categoryTag) {
                 "All Categories" -> {
                     if (isGif) {
-                        bestViewModel.onBestReady(isGif, "smile")
+                        bestViewModel.onBestReady( "smile")
                     } else {
-                        bestViewModel.onBestReady(isGif, "neko")
+                        bestViewModel.onBestReady("neko")
                     }
                 }
                 else -> {
-                    bestViewModel.onBestReady(isGif, categoryTag)
+                    bestViewModel.onBestReady(categoryTag)
                 }
             }
         }
@@ -134,20 +128,10 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
         var count: Int
         val categoryTag = bun.getString(Constants.CATEGORY_TAG_WAIFU) ?: ""
 
-        state.waifusPng?.let { savedPngWaifus ->
+        state.waifus?.let { savedWaifus ->
             appendProgress.visibility = View.GONE
-            waifuPngAdapter.submitList(savedPngWaifus)
-            count = savedPngWaifus.size
-            if (count != 0 && !numIsShowed) {
-                Toast.makeText(requireContext(), "${getString(R.string.waifus_size)} $count", Toast.LENGTH_SHORT).show()
-                numIsShowed = true
-            }
-        }
-
-        state.waifusGif?.let { savedGifWaifus ->
-            appendProgress.visibility = View.GONE
-            waifuGifAdapter.submitList(savedGifWaifus)
-            count = savedGifWaifus.size
+            waifuBestAdapter.submitList(savedWaifus)
+            count = savedWaifus.size
             if (count != 0 && !numIsShowed) {
                 Toast.makeText(requireContext(), "${getString(R.string.waifus_size)} $count", Toast.LENGTH_SHORT).show()
                 numIsShowed = true
@@ -173,7 +157,7 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
                     if (loadingMore == false) {
                         Toast.makeText(requireContext(), getString(R.string.waifus_coming), Toast.LENGTH_SHORT).show()
                         appendProgress.visibility = View.VISIBLE
-                        bestViewModel.onRequestMore(bun.getBoolean(Constants.IS_GIF_WAIFU), categoryTag)
+                        bestViewModel.onRequestMore(categoryTag)
                         loadingMore = true
                         Handler(Looper.getMainLooper()).postDelayed({
                             loadingMore = false

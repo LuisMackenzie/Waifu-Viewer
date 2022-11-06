@@ -6,32 +6,32 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface WaifuBestDao {
 
-    @Query("SELECT * FROM WaifuBestPngDbItem")
-    fun getAllPng(): Flow<List<WaifuBestPngDbItem>>
+    @Query("SELECT * FROM WaifuBestDbItem")
+    fun getAll(): Flow<List<WaifuBestDbItem>>
 
-    @Query("SELECT * FROM WaifuBestPngDbItem WHERE id = :id")
-    fun findPngById(id: Int): Flow<WaifuBestPngDbItem>
+    @Query("SELECT * FROM WaifuBestDbItem WHERE id = :id")
+    fun findById(id: Int): Flow<WaifuBestDbItem>
 
-    @Query("SELECT COUNT(id) FROM WaifuBestPngDbItem")
-    suspend fun waifuPngCount(): Int
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertWaifuPng(waifu: WaifuBestPngDbItem)
+    @Query("SELECT COUNT(id) FROM WaifuBestDbItem")
+    suspend fun waifuCount(): Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAllWaifuPng(waifus: List<WaifuBestPngDbItem>)
+    suspend fun insertWaifu(waifu: WaifuBestDbItem)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAllWaifu(waifus: List<WaifuBestDbItem>)
 
     @Update
-    suspend fun updateWaifuPng(waifu: WaifuBestPngDbItem)
+    suspend fun updateWaifu(waifu: WaifuBestDbItem)
 
     @Delete
-    suspend fun deletePng(waifu: WaifuBestPngDbItem)
+    suspend fun delete(waifu: WaifuBestDbItem)
 
-    @Query("DELETE FROM WaifuBestPngDbItem")
-    suspend fun deleteAllPng()
+    @Query("DELETE FROM WaifuBestDbItem")
+    suspend fun deleteAll()
 
 
-    @Query("SELECT * FROM WaifuBestGifDbItem")
+    /*@Query("SELECT * FROM WaifuBestGifDbItem")
     fun getAllGif(): Flow<List<WaifuBestGifDbItem>>
 
     @Query("SELECT * FROM WaifuBestGifDbItem WHERE id = :id")
@@ -53,5 +53,5 @@ interface WaifuBestDao {
     suspend fun deleteGif(waifu: WaifuBestGifDbItem)
 
     @Query("DELETE FROM WaifuBestGifDbItem")
-    suspend fun deleteAllGif()
+    suspend fun deleteAllGif()*/
 }

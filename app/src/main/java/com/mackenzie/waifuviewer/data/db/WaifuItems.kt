@@ -34,6 +34,18 @@ data class WaifuPicDbItem(
 
 @Parcelize
 @Entity
+data class WaifuBestDbItem(
+    @PrimaryKey(autoGenerate = true) val id: Int,
+    val artistHref: String,
+    val artistName: String,
+    val animeName: String,
+    val sourceUrl: String,
+    val url: String,
+    val isFavorite: Boolean
+) : Parcelable
+
+/*@Parcelize
+@Entity
 data class WaifuBestPngDbItem(
     @PrimaryKey(autoGenerate = true) val id: Int,
     val artistHref: String,
@@ -41,16 +53,16 @@ data class WaifuBestPngDbItem(
     val sourceUrl: String,
     val url: String,
     val isFavorite: Boolean
-) : Parcelable
+) : Parcelable*/
 
-@Parcelize
+/*@Parcelize
 @Entity
 data class WaifuBestGifDbItem(
     @PrimaryKey(autoGenerate = true) val id: Int,
     val animeName: String,
     val url: String,
     val isFavorite: Boolean
-) : Parcelable
+) : Parcelable*/
 
 @Parcelize
 @Entity

@@ -6,11 +6,7 @@ import javax.inject.Inject
 
 class RequestWaifuBestUseCase @Inject constructor(private val repo: WaifusBestRepository) {
 
-    suspend operator fun invoke(isGif:Boolean, tag:String): Error? {
-        if (isGif) {
-            return repo.requestWaifusGif(tag)
-        } else {
-            return repo.requestWaifusPng(tag)
-        }
+    suspend operator fun invoke(tag:String): Error? {
+        return repo.requestWaifus(tag)
     }
 }

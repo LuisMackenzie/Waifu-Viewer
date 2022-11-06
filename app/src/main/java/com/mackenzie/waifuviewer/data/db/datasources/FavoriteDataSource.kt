@@ -33,12 +33,8 @@ class FavoriteDataSource @Inject constructor(private val favDao: FavoriteDao): F
         favDao.insertFavorite(waifu.fromPicDomainModel())
     }.fold(ifLeft = { it }, ifRight = { null })
 
-    override suspend fun savePng(waifu: WaifuBestItemPng): Error? = tryCall {
-        favDao.insertFavorite(waifu.fromPngDomainModel())
-    }.fold(ifLeft = { it }, ifRight = { null })
-
-    override suspend fun saveGif(waifu: WaifuBestItemGif): Error? = tryCall {
-        favDao.insertFavorite(waifu.fromGifDomainModel())
+    override suspend fun saveBest(waifu: WaifuBestItem): Error? = tryCall {
+        favDao.insertFavorite(waifu.fromBestDomainModel())
     }.fold(ifLeft = { it }, ifRight = { null })
 
     override suspend fun save(waifu: FavoriteItem): Error? = tryCall {
@@ -89,19 +85,11 @@ private fun WaifuImItem.fromImDomainModel(): FavoriteDbItem =
         isFavorite
     )
 
-private fun WaifuBestItemPng.fromPngDomainModel(): FavoriteDbItem =
+private fun WaifuBestItem.fromBestDomainModel(): FavoriteDbItem =
     FavoriteDbItem(
         id = 0,
         url,
-        title = artistName,
-        isFavorite
-    )
-
-private fun WaifuBestItemGif.fromGifDomainModel(): FavoriteDbItem =
-    FavoriteDbItem(
-        id = 0,
-        url,
-        title = animeName,
+        title = (artistName.isNotEmpty() ?: animeName) as String,
         isFavorite
     )
 

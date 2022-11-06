@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mackenzie.waifuviewer.di.WaifuId
 import com.mackenzie.waifuviewer.domain.Error
-import com.mackenzie.waifuviewer.domain.WaifuBestItemPng
-import com.mackenzie.waifuviewer.usecases.best.FindWaifuPngUseCase
-import com.mackenzie.waifuviewer.usecases.best.SwitchPngFavoriteUseCase
+import com.mackenzie.waifuviewer.domain.WaifuBestItem
+import com.mackenzie.waifuviewer.usecases.best.FindWaifuBestUseCase
+import com.mackenzie.waifuviewer.usecases.best.SwitchBestFavoriteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,8 +18,8 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailBestViewModel @Inject constructor (
     @WaifuId private val waifuId: Int,
-    findWaifuBestUseCase: FindWaifuPngUseCase,
-    private val switchPngFavoriteUseCase : SwitchPngFavoriteUseCase
+    findWaifuBestUseCase: FindWaifuBestUseCase,
+    private val switchBestFavoriteUseCase : SwitchBestFavoriteUseCase,
 ): ViewModel() {
 
     private val _state = MutableStateFlow(UiState())
@@ -36,14 +36,15 @@ class DetailBestViewModel @Inject constructor (
     fun onFavoriteClicked() {
         viewModelScope.launch {
             _state.value.waifu?.let { waifu ->
-                val error = switchPngFavoriteUseCase(waifu)
+                val error = switchBestFavoriteUseCase(waifu)
                 _state.update { it.copy(error = error) }
             }
         }
+
     }
 
     data class UiState(
-        val waifu: WaifuBestItemPng? = null,
+        val waifu: WaifuBestItem? = null,
         val error: Error? = null
     )
 }

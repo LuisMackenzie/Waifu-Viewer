@@ -17,8 +17,7 @@ import kotlinx.coroutines.launch
 
 typealias ImListener = (WaifuImItem) -> Unit
 typealias PicListener = (WaifuPicItem) -> Unit
-typealias PngListener = (WaifuBestItemPng) -> Unit
-typealias GifListener = (WaifuBestItemGif) -> Unit
+typealias BestListener = (WaifuBestItem) -> Unit
 
 class MainState(
     private val context: Context,
@@ -36,12 +35,7 @@ class MainState(
         navController.navigate(action)
     }
 
-    fun onWaifuPngClicked(waifu: WaifuBestItemPng) {
-        val action = WaifuFragmentDirections.actionWaifuBestToDetail(waifu.id)
-        navController.navigate(action)
-    }
-
-    fun onWaifuGifClicked(waifu: WaifuBestItemGif) {
+    fun onWaifuBestClicked(waifu: WaifuBestItem) {
         val action = WaifuFragmentDirections.actionWaifuBestToDetail(waifu.id)
         navController.navigate(action)
     }

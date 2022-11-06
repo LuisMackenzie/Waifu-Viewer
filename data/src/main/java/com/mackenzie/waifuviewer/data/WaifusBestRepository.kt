@@ -1,96 +1,69 @@
 package com.mackenzie.waifuviewer.data
 
 import com.mackenzie.waifuviewer.data.datasource.FavoriteLocalDataSource
-import com.mackenzie.waifuviewer.data.datasource.WaifusBestGifLocalDataSource
-import com.mackenzie.waifuviewer.data.datasource.WaifusBestPngLocalDataSource
+import com.mackenzie.waifuviewer.data.datasource.WaifusBestLocalDataSource
 import com.mackenzie.waifuviewer.data.datasource.WaifusBestRemoteDataSource
 import com.mackenzie.waifuviewer.domain.Error
-import com.mackenzie.waifuviewer.domain.WaifuBestItemGif
-import com.mackenzie.waifuviewer.domain.WaifuBestItemPng
+import com.mackenzie.waifuviewer.domain.WaifuBestItem
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class WaifusBestRepository @Inject constructor(
-    private val localPngDataSource: WaifusBestPngLocalDataSource,
-    private val localGifDataSource: WaifusBestGifLocalDataSource,
+    private val localDataSource: WaifusBestLocalDataSource,
     private val favDataSource: FavoriteLocalDataSource,
     private val remoteDataSource: WaifusBestRemoteDataSource
 ) {
 
-    val savedWaifusPng = localPngDataSource.waifusPng
-    val savedWaifusGif = localGifDataSource.waifusGif
+    val savedWaifus = localDataSource.waifus
 
-    fun findPngById(id: Int): Flow<WaifuBestItemPng> = localPngDataSource.findPngById(id)
-    fun findGifById(id: Int): Flow<WaifuBestItemGif> = localGifDataSource.findGifById(id)
+    fun findById(id: Int): Flow<WaifuBestItem> = localDataSource.findById(id)
 
-    suspend fun requestWaifusPng(tag: String): Error? {
-        if(localPngDataSource.isPngEmpty()) {
-            val waifus = remoteDataSource.getRandomWaifusBestPng(tag)
-            waifus.fold(ifLeft = {return it}) {
-                localPngDataSource.savePng(it)
+    suspend fun requestWaifus(tag: String): Error? {
+        if(localDataSource.isEmpty()) {
+            when(tag) {
+                "neko","husbando","kitsune","waifu" -> {
+                    val waifus = remoteDataSource.getRandomWaifusBestPng(tag)
+                    waifus.fold(ifLeft = {return it}) {
+                        localDataSource.save(it)
+                    }
+                }
+                else -> {
+                    val waifus = remoteDataSource.getRandomWaifusBestGif(tag)
+                    waifus.fold(ifLeft = {return it}) {
+                        localDataSource.save(it)
+                    }
+                }
             }
         }
         return null
+
     }
 
-    suspend fun requestWaifusGif(tag: String): Error? {
-        if(localGifDataSource.isGifEmpty()) {
-            val waifus = remoteDataSource.getRandomWaifusBestGif(tag)
-            waifus.fold(ifLeft = {return it}) {
-                localGifDataSource.saveGif(it)
-            }
-        }
-        return null
-    }
-
-    suspend fun requestNewWaifusPng(tag: String): Error? {
+    suspend fun requestNewWaifus(tag: String): Error? {
         val waifus = remoteDataSource.getRandomWaifusBestPng(tag)
         waifus.fold(ifLeft = {return it}) {
-            localPngDataSource.savePng(it)
+            localDataSource.save(it)
         }
         return null
     }
 
-    suspend fun requestNewWaifusGif(tag: String): Error? {
-        val waifus = remoteDataSource.getRandomWaifusBestGif(tag)
-        waifus.fold(ifLeft = {return it}) {
-            localGifDataSource.saveGif(it)
-        }
-        return null
-    }
-
-    suspend fun requestOnlyWaifuPng(): WaifuBestItemPng? {
+    suspend fun requestOnlyWaifuPng(): WaifuBestItem? {
         val waifuPic = remoteDataSource.getOnlyWaifuBestPng()
         if (waifuPic != null) return waifuPic else return null
     }
 
-    suspend fun requestOnlyWaifuGif(): WaifuBestItemGif? {
-        val waifuPic = remoteDataSource.getOnlyWaifuBestGif()
-        if (waifuPic != null) return waifuPic else return null
-    }
-
     suspend fun requestClearWaifusBest(): Error? {
-        val error = localPngDataSource.deleteAllPng()
-        val error2 = localGifDataSource.deleteAllGif()
-        if (error != null && error2 != null) return error else return null
+        val error = localDataSource.deleteAll()
+        if (error != null) return error else return null
     }
 
-    suspend fun switchPngFavorite(pngItem: WaifuBestItemPng) :Error? {
-        val updatedWaifu = pngItem.copy(isFavorite = !pngItem.isFavorite)
+    suspend fun switchFavorite(item: WaifuBestItem) :Error? {
+        val updatedWaifu = item.copy(isFavorite = !item.isFavorite)
         if (updatedWaifu.isFavorite) {
-            val error = favDataSource.savePng(updatedWaifu)
+            val error = favDataSource.saveBest(updatedWaifu)
             if (error != null) return error
         }
-        return localPngDataSource.saveOnlyPng(updatedWaifu)
-    }
-
-    suspend fun switchGifFavorite(gifItem: WaifuBestItemGif) :Error? {
-        val updatedWaifu = gifItem.copy(isFavorite = !gifItem.isFavorite)
-        if (updatedWaifu.isFavorite) {
-            val error = favDataSource.saveGif(updatedWaifu)
-            if (error != null) return error
-        }
-        return localGifDataSource.saveOnlyGif(updatedWaifu)
+        return localDataSource.saveOnly(updatedWaifu)
     }
 
 }

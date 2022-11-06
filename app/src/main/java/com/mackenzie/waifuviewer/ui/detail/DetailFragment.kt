@@ -93,7 +93,11 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
         pbLoading.visibility = View.GONE
         state.waifu?.let {
             val title = it.url.substringAfterLast('/').substringBeforeLast('.')
-            tvDetail.text = it.artistName
+            if (it.artistName.isEmpty()) {
+                tvDetail.text = it.animeName
+            } else {
+                tvDetail.text = it.artistName
+            }
             ivDetail.loadUrl(it.url)
             if (it.isFavorite) {
                 fab.setImageResource(R.drawable.ic_favorite_on)

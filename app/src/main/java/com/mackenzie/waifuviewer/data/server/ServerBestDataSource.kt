@@ -4,28 +4,27 @@ import arrow.core.Either
 import com.mackenzie.waifuviewer.data.datasource.WaifusBestRemoteDataSource
 import com.mackenzie.waifuviewer.data.tryCall
 import com.mackenzie.waifuviewer.domain.Error
-import com.mackenzie.waifuviewer.domain.WaifuBestItemGif
-import com.mackenzie.waifuviewer.domain.WaifuBestItemPng
+import com.mackenzie.waifuviewer.domain.WaifuBestItem
 import javax.inject.Inject
 
 class ServerBestDataSource @Inject constructor(private val remoteService: RemoteConnect): WaifusBestRemoteDataSource {
 
-    override suspend fun getRandomWaifusBestPng(tag: String): Either<Error, List<WaifuBestItemPng>> = tryCall {
+    override suspend fun getRandomWaifusBestPng(tag: String): Either<Error, List<WaifuBestItem>> = tryCall {
         remoteService.serviceBest
             .getRandomWaifuBestPng(tag)
             .waifus
             .toDomainModelPng()
     }
 
-    override suspend fun getRandomWaifusBestGif(tag: String): Either<Error, List<WaifuBestItemGif>> = tryCall {
+    override suspend fun getRandomWaifusBestGif(tag: String): Either<Error, List<WaifuBestItem>> = tryCall {
         remoteService.serviceBest
             .getRandomWaifuBestGif(tag)
             .waifus
             .toDomainModelGif()
     }
 
-    override suspend fun getOnlyWaifuBestPng(): WaifuBestItemPng? {
-        val waifu: WaifuBestItemPng?
+    override suspend fun getOnlyWaifuBestPng(): WaifuBestItem? {
+        val waifu: WaifuBestItem?
         try {
             waifu = remoteService.serviceBest
                 .getOnlyRandomWaifuBestPng()
@@ -37,8 +36,8 @@ class ServerBestDataSource @Inject constructor(private val remoteService: Remote
         return waifu
     }
 
-    override suspend fun getOnlyWaifuBestGif(): WaifuBestItemGif? {
-        val waifu: WaifuBestItemGif?
+    override suspend fun getOnlyWaifuBestGif(): WaifuBestItem? {
+        val waifu: WaifuBestItem?
         try {
             waifu = remoteService.serviceBest
                 .getOnlyRandomWaifuBestGif()
@@ -51,24 +50,28 @@ class ServerBestDataSource @Inject constructor(private val remoteService: Remote
     }
 }
 
-private fun List<WaifuBestPng>.toDomainModelPng(): List<WaifuBestItemPng> = map { it.toDomainModel() }
+private fun List<WaifuBestPng>.toDomainModelPng(): List<WaifuBestItem> = map { it.toDomainModel() }
 
-private fun WaifuBestPng.toDomainModel(): WaifuBestItemPng =
-    WaifuBestItemPng(
+private fun WaifuBestPng.toDomainModel(): WaifuBestItem =
+    WaifuBestItem(
         0,
         artistHref,
         artistName,
+        "",
         sourceUrl,
         url,
         false
     )
 
-private fun List<WaifuBestGif>.toDomainModelGif(): List<WaifuBestItemGif> = map { it.toDomainModel() }
+private fun List<WaifuBestGif>.toDomainModelGif(): List<WaifuBestItem> = map { it.toDomainModel() }
 
-private fun WaifuBestGif.toDomainModel(): WaifuBestItemGif =
-    WaifuBestItemGif(
+private fun WaifuBestGif.toDomainModel(): WaifuBestItem =
+    WaifuBestItem(
         0,
+        "",
+        "",
         animeName,
+        "",
         url,
         false
     )

@@ -100,10 +100,7 @@ abstract class AppDataModule {
     abstract fun bindLocalPicDataSource(localPicDataSource: RoomPicDataSource): WaifusPicLocalDataSource
 
     @Binds
-    abstract fun bindLocalPngDataSource(localPngDataSource: RoomPngDataSource): WaifusBestPngLocalDataSource
-
-    @Binds
-    abstract fun bindLocalGifDataSource(localGifDataSource: RoomGifDataSource): WaifusBestGifLocalDataSource
+    abstract fun bindLocalBestDataSource(localBestDataSource: RoomBestDataSource): WaifusBestLocalDataSource
 
     @Binds
     abstract fun bindFavoriteDataSource(favoriteDataSource: FavoriteDataSource): FavoriteLocalDataSource
