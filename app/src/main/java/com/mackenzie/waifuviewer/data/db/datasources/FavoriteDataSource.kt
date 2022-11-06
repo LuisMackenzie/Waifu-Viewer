@@ -89,7 +89,7 @@ private fun WaifuBestItem.fromBestDomainModel(): FavoriteDbItem =
     FavoriteDbItem(
         id = 0,
         url,
-        title = (artistName.isNotEmpty() ?: animeName) as String,
+        title = artistName + animeName,
         isFavorite
     )
 

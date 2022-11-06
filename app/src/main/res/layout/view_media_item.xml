@@ -57,10 +57,7 @@
             android:contentDescription="@string/waifus_content"
             android:src="@drawable/ic_favorite_on" />
 
-
     </RelativeLayout>
-
-
 
 </androidx.cardview.widget.CardView>
 
