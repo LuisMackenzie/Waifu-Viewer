@@ -125,7 +125,7 @@
         app:layout_constraintBottom_toBottomOf="parent" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:layout_marginBottom="4dp"
@@ -140,7 +140,7 @@
             android:id="@+id/s_gifs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
             android:text="@string/gif_content"
             android:textColor="@color/white" />
 
@@ -148,6 +148,8 @@
             android:id="@+id/s_nsfw"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:layout_marginStart="4dp"
             android:text="@string/sfw_content"
             android:textColor="@color/white"
             android:visibility="gone"
@@ -157,7 +159,7 @@
             android:id="@+id/s_orientation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_marginStart="8dp"
             android:text="@string/portrait_default"
             android:textColor="@color/white" />
 
