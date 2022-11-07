@@ -26,6 +26,12 @@
     <string name="require_connection">Se requiere conexion para funcionar</string>
     <string name="function_not_implemented">Not implemented yet!</string>
 
+    <string name="tag_waifu">waifu</string>
+    <string name="tag_ecchi">ecchi</string>
+    <string name="tag_neko">neko</string>
+    <string name="tag_happy">happy</string>
+    <string name="categories">All Categories</string>
+
     <string name="waifus_gone">Some waifus are gone</string>
     <string name="waifu_deleted">Waifu Deleted!</string>
     <string name="waifu_favorite_delete">Delete All Favorites no implemented yet. Try Long Press on a waifu</string>

@@ -2,6 +2,8 @@ package com.mackenzie.waifuviewer.ui
 
 import android.Manifest
 import android.content.Context
+import android.icu.lang.UCharacter.GraphemeClusterBreak.L
+import android.nfc.Tag
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -213,18 +215,18 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
     private fun updateSwitches() = with(binding) {
         val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
         val workMode = sharedPref.getBoolean(Constants.WORK_MODE, false)
-        when (serverMode.value) {
-            ServerType.ENHANCED.value -> {
+        when (serverMode) {
+            ServerType.ENHANCED -> {
                 sNsfw.visible = workMode
                 sGifs.visible = false
                 sOrientation.visible = false
             }
-            ServerType.NORMAL.value -> {
+            ServerType.NORMAL -> {
                 sNsfw.visible = workMode
                 sGifs.visible = true
                 sOrientation.visible = true
             }
-            ServerType.NEKOS.value -> {
+            ServerType.NEKOS -> {
                 sGifs.visible = true
                 sNsfw.visible = false
                 sOrientation.visible = false
@@ -235,27 +237,54 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         }
     }
 
-    private fun navigateTo(mode: ServerType) = with(binding) {
+    private fun navigateTo(mode: ServerType) {
+        val bun = saveBundle()
+        when (mode) {
+            ServerType.FAVORITE -> mainState.onButtonFavoritesClicked(bun)
+            else -> mainState.onButtonGetWaifuClicked(bun)
+        }
+    }
+
+    private fun saveBundle(): Bundle {
         val bun = bundleOf()
         bun.putString(Constants.SERVER_MODE, serverMode.value)
-        bun.putBoolean(Constants.IS_NSFW_WAIFU, sNsfw.isChecked)
-        bun.putBoolean(Constants.IS_GIF_WAIFU, sGifs.isChecked)
-        bun.putBoolean(Constants.IS_LANDS_WAIFU, sOrientation.isChecked)
-        val selectedTag = spinner.selectedItem.toString()
-        if (selectedTag.isNotEmpty()) {
-            bun.putString(Constants.CATEGORY_TAG_WAIFU, selectedTag)
-        }
+        bun.putBoolean(Constants.IS_NSFW_WAIFU, binding.sNsfw.isChecked)
+        bun.putBoolean(Constants.IS_GIF_WAIFU, binding.sGifs.isChecked)
+        bun.putBoolean(Constants.IS_LANDS_WAIFU, binding.sOrientation.isChecked)
+        bun.putString(Constants.CATEGORY_TAG_WAIFU, tagFilter(binding.spinner.selectedItem.toString()))
 
         val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
         with (sharedPref.edit()) {
             putString(Constants.SERVER_MODE, serverMode.value)
             apply()
         }
+        return bun
+    }
 
-        when (mode) {
-            ServerType.FAVORITE -> mainState.onButtonFavoritesClicked(bun)
-            else -> mainState.onButtonGetWaifuClicked(bun)
+    fun tagFilter(tag: String): String {
+        var updatedTag: String = tag
+        if (tag == getString(R.string.categories)) {
+            when (serverMode) {
+                ServerType.ENHANCED -> {
+                    updatedTag = getString(R.string.tag_waifu)
+                }
+                ServerType.NORMAL -> {
+                    if (!binding.sNsfw.isChecked) {
+                        updatedTag = getString(R.string.tag_waifu)
+                    } else {
+                        updatedTag = getString(R.string.tag_ecchi)
+                    }
+                }
+                else -> {
+                    if (!binding.sGifs.isChecked) {
+                        updatedTag = getString(R.string.tag_neko)
+                    } else {
+                        updatedTag = getString(R.string.tag_happy)
+                    }
+                }
+            }
         }
+        return updatedTag
     }
 
     private fun loadInitialServer() {

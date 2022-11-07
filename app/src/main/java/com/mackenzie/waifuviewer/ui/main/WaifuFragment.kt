@@ -69,57 +69,20 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
 
         if (serverMode == getString(R.string.server_normal_string)) {
             when (categoryTag) {
-                "All Categories" -> {
-                    if (isNsfw) {
-                        imViewModel.onImReady(isNsfw, isGif, "ecchi", orientation)
-                    } else {
-                        imViewModel.onImReady(isNsfw, isGif, "waifu", orientation)
-                    }
-                }
-                "uniform" -> {
+                "uniform","maid","marin-kitagawa","oppai" -> {
                     imViewModel.onImReady(isNsfw, isGif = false, categoryTag, orientation)
                 }
-                "maid" -> {
-                    imViewModel.onImReady(isNsfw, isGif = false, categoryTag, orientation)
-                }
-                "marin-kitagawa" -> {
-                    imViewModel.onImReady(isNsfw, isGif = false, categoryTag, orientation)
-                }
-                "mori-calliope" -> {
+                "mori-calliope","raiden-shogun" -> {
                     imViewModel.onImReady(isNsfw, isGif = false, categoryTag, false)
-                }
-                "raiden-shogun" -> {
-                    imViewModel.onImReady(isNsfw, isGif = false, categoryTag, false)
-                }
-                "oppai" -> {
-                    imViewModel.onImReady(isNsfw, isGif = false, categoryTag, orientation)
                 }
                 else -> {
                     imViewModel.onImReady(isNsfw, isGif, categoryTag, orientation)
                 }
             }
         } else if (serverMode == getString(R.string.server_enhanced_string)) {
-            when(categoryTag) {
-                "All Categories" -> {
-                    picsViewModel.onPicsReady(isNsfw, "waifu")
-                }
-                else -> {
-                    picsViewModel.onPicsReady(isNsfw, categoryTag)
-                }
-            }
+            picsViewModel.onPicsReady(isNsfw, categoryTag)
         } else {
-            when(categoryTag) {
-                "All Categories" -> {
-                    if (isGif) {
-                        bestViewModel.onBestReady( "smile")
-                    } else {
-                        bestViewModel.onBestReady("neko")
-                    }
-                }
-                else -> {
-                    bestViewModel.onBestReady(categoryTag)
-                }
-            }
+            bestViewModel.onBestReady(categoryTag)
         }
     }
 

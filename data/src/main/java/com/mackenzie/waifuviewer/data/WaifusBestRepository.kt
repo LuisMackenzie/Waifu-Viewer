@@ -40,9 +40,19 @@ class WaifusBestRepository @Inject constructor(
     }
 
     suspend fun requestNewWaifus(tag: String): Error? {
-        val waifus = remoteDataSource.getRandomWaifusBestPng(tag)
-        waifus.fold(ifLeft = {return it}) {
-            localDataSource.save(it)
+        when(tag) {
+            "neko","husbando","kitsune","waifu" -> {
+                val waifus = remoteDataSource.getRandomWaifusBestPng(tag)
+                waifus.fold(ifLeft = {return it}) {
+                    localDataSource.save(it)
+                }
+            }
+            else -> {
+                val waifus = remoteDataSource.getRandomWaifusBestGif(tag)
+                waifus.fold(ifLeft = {return it}) {
+                    localDataSource.save(it)
+                }
+            }
         }
         return null
     }
