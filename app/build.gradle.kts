@@ -101,14 +101,20 @@ dependencies {
 
     // Retrofit Libraries
     implementation ("com.squareup.retrofit2:retrofit:$retrofit_version")
-    implementation ("com.google.code.gson:gson:2.9.1")
     implementation ("com.squareup.retrofit2:converter-gson:$retrofit_version")
+    implementation ("com.google.code.gson:gson:2.10")
+
+    // Moshi converters
+    // implementation ("com.squareup.moshi:moshi:1.12.0")
+    // annotationProcessor ("com.squareup.moshi:moshi-kotlin-codegen:1.12.0")
+    // implementation ("com.squareup.retrofit2:converter-moshi:$retrofit_version")
+
     // OKHttp3
     implementation (Libs.OkHttp3.okhttp3)
     // Logging interceptor
     implementation (Libs.OkHttp3.loginInterceptor)
     // library to parse JSON in Kotlin
-    implementation ("com.beust:klaxon:5.6")
+    // implementation ("com.beust:klaxon:5.6")
 
     // library to use Either Class in Kotlin
     implementation (Libs.Arrow.core)
@@ -140,7 +146,7 @@ dependencies {
     implementation("com.github.chrisbanes:PhotoView:2.3.0")
 
     // Location Play services
-    implementation("com.google.android.gms:play-services-location:21.0.0")
+    implementation("com.google.android.gms:play-services-location:21.0.1")
 
     // JUnit y Mockito
     testImplementation (project(Modules.testShared))

@@ -261,7 +261,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         return bun
     }
 
-    fun tagFilter(tag: String): String {
+    private fun tagFilter(tag: String): String {
         var updatedTag: String = tag
         if (tag == getString(R.string.categories)) {
             when (serverMode) {
