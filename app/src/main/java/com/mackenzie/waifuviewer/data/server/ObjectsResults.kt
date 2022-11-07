@@ -1,7 +1,6 @@
 package com.mackenzie.waifuviewer.data.server
 
 import android.os.Parcelable
-import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
@@ -57,7 +56,7 @@ data class WaifuBestGif(
     @SerializedName("url") val url: String
 ) : Parcelable*/
 
-@Parcelize
+/*@Parcelize
 data class CategoriesResult(
     @SerializedName("baka")
     val baka: CategoryContent,
@@ -133,9 +132,9 @@ data class CategoriesResult(
     val wink: CategoryContent,
     @SerializedName("yeet")
     val yeet: CategoryContent
-) : Parcelable
+) : Parcelable*/
 
-@Parcelize
+/*@Parcelize
 data class CategoryContent(
     @SerializedName("format")
     val format: String,
@@ -143,9 +142,9 @@ data class CategoryContent(
     val max: String,
     @SerializedName("min")
     val min: String
-) : Parcelable
+) : Parcelable*/
 
-@Parcelize
+/*@Parcelize
 data class Tag(
     val description: String,
     @SerializedName("is_nsfw") val isNsfw: Boolean,
@@ -155,19 +154,18 @@ data class Tag(
 
 data class TagResult(
     @SerializedName("nsfw") val categories: List<Tag>
-)
+)*/
 
-data class RemoteConnect(
+/*data class RemoteConnect(
     val serviceIm: WaifuImService,
     val servicePic: WaifuPicService,
     val serviceBest: WaifuBestService
-)
+)*/
 
-@Serializable
-sealed class WaifuBestResult {
+/*sealed class WaifuBestResult {
     data class WaifuBestPngResult(val results: List<WaifuBestPng>)
     data class WaifuBestGifResult(val results: List<WaifuBestGif>)
-}
+}*/
 
 
 

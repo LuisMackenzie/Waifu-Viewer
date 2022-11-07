@@ -30,8 +30,8 @@ interface WaifuBestService {
         @Query("amount") amount:Int = 1,
     ): WaifuBestGifResult
 
-    @GET("endpoints")
-    suspend fun getCategoriesWaifuBest(): CategoriesResult
+    /*@GET("endpoints")
+    suspend fun getCategoriesWaifuBest(): CategoriesResult*/
 
 }
 

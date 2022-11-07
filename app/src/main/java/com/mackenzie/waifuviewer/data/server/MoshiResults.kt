@@ -1,7 +1,6 @@
 package com.mackenzie.waifuviewer.data.server
 
 import android.os.Parcelable
-import com.google.gson.annotations.SerializedName
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
@@ -71,5 +70,11 @@ data class WaifuBestGif(
     @Json(name = "anime_name") val animeName: String,
     @Json(name = "url") val url: String
 ) : Parcelable
+
+@JsonClass(generateAdapter = true)
+sealed class WaifuBestResult {
+    data class WaifuBestPngResult(@Json(name = "results") val results: List<WaifuBestPng>)
+    data class WaifuBestGifResult(@Json(name = "results") val results: List<WaifuBestGif>)
+}
 
 

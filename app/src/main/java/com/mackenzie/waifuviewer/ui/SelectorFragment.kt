@@ -279,7 +279,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
                     if (!binding.sGifs.isChecked) {
                         updatedTag = getString(R.string.tag_neko)
                     } else {
-                        updatedTag = getString(R.string.tag_happy)
+                        updatedTag = getString(R.string.tag_pat)
                     }
                 }
             }
