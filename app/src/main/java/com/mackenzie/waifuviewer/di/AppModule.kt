@@ -8,6 +8,8 @@ import com.mackenzie.waifuviewer.data.db.WaifuDataBase
 import com.mackenzie.waifuviewer.data.db.datasources.*
 import com.mackenzie.waifuviewer.data.server.*
 import com.mackenzie.waifuviewer.domain.ApiUrl
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -16,7 +18,7 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -53,29 +55,37 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideWaifuService(apiUrl: ApiUrl): RemoteConnect {
-        val okHttpClient = HttpLoggingInterceptor().run {
-            level = HttpLoggingInterceptor.Level.BODY
-            OkHttpClient.Builder().addInterceptor(this).build()
-        }
+    fun provideOkHttpClient():OkHttpClient = HttpLoggingInterceptor().run {
+        level = HttpLoggingInterceptor.Level.BODY
+        OkHttpClient.Builder().addInterceptor(this).build()
+    }
 
+    @Provides
+    @Singleton
+    fun provideMoshi(): Moshi = Moshi.Builder()
+        .add(KotlinJsonAdapterFactory())
+        .build()
+
+    @Provides
+    @Singleton
+    fun provideWaifuService(apiUrl: ApiUrl, client: OkHttpClient, moshi: Moshi): RemoteConnect {
 
         val builderIm = Retrofit.Builder()
             .baseUrl(apiUrl.imBaseUrl)
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
 
         val builderPics = Retrofit.Builder()
             .baseUrl(apiUrl.picsBaseUrl)
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
 
         val builderBest = Retrofit.Builder()
             .baseUrl(apiUrl.nekosBaseUrl)
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
 
         val serviceIm = builderIm.create(WaifuImService::class.java)

@@ -1,0 +1,75 @@
+package com.mackenzie.waifuviewer.data.server
+
+import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+import kotlinx.parcelize.Parcelize
+
+@JsonClass(generateAdapter = true)
+data class WaifuImResult(
+    @Json(name = "images") val waifus: List<WaifuIm>
+)
+
+@JsonClass(generateAdapter = true)
+data class WaifuPicsResult(
+    @Json(name = "files") val images: List<String>
+)
+
+@JsonClass(generateAdapter = true)
+data class WaifuPicsRequest(
+    @Json(name = "classification") val classification: String,
+    @Json(name = "category") val category: String
+)
+
+@JsonClass(generateAdapter = true)
+data class WaifuBestPngResult(
+    @Json(name = "results") val waifus: List<WaifuBestPng>
+)
+
+@JsonClass(generateAdapter = true)
+data class WaifuBestGifResult(
+    @Json(name = "results") val waifus: List<WaifuBestGif>
+)
+
+@Parcelize
+@JsonClass(generateAdapter = true)
+data class WaifuIm(
+    @Json(name = "signature") val signature: String,
+    @Json(name = "extension") val extension: String,
+    @Json(name = "image_id") val imageId: Int,
+    @Json(name = "favourites") val favourites: Int,
+    @Json(name = "dominant_color") val dominant_color: String,
+    @Json(name = "source") val source: String?,
+    @Json(name = "uploaded_at") val uploadedAt: String,
+    @Json(name = "is_nsfw") val isNsfw: Boolean,
+    @Json(name = "width") val width: String,
+    @Json(name = "height") val height: String,
+    @Json(name = "url") val url: String,
+    @Json(name = "preview_url") val previewUrl: String,
+    // @Json(name = "tags")val tags: List<Tag>?
+) : Parcelable
+
+@Parcelize
+@JsonClass(generateAdapter = true)
+data class WaifuPic(
+    @Json(name = "url")val url: String
+) : Parcelable
+
+@Parcelize
+@JsonClass(generateAdapter = true)
+data class WaifuBestPng(
+    @Json(name = "artist_href") val artistHref: String,
+    @Json(name = "artist_name") val artistName: String,
+    @Json(name = "source_url") val sourceUrl: String,
+    @Json(name = "url") val url: String
+) : Parcelable
+
+@Parcelize
+@JsonClass(generateAdapter = true)
+data class WaifuBestGif(
+    @Json(name = "anime_name") val animeName: String,
+    @Json(name = "url") val url: String
+) : Parcelable
+
+

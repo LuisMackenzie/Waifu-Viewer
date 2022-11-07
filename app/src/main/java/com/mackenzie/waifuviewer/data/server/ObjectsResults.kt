@@ -5,23 +5,23 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
-data class WaifuImResult(
+/*data class WaifuImResult(
     @SerializedName("images") val waifus: List<WaifuIm>
-)
+)*/
 
-data class WaifuPicsResult(
+/*data class WaifuPicsResult(
     @SerializedName("files") val images: List<String>
-)
+)*/
 
-data class WaifuBestPngResult(
+/*data class WaifuBestPngResult(
     @SerializedName("results") val waifus: List<WaifuBestPng>
 )
 
 data class WaifuBestGifResult(
     @SerializedName("results") val waifus: List<WaifuBestGif>
-)
+)*/
 
-@Parcelize
+/*@Parcelize
 data class WaifuIm(
     @SerializedName("signature") val signature: String,
     @SerializedName("extension") val extension: String,
@@ -36,14 +36,14 @@ data class WaifuIm(
     @SerializedName("url") val url: String,
     @SerializedName("preview_url") val previewUrl: String,
     // val tags: List<Tag>
-) : Parcelable
+) : Parcelable*/
 
-@Parcelize
+/*@Parcelize
 data class WaifuPic(
     @SerializedName("url")val url: String
-) : Parcelable
+) : Parcelable*/
 
-@Parcelize
+/*@Parcelize
 data class WaifuBestPng(
     @SerializedName("artist_href") val artistHref: String,
     @SerializedName("artist_name") val artistName: String,
@@ -55,7 +55,7 @@ data class WaifuBestPng(
 data class WaifuBestGif(
     @SerializedName("anime_name") val animeName: String,
     @SerializedName("url") val url: String
-) : Parcelable
+) : Parcelable*/
 
 @Parcelize
 data class CategoriesResult(

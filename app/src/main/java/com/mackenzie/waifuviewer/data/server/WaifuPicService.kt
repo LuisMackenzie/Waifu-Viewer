@@ -14,7 +14,7 @@ interface WaifuPicService {
         @Path("many") many:String = "many",
         @Path("type") type:String = "sfw",
         @Path("category") category:String = "waifu",
-        @Body() body: JsonObject
+        @Body() body: WaifuPicsRequest
     ): Response<WaifuPicsResult>
 
     @GET("{type}/{category}")

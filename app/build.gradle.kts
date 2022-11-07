@@ -101,13 +101,15 @@ dependencies {
 
     // Retrofit Libraries
     implementation ("com.squareup.retrofit2:retrofit:$retrofit_version")
+    // Gson converter
     implementation ("com.squareup.retrofit2:converter-gson:$retrofit_version")
     implementation ("com.google.code.gson:gson:2.10")
 
     // Moshi converters
-    // implementation ("com.squareup.moshi:moshi:1.12.0")
-    // annotationProcessor ("com.squareup.moshi:moshi-kotlin-codegen:1.12.0")
-    // implementation ("com.squareup.retrofit2:converter-moshi:$retrofit_version")
+    implementation ("com.squareup.moshi:moshi:1.12.0")
+    implementation ("com.squareup.moshi:moshi-kotlin:1.12.0")
+    annotationProcessor ("com.squareup.moshi:moshi-kotlin-codegen:1.12.0")
+    implementation ("com.squareup.retrofit2:converter-moshi:$retrofit_version")
 
     // OKHttp3
     implementation (Libs.OkHttp3.okhttp3)
