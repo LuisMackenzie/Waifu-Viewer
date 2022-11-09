@@ -1,10 +1,10 @@
 package com.mackenzie.waifuviewer.ui.fakes
 
-import com.google.gson.JsonObject
 import com.mackenzie.waifuviewer.data.db.WaifuPicDao
 import com.mackenzie.waifuviewer.data.db.WaifuPicDbItem
 import com.mackenzie.waifuviewer.data.server.WaifuPic
 import com.mackenzie.waifuviewer.data.server.WaifuPicService
+import com.mackenzie.waifuviewer.data.server.WaifuPicsRequest
 import com.mackenzie.waifuviewer.data.server.WaifuPicsResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -60,7 +60,7 @@ class FakeRemotePicsService(private val waifus: List<String>) : WaifuPicService 
         many: String,
         type: String,
         category: String,
-        body: JsonObject
+        body: WaifuPicsRequest
     ): Response <WaifuPicsResult> {
         val waifuPicsResult = WaifuPicsResult(waifus)
         return Response.success(waifuPicsResult)

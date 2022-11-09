@@ -2,6 +2,8 @@ package com.mackenzie.waifuviewer.ui
 
 import com.mackenzie.waifuviewer.data.WaifusImRepository
 import com.mackenzie.waifuviewer.data.db.*
+import com.mackenzie.waifuviewer.data.db.datasources.FavoriteDataSource
+import com.mackenzie.waifuviewer.data.db.datasources.RoomImDataSource
 import com.mackenzie.waifuviewer.data.server.*
 import com.mackenzie.waifuviewer.ui.fakes.*
 
@@ -11,38 +13,45 @@ fun buildImRepositoryWith(
 ): WaifusImRepository {
     val localImDataSource = RoomImDataSource(FakeWaifuImDao(localData))
     val favoriteDataSource = FavoriteDataSource(FakeFavoriteDao())
-    val remoteImDataSource = ServerImDataSource( RemoteConnect(FakeRemoteImService(remoteData), FakeRemotePicsService(listOf())))
+    val remoteImDataSource = ServerImDataSource( RemoteConnect(
+        FakeRemoteImService(remoteData),
+        FakeRemotePicsService(listOf()),
+        FakeRemoteBestService(listOf())))
     return WaifusImRepository(localImDataSource, favoriteDataSource , remoteImDataSource)
 }
 
 fun buildImDatabaseWaifus(vararg id: Int) = id.map {
     WaifuImDbItem(
         id = it,
+        signature = "",
+        extension = "",
         dominantColor = "",
-        file = "Overview $it",
+        source = "Overview $it",
+        uploadedAt = "",
+        isNsfw = false,
+        width = "",
         height = "",
         imageId = 6969,
-        isNsfw = false,
         url = "https://cdn.waifu.im/5f7e656343cb7be1.jpg",
-        width = "",
+        previewUrl = "https://cdn.waifu.im/5f7e656343cb7be1.jpg",
         isFavorite = false
     )
 }
 
 fun buildImRemoteWaifus(vararg id: Int) = id.map {
     WaifuIm(
-        dominant_color = "",
+        signature = "",
         extension = "",
-        favourites = 0,
-        file = "Overview $it",
-        height = "",
         imageId = 6969,
-        isNsfw = false,
-        previewUrl = "",
-        source = "",
-        // tags = ,
+        favourites = 0,
+        dominant_color = "",
+        source = "Overview $it",
         uploadedAt = "",
+        isNsfw = false,
+        height = "",
+        width = "",
         url = "https://cdn.waifu.im/5f7e656343cb7be1.jpg",
-        width = ""
+        previewUrl = ""
+        // tags = ,
     )
 }

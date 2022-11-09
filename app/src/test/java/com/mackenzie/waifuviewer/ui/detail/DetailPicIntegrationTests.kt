@@ -21,7 +21,7 @@ class DetailPicIntegrationTests {
     val coroutinesTestRule = CoroutinesTestRule()
 
     @Test
-    fun `UI is updated with the Waifu on start`() = runTest {
+    fun `UI is updated with PICS the Waifu on start`() = runTest {
         val vm = buildModelWith(id = 2, localData = buildPicDatabaseWaifus(1, 2, 3))
 
         vm.state.test {
@@ -32,7 +32,7 @@ class DetailPicIntegrationTests {
     }
 
     @Test
-    fun `Favorite IM is updated in local data source`() = runTest {
+    fun `Favorite PICS is updated in local data source`() = runTest {
 
         val vm = buildModelWith(5, localData = buildPicDatabaseWaifus(4, 5, 6))
 

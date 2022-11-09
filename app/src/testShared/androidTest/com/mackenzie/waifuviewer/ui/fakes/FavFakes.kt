@@ -6,7 +6,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 
-
 class FakeFavoriteDao(waifus: List<FavoriteDbItem> = emptyList()) : FavoriteDao {
 
     private val inMemoryMovies = MutableStateFlow(waifus)

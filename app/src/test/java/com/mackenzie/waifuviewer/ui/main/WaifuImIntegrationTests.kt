@@ -41,9 +41,9 @@ class WaifuImIntegrationTests  {
             // assertEquals(UiState(waifus = remoteData), awaitItem())
 
             val waifus = awaitItem().waifus!!
-            assertEquals("Overview 4", waifus[0].file)
-            assertEquals("Overview 5", waifus[1].file)
-            assertEquals("Overview 6", waifus[2].file)
+            assertEquals("Overview 4", waifus[0].source)
+            assertEquals("Overview 5", waifus[1].source)
+            assertEquals("Overview 6", waifus[2].source)
 
             cancel()
         }
@@ -63,9 +63,9 @@ class WaifuImIntegrationTests  {
         vm.state.test {
             assertEquals(UiState(), awaitItem())
             val waifus = awaitItem().waifus!!
-            assertEquals("Overview 1", waifus[0].file)
-            assertEquals("Overview 2", waifus[1].file)
-            assertEquals("Overview 3", waifus[2].file)
+            assertEquals("Overview 1", waifus[0].source)
+            assertEquals("Overview 2", waifus[1].source)
+            assertEquals("Overview 3", waifus[2].source)
             cancel()
         }
 

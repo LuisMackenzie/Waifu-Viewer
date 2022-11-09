@@ -62,6 +62,11 @@ class WaifusBestRepository @Inject constructor(
         if (waifuPic != null) return waifuPic else return null
     }
 
+    suspend fun requestOnlyWaifuGif(): WaifuBestItem? {
+        val waifuPic = remoteDataSource.getOnlyWaifuBestGif()
+        if (waifuPic != null) return waifuPic else return null
+    }
+
     suspend fun requestClearWaifusBest(): Error? {
         val error = localDataSource.deleteAll()
         if (error != null) return error else return null

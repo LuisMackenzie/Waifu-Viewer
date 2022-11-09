@@ -35,7 +35,7 @@ class SelectorImIntegrationTests {
             // Assert.assertEquals(UiState(waifus = emptyList(), isLoading = true), awaitItem())
             // assertEquals(UiState(waifu = emptyList(), isLoading = false), awaitItem())
             val waifu = awaitItem().waifu!!
-            assertEquals("Overview 7", waifu.file)
+            assertEquals("Overview 7", waifu.source)
 
             cancel()
         }
@@ -55,7 +55,7 @@ class SelectorImIntegrationTests {
         vm.state.test {
             assertEquals(UiState(), awaitItem())
             val waifu = awaitItem().waifu!!
-            assertEquals("Overview 1", waifu.file)
+            assertEquals("Overview 1", waifu.source)
             cancel()
         }
 

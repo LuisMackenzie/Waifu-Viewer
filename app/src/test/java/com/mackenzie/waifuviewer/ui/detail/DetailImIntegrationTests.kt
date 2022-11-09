@@ -22,7 +22,7 @@ class DetailImIntegrationTests {
     val coroutinesTestRule = CoroutinesTestRule()
 
     @Test
-    fun `UI is updated with the Waifu on start`() = runTest {
+    fun `UI is updated with IM the Waifu on start`() = runTest {
         val vm = buildModelWith(id = 2, localData = buildImDatabaseWaifus(1, 2, 3))
 
         vm.state.test {

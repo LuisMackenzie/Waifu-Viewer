@@ -10,7 +10,7 @@ import org.mockito.kotlin.mock
 class RegionRepositoryTest {
 
     @Test
-    fun `return default region when coarse permission is not granted`(): Unit = runBlocking {
+    fun `Returns default region when coarse permission is not granted`(): Unit = runBlocking {
         val sut = buildRegionRepository(
             permissionChecker = mock{ on { check(COARSE_LOCATION) }.thenReturn(false) }
         )

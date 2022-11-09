@@ -1,8 +1,8 @@
 package com.mackenzie.waifuviewer.ui
 
 import com.mackenzie.waifuviewer.data.FavoritesRepository
-import com.mackenzie.waifuviewer.data.db.FavoriteDataSource
 import com.mackenzie.waifuviewer.data.db.FavoriteDbItem
+import com.mackenzie.waifuviewer.data.db.datasources.FavoriteDataSource
 import com.mackenzie.waifuviewer.ui.fakes.FakeFavoriteDao
 
 fun buildFavRepositoryWith(

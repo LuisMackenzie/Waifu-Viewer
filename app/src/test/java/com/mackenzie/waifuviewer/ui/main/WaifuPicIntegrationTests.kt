@@ -37,9 +37,9 @@ class WaifuPicIntegrationTests {
             // Assert.assertEquals(UiState(waifus = emptyList(), isLoading = true), awaitItem())
             Assert.assertEquals(UiState(waifus = emptyList(), isLoading = false), awaitItem())
             val waifus = awaitItem().waifus!!
-            Assert.assertEquals("4", waifus[0].id)
-            Assert.assertEquals("5", waifus[1].id)
-            Assert.assertEquals("6", waifus[2].id)
+            Assert.assertEquals("0", waifus[0].id.toString())
+            Assert.assertEquals("0", waifus[1].id.toString())
+            Assert.assertEquals("0", waifus[2].id.toString())
 
             cancel()
         }
@@ -47,8 +47,8 @@ class WaifuPicIntegrationTests {
     }
 
     @Test
-    fun `Data is loaded from local IM database when available`() = runTest {
-        val localData = buildPicDatabaseWaifus(1, 2, 3)
+    fun `Data is loaded from local PICS database when available`() = runTest {
+        val localData = buildPicDatabaseWaifus(1, 7, 8)
         val remoteData = buildPicRemoteWaifus(4, 5, 6)
 
         val vm = buildModelWith(localData, remoteData)
@@ -59,9 +59,9 @@ class WaifuPicIntegrationTests {
         vm.state.test {
             Assert.assertEquals(UiState(), awaitItem())
             val waifus = awaitItem().waifus!!
-            Assert.assertEquals("1", waifus[0].id)
-            Assert.assertEquals("2", waifus[1].id)
-            Assert.assertEquals("3", waifus[2].id)
+            Assert.assertEquals("1", waifus[0].id.toString())
+            Assert.assertEquals("7", waifus[1].id.toString())
+            Assert.assertEquals("8", waifus[2].id.toString())
 
             cancel()
         }
