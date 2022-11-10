@@ -55,6 +55,7 @@ class DetailBestViewModelTest {
     fun `Favorite action calls the corresponding use case`() = runTest {
 
         vm.onFavoriteClicked()
+
         runCurrent()
 
         verify(switchFavoriteUseCase).invoke(bestSample)
