@@ -1,4 +1,4 @@
-package usecases
+package usecases.im
 
 import com.mackenzie.testshared.sampleImWaifu
 import com.mackenzie.waifuviewer.usecases.im.GetWaifuImUseCase

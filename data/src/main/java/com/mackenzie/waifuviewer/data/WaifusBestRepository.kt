@@ -57,13 +57,8 @@ class WaifusBestRepository @Inject constructor(
         return null
     }
 
-    suspend fun requestOnlyWaifuPng(): WaifuBestItem? {
+    suspend fun requestOnlyWaifu(): WaifuBestItem? {
         val waifuPic = remoteDataSource.getOnlyWaifuBestPng()
-        if (waifuPic != null) return waifuPic else return null
-    }
-
-    suspend fun requestOnlyWaifuGif(): WaifuBestItem? {
-        val waifuPic = remoteDataSource.getOnlyWaifuBestGif()
         if (waifuPic != null) return waifuPic else return null
     }
 

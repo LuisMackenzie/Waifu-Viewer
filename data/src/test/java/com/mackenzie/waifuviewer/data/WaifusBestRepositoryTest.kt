@@ -113,17 +113,7 @@ class WaifusBestRepositoryTest {
         val remoteWaifu = sampleBestWaifu.copy(6)
         whenever(remoteDataSource.getOnlyWaifuBestPng()).thenReturn(remoteWaifu)
 
-        val result = repo.requestOnlyWaifuPng()
-
-        Assert.assertEquals(remoteWaifu, result)
-    }
-
-    @Test
-    fun `Only one GIF waifu are taken to server data source`() = runTest {
-        val remoteWaifu = sampleBestWaifu.copy(8)
-        whenever(remoteDataSource.getOnlyWaifuBestGif()).thenReturn(remoteWaifu)
-
-        val result = repo.requestOnlyWaifuGif()
+        val result = repo.requestOnlyWaifu()
 
         Assert.assertEquals(remoteWaifu, result)
     }

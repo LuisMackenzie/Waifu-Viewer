@@ -1,4 +1,4 @@
-package usecases
+package usecases.pics
 
 import com.mackenzie.testshared.samplePicWaifu
 import com.mackenzie.waifuviewer.data.WaifusPicRepository

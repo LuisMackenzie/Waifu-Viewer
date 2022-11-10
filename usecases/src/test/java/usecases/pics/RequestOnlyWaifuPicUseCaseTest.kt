@@ -1,22 +1,22 @@
-package usecases
+package usecases.pics
 
 import com.mackenzie.waifuviewer.data.WaifusPicRepository
-import com.mackenzie.waifuviewer.usecases.pics.ClearWaifuPicUseCase
+import com.mackenzie.waifuviewer.usecases.pics.RequestOnlyWaifuPicUseCase
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 
-class ClearWaifuPicUseCaseTest {
+class RequestOnlyWaifuPicUseCaseTest {
 
     @Test
     fun `Invoke calls PICS repository`(): Unit = runBlocking {
         val repo = mock<WaifusPicRepository>()
-        val clearWaifuPicUseCase = ClearWaifuPicUseCase(repo)
+        val requestOnlyWaifuPicUseCase = RequestOnlyWaifuPicUseCase(repo)
 
-        clearWaifuPicUseCase()
+        requestOnlyWaifuPicUseCase()
 
-        verify(repo).requestClearWaifusPic()
+        verify(repo).requestOnlyWaifuPic()
     }
 
 }

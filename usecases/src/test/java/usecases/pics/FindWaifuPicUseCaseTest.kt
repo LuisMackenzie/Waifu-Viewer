@@ -1,5 +1,6 @@
-package usecases
+package usecases.pics
 
+import com.mackenzie.testshared.samplePicWaifu
 import com.mackenzie.waifuviewer.usecases.pics.FindWaifuPicUseCase
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking

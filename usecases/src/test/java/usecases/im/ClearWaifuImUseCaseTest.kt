@@ -1,4 +1,4 @@
-package usecases
+package usecases.im
 
 import com.mackenzie.waifuviewer.data.WaifusImRepository
 import com.mackenzie.waifuviewer.usecases.im.ClearWaifuImUseCase
