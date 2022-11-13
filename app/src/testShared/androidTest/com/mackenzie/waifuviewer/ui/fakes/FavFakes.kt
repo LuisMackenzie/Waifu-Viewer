@@ -8,25 +8,25 @@ import kotlinx.coroutines.flow.update
 
 class FakeFavoriteDao(waifus: List<FavoriteDbItem> = emptyList()) : FavoriteDao {
 
-    private val inMemoryMovies = MutableStateFlow(waifus)
+    private val inMemoryWaifus = MutableStateFlow(waifus)
 
     private lateinit var findWaifuFlow: MutableStateFlow<FavoriteDbItem>
 
-    override fun getAllFavs(): Flow<List<FavoriteDbItem>> = inMemoryMovies
+    override fun getAllFavs(): Flow<List<FavoriteDbItem>> = inMemoryWaifus
 
     override fun findFavById(id: Int): Flow<FavoriteDbItem> {
-        findWaifuFlow = MutableStateFlow(inMemoryMovies.value.first { it.id == id })
+        findWaifuFlow = MutableStateFlow(inMemoryWaifus.value.first { it.id == id })
         return findWaifuFlow
     }
 
-    override suspend fun favoriteCount(): Int = inMemoryMovies.value.size
+    override suspend fun favoriteCount(): Int = inMemoryWaifus.value.size
 
     override suspend fun insertFavorite(waifu: FavoriteDbItem) {
-        inMemoryMovies.update { it }
+        inMemoryWaifus.update { it }
     }
 
     override suspend fun insertAllFavorite(waifus: List<FavoriteDbItem>) {
-        inMemoryMovies.value = waifus
+        inMemoryWaifus.value = waifus
 
         if (::findWaifuFlow.isInitialized) {
             waifus.firstOrNull() { it.id == findWaifuFlow.value.id }
@@ -36,15 +36,15 @@ class FakeFavoriteDao(waifus: List<FavoriteDbItem> = emptyList()) : FavoriteDao 
     }
 
     override suspend fun updateFav(waifu: FavoriteDbItem) {
-        inMemoryMovies.update { it }
+        inMemoryWaifus.update { it }
     }
 
     override suspend fun deleteFav(waifu: FavoriteDbItem) {
-        inMemoryMovies.update { it }
+        inMemoryWaifus.update { it }
     }
 
     override suspend fun deleteAll() {
-        inMemoryMovies.update { it }
+        inMemoryWaifus.update { it }
     }
 
 }

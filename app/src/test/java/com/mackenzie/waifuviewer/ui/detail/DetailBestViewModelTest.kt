@@ -5,6 +5,7 @@ import com.mackenzie.testshared.sampleBestWaifu
 import com.mackenzie.waifuviewer.testrules.CoroutinesTestRule
 import com.mackenzie.waifuviewer.usecases.best.FindWaifuBestUseCase
 import com.mackenzie.waifuviewer.usecases.best.SwitchBestFavoriteUseCase
+import com.mackenzie.waifuviewer.ui.detail.DetailBestViewModel.UiState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runCurrent
@@ -45,8 +46,8 @@ class DetailBestViewModelTest {
     @Test
     fun `UI is updated with the movie on start`() = runTest {
         vm.state.test {
-            Assert.assertEquals(DetailBestViewModel.UiState(), awaitItem())
-            Assert.assertEquals(DetailBestViewModel.UiState(waifu = bestSample), awaitItem())
+            Assert.assertEquals(UiState(), awaitItem())
+            Assert.assertEquals(UiState(waifu = bestSample), awaitItem())
             cancel()
         }
     }

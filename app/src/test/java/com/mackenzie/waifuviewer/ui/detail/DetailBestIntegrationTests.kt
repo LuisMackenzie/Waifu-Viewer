@@ -7,6 +7,7 @@ import com.mackenzie.waifuviewer.data.server.WaifuBestPng
 import com.mackenzie.waifuviewer.testrules.CoroutinesTestRule
 import com.mackenzie.waifuviewer.ui.helpers.buildBestDatabaseWaifus
 import com.mackenzie.waifuviewer.ui.helpers.buildBestRepositoryWith
+import com.mackenzie.waifuviewer.ui.detail.DetailBestViewModel.UiState
 import com.mackenzie.waifuviewer.usecases.best.FindWaifuBestUseCase
 import com.mackenzie.waifuviewer.usecases.best.SwitchBestFavoriteUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -26,7 +27,7 @@ class DetailBestIntegrationTests {
         val vm = buildModelWith(id = 2, localData = buildBestDatabaseWaifus(1, 2, 3))
 
         vm.state.test {
-            Assert.assertEquals(DetailBestViewModel.UiState(), awaitItem())
+            Assert.assertEquals(UiState(), awaitItem())
             Assert.assertEquals(2, awaitItem().waifu!!.id)
             cancel()
         }
@@ -41,7 +42,7 @@ class DetailBestIntegrationTests {
 
 
         vm.state.test {
-            Assert.assertEquals(DetailBestViewModel.UiState(), awaitItem())
+            Assert.assertEquals(UiState(), awaitItem())
             Assert.assertEquals(false, awaitItem().waifu!!.isFavorite)
             Assert.assertEquals(true, awaitItem().waifu!!.isFavorite)
             cancel()

@@ -11,25 +11,25 @@ import kotlinx.coroutines.flow.update
 
 class FakeWaifuImDao(waifusIm: List<WaifuImDbItem> = emptyList()) : WaifuImDao {
 
-    private val inMemoryMovies = MutableStateFlow(waifusIm)
+    private val inMemoryWaifus = MutableStateFlow(waifusIm)
 
     private lateinit var findWaifuFlow: MutableStateFlow<WaifuImDbItem>
 
-    override fun getAllIm(): Flow<List<WaifuImDbItem>> = inMemoryMovies
+    override fun getAllIm(): Flow<List<WaifuImDbItem>> = inMemoryWaifus
 
     override fun findImById(id: Int): Flow<WaifuImDbItem> {
-        findWaifuFlow = MutableStateFlow(inMemoryMovies.value.first { it.id == id })
+        findWaifuFlow = MutableStateFlow(inMemoryWaifus.value.first { it.id == id })
         return findWaifuFlow
     }
 
-    override suspend fun waifuImCount(): Int = inMemoryMovies.value.size
+    override suspend fun waifuImCount(): Int = inMemoryWaifus.value.size
 
     override suspend fun insertWaifuIm(waifu: WaifuImDbItem) {
-        inMemoryMovies.update { it }
+        inMemoryWaifus.update { it }
     }
 
     override suspend fun insertAllWaifuIm(waifus: List<WaifuImDbItem>) {
-        inMemoryMovies.value = waifus
+        inMemoryWaifus.value = waifus
 
         if (::findWaifuFlow.isInitialized) {
             waifus.firstOrNull() { it.id == findWaifuFlow.value.id }
@@ -39,15 +39,15 @@ class FakeWaifuImDao(waifusIm: List<WaifuImDbItem> = emptyList()) : WaifuImDao {
     }
 
     override suspend fun updateWaifuIm(waifu: WaifuImDbItem) {
-        inMemoryMovies.update { it }
+        inMemoryWaifus.update { it }
     }
 
     override suspend fun deleteIm(waifu: WaifuImDbItem) {
-        inMemoryMovies.update { it }
+        inMemoryWaifus.update { it }
     }
 
     override suspend fun deleteAll() {
-        inMemoryMovies.update { it }
+        inMemoryWaifus.update { it }
     }
 
 }

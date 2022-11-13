@@ -19,7 +19,7 @@ class FavoriteIntegrationTests {
     val coroutinesTestRule = CoroutinesTestRule()
 
     @Test
-    fun `Data is loaded from local IM database when available`() = runTest {
+    fun `Data is loaded from local Favorite database when available`() = runTest {
         val localData = buildFavDatabaseWaifus(1, 2, 3)
 
         val vm = buildModelWith(localData)

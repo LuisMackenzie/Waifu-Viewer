@@ -13,25 +13,25 @@ import retrofit2.Response
 
 class FakeWaifuPicDao(waifusPic: List<WaifuPicDbItem> = emptyList()) : WaifuPicDao {
 
-    private val inMemoryMovies = MutableStateFlow(waifusPic)
+    private val inMemoryWaifus = MutableStateFlow(waifusPic)
 
     private lateinit var findWaifuFlow: MutableStateFlow<WaifuPicDbItem>
 
-    override fun getAllPic(): Flow<List<WaifuPicDbItem>> = inMemoryMovies
+    override fun getAllPic(): Flow<List<WaifuPicDbItem>> = inMemoryWaifus
 
     override fun findPicsById(id: Int): Flow<WaifuPicDbItem> {
-        findWaifuFlow = MutableStateFlow(inMemoryMovies.value.first { it.id == id })
+        findWaifuFlow = MutableStateFlow(inMemoryWaifus.value.first { it.id == id })
         return findWaifuFlow
     }
 
-    override suspend fun waifuPicsCount(): Int = inMemoryMovies.value.size
+    override suspend fun waifuPicsCount(): Int = inMemoryWaifus.value.size
 
     override suspend fun insertWaifuPics(waifu: WaifuPicDbItem) {
-        inMemoryMovies.update { it }
+        inMemoryWaifus.update { it }
     }
 
     override suspend fun insertAllWaifuPics(waifus: List<WaifuPicDbItem>) {
-        inMemoryMovies.value = waifus
+        inMemoryWaifus.value = waifus
 
         if (::findWaifuFlow.isInitialized) {
             waifus.firstOrNull() { it.id == findWaifuFlow.value.id }
@@ -41,15 +41,15 @@ class FakeWaifuPicDao(waifusPic: List<WaifuPicDbItem> = emptyList()) : WaifuPicD
     }
 
     override suspend fun updateWaifuPics(waifu: WaifuPicDbItem) {
-        inMemoryMovies.update { it }
+        inMemoryWaifus.update { it }
     }
 
     override suspend fun deletePics(waifu: WaifuPicDbItem) {
-        inMemoryMovies.update { it }
+        inMemoryWaifus.update { it }
     }
 
     override suspend fun deleteAll() {
-        inMemoryMovies.update { it }
+        inMemoryWaifus.update { it }
     }
 
 }

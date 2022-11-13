@@ -8,6 +8,7 @@ import com.mackenzie.waifuviewer.testrules.CoroutinesTestRule
 import com.mackenzie.waifuviewer.ui.helpers.buildBestDatabaseWaifus
 import com.mackenzie.waifuviewer.ui.helpers.buildBestRemoteWaifus
 import com.mackenzie.waifuviewer.ui.helpers.buildBestRepositoryWith
+import com.mackenzie.waifuviewer.ui.main.WaifuBestViewModel.UiState
 import com.mackenzie.waifuviewer.usecases.best.ClearWaifuBestUseCase
 import com.mackenzie.waifuviewer.usecases.best.GetWaifuBestUseCase
 import com.mackenzie.waifuviewer.usecases.best.RequestMoreWaifuBestUseCase
@@ -34,10 +35,10 @@ class WaifuBestIntegrationTests {
 
 
         vm.state.test {
-            Assert.assertEquals(WaifuBestViewModel.UiState(), awaitItem())
+            Assert.assertEquals(UiState(), awaitItem())
             // Assert.assertEquals(UiState(waifus = emptyList()), awaitItem())
             // Assert.assertEquals(UiState(waifus = emptyList(), isLoading = true), awaitItem())
-            Assert.assertEquals(WaifuBestViewModel.UiState(waifus = emptyList(), isLoading = false), awaitItem())
+            Assert.assertEquals(UiState(waifus = emptyList(), isLoading = false), awaitItem())
             // assertEquals(UiState(waifus = remoteData), awaitItem())
 
             val waifus = awaitItem().waifus!!
@@ -61,7 +62,7 @@ class WaifuBestIntegrationTests {
 
 
         vm.state.test {
-            Assert.assertEquals(WaifuBestViewModel.UiState(), awaitItem())
+            Assert.assertEquals(UiState(), awaitItem())
             val waifus = awaitItem().waifus!!
             Assert.assertEquals("Overview 1", waifus[0].artistName)
             Assert.assertEquals("Overview 2", waifus[1].artistName)

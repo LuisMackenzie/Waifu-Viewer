@@ -73,7 +73,9 @@ class WaifuImIntegrationTests  {
 
 
 
-    private fun buildModelWith(localData:List<WaifuImDbItem> = emptyList(), remoteData: List<WaifuIm> = emptyList()): WaifuImViewModel {
+    private fun buildModelWith(
+        localData:List<WaifuImDbItem> = emptyList(),
+        remoteData: List<WaifuIm> = emptyList()): WaifuImViewModel {
 
         val repo = buildImRepositoryWith(localData, remoteData)
 

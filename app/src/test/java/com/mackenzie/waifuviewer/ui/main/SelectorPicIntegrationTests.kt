@@ -31,7 +31,7 @@ class SelectorPicIntegrationTests {
         vm.loadErrorOrWaifu()
 
         vm.state.test {
-            Assert.assertEquals(UiState(), awaitItem())
+            assertEquals(UiState(), awaitItem())
             // Assert.assertEquals(UiState(waifus = emptyList()), awaitItem())
             // Assert.assertEquals(UiState(waifus = emptyList(), isLoading = true), awaitItem())
             // assertEquals(UiState(waifu = emptyList(), isLoading = false), awaitItem())

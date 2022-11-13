@@ -25,6 +25,7 @@ class WaifuPicIntegrationTests {
     @Test
     fun `Data is loaded from PICS server when local source is empty`() = runTest {
         val remoteData = buildPicRemoteWaifus(4, 5, 6)
+        // val sampleList = listOf(samplePicWaifu.copy(0),samplePicWaifu.copy(0), samplePicWaifu.copy(0))
 
         val vm = buildModelWith(remoteData = remoteData)
 
@@ -33,9 +34,11 @@ class WaifuPicIntegrationTests {
 
         vm.state.test {
             Assert.assertEquals(UiState(), awaitItem())
-            // Assert.assertEquals(UiState(waifus = emptyList()), awaitItem())
-            // Assert.assertEquals(UiState(waifus = emptyList(), isLoading = true), awaitItem())
             Assert.assertEquals(UiState(waifus = emptyList(), isLoading = false), awaitItem())
+            // Assert.assertEquals(UiState(waifus = emptyList(), isLoading = true), awaitItem())
+            // Assert.assertEquals(UiState(waifus = sampleList), awaitItem())
+            // Assert.assertEquals(UiState(waifus = emptyList(), isLoading = false), awaitItem())
+            // Assert.assertEquals(UiState(waifus = remoteData, isLoading = false), awaitItem())
             val waifus = awaitItem().waifus!!
             Assert.assertEquals("0", waifus[0].id.toString())
             Assert.assertEquals("0", waifus[1].id.toString())
@@ -68,7 +71,9 @@ class WaifuPicIntegrationTests {
 
     }
 
-    private fun buildModelWith(localData:List<WaifuPicDbItem> = emptyList(), remoteData: List<String> = emptyList()): WaifuPicsViewModel {
+    private fun buildModelWith(
+        localData:List<WaifuPicDbItem> = emptyList(),
+        remoteData: List<String> = emptyList()): WaifuPicsViewModel {
 
 
         val repo = buildPicRepositoryWith(localData, remoteData)

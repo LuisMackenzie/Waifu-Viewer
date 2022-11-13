@@ -9,25 +9,25 @@ import kotlinx.coroutines.flow.update
 
 class FakeWaifuBestDao(waifusBest: List<WaifuBestDbItem> = emptyList()): WaifuBestDao {
 
-    private val inMemoryMovies = MutableStateFlow(waifusBest)
+    private val inMemoryWaifus = MutableStateFlow(waifusBest)
 
     private lateinit var findWaifuFlow: MutableStateFlow<WaifuBestDbItem>
 
-    override fun getAll(): Flow<List<WaifuBestDbItem>> = inMemoryMovies
+    override fun getAll(): Flow<List<WaifuBestDbItem>> = inMemoryWaifus
 
     override fun findById(id: Int): Flow<WaifuBestDbItem> {
-        findWaifuFlow = MutableStateFlow(inMemoryMovies.value.first { it.id == id })
+        findWaifuFlow = MutableStateFlow(inMemoryWaifus.value.first { it.id == id })
         return findWaifuFlow
     }
 
-    override suspend fun waifuCount(): Int = inMemoryMovies.value.size
+    override suspend fun waifuCount(): Int = inMemoryWaifus.value.size
 
     override suspend fun insertWaifu(waifu: WaifuBestDbItem) {
-        inMemoryMovies.update { it }
+        inMemoryWaifus.update { it }
     }
 
     override suspend fun insertAllWaifu(waifus: List<WaifuBestDbItem>) {
-        inMemoryMovies.value = waifus
+        inMemoryWaifus.value = waifus
 
         if (::findWaifuFlow.isInitialized) {
             waifus.firstOrNull() { it.id == findWaifuFlow.value.id }
@@ -36,15 +36,15 @@ class FakeWaifuBestDao(waifusBest: List<WaifuBestDbItem> = emptyList()): WaifuBe
     }
 
     override suspend fun updateWaifu(waifu: WaifuBestDbItem) {
-        inMemoryMovies.update { it }
+        inMemoryWaifus.update { it }
     }
 
     override suspend fun delete(waifu: WaifuBestDbItem) {
-        inMemoryMovies.update { it }
+        inMemoryWaifus.update { it }
     }
 
     override suspend fun deleteAll() {
-        inMemoryMovies.update { it }
+        inMemoryWaifus.update { it }
     }
 
 }
