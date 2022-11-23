@@ -91,13 +91,13 @@ dependencies {
     kapt("androidx.room:room-compiler:$roomVersion")
 
     // Hilt
-    implementation("com.google.dagger:hilt-android:2.43.2")
-    kapt("com.google.dagger:hilt-android-compiler:2.43.2")
+    implementation("com.google.dagger:hilt-android:2.44")
+    kapt("com.google.dagger:hilt-android-compiler:2.44")
 
     // Glide libraries
-    implementation ("com.github.bumptech.glide:glide:4.13.2")
-    kapt("com.github.bumptech.glide:compiler:4.13.2")
-    // annotationProcessor ("com.github.bumptech.glide:compiler:4.13.2")
+    implementation ("com.github.bumptech.glide:glide:4.14.2")
+    kapt("com.github.bumptech.glide:compiler:4.14.2")
+    // annotationProcessor ("com.github.bumptech.glide:compiler:4.14.2")
 
     // Retrofit Libraries
     implementation ("com.squareup.retrofit2:retrofit:$retrofit_version")
@@ -135,8 +135,8 @@ dependencies {
 
 
     // Serialization
-    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
+    // implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
+    // implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
 
     // Lottie files
     implementation("com.airbnb.android:lottie:5.2.0")

@@ -28,7 +28,7 @@ class WaifuImIntegrationTests  {
     fun `Data is loaded from IM server when local source is empty`() = runTest {
         val remoteData = buildImRemoteWaifus(4, 5, 6)
 
-        val vm = buildModelWith(localData = emptyList(), remoteData = remoteData)
+        val vm = buildModelWith(remoteData = remoteData)
 
         vm.onImReady(false, false, "waifu", false)
 
