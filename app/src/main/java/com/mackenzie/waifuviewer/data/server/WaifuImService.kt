@@ -4,19 +4,19 @@ import retrofit2.http.*
 
 interface WaifuImService {
 
-    @GET("random/")
+    @GET("search/")
     suspend fun getRandomWaifuIm(
         @Query("is_nsfw") isNsfw:Boolean = false,
-        @Query("selected_tags") tags:String = "waifu",
+        @Query("included_tags") tags:String = "waifu",
         @Query("gif") isGif:Boolean = false,
         @Query("orientation") orientation:String = "PORTRAIT",
         @Query("many") manyWaifus:Boolean = true
     ): WaifuImResult
 
-    @GET("random/")
+    @GET("search/")
     suspend fun getOnlyRandomWaifuIm(
         @Query("is_nsfw") isNsfw:Boolean = false,
-        @Query("selected_tags") tags:String = "waifu",
+        @Query("included_tags") tags:String = "waifu",
         @Query("gif") isGif:Boolean = false,
         @Query("orientation") orientation:String = "PORTRAIT",
         @Query("many") manyWaifus:Boolean = false

@@ -115,7 +115,8 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .error(R.drawable.ic_error_grey)
                 .into(binding.ivBackdrop)
-            Toast.makeText(requireContext(), getString(R.string.require_connection), Toast.LENGTH_SHORT).show()
+            // Toast.makeText(requireContext(), getString(R.string.require_connection), Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), mainState.errorToString(error), Toast.LENGTH_SHORT).show()
             Log.e(Constants.CATEGORY_TAG_SELECTOR_IM_ERROR, mainState.errorToString(error))
         }
     }

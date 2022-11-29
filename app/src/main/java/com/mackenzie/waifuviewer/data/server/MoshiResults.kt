@@ -41,6 +41,7 @@ data class WaifuIm(
     @Json(name = "dominant_color") val dominant_color: String,
     @Json(name = "source") val source: String?,
     @Json(name = "uploaded_at") val uploadedAt: String,
+    @Json(name = "liked_at") val likedAt: String?,
     @Json(name = "is_nsfw") val isNsfw: Boolean,
     @Json(name = "width") val width: String,
     @Json(name = "height") val height: String,
@@ -70,6 +71,20 @@ data class WaifuBestGif(
     @Json(name = "anime_name") val animeName: String,
     @Json(name = "url") val url: String
 ) : Parcelable
+
+@Parcelize
+@JsonClass(generateAdapter = true)
+data class Tag(
+    @Json(name = "description") val description: String,
+    @Json(name = "is_nsfw") val isNsfw: Boolean,
+    @Json(name = "name") val name: String,
+    @Json(name = "tag_id") val tagId: Int
+) : Parcelable
+
+@JsonClass(generateAdapter = true)
+data class TagResult(
+    @Json(name = "nsfw") val categories: List<Tag>
+)
 
 @JsonClass(generateAdapter = true)
 sealed class WaifuBestResult {

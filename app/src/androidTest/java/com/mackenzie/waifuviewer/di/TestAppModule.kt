@@ -2,17 +2,14 @@ package com.mackenzie.waifuviewer.di
 
 import android.app.Application
 import androidx.room.Room
-import com.mackenzie.waifuviewer.data.db.FavoriteDao
-import com.mackenzie.waifuviewer.data.db.WaifuDataBase
-import com.mackenzie.waifuviewer.data.db.WaifuImDao
-import com.mackenzie.waifuviewer.data.db.WaifuPicDao
+import com.mackenzie.waifuviewer.data.db.*
 import com.mackenzie.waifuviewer.data.server.RemoteConnect
+import com.mackenzie.waifuviewer.data.server.WaifuBestService
 import com.mackenzie.waifuviewer.data.server.WaifuImService
 import com.mackenzie.waifuviewer.data.server.WaifuPicService
 import com.mackenzie.waifuviewer.domain.ApiUrl
-import com.mackenzie.waifuviewer.ui.buildImRemoteWaifus
-import com.mackenzie.waifuviewer.ui.buildPicRemoteWaifus
-import com.mackenzie.waifuviewer.ui.fakes.*
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
@@ -20,7 +17,7 @@ import dagger.hilt.testing.TestInstallIn
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -47,11 +44,15 @@ object TestAppModule {
 
     @Provides
     @Singleton
+    fun provideBestDao(db: WaifuDataBase): WaifuBestDao  = db.waifuBestDao()
+
+    @Provides
+    @Singleton
     fun provideFavoriteDao(db: WaifuDataBase): FavoriteDao = db.favoriteDao()
 
     @Provides
     @Singleton
-    fun provideApiUrl(): ApiUrl = ApiUrl("http://localhost:8080", "http://localhost:8080")
+    fun provideApiUrl(): ApiUrl = ApiUrl("http://localhost:8080", "http://localhost:8080", "http://localhost:8080")
 
     @Provides
     @Singleton
@@ -62,24 +63,37 @@ object TestAppModule {
 
     @Provides
     @Singleton
-    fun provideWaifuService(apiUrl: ApiUrl, client: OkHttpClient): RemoteConnect {
+    fun provideMoshi(): Moshi = Moshi.Builder()
+        .add(KotlinJsonAdapterFactory())
+        .build()
+
+    @Provides
+    @Singleton
+    fun provideWaifuService(apiUrl: ApiUrl, client: OkHttpClient, moshi: Moshi): RemoteConnect {
 
         val builderIm = Retrofit.Builder()
             .baseUrl(apiUrl.imBaseUrl)
             .client(client)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
 
         val builderPics = Retrofit.Builder()
             .baseUrl(apiUrl.picsBaseUrl)
             .client(client)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .build()
+
+        val builderBest = Retrofit.Builder()
+            .baseUrl(apiUrl.nekosBaseUrl)
+            .client(client)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
 
         val serviceIm = builderIm.create(WaifuImService::class.java)
         val servicePics = builderPics.create(WaifuPicService::class.java)
+        val serviceBest = builderBest.create(WaifuBestService::class.java)
 
-        val connection = RemoteConnect(serviceIm, servicePics)
+        val connection = RemoteConnect(serviceIm, servicePics, serviceBest)
 
         return connection
     }
