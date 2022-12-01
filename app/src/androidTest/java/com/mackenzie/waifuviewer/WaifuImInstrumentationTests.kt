@@ -1,13 +1,9 @@
 package com.mackenzie.waifuviewer
 
-import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
-import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.rule.GrantPermissionRule
 import com.mackenzie.waifuviewer.data.db.WaifuImDao
@@ -16,15 +12,12 @@ import com.mackenzie.waifuviewer.data.server.OkHttp3IdlingResource
 import com.mackenzie.waifuviewer.data.server.ServerImDataSource
 import com.mackenzie.waifuviewer.data.server.fromJson
 import com.mackenzie.waifuviewer.ui.NavHostActivity
-import com.mackenzie.waifuviewer.ui.buildImDatabaseWaifus
-import com.mackenzie.waifuviewer.ui.main.WaifuFragment
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockResponse
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -70,7 +63,7 @@ class WaifuImInstrumentationTests {
         onView(withId(R.id.btn_waifu))
             .perform(click())
 
-        Thread.sleep(3000)
+        // Thread.sleep(3000)
         /// onView(withId(R.id.btn_waifu)).check(matches())
     }
 

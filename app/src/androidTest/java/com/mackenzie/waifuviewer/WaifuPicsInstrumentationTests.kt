@@ -1,24 +1,23 @@
 package com.mackenzie.waifuviewer
 
 import androidx.test.espresso.Espresso
+import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.rule.GrantPermissionRule
 import com.mackenzie.waifuviewer.data.db.WaifuPicDao
 import com.mackenzie.waifuviewer.data.server.MockWebServerRule
-import com.mackenzie.waifuviewer.data.server.ServerImDataSource
+import com.mackenzie.waifuviewer.data.server.OkHttp3IdlingResource
 import com.mackenzie.waifuviewer.data.server.ServerPicDataSource
 import com.mackenzie.waifuviewer.data.server.fromJson
 import com.mackenzie.waifuviewer.ui.NavHostActivity
-import com.mackenzie.waifuviewer.ui.buildPicDatabaseWaifus
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockResponse
-import okhttp3.mockwebserver.MockWebServer
-import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -48,10 +47,15 @@ class WaifuPicsInstrumentationTests {
     @Inject
     lateinit var picDataSource: ServerPicDataSource
 
+    @Inject
+    lateinit var okHttpClient: OkHttpClient
+
     @Before
     fun setUp() {
         mockWebServerRule.server.enqueue(MockResponse().fromJson("response_pics.json"))
         hiltRule.inject()
+        val resource = OkHttp3IdlingResource.create("okHttp", okHttpClient)
+        IdlingRegistry.getInstance().register(resource)
     }
 
     @Test
@@ -59,7 +63,7 @@ class WaifuPicsInstrumentationTests {
         Espresso.onView(ViewMatchers.withId(R.id.btn_waifu))
             .perform(ViewActions.click())
 
-        Thread.sleep(3000)
+        // Thread.sleep(3000)
         /// onView(withId(R.id.btn_waifu)).check(matches())
     }
 

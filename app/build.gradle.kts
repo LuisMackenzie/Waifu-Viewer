@@ -65,6 +65,7 @@ dependencies {
     implementation (project(Modules.domain))
     implementation (project(Modules.data))
     implementation (project(Modules.usecases))
+    implementation (project(Modules.testShared))
 
 
     implementation ("androidx.core:core-ktx:1.9.0")

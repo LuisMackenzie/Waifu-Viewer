@@ -47,6 +47,7 @@ fun buildImRemoteWaifus(vararg id: Int) = id.map {
         dominant_color = "",
         source = "Overview $it",
         uploadedAt = "",
+        likedAt = null,
         isNsfw = false,
         height = "",
         width = "",

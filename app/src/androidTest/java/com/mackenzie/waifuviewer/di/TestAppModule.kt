@@ -52,7 +52,10 @@ object TestAppModule {
 
     @Provides
     @Singleton
-    fun provideApiUrl(): ApiUrl = ApiUrl("http://localhost:8080", "http://localhost:8080", "http://localhost:8080")
+    fun provideApiUrl(): ApiUrl = ApiUrl(
+        "http://localhost:8080",
+        "http://localhost:8080",
+        "http://localhost:8080")
 
     @Provides
     @Singleton
