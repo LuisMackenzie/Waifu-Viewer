@@ -57,7 +57,7 @@ object Libs {
 
         object Test {
             object Ext {
-                private const val version = "1.1.3" // updated
+                private const val version = "1.1.4" // updated
                 const val junit = "androidx.test.ext:junit-ktx:$version"
             }
             object Espresso{

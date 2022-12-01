@@ -3,10 +3,8 @@ package com.mackenzie.waifuviewer
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.rule.GrantPermissionRule
 import com.mackenzie.waifuviewer.data.db.WaifuBestDao
-import com.mackenzie.waifuviewer.data.db.WaifuImDao
 import com.mackenzie.waifuviewer.data.server.MockWebServerRule
 import com.mackenzie.waifuviewer.data.server.ServerBestDataSource
-import com.mackenzie.waifuviewer.data.server.ServerImDataSource
 import com.mackenzie.waifuviewer.ui.NavHostActivity
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
