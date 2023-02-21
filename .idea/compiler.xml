@@ -4,6 +4,9 @@
     <bytecodeTargetLevel target="1.8">
       <module name="Waifu_Viewer.app" target="11" />
       <module name="Waifu_Viewer.app.test" target="11" />
+      <module name="Waifu_Viewer.buildSrc" target="11" />
+      <module name="Waifu_Viewer.buildSrc.main" target="11" />
+      <module name="Waifu_Viewer.buildSrc.test" target="11" />
       <module name="WaifuViewer.buildSrc" target="11" />
       <module name="WaifuViewer.buildSrc.main" target="11" />
       <module name="WaifuViewer.buildSrc.test" target="11" />

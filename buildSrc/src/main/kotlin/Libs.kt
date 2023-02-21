@@ -13,7 +13,7 @@ object Libs {
 
     object AndroidX {
 
-        const val coreKtx = "androidx.core:core-ktx:1.8.0" // updated
+        const val coreKtx = "androidx.core:core-ktx:1.9.0" // updated
         const val appCompat = "androidx.appcompat:appcompat:1.5.0" // updated
         const val recyclerView = "androidx.recyclerview:recyclerview:1.2.1"
         const val material = "com.google.android.material:material:1.6.1" // updated
@@ -61,12 +61,12 @@ object Libs {
                 const val junit = "androidx.test.ext:junit-ktx:$version"
             }
             object Espresso{
-                private const val version="3.4.0" // updated
+                private const val version="3.5.0" // updated
                 const val core = "androidx.test.espresso:espresso-core:$version"
                 const val contrib = "androidx.test.espresso:espresso-contrib:$version"
             }
             object Runner{
-                private const val version="1.4.0" // updated
+                private const val version="1.5.1" // updated
                 const val runner = "androidx.test:runner:$version"
                 const val rules = "androidx.test:rules:$version"
             }
@@ -81,7 +81,7 @@ object Libs {
     }
 
     object OkHttp3 {
-        private const val version = "4.9.3" // updated
+        private const val version = "4.10.0" // updated
         const val okhttp3 = "com.squareup.okhttp3:okhttp:$version"
         const val mockWebServer = "com.squareup.okhttp3:mockwebserver:$version"
         const val loginInterceptor = "com.squareup.okhttp3:logging-interceptor:$version"
@@ -116,7 +116,7 @@ object Libs {
     }
 
     object Arrow {
-        private const val version = "1.1.2"
+        private const val version = "1.1.3"
         const val core = "io.arrow-kt:arrow-core:$version"
     }
 
@@ -126,7 +126,7 @@ object Libs {
     }
 
     object Hilt {
-        private const val version = "2.43.2"
+        private const val version = "2.44"
         const val android = "com.google.dagger:hilt-android:$version"
         const val compiler = "com.google.dagger:hilt-android-compiler:$version"
         const val gradlePlugin = "com.google.dagger:hilt-android-gradle-plugin:$version"
@@ -140,11 +140,11 @@ object Libs {
 
     object Mockito {
         const val kotlin = "org.mockito.kotlin:mockito-kotlin:4.0.0"
-        const val inline = "org.mockito:mockito-inline:4.6.1"
+        const val inline = "org.mockito:mockito-inline:4.8.1"
     }
 
     object Turbine {
-        const val core = "app.cash.turbine:turbine:0.9.0"
+        const val core = "app.cash.turbine:turbine:0.12.0"
     }
 
     object JavaX {

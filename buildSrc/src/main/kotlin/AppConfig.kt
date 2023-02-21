@@ -1,8 +1,8 @@
 
 object AppConfig {
     const val applicationId = "com.mackenzie.waifuviewer"
-    const val versionCode = 1
-    const val versionName = "0.3.7"
+    const val versionCode = 2
+    const val versionName = "0.3.9"
     const val compileSdk = 33
     const val minSdk = 23
     const val targetSdk = 33

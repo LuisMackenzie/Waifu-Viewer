@@ -12,12 +12,14 @@ import com.mackenzie.waifuviewer.data.server.OkHttp3IdlingResource
 import com.mackenzie.waifuviewer.data.server.ServerImDataSource
 import com.mackenzie.waifuviewer.data.server.fromJson
 import com.mackenzie.waifuviewer.ui.NavHostActivity
+import com.mackenzie.waifuviewer.ui.buildImDatabaseWaifus
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockResponse
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -65,6 +67,18 @@ class WaifuImInstrumentationTests {
 
         // Thread.sleep(3000)
         /// onView(withId(R.id.btn_waifu)).check(matches())
+    }
+
+    @Test
+    fun check_4_IM_items_db() = runTest {
+        imDao.insertAllWaifuIm(buildImDatabaseWaifus(1, 2, 3, 4))
+        assertEquals(4, imDao.waifuImCount())
+    }
+
+    @Test
+    fun check_6_IM_items_db()  = runTest {
+        imDao.insertAllWaifuIm(buildImDatabaseWaifus(5, 6, 7, 8, 9, 10))
+        assertEquals(6, imDao.waifuImCount())
     }
 
     /*@Test

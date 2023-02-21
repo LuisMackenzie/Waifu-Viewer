@@ -59,24 +59,25 @@ dependencies {
 
 
     val retrofit_version = "2.9.0"
-    val roomVersion = "2.4.3"
+    val roomVersion = "2.5.0"
 
     // modules Implementation
     implementation (project(Modules.domain))
     implementation (project(Modules.data))
     implementation (project(Modules.usecases))
-    // implementation (project(Modules.testShared))
+    implementation (project(Modules.testShared))
     testImplementation (project(Modules.testShared))
+    androidTestImplementation (project(Modules.testShared))
 
 
     implementation ("androidx.core:core-ktx:1.9.0")
-    implementation ("androidx.appcompat:appcompat:1.5.1")
-    implementation ("com.google.android.material:material:1.7.0")
+    implementation ("androidx.appcompat:appcompat:1.6.1")
+    implementation ("com.google.android.material:material:1.8.0")
     implementation ("androidx.constraintlayout:constraintlayout:2.1.4")
 
     // Permisions request
     implementation("androidx.activity:activity-ktx:1.6.1")
-    implementation("androidx.fragment:fragment-ktx:1.5.4")
+    implementation("androidx.fragment:fragment-ktx:1.5.5")
 
     // Navigation
     implementation("androidx.navigation:navigation-fragment-ktx:2.5.3")
@@ -115,16 +116,14 @@ dependencies {
 
     // OKHttp3
     // implementation (Libs.OkHttp3.okhttp3)
-    implementation ("com.squareup.okhttp3:okhttp:4.9.3")
+    implementation ("com.squareup.okhttp3:okhttp:4.10.0")
     // Logging interceptor
     // implementation (Libs.OkHttp3.loginInterceptor)
-    implementation ("com.squareup.okhttp3:logging-interceptor:4.9.3")
-    // library to parse JSON in Kotlin
-    // implementation ("com.beust:klaxon:5.6")
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.10.0")
 
     // library to use Either Class in Kotlin
     // implementation (Libs.Arrow.core)
-    implementation ("io.arrow-kt:arrow-core:1.1.2")
+    implementation ("io.arrow-kt:arrow-core:1.1.3")
 
     // Paging library
     // implementation (Libs.AndroidX.Paging.runtime)
@@ -132,7 +131,7 @@ dependencies {
     // implementation (Libs.AndroidX.Paging.runtimeKtx)
     implementation ("androidx.paging:paging-runtime-ktx:3.1.1")
     // implementation (Libs.AndroidX.Room.paging)
-    implementation ("androidx.room:room-paging:2.4.3")
+    implementation ("androidx.room:room-paging:2.5.0")
     // implementation(Libs.AndroidX.Room.pagingAlpha)
 
     // Firebase
@@ -165,30 +164,30 @@ dependencies {
     // testImplementation (Libs.Mockito.kotlin)
     testImplementation ("org.mockito.kotlin:mockito-kotlin:4.0.0")
     // testImplementation (Libs.Mockito.inline)
-    testImplementation ("org.mockito:mockito-inline:4.6.1")
+    testImplementation ("org.mockito:mockito-inline:4.8.1")
     // testImplementation (Libs.Coroutines.test)
     testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
     // testImplementation (Libs.Turbine.core)
-    testImplementation ("app.cash.turbine:turbine:0.9.0")
+    testImplementation ("app.cash.turbine:turbine:0.12.0")
 
     // androidTestImplementation (Libs.AndroidX.Test.Ext.junit)
-    androidTestImplementation ("androidx.test.ext:junit-ktx:1.1.4")
+    androidTestImplementation ("androidx.test.ext:junit-ktx:1.1.5")
     // androidTestImplementation (Libs.AndroidX.Test.Espresso.contrib)
-    androidTestImplementation ("androidx.test.espresso:espresso-contrib:3.4.0")
+    androidTestImplementation ("androidx.test.espresso:espresso-contrib:3.5.1")
     // androidTestImplementation (Libs.AndroidX.Test.Runner.runner)
-    androidTestImplementation ("androidx.test:runner:1.4.0")
+    androidTestImplementation ("androidx.test:runner:1.5.2")
     // androidTestImplementation (Libs.AndroidX.Test.Runner.rules)
-    androidTestImplementation ("androidx.test:rules:1.4.0")
+    androidTestImplementation ("androidx.test:rules:1.5.0")
     // androidTestImplementation (Libs.Coroutines.test)
     androidTestImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
     // For instrumentation tests
     // androidTestImplementation (Libs.Hilt.test)
-    androidTestImplementation ("com.google.dagger:hilt-android-testing:2.43.2")
+    androidTestImplementation ("com.google.dagger:hilt-android-testing:2.44")
 
     // kaptAndroidTest(Libs.Hilt.compiler)
-    kaptAndroidTest ("com.google.dagger:hilt-android-compiler:2.43.2")
+    kaptAndroidTest ("com.google.dagger:hilt-android-compiler:2.44")
     // For MockwebServer
     // androidTestImplementation (Libs.OkHttp3.mockWebServer)
-    androidTestImplementation ("com.squareup.okhttp3:mockwebserver:4.9.3")
+    androidTestImplementation ("com.squareup.okhttp3:mockwebserver:4.10.0")
 
 }
