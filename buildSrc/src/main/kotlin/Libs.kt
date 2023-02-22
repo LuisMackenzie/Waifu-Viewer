@@ -2,37 +2,34 @@
 
 object Libs {
 
-    const val androidGradlePlugin = "com.android.tools.build:gradle:_" // Updated
-    const val gradleVersionsPlugin = "com.github.ben-manes:gradle-versions-plugin:_"
-    const val playServicesLocation = "com.google.android.gms:play-services-location:_"
+    object Gradle {
+        // const val androidGradlePlugin = "com.android.tools.build:gradle:_"
+        const val playServicesLocation = "com.google.android.gms:play-services-location:_"
+    }
 
     object Kotlin {
-        private const val version = "1.7.20-Beta" // Updated
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin.gradle-plugin:_"
     }
 
     object AndroidX {
 
-        const val coreKtx = "androidx.core:core-ktx:_" // updated
-        const val appCompat = "androidx.appcompat:appcompat:_" // updated
+        const val coreKtx = "androidx.core:core-ktx:_"
+        const val appCompat = "androidx.appcompat:appcompat:_"
         const val recyclerView = "androidx.recyclerview:recyclerview:_"
-        const val material = "com.google.android.material:material:_" // updated
-        const val constraintLayout = "androidx.constraintlayout:constraintlayout:_" // updated
+        const val material = "com.google.android.material:material:_"
+        const val constraintLayout = "androidx.constraintlayout:constraintlayout:_"
 
         object Activity {
-            private const val version = "_"  // updated
             const val ktx = "androidx.activity:activity-ktx:_"
             const val fragmentKtx = "androidx.fragment:fragment-ktx:_"
         }
 
         object Lifecycle {
-            private const val version = "_" // updated
             const val viewmodelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:_"
             const val runtimeKtx = "androidx.lifecycle:lifecycle-runtime-ktx:_"
         }
 
         object Paging {
-            private const val version = "_" // updated
             const val runtime = "androidx.paging:paging-runtime:_"
             const val runtimeKtx = "androidx.paging:paging-runtime-ktx:_"
             const val pagingCommon = "androidx.paging:paging-common:_"
@@ -40,33 +37,27 @@ object Libs {
         }
 
         object Navigation {
-            private const val version = "_" // updated
             const val fragmentKtx = "androidx.navigation:navigation-fragment-ktx:_"
             const val uiKtx = "androidx.navigation:navigation-ui-ktx:_"
             const val gradlePlugin = "androidx.navigation:navigation-safe-args-gradle-plugin:_"
         }
 
         object Room {
-            private const val version = "_" // updated
             const val runtime = "androidx.room:room-runtime:_"
             const val paging = "androidx.room:room-paging:_"
-            const val pagingAlpha = "androidx.room:room-paging:_"
             const val ktx = "androidx.room:room-ktx:_"
             const val compiler = "androidx.room:room-compiler:_"
         }
 
         object Test {
             object Ext {
-                private const val version = "_" // updated
                 const val junit = "androidx.test.ext:junit-ktx:_"
             }
             object Espresso{
-                private const val version="_" // updated
                 const val core = "androidx.test.espresso:espresso-core:_"
                 const val contrib = "androidx.test.espresso:espresso-contrib:_"
             }
             object Runner{
-                private const val version="_" // updated
                 const val runner = "androidx.test:runner:_"
                 const val rules = "androidx.test:rules:_"
             }
@@ -75,23 +66,30 @@ object Libs {
     }
 
     object Glide {
-        private const val version = "_" // updated
         const val glide = "com.github.bumptech.glide:glide:_"
         const val compiler = "com.github.bumptech.glide:compiler:_"
     }
 
     object OkHttp3 {
-        private const val version = "_" // updated
         const val okhttp3 = "com.squareup.okhttp3:okhttp:_"
         const val mockWebServer = "com.squareup.okhttp3:mockwebserver:_"
         const val loginInterceptor = "com.squareup.okhttp3:logging-interceptor:_"
     }
 
     object Retrofit {
-        private const val version = "_" // updated
         const val retrofit = "com.squareup.retrofit2:retrofit:_"
         const val converterGson = "com.squareup.retrofit2:converter-gson:_"
         const val googleGson = "com.google.code.gson:gson:_"
+        const val converterMoshi = "com.squareup.retrofit2:converter-moshi:_"
+        const val moshi = "com.squareup.moshi:moshi:_"
+        const val moshiKtx = "com.squareup.moshi:moshi-kotlin:_"
+    }
+
+    object Firebase {
+        const val coreBom = "com.google.firebase:firebase-bom:_"
+        const val analitycsKtx = "com.google.firebase:firebase-analytics-ktx"
+        const val crashlitycsKtx = "com.google.firebase:firebase-crashlytics-ktx"
+        const val remoteconfigKtx = "com.google.firebase:firebase-config-ktx"
     }
 
     object Serialization {
@@ -100,33 +98,31 @@ object Libs {
     }
 
     object Coroutines {
-        private const val version = "_"
         const val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:_"
         const val test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:_"
     }
 
     object Shimmer {
-        private const val version = "_"
         const val shimmer = "com.facebook.shimmer:shimmer:_"
     }
 
     object PhotoView {
-        private const val version = "_"
-        const val shimmer = "com.github.chrisbanes:PhotoView:_"
+        const val core = "com.github.chrisbanes:PhotoView:_"
     }
 
     object Arrow {
-        private const val version = "_"
         const val core = "io.arrow-kt:arrow-core:_"
     }
 
+    object Lottie {
+        const val core = "com.airbnb.android:lottie:_"
+    }
+
     object Klaxon {
-        private const val version = "_"
         const val core = "com.beust:klaxon:_"
     }
 
     object Hilt {
-        private const val version = "_"
         const val android = "com.google.dagger:hilt-android:_"
         const val compiler = "com.google.dagger:hilt-android-compiler:_"
         const val gradlePlugin = "com.google.dagger:hilt-android-gradle-plugin:_"
@@ -134,7 +130,6 @@ object Libs {
     }
 
     object JUnit {
-        private const val version = "_"
         const val junit = "junit:junit:_"
     }
 
@@ -148,6 +143,6 @@ object Libs {
     }
 
     object JavaX {
-        const val inject = "javax.inject:javax.inject:1"
+        const val inject = "javax.inject:javax.inject:_"
     }
 }

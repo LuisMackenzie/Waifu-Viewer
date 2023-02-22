@@ -57,111 +57,32 @@ androidx-test-rules = "1.5.0"
 kotlinx-coroutines = "1.6.4"
 
 okhttp3 = "4.10.0"
-##   ⬆ = "5.0.0-alpha.1"
-##   ⬆ = "5.0.0-alpha.2"
-##   ⬆ = "5.0.0-alpha.3"
-##   ⬆ = "5.0.0-alpha.4"
-##   ⬆ = "5.0.0-alpha.5"
-##   ⬆ = "5.0.0-alpha.6"
-##   ⬆ = "5.0.0-alpha.7"
-##   ⬆ = "5.0.0-alpha.8"
-##   ⬆ = "5.0.0-alpha.9"
-##   ⬆ = "5.0.0-alpha.10"
-##   ⬆ = "5.0.0-alpha.11"
 
 androidx-core = "1.9.0"
-##         ⬆ = "1.10.0-alpha01"
-##         ⬆ = "1.10.0-alpha02"
 
 androidx-appcompat = "1.6.1"
-##              ⬆ = "1.7.0-alpha01"
-##              ⬆ = "1.7.0-alpha02"
 
 google-android-material = "1.8.0"
-##                   ⬆ = "1.9.0-alpha01"
-##                   ⬆ = "1.9.0-alpha02"
 
 androidx-constraintlayout = "2.1.4"
-##                     ⬆ = "2.2.0-alpha01"
-##                     ⬆ = "2.2.0-alpha02"
-##                     ⬆ = "2.2.0-alpha03"
-##                     ⬆ = "2.2.0-alpha04"
-##                     ⬆ = "2.2.0-alpha05"
-##                     ⬆ = "2.2.0-alpha06"
-##                     ⬆ = "2.2.0-alpha07"
 
 androidx-activity = "1.6.1"
-##             ⬆ = "1.7.0-alpha01"
-##             ⬆ = "1.7.0-alpha02"
-##             ⬆ = "1.7.0-alpha03"
-##             ⬆ = "1.7.0-alpha04"
-##             ⬆ = "1.7.0-beta01"
-##             ⬆ = "1.8.0-alpha01"
 
 androidx-fragment = "1.5.5"
-##             ⬆ = "1.6.0-alpha01"
-##             ⬆ = "1.6.0-alpha02"
-##             ⬆ = "1.6.0-alpha03"
-##             ⬆ = "1.6.0-alpha04"
-##             ⬆ = "1.6.0-alpha05"
 
 androidx-navigation = "2.5.3"
-##               ⬆ = "2.6.0-alpha01"
-##               ⬆ = "2.6.0-alpha02"
-##               ⬆ = "2.6.0-alpha03"
-##               ⬆ = "2.6.0-alpha04"
-##               ⬆ = "2.6.0-alpha05"
 
 androidx-lifecycle = "2.5.1"
-##              ⬆ = "2.6.0-alpha01"
-##              ⬆ = "2.6.0-alpha02"
-##              ⬆ = "2.6.0-alpha03"
-##              ⬆ = "2.6.0-alpha04"
-##              ⬆ = "2.6.0-alpha05"
-##              ⬆ = "2.6.0-beta01"
 
 retrofit2 = "2.9.0"
 
 moshi = "1.12.0"
-## ⬆ = "1.13.0"
-## ⬆ = "1.14.0"
 
 arrow = "1.1.5"
-## ⬆ = "1.1.6-alpha.1"
-## ⬆ = "1.1.6-alpha.2"
-## ⬆ = "1.1.6-alpha.3"
-## ⬆ = "1.1.6-alpha.4"
-## ⬆ = "1.1.6-alpha.5"
-## ⬆ = "1.1.6-alpha.6"
-## ⬆ = "1.1.6-alpha.7"
-## ⬆ = "1.1.6-alpha.11"
-## ⬆ = "1.1.6-alpha.12"
-## ⬆ = "1.1.6-alpha.13"
-## ⬆ = "1.1.6-alpha.14"
-## ⬆ = "1.1.6-alpha.15"
-## ⬆ = "1.1.6-alpha.16"
-## ⬆ = "1.1.6-alpha.17"
-## ⬆ = "1.1.6-alpha.18"
-## ⬆ = "1.1.6-alpha.19"
-## ⬆ = "1.1.6-alpha.20"
-## ⬆ = "1.1.6-alpha.22"
-## ⬆ = "1.1.6-alpha.23"
-## ⬆ = "1.1.6-alpha.24"
-## ⬆ = "1.1.6-alpha.26"
-## ⬆ = "1.1.6-alpha.27"
-## ⬆ = "1.1.6-alpha.28"
 
 androidx-paging = "3.1.1"
-##           ⬆ = "3.2.0-alpha01"
-##           ⬆ = "3.2.0-alpha02"
-##           ⬆ = "3.2.0-alpha03"
-##           ⬆ = "3.2.0-alpha04"
 
 firebase-bom = "31.1.0"
-##        ⬆ = "31.1.1"
-##        ⬆ = "31.2.0"
-##        ⬆ = "31.2.1"
-##        ⬆ = "31.2.2"
 
 google-android-play-services-location = "21.0.1"
 
@@ -178,26 +99,6 @@ google-services = "com.google.gms:google-services:4.3.15"
 firebase-crashlytics-gradle = { group = "com.google.firebase", name = "firebase-crashlytics-gradle", version.ref = "firebase-crashlytics-gradle" }
 
 com-android-tools-build-gradle = "com.android.tools.build:gradle:7.4.1"
-##                                                           ⬆ :8.0.0-alpha01"
-##                                                           ⬆ :8.0.0-alpha02"
-##                                                           ⬆ :8.0.0-alpha03"
-##                                                           ⬆ :8.0.0-alpha04"
-##                                                           ⬆ :8.0.0-alpha05"
-##                                                           ⬆ :8.0.0-alpha06"
-##                                                           ⬆ :8.0.0-alpha07"
-##                                                           ⬆ :8.0.0-alpha08"
-##                                                           ⬆ :8.0.0-alpha09"
-##                                                           ⬆ :8.0.0-alpha10"
-##                                                           ⬆ :8.0.0-alpha11"
-##                                                           ⬆ :8.0.0-beta01"
-##                                                           ⬆ :8.0.0-beta02"
-##                                                           ⬆ :8.0.0-beta03"
-##                                                           ⬆ :8.1.0-alpha01"
-##                                                           ⬆ :8.1.0-alpha02"
-##                                                           ⬆ :8.1.0-alpha03"
-##                                                           ⬆ :8.1.0-alpha04"
-##                                                           ⬆ :8.1.0-alpha05"
-##                                                           ⬆ :8.1.0-alpha06"
 
 hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "google-dagger" }
 
@@ -287,8 +188,7 @@ firebase-config-ktx = { module = "com.google.firebase:firebase-config-ktx" }
 
 firebase-crashlytics-ktx = { module = "com.google.firebase:firebase-crashlytics-ktx" }
 
-lottie = "com.airbnb.android:lottie:5.2.0"
-##                              ⬆ :6.0.0"
+lottie = "com.airbnb.android:lottie:6.0.0"
 
 shimmer = "com.facebook.shimmer:shimmer:0.5.0"
 
@@ -317,3 +217,9 @@ javax-inject = "javax.inject:javax.inject:1"
 paging-common-ktx = { group = "androidx.paging", name = "paging-common-ktx", version.ref = "androidx-paging" }
 
 kotlin-scripting-compiler-embeddable = { group = "org.jetbrains.kotlin", name = "kotlin-scripting-compiler-embeddable", version.ref = "kotlin" }
+
+kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+
+secrets-gradle-plugin = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:2.0.1"
+
+detekt-gradle-plugin = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.22.0"
