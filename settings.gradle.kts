@@ -16,6 +16,9 @@ dependencyResolutionManagement {
 /*plugins {
     id("org.jetbrains.kotlin.plugin.serialization") version "1.7.0-Beta"
 }*/
+plugins {
+    id("de.fayard.refreshVersions") version("0.51.0")
+}
 rootProject.name = "Waifu Viewer"
 include (":app")
 include (":domain")

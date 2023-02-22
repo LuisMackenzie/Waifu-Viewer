@@ -94,8 +94,8 @@ dependencies {
     kapt("androidx.room:room-compiler:$roomVersion")
 
     // Hilt
-    implementation("com.google.dagger:hilt-android:2.44")
-    kapt("com.google.dagger:hilt-android-compiler:2.44")
+    implementation("com.google.dagger:hilt-android:2.45")
+    kapt("com.google.dagger:hilt-android-compiler:2.45")
 
     // Glide libraries
     implementation ("com.github.bumptech.glide:glide:4.14.2")
@@ -111,8 +111,8 @@ dependencies {
     // Moshi converters
     // implementation ("com.squareup.moshi:moshi:1.12.0")
     implementation ("com.squareup.moshi:moshi-kotlin:1.12.0")
-    annotationProcessor ("com.squareup.moshi:moshi-kotlin-codegen:1.12.0")
     implementation ("com.squareup.retrofit2:converter-moshi:$retrofit_version")
+    // annotationProcessor ("com.squareup.moshi:moshi-kotlin-codegen:1.12.0")
 
     // OKHttp3
     // implementation (Libs.OkHttp3.okhttp3)
@@ -123,7 +123,7 @@ dependencies {
 
     // library to use Either Class in Kotlin
     // implementation (Libs.Arrow.core)
-    implementation ("io.arrow-kt:arrow-core:1.1.3")
+    implementation ("io.arrow-kt:arrow-core:1.1.5")
 
     // Paging library
     // implementation (Libs.AndroidX.Paging.runtime)
@@ -158,17 +158,17 @@ dependencies {
     implementation("com.google.android.gms:play-services-location:21.0.1")
 
     // JUnit y Mockito
-    
+
     // testImplementation (Libs.JUnit.junit)
     testImplementation ("junit:junit:4.13.2")
     // testImplementation (Libs.Mockito.kotlin)
-    testImplementation ("org.mockito.kotlin:mockito-kotlin:4.0.0")
+    testImplementation ("org.mockito.kotlin:mockito-kotlin:4.1.0")
     // testImplementation (Libs.Mockito.inline)
-    testImplementation ("org.mockito:mockito-inline:4.8.1")
+    testImplementation ("org.mockito:mockito-inline:5.1.1")
     // testImplementation (Libs.Coroutines.test)
     testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
     // testImplementation (Libs.Turbine.core)
-    testImplementation ("app.cash.turbine:turbine:0.12.0")
+    testImplementation ("app.cash.turbine:turbine:0.12.1")
 
     // androidTestImplementation (Libs.AndroidX.Test.Ext.junit)
     androidTestImplementation ("androidx.test.ext:junit-ktx:1.1.5")
@@ -182,7 +182,7 @@ dependencies {
     androidTestImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
     // For instrumentation tests
     // androidTestImplementation (Libs.Hilt.test)
-    androidTestImplementation ("com.google.dagger:hilt-android-testing:2.44")
+    androidTestImplementation ("com.google.dagger:hilt-android-testing:2.45")
 
     // kaptAndroidTest(Libs.Hilt.compiler)
     kaptAndroidTest ("com.google.dagger:hilt-android-compiler:2.44")
