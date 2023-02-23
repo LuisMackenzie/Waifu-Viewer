@@ -29,7 +29,14 @@ android {
         }
         getByName("debug") {
             applicationIdSuffix = ".debug"
+            versionNameSuffix = "-DEBUG"
             isDebuggable = true
+        }
+        create("enhanced") {
+            applicationIdSuffix = ".prime"
+            versionNameSuffix = "-PRIME"
+            isDebuggable = true
+
         }
     }
 
