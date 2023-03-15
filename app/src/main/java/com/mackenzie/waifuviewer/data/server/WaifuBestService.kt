@@ -4,7 +4,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface WaifuBestService {
+interface  WaifuBestService {
 
     @GET("{tags}")
     suspend fun getRandomWaifuBestPng(

@@ -1,6 +1,5 @@
 package com.mackenzie.waifuviewer.data.datasource
 
-import androidx.paging.PagingData
 import com.mackenzie.waifuviewer.domain.WaifuImItem
 import com.mackenzie.waifuviewer.domain.Error
 import kotlinx.coroutines.flow.Flow

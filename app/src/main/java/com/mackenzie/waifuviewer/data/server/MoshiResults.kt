@@ -37,7 +37,7 @@ data class WaifuIm(
     @Json(name = "signature") val signature: String,
     @Json(name = "extension") val extension: String,
     @Json(name = "image_id") val imageId: Int,
-    @Json(name = "favourites") val favourites: Int,
+    @Json(name = "favorites") val favourites: Int,
     @Json(name = "dominant_color") val dominant_color: String,
     @Json(name = "source") val source: String?,
     @Json(name = "uploaded_at") val uploadedAt: String,

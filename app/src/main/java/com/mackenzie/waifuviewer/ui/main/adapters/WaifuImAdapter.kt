@@ -8,6 +8,7 @@ import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.databinding.ViewMediaItemBinding
 import com.mackenzie.waifuviewer.domain.WaifuImItem
 import com.mackenzie.waifuviewer.ui.common.basicDiffUtil
+
 import com.mackenzie.waifuviewer.ui.common.inflate
 import com.mackenzie.waifuviewer.ui.common.loadUrlCenterCrop
 import com.mackenzie.waifuviewer.ui.main.ImListener
