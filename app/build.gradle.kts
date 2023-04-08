@@ -63,6 +63,10 @@ android {
         }
     }
 
+    packagingOptions {
+        exclude("META-INF/versions/9/previous-compilation-data.bin")
+    }
+
     namespace = "com.mackenzie.waifuviewer"
 }
 
