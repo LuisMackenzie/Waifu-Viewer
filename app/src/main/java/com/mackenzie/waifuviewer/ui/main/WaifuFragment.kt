@@ -21,22 +21,20 @@ import com.mackenzie.waifuviewer.ui.main.adapters.WaifuBestAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class WaifuFragment: Fragment(R.layout.fragment_waifu) {
+class WaifuFragment : Fragment(R.layout.fragment_waifu) {
 
     private val safeArgs: WaifuFragmentArgs by navArgs()
     private val picsViewModel: WaifuPicsViewModel by viewModels()
     private val imViewModel: WaifuImViewModel by viewModels()
     private val bestViewModel: WaifuBestViewModel by viewModels()
-    private val waifuImAdapter = WaifuImAdapter{ mainState.onWaifuImClicked(it) }
-    private val waifuPicsAdapter = WaifuPicsAdapter{ mainState.onWaifuPicsClicked(it) }
-    private val waifuBestAdapter = WaifuBestAdapter{ mainState.onWaifuBestClicked(it) }
+    private val waifuImAdapter = WaifuImAdapter { mainState.onWaifuImClicked(it) }
+    private val waifuPicsAdapter = WaifuPicsAdapter { mainState.onWaifuPicsClicked(it) }
+    private val waifuBestAdapter = WaifuBestAdapter { mainState.onWaifuBestClicked(it) }
     private lateinit var mainState: MainState
     private lateinit var bun: Bundle
     private var serverMode: String = ""
     private var numIsShowed: Boolean = false
     private var loadingMore: Boolean = false
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mainState = buildMainState()
@@ -69,10 +67,10 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
 
         if (serverMode == getString(R.string.server_normal_string)) {
             when (categoryTag) {
-                "uniform","maid","marin-kitagawa","oppai" -> {
+                "uniform", "maid", "marin-kitagawa", "oppai" -> {
                     imViewModel.onImReady(isNsfw, isGif = false, categoryTag, orientation)
                 }
-                "mori-calliope","raiden-shogun" -> {
+                "mori-calliope", "raiden-shogun" -> {
                     imViewModel.onImReady(isNsfw, isGif = false, categoryTag, false)
                 }
                 else -> {
@@ -87,7 +85,6 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
     }
 
     private infix fun FragmentWaifuBinding.withBestUpdateUI(state: WaifuBestViewModel.UiState) {
-
         var count: Int
         val categoryTag = bun.getString(Constants.CATEGORY_TAG_WAIFU) ?: ""
 
@@ -138,7 +135,6 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
     }
 
     private infix fun FragmentWaifuBinding.withPicsUpdateUI(state: WaifuPicsViewModel.UiState) {
-
         var count: Int
         val isNsfw = bun.getBoolean(Constants.IS_NSFW_WAIFU)
         val categoryTag = bun.getString(Constants.CATEGORY_TAG_WAIFU) ?: ""
@@ -190,7 +186,6 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
     }
 
     private infix fun FragmentWaifuBinding.withImUpdateUI(state: WaifuImViewModel.UiState) {
-
         var count: Int
         val isNsfw = bun.getBoolean(Constants.IS_NSFW_WAIFU)
         val isGif = bun.getBoolean(Constants.IS_GIF_WAIFU)
@@ -217,7 +212,6 @@ class WaifuFragment: Fragment(R.layout.fragment_waifu) {
 
         state.isLoading?.let {
             loading = it
-
         }
 
         recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {

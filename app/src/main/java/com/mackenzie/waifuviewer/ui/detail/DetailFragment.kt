@@ -28,7 +28,7 @@ import java.io.IOException
 import java.net.URL
 
 @AndroidEntryPoint
-class DetailFragment: Fragment(R.layout.fragment_detail) {
+class DetailFragment : Fragment(R.layout.fragment_detail) {
 
     private val picsViewModel: DetailPicsViewModel by viewModels()
     private val imViewModel: DetailImViewModel by viewModels()
@@ -89,7 +89,6 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
     }
 
     private fun FragmentDetailBinding.withBestUpdateUI(state: DetailBestViewModel.UiState) {
-
         pbLoading.visibility = View.GONE
         state.waifu?.let {
             val title = it.url.substringAfterLast('/').substringBeforeLast('.')
@@ -104,7 +103,7 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
             } else {
                 fab.setImageResource(R.drawable.ic_favorite_off)
             }
-            prepareDownload(title , it.url, it.url.substringAfterLast('.'))
+            prepareDownload(title, it.url, it.url.substringAfterLast('.'))
         }
 
         state.error?.let {
@@ -115,7 +114,6 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
     }
 
     private fun FragmentDetailBinding.withFavsUpdateUI(state: DetailFavsViewModel.UiState) {
-
         pbLoading.visibility = View.GONE
         state.waifu?.let {
             tvDetail.text = it.url.substringAfterLast('/').substringBeforeLast('.')
@@ -136,7 +134,6 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
     }
 
     private fun FragmentDetailBinding.withPicsUpdateUI(state: DetailPicsViewModel.UiState) {
-
         pbLoading.visibility = View.GONE
         state.waifuPic?.let {
             val title = it.url.substringAfterLast('/').substringBeforeLast('.')
@@ -153,12 +150,10 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
         state.error?.let {
             tvDetail.text = getString(R.string.waifu_error)
             ivDetail.setImageResource(R.drawable.ic_offline_background)
-
         }
     }
 
     private fun FragmentDetailBinding.withImUpdateUI(state: DetailImViewModel.UiState) {
-
         pbLoading.visibility = View.GONE
         state.waifuIm?.let {
             tvDetail.text = it.imageId.toString()
@@ -204,7 +199,7 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
             }
         }
         fabDownload.setOnClickListener {
-            if (isWritePermissionGranted != true ) {
+            if (isWritePermissionGranted != true) {
                 RequestPermision()
             }
             requestDownload()
@@ -213,7 +208,7 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
 
     private fun RequestPermision() {
         viewLifecycleOwner.lifecycleScope.launch {
-            mainState.requestPermissionLauncher {isWritePermissionGranted = it}
+            mainState.requestPermissionLauncher { isWritePermissionGranted = it }
         }
     }
 
@@ -222,7 +217,6 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
     }
 
     private fun downloadImage(title: String, link: String, fileType: String) {
-
         val type: String = selectMimeType(fileType)
         lifecycleScope.launch(Dispatchers.IO) {
             try {
@@ -238,7 +232,7 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
                     requireContext(),
                     image,
                     title,
-                    type
+                    type,
                 )
             } catch (e: IOException) {
                 Log.d(Constants.CATEGORY_TAG_DETAIL, "error: ${e.localizedMessage}")

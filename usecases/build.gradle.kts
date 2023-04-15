@@ -4,21 +4,20 @@ plugins {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 dependencies {
-    implementation (project(Modules.data))
-    implementation (project(Modules.domain))
-    implementation (Libs.Coroutines.core)
-    implementation (Libs.JavaX.inject)
-    implementation (Libs.Arrow.core)
+    implementation(project(Modules.data))
+    implementation(project(Modules.domain))
+    implementation(Libs.Coroutines.core)
+    implementation(Libs.JavaX.inject)
+    implementation(Libs.Arrow.core)
 
     // JUnit y Mockito
-    testImplementation (project(Modules.testShared))
-    testImplementation (Libs.Mockito.kotlin)
-    testImplementation (Libs.Mockito.inline)
-    testImplementation (Libs.JUnit.junit)
-
+    testImplementation(project(Modules.testShared))
+    testImplementation(Libs.Mockito.kotlin)
+    testImplementation(Libs.Mockito.inline)
+    testImplementation(Libs.JUnit.junit)
 }

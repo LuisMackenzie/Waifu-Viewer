@@ -89,7 +89,6 @@ com-github-bumptech-glide-compiler = "com.github.bumptech.glide:compiler:4.14.2"
 databinding-compiler = { group = "androidx.databinding", name = "databinding-compiler", version.ref = "androidx-databinding" }
 
 org-jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.8"
-##                                      ⬆ :0.8.9"
 
 junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "androidx-test-ext-junit" }
 
