@@ -2,19 +2,18 @@ package com.mackenzie.waifuviewer.ui.favs
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.databinding.ViewMediaItemBinding
 import com.mackenzie.waifuviewer.domain.FavoriteItem
-import com.mackenzie.waifuviewer.ui.common.basicDiffUtil
 import com.mackenzie.waifuviewer.ui.common.inflate
 import com.mackenzie.waifuviewer.ui.common.loadUrlCenterCrop
 
 class FavoriteAdapter(
     private val listener: OnItemClickListener
-    ): ListAdapter<FavoriteItem, FavoriteAdapter.ViewHolder>(
-    basicDiffUtil { old, new -> old.id == new.id }) {
+    ): ListAdapter<FavoriteItem, FavoriteAdapter.ViewHolder>(WaifuFavDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = parent.inflate(R.layout.view_media_item, false)
@@ -42,9 +41,18 @@ class FavoriteAdapter(
         }
     }
 
+    private class WaifuFavDiffCallback : DiffUtil.ItemCallback<FavoriteItem>() {
+        override fun areItemsTheSame(oldItem: FavoriteItem, newItem: FavoriteItem): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: FavoriteItem, newItem: FavoriteItem): Boolean {
+            return oldItem.id == newItem.id && oldItem.isFavorite == newItem.isFavorite
+        }
+    }
+
     interface OnItemClickListener{
         fun onClick(waifu: FavoriteItem)
         fun onLongClick(waifu: FavoriteItem)
     }
-
 }

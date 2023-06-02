@@ -20,11 +20,21 @@ android {
         versionCode = AppConfig.versionCode
         versionName = AppConfig.versionName
         testInstrumentationRunner = AppConfig.testInstrumentationRunnerHilt
+        /*javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += mapOf(
+                    "room.schemaLocation" to "$projectDir/schemas",
+                    "room.incremental" to "true"
+                )
+            }
+        }*/
     }
 
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
+            // applicationIdSuffix = ".release"
+            versionNameSuffix = "-RELEASE"
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
         getByName("debug") {
@@ -33,7 +43,7 @@ android {
             isDebuggable = true
         }
         create("enhanced") {
-            applicationIdSuffix = ".prime"
+            // applicationIdSuffix = ".prime"
             versionNameSuffix = "-PRIME"
             isDebuggable = true
         }
@@ -61,8 +71,9 @@ android {
         }
     }
 
-    packagingOptions {
-        exclude("META-INF/versions/9/previous-compilation-data.bin")
+    packaging {
+        // exclude("META-INF/versions/9/previous-compilation-data.bin"
+        resources.excludes.add("META-INF/versions/9/previous-compilation-data.bin")
     }
 
     namespace = "com.mackenzie.waifuviewer"

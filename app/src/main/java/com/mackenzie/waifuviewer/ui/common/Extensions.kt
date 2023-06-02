@@ -10,14 +10,11 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.recyclerview.widget.DiffUtil
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.mackenzie.waifuviewer.App
 import com.mackenzie.waifuviewer.R
-import com.mackenzie.waifuviewer.domain.WaifuImItem
-import com.mackenzie.waifuviewer.domain.WaifuPicItem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
@@ -43,7 +40,7 @@ fun ImageView.loadUrlCenterCrop(url: String) {
         .into(this)
 }
 
-inline fun <T> basicDiffUtil(
+/*inline fun <T> basicDiffUtil(
     crossinline areItemsTheSame: (T, T) -> Boolean = { old, new -> old == new },
     crossinline areContentsTheSame: (T, T) -> Boolean = { old, new -> old == new }
 ) = object : DiffUtil.ItemCallback<T>() {
@@ -52,7 +49,7 @@ inline fun <T> basicDiffUtil(
 
     override fun areContentsTheSame(oldItem: T, newItem: T): Boolean =
         areContentsTheSame(oldItem, newItem)
-}
+}*/
 
 var View.visible: Boolean
     get() = visibility == View.VISIBLE

@@ -2,19 +2,19 @@ package com.mackenzie.waifuviewer.ui.main.adapters
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.databinding.ViewMediaItemBinding
 import com.mackenzie.waifuviewer.domain.WaifuPicItem
-import com.mackenzie.waifuviewer.ui.common.basicDiffUtil
 import com.mackenzie.waifuviewer.ui.common.inflate
 import com.mackenzie.waifuviewer.ui.common.loadUrlCenterCrop
 import com.mackenzie.waifuviewer.ui.main.PicListener
 
 class WaifuPicsAdapter(
     private val listener: PicListener
-    ): ListAdapter<WaifuPicItem, WaifuPicsAdapter.ViewHolder>(basicDiffUtil { old, new -> old.id == new.id }) {
+    ): ListAdapter<WaifuPicItem, WaifuPicsAdapter.ViewHolder>(WaifuPicsDiffCallback()) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -43,4 +43,13 @@ class WaifuPicsAdapter(
 
     }
 
+    private class WaifuPicsDiffCallback : DiffUtil.ItemCallback<WaifuPicItem>() {
+        override fun areItemsTheSame(oldItem: WaifuPicItem, newItem: WaifuPicItem): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: WaifuPicItem, newItem: WaifuPicItem): Boolean {
+            return oldItem.id == newItem.id && oldItem.isFavorite == newItem.isFavorite
+        }
+    }
 }
