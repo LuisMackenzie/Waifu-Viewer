@@ -44,12 +44,8 @@ class WaifuPicsAdapter(
     }
 
     private class WaifuPicsDiffCallback : DiffUtil.ItemCallback<WaifuPicItem>() {
-        override fun areItemsTheSame(oldItem: WaifuPicItem, newItem: WaifuPicItem): Boolean {
-            return oldItem.id == newItem.id
-        }
+        override fun areItemsTheSame(oldItem: WaifuPicItem, newItem: WaifuPicItem): Boolean = oldItem.id == newItem.id
 
-        override fun areContentsTheSame(oldItem: WaifuPicItem, newItem: WaifuPicItem): Boolean {
-            return oldItem.id == newItem.id && oldItem.isFavorite == newItem.isFavorite
-        }
+        override fun areContentsTheSame(oldItem: WaifuPicItem, newItem: WaifuPicItem): Boolean = oldItem == newItem
     }
 }

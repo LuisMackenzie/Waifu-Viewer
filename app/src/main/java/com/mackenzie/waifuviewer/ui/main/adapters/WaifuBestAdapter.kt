@@ -47,12 +47,8 @@ class WaifuBestAdapter(
     }
 
     private class WaifuBestDiffCallback : DiffUtil.ItemCallback<WaifuBestItem>() {
-        override fun areItemsTheSame(oldItem: WaifuBestItem, newItem: WaifuBestItem): Boolean {
-            return oldItem.id == newItem.id
-        }
+        override fun areItemsTheSame(oldItem: WaifuBestItem, newItem: WaifuBestItem): Boolean = oldItem.id == newItem.id
 
-        override fun areContentsTheSame(oldItem: WaifuBestItem, newItem: WaifuBestItem): Boolean {
-            return oldItem.id == newItem.id && oldItem.isFavorite == newItem.isFavorite
-        }
+        override fun areContentsTheSame(oldItem: WaifuBestItem, newItem: WaifuBestItem): Boolean = oldItem == newItem
     }
 }

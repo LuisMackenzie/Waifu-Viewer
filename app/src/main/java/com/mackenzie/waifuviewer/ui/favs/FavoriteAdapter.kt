@@ -42,13 +42,9 @@ class FavoriteAdapter(
     }
 
     private class WaifuFavDiffCallback : DiffUtil.ItemCallback<FavoriteItem>() {
-        override fun areItemsTheSame(oldItem: FavoriteItem, newItem: FavoriteItem): Boolean {
-            return oldItem.id == newItem.id
-        }
+        override fun areItemsTheSame(oldItem: FavoriteItem, newItem: FavoriteItem): Boolean = oldItem.id == newItem.id
 
-        override fun areContentsTheSame(oldItem: FavoriteItem, newItem: FavoriteItem): Boolean {
-            return oldItem.id == newItem.id && oldItem.isFavorite == newItem.isFavorite
-        }
+        override fun areContentsTheSame(oldItem: FavoriteItem, newItem: FavoriteItem): Boolean = oldItem == newItem
     }
 
     interface OnItemClickListener{
