@@ -57,13 +57,13 @@ class SaveImage {
 
         try {
             if (mimeType == "image/png") {
-                bitmapObject.compress(Bitmap.CompressFormat.PNG, 100, imageOutStream)
+                bitmapObject.compress(Bitmap.CompressFormat.PNG, 100, imageOutStream!!)
             } else if (mimeType == "image/gif") {
                 // var imageGif: Bitmap = bitmapObject.copy(Bitmap.Config.ARGB_8888, true)
                 // imageGif = Glide.with(context).asGif().load(dirImagen).into(image)
-                bitmapObject.compress(Bitmap.CompressFormat.JPEG, 100, imageOutStream)
+                bitmapObject.compress(Bitmap.CompressFormat.JPEG, 100, imageOutStream!!)
             } else {
-                bitmapObject.compress(Bitmap.CompressFormat.JPEG, 100, imageOutStream)
+                bitmapObject.compress(Bitmap.CompressFormat.JPEG, 100, imageOutStream!!)
             }
 
 

@@ -35,6 +35,7 @@ class WaifuImViewModel @Inject constructor(
 
     fun onImReady(isNsfw: Boolean, isGif: Boolean, tag: String, orientation: Boolean) {
         viewModelScope.launch {
+
             _state.update { it.copy(isLoading = true) }
             val error = requestWaifuImUseCase(isNsfw, tag, isGif,  orientation)
             _state.update { it.copy(isLoading = false, error = error) }
