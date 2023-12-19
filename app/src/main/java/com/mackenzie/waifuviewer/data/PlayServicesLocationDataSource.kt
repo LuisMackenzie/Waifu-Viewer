@@ -48,10 +48,12 @@ class PlayServicesLocationDataSource @Inject constructor(application: Applicatio
         return newCC ?: "US"
     }
 
+    @Suppress("DEPRECATION")
     private fun Location?.toRegion2(): String? {
         val addresses = this?.let {
             geocoder.getFromLocation(latitude, longitude, 1)
         }
+        Log.e("getFromLocation", "countryCode = ${addresses?.firstOrNull()?.countryCode}")
         return addresses?.firstOrNull()?.countryCode
     }
 }
