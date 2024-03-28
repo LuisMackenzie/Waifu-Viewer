@@ -1,7 +1,13 @@
 pluginManagement {
     repositories {
+        google {
+            content {
+                includeGroupByRegex("com\\.android.*")
+                includeGroupByRegex("com\\.google.*")
+                includeGroupByRegex("androidx.*")
+            }
+        }
         gradlePluginPortal()
-        google()
         mavenCentral()
     }
 }
@@ -17,7 +23,7 @@ dependencyResolutionManagement {
     id("org.jetbrains.kotlin.plugin.serialization") version "1.7.0-Beta"
 }*/
 plugins {
-    id("de.fayard.refreshVersions") version("0.60.3")
+    id("de.fayard.refreshVersions") version("0.60.5")
 }
 rootProject.name = "Waifu Viewer"
 include (":app")

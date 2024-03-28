@@ -11,6 +11,7 @@ object Plugins {
     const val hiltAndroid = "dagger.hilt.android.plugin"
     const val playServices = "com.google.gms.google-services"
     const val crashlitycs = "com.google.firebase.crashlytics"
-    // const val secret = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin"
+
+    const val secrets = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin"
 }
 

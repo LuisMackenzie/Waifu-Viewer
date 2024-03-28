@@ -11,6 +11,10 @@ object Libs {
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin.gradle-plugin:_"
     }
 
+    object GenerativeAI {
+        const val generativeai = "com.google.ai.client.generativeai:generativeai:0.2.2"
+    }
+
     object AndroidX {
 
         const val coreKtx = "androidx.core:core-ktx:_"

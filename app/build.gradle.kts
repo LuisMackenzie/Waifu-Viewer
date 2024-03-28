@@ -8,6 +8,7 @@ plugins {
     id(Plugins.hiltAndroid)
     id(Plugins.playServices)
     id(Plugins.crashlitycs)
+    id(Plugins.secrets)
 }
 
 android {
@@ -20,6 +21,7 @@ android {
         versionCode = AppConfig.versionCode
         versionName = AppConfig.versionName
         testInstrumentationRunner = AppConfig.testInstrumentationRunnerHilt
+
     }
 
     buildTypes {
@@ -50,8 +52,13 @@ android {
         jvmTarget = "17"
     }
 
-    dataBinding {
+    /*dataBinding {
         enable = true
+    }*/
+
+    buildFeatures {
+        buildConfig = true
+        dataBinding = true
     }
 
     sourceSets {
@@ -155,6 +162,10 @@ dependencies {
     // Location Play services
     implementation(Libs.Gradle.playServicesLocation)
 
+    // Google AI SDK for Android
+    // implementation("com.google.ai.client.generativeai:generativeai:0.2.2")
+    implementation(Libs.GenerativeAI.generativeai)
+
     // JUnit y Mockito
     testImplementation(Libs.JUnit.junit)
     testImplementation(Libs.Mockito.kotlin)
@@ -172,5 +183,7 @@ dependencies {
     kaptAndroidTest(Libs.Hilt.compiler)
     // For MockwebServer
     androidTestImplementation(Libs.OkHttp3.mockWebServer)
+
+
 }
 
