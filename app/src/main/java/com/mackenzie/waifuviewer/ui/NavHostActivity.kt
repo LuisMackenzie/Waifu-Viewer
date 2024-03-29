@@ -5,6 +5,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import com.google.ai.client.generativeai.GenerativeModel
+import com.google.ai.client.generativeai.type.generationConfig
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
@@ -22,13 +23,50 @@ class NavHostActivity : AppCompatActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         firebaseAnalytics = Firebase.analytics
 
-        val generativeModelTest = GenerativeModel(
-            modelName = "gemini-1.0-pro-vision-latest",
-            apiKey = BuildConfig.apikey
+        val config = generationConfig {
+            temperature = 0.7f
+        }
+
+        val gm15ProLatest = GenerativeModel(
+            modelName = "gemini-1.5-pro-latest",
+            apiKey = BuildConfig.apikey,
+            generationConfig = config
         )
-        val generativeModel = GenerativeModel(
+
+        val gm15pro = GenerativeModel(
+            modelName = "gemini-1.5-pro",
+            apiKey = BuildConfig.apikey,
+            generationConfig = config
+        )
+
+        val gm10ProLatest = GenerativeModel(
+            modelName = "gemini-1.0-pro-latest",
+            apiKey = BuildConfig.apikey,
+            generationConfig = config
+        )
+
+        val gm10Pro = GenerativeModel(
+            modelName = "gemini-1.0-pro",
+            apiKey = BuildConfig.apikey,
+            generationConfig = config
+        )
+
+        val gm10ProGeneral = GenerativeModel(
             modelName = "gemini-pro",
-            apiKey = BuildConfig.apikey
+            apiKey = BuildConfig.apikey,
+            generationConfig = config
+        )
+
+        val gm10ProVisionLatest = GenerativeModel(
+            modelName = "gemini-1.0-pro-vision-latest",
+            apiKey = BuildConfig.apikey,
+            generationConfig = config
+        )
+
+        val gm10ProVision = GenerativeModel(
+            modelName = "gemini-1.0-pro-vision",
+            apiKey = BuildConfig.apikey,
+            generationConfig = config
         )
 
     }

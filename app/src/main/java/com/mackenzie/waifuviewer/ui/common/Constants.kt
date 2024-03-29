@@ -7,6 +7,7 @@ class Constants {
         const val IS_NSFW_WAIFU = "WaifuFragment:nsfw"
         const val IS_GIF_WAIFU = "WaifuFragment:gif"
         const val IS_LANDS_WAIFU = "WaifuFragment:lands"
+        const val IS_WAIFU_GPT = "WaifuFragment:waifu_gpt"
         const val CATEGORY_TAG_WAIFU = "WaifuFragment:tag"
         const val CATEGORY_TAG_WAIFU_IM_ERROR = "WaifuFragment:Im Error"
         const val CATEGORY_TAG_WAIFU_PICS_ERROR = "WaifuFragment:Pics Error"

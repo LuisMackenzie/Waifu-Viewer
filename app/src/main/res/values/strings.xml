@@ -43,5 +43,7 @@
     <string name="server_enhanced_string">enhanced</string>
     <string name="server_nekos_string">nekos</string>
     <string name="server_favorite_string">favorite</string>
+    <string name="server_waifu_gpt_string">waifu_gpt</string>
+
 
 </resources>

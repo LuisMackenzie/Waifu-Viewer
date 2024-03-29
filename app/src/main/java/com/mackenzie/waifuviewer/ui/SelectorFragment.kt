@@ -2,8 +2,6 @@ package com.mackenzie.waifuviewer.ui
 
 import android.Manifest
 import android.content.Context
-import android.icu.lang.UCharacter.GraphemeClusterBreak.L
-import android.nfc.Tag
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -44,7 +42,12 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mainState = MainState(requireContext(), viewLifecycleOwner.lifecycleScope, findNavController(), PermissionRequester(this , Manifest.permission.ACCESS_COARSE_LOCATION))
+        mainState = MainState(
+            requireContext(),
+            viewLifecycleOwner.lifecycleScope,
+            findNavController(),
+            PermissionRequester(this , Manifest.permission.ACCESS_COARSE_LOCATION)
+        )
         binding = FragmentSelectorBinding.bind(view)
         setUpElements()
         updateSpinner()
@@ -62,10 +65,12 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         remoteConfig.fetchAndActivate().addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val nsfw = remoteConfig.getBoolean("nsfw_mode")
+                val hasGpt = remoteConfig.getBoolean("waifu_gpt_service")
+                Log.e("getRemoteConfig", "nsfw = $nsfw, hasGpt = $hasGpt ")
                 val isAutomatic = remoteConfig.getBoolean("automatic_server")
                 val mode = remoteConfig.getLong("server_mode")
                 if (serverMode != ServerType.NEKOS) {
-                    setNsfwMode(nsfw)
+                    setNsfwMode(nsfw, hasGpt)
                 }
                 setAutoMode(isAutomatic)
             } else {
@@ -84,14 +89,18 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         }
     }
 
-    private fun setNsfwMode(nsfw: Boolean) {
+    private fun setNsfwMode(nsfw: Boolean, hasGpt: Boolean) {
         val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
         with (sharedPref.edit()) {
             putBoolean(Constants.WORK_MODE, nsfw)
+            putBoolean(Constants.IS_WAIFU_GPT, hasGpt)
             apply()
         }
         if (nsfw) {
             binding.sNsfw.visibility = View.VISIBLE
+        }
+        if (hasGpt) {
+            binding.waifuGpt.visibility = View.VISIBLE
         }
     }
 
@@ -179,7 +188,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
                 updateSpinner()
             }
         }
-        fab.setOnClickListener {
+        reloadBackground.setOnClickListener {
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
                 imViewModel.loadErrorOrWaifu()
             } else {
@@ -187,8 +196,10 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
             }
         }
         favorites.setOnClickListener {
-            serverMode = ServerType.FAVORITE
-            navigateTo(serverMode)
+            navigateTo(ServerType.FAVORITE)
+        }
+        waifuGpt.setOnClickListener {
+            navigateTo(ServerType.WAIFUGPT)
         }
         backgroudImage = ivBackdrop
     }
@@ -242,6 +253,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         val bun = saveBundle()
         when (mode) {
             ServerType.FAVORITE -> mainState.onButtonFavoritesClicked(bun)
+            ServerType.WAIFUGPT -> mainState.onButtonGptClicked()
             else -> mainState.onButtonGetWaifuClicked(bun)
         }
     }

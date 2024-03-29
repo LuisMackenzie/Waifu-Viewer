@@ -55,6 +55,11 @@ class MainState(
         navController.navigate(action)
     }
 
+    fun onButtonGptClicked() {
+        val action = SelectorFragmentDirections.actionSelectorToGpt()
+        navController.navigate(action)
+    }
+
     fun requestPermissionLauncher(afterRequest: (Boolean) -> Unit) {
         scope.launch {
             val result = permissionRequester.request()
