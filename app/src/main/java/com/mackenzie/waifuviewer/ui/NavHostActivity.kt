@@ -18,6 +18,9 @@ import com.google.firebase.ktx.Firebase
 import com.mackenzie.waifuviewer.BuildConfig
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.databinding.ActivityNavHostBinding
+import com.mackenzie.waifuviewer.ui.common.isNightModeActive
+import com.mackenzie.waifuviewer.ui.common.isSystemNavBarVisible
+import com.mackenzie.waifuviewer.ui.common.isSystemNavBarVisible2
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -30,9 +33,17 @@ class NavHostActivity : AppCompatActivity(R.layout.activity_nav_host) {
         super.onCreate(savedInstanceState)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             enableEdgeToEdge()
+            val isNightModeVisible = isNightModeActive()
+            Log.e("NavHostActivity", "isNightModeVisible=$isNightModeVisible")
+
         }
         binding = ActivityNavHostBinding.inflate(layoutInflater)
         firebaseAnalytics = Firebase.analytics
+
+        val isNavbarVisible = isSystemNavBarVisible()
+        Log.e("NavHostActivity", "isNavbarVisible=$isNavbarVisible")
+        val isNavbarVisible2 = isSystemNavBarVisible2()
+        Log.e("NavHostActivity", "isNavbarVisible2=$isNavbarVisible2")
 
         val config = generationConfig {
             temperature = 0.7f
@@ -83,7 +94,7 @@ class NavHostActivity : AppCompatActivity(R.layout.activity_nav_host) {
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.R)
+    /*@RequiresApi(Build.VERSION_CODES.R)
     private fun isNavBarVisible():Boolean {
         val windowInsets = WindowInsets.CONSUMED
         val isShow = windowInsets.isVisible(WindowInsets.Type.navigationBars())
@@ -93,9 +104,9 @@ class NavHostActivity : AppCompatActivity(R.layout.activity_nav_host) {
         val isConsumed = windowInsets.isConsumed
         Log.e("NavHostActivity", "isNavigationBarVisible=$isShow, isConsumed=$isConsumed, cutOut=$cutOut, temp1=$temp1, temp2=$temp2")
         return isShow
-    }
+    }*/
 
-    private fun isNavBarVisibleCompat():Boolean {
+    /*private fun isNavBarVisibleCompat():Boolean {
         val windowInsets = WindowInsetsCompat.CONSUMED
         val isShow = windowInsets.isVisible(WindowInsetsCompat.Type.navigationBars())
         val cutOut = windowInsets.isVisible(WindowInsetsCompat.Type.displayCutout())
@@ -104,7 +115,7 @@ class NavHostActivity : AppCompatActivity(R.layout.activity_nav_host) {
         val isConsumed = windowInsets.isConsumed
         Log.e("NavHostActivity", "isNavigationBarVisible=$isShow, isConsumed=$isConsumed, cutOut=$cutOut, temp1=$temp1, temp2=$temp2")
         return isShow
-    }
+    }*/
 
     private fun hideInmersiveMode() {
         val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)

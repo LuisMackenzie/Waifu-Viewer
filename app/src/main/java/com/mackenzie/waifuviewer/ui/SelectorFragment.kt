@@ -67,7 +67,6 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
             if (task.isSuccessful) {
                 val nsfw = remoteConfig.getBoolean("nsfw_mode")
                 val hasGpt = remoteConfig.getBoolean("waifu_gpt_service")
-                Log.e("getRemoteConfig", "nsfw = $nsfw, hasGpt = $hasGpt ")
                 val isAutomatic = remoteConfig.getBoolean("automatic_server")
                 val mode = remoteConfig.getLong("server_mode")
                 if (serverMode != ServerType.NEKOS) {
