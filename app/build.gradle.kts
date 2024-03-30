@@ -1,3 +1,4 @@
+import java.util.Properties
 
 plugins {
     id(Plugins.application)
@@ -24,12 +25,46 @@ android {
 
     }
 
+    /*signingConfigs {
+        releaseSigningConfig {
+            storeFile = rootProject.file("app/testapp.jks")
+            storePassword = System.getProperty("APPCENTER_KEYSTORE_PASSWORD")
+            keyAlias = System.getProperty("APPCENTER_KEY_ALIAS")
+            keyPassword = System.getProperty("APPCENTER_KEY_PASSWORD")
+        }
+    }*/
+
+    signingConfigs {
+        val properties = Properties().apply {
+            load(File(secrets.propertiesFileName).reader())
+        }
+        /*getByName("debug") {
+            keyAlias = "debug"
+            keyPassword = "my debug key password"
+            storeFile = file("/home/miles/keystore.jks")
+            storePassword = "my keystore password"
+        }*/
+        create("release") {
+            keyAlias = (properties["keyAliasSign"] ?: "") as String
+            keyPassword = (properties["keyPassword"] ?: "") as String
+            storeFile = file((properties["ketStoreFile"] ?: "") as String)
+            storePassword = (properties["storePassword"] ?: "") as String
+        }
+        create("enhanced") {
+            keyAlias = (properties["keyAliasSign"] ?: "") as String
+            keyPassword = (properties["keyPassword"] ?: "") as String
+            storeFile = file((properties["ketStoreFile"] ?: "") as String)
+            storePassword = (properties["storePassword"] ?: "") as String
+        }
+    }
+
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
             // applicationIdSuffix = ".release"
             versionNameSuffix = "-RELEASE"
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("release")
         }
         getByName("debug") {
             applicationIdSuffix = ".debug"
@@ -37,9 +72,10 @@ android {
             isDebuggable = true
         }
         create("enhanced") {
-            // applicationIdSuffix = ".prime"
+            applicationIdSuffix = ".prime"
             versionNameSuffix = "-PRIME"
             isDebuggable = true
+            signingConfig = signingConfigs.getByName("enhanced")
         }
     }
 
@@ -51,10 +87,6 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
-
-    /*dataBinding {
-        enable = true
-    }*/
 
     buildFeatures {
         buildConfig = true
@@ -71,7 +103,6 @@ android {
     }
 
     packaging {
-        // exclude("META-INF/versions/9/previous-compilation-data.bin"
         resources.excludes.add("META-INF/versions/9/previous-compilation-data.bin")
     }
 

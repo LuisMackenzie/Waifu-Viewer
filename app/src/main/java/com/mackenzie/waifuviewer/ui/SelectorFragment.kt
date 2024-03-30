@@ -16,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfig
@@ -200,6 +201,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         }
         waifuGpt.setOnClickListener {
             navigateTo(ServerType.WAIFUGPT)
+            Snackbar.make(requireView(), "Not Implemented Yet!", Snackbar.LENGTH_SHORT).show()
         }
         backgroudImage = ivBackdrop
     }
