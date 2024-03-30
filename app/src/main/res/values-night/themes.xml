@@ -11,9 +11,17 @@
         <item name="colorSecondaryVariant">@color/teal_200</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <!--<item name="android:statusBarColor">@color/error</item>
+        <item name="android:navigationBarColor">@color/error</item>-->
         <!-- Customize your theme here. -->
         <item name="android:textColorTertiary">@color/white</item>
+        <item name="android:windowFullscreen">true</item>
+        <!--<item name="android:windowTranslucentStatus">true</item>-->
+        <!--<item name="android:windowTranslucentNavigation">true</item>-->
+        <!--<item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowLightStatusBar">false</item>-->
+        <!--<item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="o_mr1">shortEdges</item>-->
+        <!--<item name="android:fitsSystemWindows">false</item>-->
+        <!--<item name="android:windowContentOverlay">@null</item>-->
     </style>
 </resources>

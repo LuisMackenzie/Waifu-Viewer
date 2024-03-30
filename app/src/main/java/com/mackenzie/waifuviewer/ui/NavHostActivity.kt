@@ -1,7 +1,12 @@
 package com.mackenzie.waifuviewer.ui
 
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.view.WindowInsets
+import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -23,7 +28,9 @@ class NavHostActivity : AppCompatActivity(R.layout.activity_nav_host) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // enableEdgeToEdge()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            enableEdgeToEdge()
+        }
         binding = ActivityNavHostBinding.inflate(layoutInflater)
         firebaseAnalytics = Firebase.analytics
 
@@ -75,25 +82,38 @@ class NavHostActivity : AppCompatActivity(R.layout.activity_nav_host) {
 
     }
 
-    private fun inmersiveMode() {
-        val windowInsetsController = WindowCompat.getInsetsController(window, binding.root)
-        windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())  // FUNC
-//        windowInsetsController.hide(WindowInsetsCompat.Type.statusBars())
-//        windowInsetsController.hide(WindowInsetsCompat.Type.navigationBars())  // FUNC
-//        windowInsetsController.hide(WindowInsetsCompat.Type.mandatorySystemGestures())
-//        windowInsetsController.hide(WindowInsetsCompat.Type.tappableElement())
-//        windowInsetsController.hide(WindowInsetsCompat.Type.systemGestures())
 
+    @RequiresApi(Build.VERSION_CODES.R)
+    private fun isNavBarVisible():Boolean {
+        val windowInsets = WindowInsets.CONSUMED
+        val isShow = windowInsets.isVisible(WindowInsets.Type.navigationBars())
+        val cutOut = windowInsets.isVisible(WindowInsets.Type.displayCutout())
+        val temp1 = windowInsets.isVisible(WindowInsets.Type.systemBars())
+        val temp2 = windowInsets.isVisible(WindowInsets.Type.captionBar())
+        val isConsumed = windowInsets.isConsumed
+        Log.e("NavHostActivity", "isNavigationBarVisible=$isShow, isConsumed=$isConsumed, cutOut=$cutOut, temp1=$temp1, temp2=$temp2")
+        return isShow
     }
 
-    private fun inmersiveMode2() {
-        WindowCompat.getInsetsController(window, binding.root)
-            .hide(WindowInsetsCompat.Type.systemBars())
+    private fun isNavBarVisibleCompat():Boolean {
+        val windowInsets = WindowInsetsCompat.CONSUMED
+        val isShow = windowInsets.isVisible(WindowInsetsCompat.Type.navigationBars())
+        val cutOut = windowInsets.isVisible(WindowInsetsCompat.Type.displayCutout())
+        val temp1 = windowInsets.isVisible(WindowInsetsCompat.Type.systemBars())
+        val temp2 = windowInsets.isVisible(WindowInsetsCompat.Type.captionBar())
+        val isConsumed = windowInsets.isConsumed
+        Log.e("NavHostActivity", "isNavigationBarVisible=$isShow, isConsumed=$isConsumed, cutOut=$cutOut, temp1=$temp1, temp2=$temp2")
+        return isShow
     }
 
-    private fun hideBottomSysBar() {
-        val decorView = window.decorView
-        decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+    private fun hideInmersiveMode() {
+        val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
+        windowInsetsController.show(WindowInsetsCompat.Type.navigationBars())
+    }
+
+    private fun showInmersiveMode() {
+        val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
+        windowInsetsController.hide(WindowInsetsCompat.Type.navigationBars())
     }
 
 }

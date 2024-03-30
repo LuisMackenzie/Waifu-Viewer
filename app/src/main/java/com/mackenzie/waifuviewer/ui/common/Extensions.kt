@@ -1,9 +1,13 @@
 package com.mackenzie.waifuviewer.ui.common
 
+import android.app.Activity
 import android.content.Context
+import android.graphics.Point
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.ImageView
 import androidx.annotation.LayoutRes
 import androidx.lifecycle.Lifecycle
@@ -39,6 +43,28 @@ fun ImageView.loadUrlCenterCrop(url: String) {
         .error(R.drawable.ic_error_grey)
         .into(this)
 }
+
+fun Activity.showFullscreenCutout() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        window.attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+    }
+}
+
+fun Activity.showBelowCutout() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        window.attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_NEVER
+    }
+}
+
+/*fun Context.isNavigationBarVisible(): Boolean {
+    val windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+    val display = windowManager.defaultDisplay
+    val realSize = Point()
+    val screenSize = Point()
+    display.getRealSize(realSize)
+    display.getSize(screenSize)
+    return realSize.y != screenSize.y
+}*/
 
 /*inline fun <T> basicDiffUtil(
     crossinline areItemsTheSame: (T, T) -> Boolean = { old, new -> old == new },
