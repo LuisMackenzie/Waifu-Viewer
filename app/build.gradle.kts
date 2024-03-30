@@ -25,25 +25,10 @@ android {
 
     }
 
-    /*signingConfigs {
-        releaseSigningConfig {
-            storeFile = rootProject.file("app/testapp.jks")
-            storePassword = System.getProperty("APPCENTER_KEYSTORE_PASSWORD")
-            keyAlias = System.getProperty("APPCENTER_KEY_ALIAS")
-            keyPassword = System.getProperty("APPCENTER_KEY_PASSWORD")
-        }
-    }*/
-
     signingConfigs {
         val properties = Properties().apply {
             load(File(secrets.propertiesFileName).reader())
         }
-        /*getByName("debug") {
-            keyAlias = "debug"
-            keyPassword = "my debug key password"
-            storeFile = file("/home/miles/keystore.jks")
-            storePassword = "my keystore password"
-        }*/
         create("release") {
             keyAlias = (properties["keyAliasSign"] ?: "") as String
             keyPassword = (properties["keyPassword"] ?: "") as String
@@ -59,17 +44,17 @@ android {
     }
 
     buildTypes {
+        getByName("debug") {
+            applicationIdSuffix = ".debug"
+            versionNameSuffix = "-DEBUG"
+            isDebuggable = true
+        }
         getByName("release") {
             isMinifyEnabled = false
             // applicationIdSuffix = ".release"
             versionNameSuffix = "-RELEASE"
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             signingConfig = signingConfigs.getByName("release")
-        }
-        getByName("debug") {
-            applicationIdSuffix = ".debug"
-            versionNameSuffix = "-DEBUG"
-            isDebuggable = true
         }
         create("enhanced") {
             applicationIdSuffix = ".prime"
