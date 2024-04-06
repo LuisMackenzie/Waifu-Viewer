@@ -45,52 +45,6 @@ class NavHostActivity : AppCompatActivity(R.layout.activity_nav_host) {
         val isNavbarVisible2 = isSystemNavBarVisible2()
         Log.e("NavHostActivity", "isNavbarVisible2=$isNavbarVisible2")
 
-        val config = generationConfig {
-            temperature = 0.7f
-        }
-
-        val gm15ProLatest = GenerativeModel(
-            modelName = "gemini-1.5-pro-latest",
-            apiKey = BuildConfig.apikey,
-            generationConfig = config
-        )
-
-        val gm15pro = GenerativeModel(
-            modelName = "gemini-1.5-pro",
-            apiKey = BuildConfig.apikey,
-            generationConfig = config
-        )
-
-        val gm10ProLatest = GenerativeModel(
-            modelName = "gemini-1.0-pro-latest",
-            apiKey = BuildConfig.apikey,
-            generationConfig = config
-        )
-
-        val gm10Pro = GenerativeModel(
-            modelName = "gemini-1.0-pro",
-            apiKey = BuildConfig.apikey,
-            generationConfig = config
-        )
-
-        val gm10ProGeneral = GenerativeModel(
-            modelName = "gemini-pro",
-            apiKey = BuildConfig.apikey,
-            generationConfig = config
-        )
-
-        val gm10ProVisionLatest = GenerativeModel(
-            modelName = "gemini-1.0-pro-vision-latest",
-            apiKey = BuildConfig.apikey,
-            generationConfig = config
-        )
-
-        val gm10ProVision = GenerativeModel(
-            modelName = "gemini-1.0-pro-vision",
-            apiKey = BuildConfig.apikey,
-            generationConfig = config
-        )
-
     }
 
 
