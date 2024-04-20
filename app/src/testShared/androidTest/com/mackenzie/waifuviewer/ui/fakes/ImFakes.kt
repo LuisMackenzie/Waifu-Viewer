@@ -59,15 +59,14 @@ class FakeRemoteImService(private val waifus: List<WaifuIm> = emptyList()) : Wai
         tags: String,
         isGif: Boolean,
         orientation: String,
-        manyWaifus: Boolean
+        manyWaifus: Int
     ) = WaifuImResult(waifus)
 
     override suspend fun getOnlyRandomWaifuIm(
         isNsfw: Boolean,
         tags: String,
         isGif: Boolean,
-        orientation: String,
-        manyWaifus: Boolean
+        orientation: String
     ) = WaifuImResult(waifus)
 
 }

@@ -3,6 +3,7 @@ package com.mackenzie.waifuviewer.data.server
 import arrow.core.Either
 import com.mackenzie.waifuviewer.data.datasource.WaifusImRemoteDataSource
 import com.mackenzie.waifuviewer.data.tryCall
+import com.mackenzie.waifuviewer.data.trySave
 import com.mackenzie.waifuviewer.domain.Error
 import com.mackenzie.waifuviewer.domain.WaifuImItem
 import java.io.IOException
@@ -21,7 +22,14 @@ class ServerImDataSource @Inject constructor(private val remoteService: RemoteCo
             .toDomainModel()
     }
 
-    override suspend fun getOnlyWaifuIm(): WaifuImItem? {
+    override suspend fun getOnlyWaifuIm(): WaifuImItem? = trySave {
+        remoteService.serviceIm
+            .getOnlyRandomWaifuIm()
+            .waifus
+            .firstOrNull()?.toDomainModel()
+    }
+
+    /*override suspend fun getOnlyWaifuIm(): WaifuImItem? {
         val waifu: WaifuImItem?
         try {
             waifu = remoteService.serviceIm
@@ -30,7 +38,7 @@ class ServerImDataSource @Inject constructor(private val remoteService: RemoteCo
             return null
         }
         return waifu
-    }
+    }*/
 
 }
 
