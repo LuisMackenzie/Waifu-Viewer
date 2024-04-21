@@ -3,6 +3,7 @@ package com.mackenzie.waifuviewer.ui.common
 import android.app.Activity
 import android.content.Context
 import android.graphics.Point
+import android.hardware.display.DisplayManager
 import android.nfc.NfcManager
 import android.os.Build
 import android.util.Log
@@ -65,10 +66,20 @@ fun Context.isNightModeActive(): Boolean {
     return resources.configuration.isNightModeActive
 }
 
-fun Context.isNavigationActive(): Boolean {
+fun Context.isNavigationActive2(): Boolean {
     val cm = this.getSystemService(Context.WINDOW_SERVICE) as WindowManager
     val adapter = cm.defaultDisplay
     return adapter != null
+}
+
+fun Context.isNavigationActive(): Boolean {
+    val displayManager = getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
+    val displays = displayManager.getDisplays()
+    displays.forEach {
+        Log.e("NavHostActivity", "isNotEmpty=${displays.isNotEmpty()}, flags=${it.flags} height=${it.height}, width=${it.width}")
+        Log.e("NavHostActivity", "isHdr=${it.isHdr} isValid=${it.isValid}, displayId=${it.displayId}")
+    }
+    return displays.isNotEmpty()
 }
 
 fun isNfcAvailable(context: Context): Boolean {
@@ -80,14 +91,12 @@ fun isNfcAvailable(context: Context): Boolean {
 fun Context.isSystemNavBarVisible(): Boolean {
     val decorView = (this as? WindowManager)?.defaultDisplay?.run {
         val realDisplayMetrics = android.util.DisplayMetrics()
-        Log.e("NavHostActivity", "realDisplayMetrics=$realDisplayMetrics")
         getRealMetrics(realDisplayMetrics)
         val realHeight = realDisplayMetrics.heightPixels
         val realWidth = realDisplayMetrics.widthPixels
         Log.e("NavHostActivity", "realHeight=$realHeight, realWidth=$realWidth")
 
         val displayMetrics = android.util.DisplayMetrics()
-        Log.e("NavHostActivity", "displayMetrics=$displayMetrics")
         getMetrics(displayMetrics)
         val displayHeight = displayMetrics.heightPixels
         val displayWidth = displayMetrics.widthPixels
@@ -95,6 +104,7 @@ fun Context.isSystemNavBarVisible(): Boolean {
 
         realHeight - displayHeight > 0 || realWidth - displayWidth > 0
     }
+    Log.e("NavHostActivity", "decorView=$decorView")
     return decorView ?: false
 }
 

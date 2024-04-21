@@ -18,6 +18,7 @@ import com.google.firebase.ktx.Firebase
 import com.mackenzie.waifuviewer.BuildConfig
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.databinding.ActivityNavHostBinding
+import com.mackenzie.waifuviewer.ui.common.isNavigationActive
 import com.mackenzie.waifuviewer.ui.common.isNightModeActive
 import com.mackenzie.waifuviewer.ui.common.isSystemNavBarVisible
 import com.mackenzie.waifuviewer.ui.common.isSystemNavBarVisible2
@@ -40,10 +41,9 @@ class NavHostActivity : AppCompatActivity(R.layout.activity_nav_host) {
         binding = ActivityNavHostBinding.inflate(layoutInflater)
         firebaseAnalytics = Firebase.analytics
 
-        val isNavbarVisible = isSystemNavBarVisible()
-        Log.e("NavHostActivity", "isNavbarVisible=$isNavbarVisible")
-        val isNavbarVisible2 = isSystemNavBarVisible2()
-        Log.e("NavHostActivity", "isNavbarVisible2=$isNavbarVisible2")
+        val isNavbarVisible = isNavigationActive()
+
+        val isNavbarVisible2 = isSystemNavBarVisible()
 
     }
 
