@@ -29,17 +29,6 @@ class ServerImDataSource @Inject constructor(private val remoteService: RemoteCo
             .firstOrNull()?.toDomainModel()
     }
 
-    /*override suspend fun getOnlyWaifuIm(): WaifuImItem? {
-        val waifu: WaifuImItem?
-        try {
-            waifu = remoteService.serviceIm
-                .getOnlyRandomWaifuIm().waifus.first().toDomainModel()
-        } catch (e: IOException) {
-            return null
-        }
-        return waifu
-    }*/
-
 }
 
 private fun List<WaifuIm>.toDomainModel(): List<WaifuImItem> = map { it.toDomainModel() }
