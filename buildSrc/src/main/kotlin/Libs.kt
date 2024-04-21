@@ -12,7 +12,7 @@ object Libs {
     }
 
     object GenerativeAI {
-        const val generativeai = "com.google.ai.client.generativeai:generativeai:0.2.2"
+        const val generativeai = "com.google.ai.client.generativeai:generativeai:_"
     }
 
     object AndroidX {
