@@ -8,13 +8,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.databinding.ViewMediaItemBinding
 import com.mackenzie.waifuviewer.domain.WaifuImItem
+import com.mackenzie.waifuviewer.ui.common.basicDiffUtil
 import com.mackenzie.waifuviewer.ui.common.inflate
 import com.mackenzie.waifuviewer.ui.common.loadUrlCenterCrop
 import com.mackenzie.waifuviewer.ui.main.ImListener
 
 class WaifuImAdapter(
     private val listener: ImListener
-): ListAdapter<WaifuImItem, WaifuImAdapter.ViewHolder>(WaifuImDiffCallback()) {
+): ListAdapter<WaifuImItem, WaifuImAdapter.ViewHolder>(basicDiffUtil()) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -40,11 +41,5 @@ class WaifuImAdapter(
                 preview.visibility = View.GONE
             }*/
         }
-    }
-
-    private class WaifuImDiffCallback : DiffUtil.ItemCallback<WaifuImItem>() {
-        override fun areItemsTheSame(oldItem: WaifuImItem, newItem: WaifuImItem): Boolean = oldItem.id == newItem.id
-
-        override fun areContentsTheSame(oldItem: WaifuImItem, newItem: WaifuImItem): Boolean = oldItem == newItem
     }
 }

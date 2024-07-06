@@ -19,6 +19,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.DiffUtil
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
@@ -127,7 +128,7 @@ fun Context.isSystemNavBarVisible2(): Boolean {
     return realSize.y != screenSize.y
 }*/
 
-/*inline fun <T> basicDiffUtil(
+inline fun <T : Any> basicDiffUtil(
     crossinline areItemsTheSame: (T, T) -> Boolean = { old, new -> old == new },
     crossinline areContentsTheSame: (T, T) -> Boolean = { old, new -> old == new }
 ) = object : DiffUtil.ItemCallback<T>() {
@@ -136,7 +137,7 @@ fun Context.isSystemNavBarVisible2(): Boolean {
 
     override fun areContentsTheSame(oldItem: T, newItem: T): Boolean =
         areContentsTheSame(oldItem, newItem)
-}*/
+}
 
 var View.visible: Boolean
     get() = visibility == View.VISIBLE

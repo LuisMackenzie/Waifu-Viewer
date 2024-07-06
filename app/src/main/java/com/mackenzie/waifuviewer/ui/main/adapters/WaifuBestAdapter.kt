@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.databinding.ViewMediaItemBinding
 import com.mackenzie.waifuviewer.domain.WaifuBestItem
+import com.mackenzie.waifuviewer.ui.common.basicDiffUtil
 import com.mackenzie.waifuviewer.ui.common.inflate
 import com.mackenzie.waifuviewer.ui.common.loadUrlCenterCrop
 import com.mackenzie.waifuviewer.ui.main.BestListener
@@ -15,7 +16,7 @@ import com.mackenzie.waifuviewer.ui.main.BestListener
 
 class WaifuBestAdapter(
     private val listener: BestListener
-    ): ListAdapter<WaifuBestItem, WaifuBestAdapter.ViewHolder>( WaifuBestDiffCallback() ) {
+    ): ListAdapter<WaifuBestItem, WaifuBestAdapter.ViewHolder>( basicDiffUtil() ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = parent.inflate(R.layout.view_media_item, false)
@@ -44,11 +45,5 @@ class WaifuBestAdapter(
 
         }
 
-    }
-
-    private class WaifuBestDiffCallback : DiffUtil.ItemCallback<WaifuBestItem>() {
-        override fun areItemsTheSame(oldItem: WaifuBestItem, newItem: WaifuBestItem): Boolean = oldItem.id == newItem.id
-
-        override fun areContentsTheSame(oldItem: WaifuBestItem, newItem: WaifuBestItem): Boolean = oldItem == newItem
     }
 }
