@@ -48,11 +48,14 @@ android {
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-DEBUG"
             isDebuggable = true
+            resValue("string", "app_name", "Waifu Debug")
+            resValue("string", "waifu_viewer", "Waifu Debug")
         }
         getByName("release") {
             isMinifyEnabled = false
             // applicationIdSuffix = ".release"
             versionNameSuffix = "-RELEASE"
+            resValue("string", "app_name", "Waifu Viewer")
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             signingConfig = signingConfigs.getByName("release")
         }
@@ -60,6 +63,8 @@ android {
             applicationIdSuffix = ".prime"
             versionNameSuffix = "-PRIME"
             isDebuggable = true
+            resValue("string", "app_name", "Waifu Viewer Prime")
+            resValue("string", "waifu_viewer", "Waifu Prime")
             signingConfig = signingConfigs.getByName("enhanced")
         }
     }
