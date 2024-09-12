@@ -8,7 +8,8 @@
         android:layout_height="800px"
         android:layout_margin="10dp"
         app:cardElevation="10dp"
-        app:cardCornerRadius="@dimen/default_corner">
+        app:cardCornerRadius="@dimen/default_corner"
+        tools:ignore="PxUsage">
 
         <RelativeLayout
             android:id="@+id/content"
@@ -49,14 +50,15 @@
 
             <ImageView
                 android:id="@+id/iv_favs"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="90px"
+                android:layout_height="90px"
                 android:layout_alignBottom="@+id/waifuThumb"
                 android:layout_alignStart="@+id/waifuThumb"
                 android:layout_marginStart="20dp"
                 android:layout_marginBottom="8dp"
                 android:contentDescription="@string/waifus_content"
-                android:src="@drawable/ic_favorite_on" />
+                android:src="@drawable/ic_favorite_on"
+                tools:ignore="PxUsage" />
 
         </RelativeLayout>
 
