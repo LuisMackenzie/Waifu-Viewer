@@ -15,6 +15,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
+import org.mockito.kotlin.any
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
@@ -40,7 +41,7 @@ class SelectorImViewModelTest {
 
     @Test
     fun `State is updated with current cached content inmediately`() = runTest {
-        whenever(requestOnlyWaifuImUseCase()).thenReturn(imSample)
+        whenever(requestOnlyWaifuImUseCase(any())).thenReturn(imSample)
 
         vm.loadErrorOrWaifu()
 
@@ -54,7 +55,7 @@ class SelectorImViewModelTest {
     @Test
     fun `Progress is shown when screen start and hidden when it finishes`() = runTest {
 
-        whenever(requestOnlyWaifuImUseCase()).thenReturn(imSample)
+        whenever(requestOnlyWaifuImUseCase(any())).thenReturn(imSample)
 
         vm.loadErrorOrWaifu()
 
@@ -71,7 +72,7 @@ class SelectorImViewModelTest {
 
         runCurrent()
 
-        verify(requestOnlyWaifuImUseCase).invoke()
+        verify(requestOnlyWaifuImUseCase).invoke(any())
     }
 
     @Test

@@ -5,7 +5,7 @@ import javax.inject.Inject
 
 class RequestOnlyWaifuImUseCase @Inject constructor(private val repo: WaifusImRepository) {
 
-    suspend operator fun invoke() = repo.requestOnlyWaifuIm()
+    suspend operator fun invoke(orientation: Boolean) = repo.requestOnlyWaifuIm(orientation)
 
 }
 

@@ -18,9 +18,9 @@ class SelectorImViewModel @Inject constructor(
     private val _state = MutableStateFlow(UiState())
     val state: StateFlow<UiState> = _state.asStateFlow()
 
-    private fun loadWaifu() {
+    private fun loadWaifu(orientation: Boolean) {
         viewModelScope.launch {
-            val waifu = requestOnlyImWaifu()
+            val waifu = requestOnlyImWaifu(orientation)
             if (waifu != null) {
                 _state.update { it.copy(waifu = waifu) }
             } else {
@@ -34,8 +34,8 @@ class SelectorImViewModel @Inject constructor(
             _state.update { it.copy(type = type) }
     }
 
-    fun loadErrorOrWaifu() {
-            loadWaifu()
+    fun loadErrorOrWaifu(orientation: Boolean = false) {
+            loadWaifu(orientation)
     }
 
     data class UiState(

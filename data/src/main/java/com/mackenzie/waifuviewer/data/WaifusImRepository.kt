@@ -41,8 +41,8 @@ class WaifusImRepository @Inject constructor(
         if (error != null) return error else return null
     }
 
-    suspend fun requestOnlyWaifuIm(): WaifuImItem? {
-        val waifuIm = remoteImDataSource.getOnlyWaifuIm()
+    suspend fun requestOnlyWaifuIm(orientation: Boolean): WaifuImItem? {
+        val waifuIm = remoteImDataSource.getOnlyWaifuIm(getOrientation(orientation))
         if (waifuIm != null) return waifuIm else return null
     }
 

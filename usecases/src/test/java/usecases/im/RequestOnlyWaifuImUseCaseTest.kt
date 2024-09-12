@@ -4,6 +4,7 @@ import com.mackenzie.waifuviewer.data.WaifusImRepository
 import com.mackenzie.waifuviewer.usecases.im.RequestOnlyWaifuImUseCase
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
+import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 
@@ -14,9 +15,9 @@ class RequestOnlyWaifuImUseCaseTest {
         val repo = mock<WaifusImRepository>()
         val requestOnlyWaifuImUseCase = RequestOnlyWaifuImUseCase(repo)
 
-        requestOnlyWaifuImUseCase()
+        requestOnlyWaifuImUseCase(false)
 
-        verify(repo).requestOnlyWaifuIm()
+        verify(repo).requestOnlyWaifuIm(any())
     }
 
 }

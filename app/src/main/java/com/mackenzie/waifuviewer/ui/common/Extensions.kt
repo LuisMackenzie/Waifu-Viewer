@@ -2,6 +2,7 @@ package com.mackenzie.waifuviewer.ui.common
 
 import android.app.Activity
 import android.content.Context
+import android.content.res.Configuration
 import android.graphics.Point
 import android.hardware.display.DisplayManager
 import android.nfc.NfcManager
@@ -157,3 +158,11 @@ fun <T> LifecycleOwner.launchAndCollect(
 }
 
 val Context.app: App get() = applicationContext as App
+
+fun Context.isPortrait(): Boolean {
+    return resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+}
+
+fun Context.isLandscape(): Boolean {
+    return resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+}

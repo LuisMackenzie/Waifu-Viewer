@@ -190,7 +190,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         }
         reloadBackground.setOnClickListener {
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
-                imViewModel.loadErrorOrWaifu()
+                imViewModel.loadErrorOrWaifu(requireContext().isLandscape())
             } else {
                 picsViewModel.loadErrorOrWaifu()
             }
@@ -313,7 +313,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         viewLifecycleOwner.launchAndCollect(imViewModel.state) { updateImWaifu(it) }
         mainState.requestPermissionLauncher {
             if (!loaded) {
-                imViewModel.loadErrorOrWaifu()
+                imViewModel.loadErrorOrWaifu(requireContext().isLandscape())
                 Toast.makeText(requireContext(), getString(R.string.server_normal_toast), Toast.LENGTH_SHORT).show()
             }
         }

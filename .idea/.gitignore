@@ -1,4 +1,6 @@
 # Default ignored files
+/.idea/deploymentTargetSelector.xml
+/.idea/kotlinc.xml
 /shelf/
 /workspace.xml
 # GitHub Copilot persisted chat sessions
