@@ -3,25 +3,16 @@ package com.mackenzie.waifuviewer.ui
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.view.WindowInsets
 import androidx.activity.enableEdgeToEdge
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
-import com.google.ai.client.generativeai.GenerativeModel
-import com.google.ai.client.generativeai.type.generationConfig
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
-import com.mackenzie.waifuviewer.BuildConfig
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.databinding.ActivityNavHostBinding
-import com.mackenzie.waifuviewer.ui.common.isNavigationActive
 import com.mackenzie.waifuviewer.ui.common.isNightModeActive
-import com.mackenzie.waifuviewer.ui.common.isSystemNavBarVisible
-import com.mackenzie.waifuviewer.ui.common.isSystemNavBarVisible2
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -41,9 +32,9 @@ class NavHostActivity : AppCompatActivity(R.layout.activity_nav_host) {
         binding = ActivityNavHostBinding.inflate(layoutInflater)
         firebaseAnalytics = Firebase.analytics
 
-        val isNavbarVisible = isNavigationActive()
+        // val isNavbarVisible = isNavigationActive()
 
-        val isNavbarVisible2 = isSystemNavBarVisible()
+        // val isNavbarVisible2 = isSystemNavBarVisible()
 
     }
 

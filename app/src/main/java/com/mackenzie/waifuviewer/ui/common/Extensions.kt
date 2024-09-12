@@ -67,14 +67,15 @@ fun Activity.showBelowCutout() {
 fun Context.isNightModeActive(): Boolean {
     return resources.configuration.isNightModeActive
 }
-
-fun Context.isNavigationActive2(): Boolean {
+// Deprecated
+/*fun Context.isNavigationActive2(): Boolean {
     val cm = this.getSystemService(Context.WINDOW_SERVICE) as WindowManager
     val adapter = cm.defaultDisplay
     return adapter != null
-}
+}*/
 
-fun Context.isNavigationActive(): Boolean {
+// Deprecated
+/*fun Context.isNavigationActive(): Boolean {
     val displayManager = getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
     val displays = displayManager.getDisplays()
     displays.forEach {
@@ -82,7 +83,7 @@ fun Context.isNavigationActive(): Boolean {
         Log.e("NavHostActivity", "isHdr=${it.isHdr} isValid=${it.isValid}, displayId=${it.displayId}")
     }
     return displays.isNotEmpty()
-}
+}*/
 
 fun isNfcAvailable(context: Context): Boolean {
     val cm = context.getSystemService(Context.NFC_SERVICE) as NfcManager
@@ -90,7 +91,8 @@ fun isNfcAvailable(context: Context): Boolean {
     return adapter != null
 }
 
-fun Context.isSystemNavBarVisible(): Boolean {
+// Deprecated
+/*fun Context.isSystemNavBarVisible(): Boolean {
     val decorView = (this as? WindowManager)?.defaultDisplay?.run {
         val realDisplayMetrics = android.util.DisplayMetrics()
         getRealMetrics(realDisplayMetrics)
@@ -108,17 +110,18 @@ fun Context.isSystemNavBarVisible(): Boolean {
     }
     Log.e("NavHostActivity", "decorView=$decorView")
     return decorView ?: false
-}
+}*/
 
-
-fun Context.isSystemNavBarVisible2(): Boolean {
+// Deprecated
+/*fun Context.isSystemNavBarVisible2(): Boolean {
     val cm = this.getSystemService(Context.WINDOW_SERVICE) as WindowManager
     val realDisplay = cm.defaultDisplay
     val realMetrics = android.util.DisplayMetrics()
     Log.e("NavHostActivity", "realDisplay=$realDisplay, realMetrics=$realMetrics")
     return realDisplay != null && realMetrics.equals(realDisplay)
-}
+}*/
 
+// Deprecated
 /*fun Context.isNavigationBarVisible(): Boolean {
     val windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
     val display = windowManager.defaultDisplay
