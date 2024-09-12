@@ -4,7 +4,7 @@ plugins {
     id(Plugins.application)
     id(Plugins.android)
     id(Plugins.kapt)
-    // id(Plugins.ksp)
+    id(Plugins.ksp)
     id(Plugins.parcelize)
     id(Plugins.safeArgs)
     id(Plugins.hiltAndroid)
@@ -83,6 +83,7 @@ android {
     buildFeatures {
         buildConfig = true
         dataBinding = true
+        // viewBinding = true
     }
 
     sourceSets {
@@ -130,18 +131,18 @@ dependencies {
     // Room DB
     implementation(Libs.AndroidX.Room.runtime)
     implementation(Libs.AndroidX.Room.ktx)
-    kapt(Libs.AndroidX.Room.compiler)
-    // ksp(Libs.AndroidX.Room.compiler)
+    // kapt(Libs.AndroidX.Room.compiler)
+    ksp(Libs.AndroidX.Room.compiler)
 
     // Hilt
     implementation(Libs.Hilt.android)
-    kapt(Libs.Hilt.compiler)
-    // ksp(Libs.Hilt.compiler)
+    // kapt(Libs.Hilt.compiler)
+    ksp(Libs.Hilt.compiler)
 
     // Glide libraries
     implementation(Libs.Glide.glide)
-    kapt(Libs.Glide.compiler)
-    // ksp(Libs.Glide.compiler)
+    // kapt(Libs.Glide.compiler)
+    ksp(Libs.Glide.compiler)
 
     // Retrofit Libraries
     implementation(Libs.Retrofit.retrofit)
@@ -207,8 +208,8 @@ dependencies {
     androidTestImplementation(Libs.AndroidX.Test.Runner.rules)
     androidTestImplementation(Libs.Coroutines.test)
     androidTestImplementation(Libs.Hilt.test)
-    kaptAndroidTest(Libs.Hilt.compiler)
-    // kspAndroidTest(Libs.Hilt.compiler)
+    // kaptAndroidTest(Libs.Hilt.compiler)
+    kspAndroidTest(Libs.Hilt.compiler)
     // For MockwebServer
     androidTestImplementation(Libs.OkHttp3.mockWebServer)
 
