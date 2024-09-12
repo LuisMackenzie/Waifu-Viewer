@@ -60,11 +60,12 @@ android {
             signingConfig = signingConfigs.getByName("release")
         }
         create("enhanced") {
+            isMinifyEnabled = false
             applicationIdSuffix = ".prime"
             versionNameSuffix = "-PRIME"
-            isDebuggable = true
             resValue("string", "app_name", "Waifu Viewer Prime")
             resValue("string", "waifu_viewer", "Waifu Prime")
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             signingConfig = signingConfigs.getByName("enhanced")
         }
     }
