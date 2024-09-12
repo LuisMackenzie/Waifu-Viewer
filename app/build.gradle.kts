@@ -4,6 +4,7 @@ plugins {
     id(Plugins.application)
     id(Plugins.android)
     id(Plugins.kapt)
+    // id(Plugins.ksp)
     id(Plugins.parcelize)
     id(Plugins.safeArgs)
     id(Plugins.hiltAndroid)
@@ -14,6 +15,7 @@ plugins {
 
 android {
     compileSdk = AppConfig.compileSdk
+    namespace = AppConfig.applicationId
 
     defaultConfig {
         applicationId = AppConfig.applicationId
@@ -29,44 +31,43 @@ android {
         val properties = Properties().apply {
             load(File(secrets.propertiesFileName).reader())
         }
-        create("release") {
-            keyAlias = (properties["keyAliasSign"] ?: "") as String
-            keyPassword = (properties["keyPassword"] ?: "") as String
-            storeFile = file((properties["ketStoreFile"] ?: "") as String)
-            storePassword = (properties["storePassword"] ?: "") as String
+        create(SignConstants.variantNameRelease) {
+            keyAlias = (properties[SignConstants.keyAliasSign] ?: "") as String
+            keyPassword = (properties[SignConstants.keyPassword] ?: "") as String
+            storeFile = file((properties[SignConstants.keyStoreFile] ?: "") as String)
+            storePassword = (properties[SignConstants.storePassword] ?: "") as String
         }
-        create("enhanced") {
-            keyAlias = (properties["keyAliasSign"] ?: "") as String
-            keyPassword = (properties["keyPassword"] ?: "") as String
-            storeFile = file((properties["ketStoreFile"] ?: "") as String)
-            storePassword = (properties["storePassword"] ?: "") as String
+        create(SignConstants.variantNameEnhanced) {
+            keyAlias = (properties[SignConstants.keyAliasSign] ?: "") as String
+            keyPassword = (properties[SignConstants.keyPassword] ?: "") as String
+            storeFile = file((properties[SignConstants.keyStoreFile] ?: "") as String)
+            storePassword = (properties[SignConstants.storePassword] ?: "") as String
         }
     }
 
     buildTypes {
-        getByName("debug") {
-            applicationIdSuffix = ".debug"
-            versionNameSuffix = "-DEBUG"
+        getByName(SignConstants.variantNameDebug) {
+            applicationIdSuffix = SignConstants.appIdSuffixDebug
+            versionNameSuffix = SignConstants.versionNameSuffixDebug
             isDebuggable = true
-            resValue("string", "app_name", "Waifu Debug")
-            resValue("string", "waifu_viewer", "Waifu Debug")
+            resValue(Constants.type, SignConstants.varAppName, SignConstants.valueAppNameDebug)
+            resValue(Constants.type, SignConstants.varWaifuViewer, SignConstants.homeWaifuViewerDebug)
         }
-        getByName("release") {
+        getByName(SignConstants.variantNameRelease) {
             isMinifyEnabled = false
             // applicationIdSuffix = ".release"
-            versionNameSuffix = "-RELEASE"
-            resValue("string", "app_name", "Waifu Viewer")
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            signingConfig = signingConfigs.getByName("release")
+            versionNameSuffix = SignConstants.versionNameSuffixRelease
+            proguardFiles(getDefaultProguardFile(Constants.proGuardFile), Constants.proGuardRules)
+            signingConfig = signingConfigs.getByName(SignConstants.variantNameRelease)
         }
-        create("enhanced") {
+        create(SignConstants.variantNameEnhanced) {
             isMinifyEnabled = false
-            applicationIdSuffix = ".prime"
-            versionNameSuffix = "-PRIME"
-            resValue("string", "app_name", "Waifu Viewer Prime")
-            resValue("string", "waifu_viewer", "Waifu Prime")
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            signingConfig = signingConfigs.getByName("enhanced")
+            applicationIdSuffix = SignConstants.appIdSuffixEnhanced
+            versionNameSuffix = SignConstants.versionNameSuffixEnhanced
+            resValue(Constants.type, SignConstants.varAppName, SignConstants.valueAppNameEnhanced)
+            resValue(Constants.type, SignConstants.varWaifuViewer, SignConstants.homeWaifuViewerEnhanced)
+            proguardFiles(getDefaultProguardFile(Constants.proGuardFile), Constants.proGuardRules)
+            signingConfig = signingConfigs.getByName(SignConstants.variantNameEnhanced)
         }
     }
 
@@ -85,19 +86,17 @@ android {
     }
 
     sourceSets {
-        this.getByName("androidTest") {
+        this.getByName(Constants.androidTestSSName) {
             this.java.srcDir("$projectDir/src/testShared/androidTest")
         }
-        this.getByName("test") {
+        this.getByName(Constants.testSSName) {
             this.java.srcDir("$projectDir/src/testShared/test")
         }
     }
 
     packaging {
-        resources.excludes.add("META-INF/versions/9/previous-compilation-data.bin")
+        resources.excludes.add(Constants.metaInf)
     }
-
-    namespace = "com.mackenzie.waifuviewer"
 }
 
 dependencies {
@@ -132,14 +131,17 @@ dependencies {
     implementation(Libs.AndroidX.Room.runtime)
     implementation(Libs.AndroidX.Room.ktx)
     kapt(Libs.AndroidX.Room.compiler)
+    // ksp(Libs.AndroidX.Room.compiler)
 
     // Hilt
     implementation(Libs.Hilt.android)
     kapt(Libs.Hilt.compiler)
+    // ksp(Libs.Hilt.compiler)
 
     // Glide libraries
     implementation(Libs.Glide.glide)
     kapt(Libs.Glide.compiler)
+    // ksp(Libs.Glide.compiler)
 
     // Retrofit Libraries
     implementation(Libs.Retrofit.retrofit)
@@ -188,6 +190,9 @@ dependencies {
     // implementation("com.google.ai.client.generativeai:generativeai:0.2.2")
     implementation(Libs.GenerativeAI.generativeai)
 
+    // Kotlin KSP
+    // implementation("com.google.devtools.ksp:symbol-processing-api:2.0.20-1.0.24")
+
     // JUnit y Mockito
     testImplementation(Libs.JUnit.junit)
     testImplementation(Libs.Mockito.kotlin)
@@ -203,6 +208,7 @@ dependencies {
     androidTestImplementation(Libs.Coroutines.test)
     androidTestImplementation(Libs.Hilt.test)
     kaptAndroidTest(Libs.Hilt.compiler)
+    // kspAndroidTest(Libs.Hilt.compiler)
     // For MockwebServer
     androidTestImplementation(Libs.OkHttp3.mockWebServer)
 
