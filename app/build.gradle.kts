@@ -31,17 +31,25 @@ android {
         val properties = Properties().apply {
             load(File(secrets.propertiesFileName).reader())
         }
+        getByName(SignConstants.variantNameDebug) {
+            keyAlias = (properties[SignConstants.keyAliasSign] ?: "") as String
+            keyPassword = (properties[SignConstants.keyPassword] ?: "") as String
+            storeFile = file((properties[SignConstants.keyStoreFile] ?: "") as String)
+            storePassword = (properties[SignConstants.storePassword] ?: "") as String
+        }
         create(SignConstants.variantNameRelease) {
             keyAlias = (properties[SignConstants.keyAliasSign] ?: "") as String
             keyPassword = (properties[SignConstants.keyPassword] ?: "") as String
             storeFile = file((properties[SignConstants.keyStoreFile] ?: "") as String)
             storePassword = (properties[SignConstants.storePassword] ?: "") as String
+            enableV2Signing = true
         }
         create(SignConstants.variantNameEnhanced) {
             keyAlias = (properties[SignConstants.keyAliasSign] ?: "") as String
             keyPassword = (properties[SignConstants.keyPassword] ?: "") as String
             storeFile = file((properties[SignConstants.keyStoreFile] ?: "") as String)
             storePassword = (properties[SignConstants.storePassword] ?: "") as String
+            enableV2Signing = true
         }
     }
 
@@ -52,6 +60,7 @@ android {
             isDebuggable = true
             resValue(Constants.type, SignConstants.varAppName, SignConstants.valueAppNameDebug)
             resValue(Constants.type, SignConstants.varWaifuViewer, SignConstants.homeWaifuViewerDebug)
+            signingConfig = signingConfigs.getByName(SignConstants.variantNameDebug)
         }
         getByName(SignConstants.variantNameRelease) {
             isMinifyEnabled = false
@@ -131,17 +140,14 @@ dependencies {
     // Room DB
     implementation(Libs.AndroidX.Room.runtime)
     implementation(Libs.AndroidX.Room.ktx)
-    // kapt(Libs.AndroidX.Room.compiler)
     ksp(Libs.AndroidX.Room.compiler)
 
     // Hilt
     implementation(Libs.Hilt.android)
-    // kapt(Libs.Hilt.compiler)
     ksp(Libs.Hilt.compiler)
 
     // Glide libraries
     implementation(Libs.Glide.glide)
-    // kapt(Libs.Glide.compiler)
     ksp(Libs.Glide.compiler)
 
     // Retrofit Libraries
@@ -150,7 +156,7 @@ dependencies {
     // Moshi converters
     implementation(Libs.Retrofit.moshiKtx)
     implementation(Libs.Retrofit.converterMoshi)
-    // annotationProcessor (Square.moshi.kotlinCodegen)
+    // ksp (Square.moshi.kotlinCodegen)
 
     // OKHttp3
     implementation(Libs.OkHttp3.okhttp3)
@@ -191,9 +197,6 @@ dependencies {
     // implementation("com.google.ai.client.generativeai:generativeai:0.2.2")
     implementation(Libs.GenerativeAI.generativeai)
 
-    // Kotlin KSP
-    // implementation("com.google.devtools.ksp:symbol-processing-api:2.0.20-1.0.24")
-
     // JUnit y Mockito
     testImplementation(Libs.JUnit.junit)
     testImplementation(Libs.Mockito.kotlin)
@@ -208,7 +211,6 @@ dependencies {
     androidTestImplementation(Libs.AndroidX.Test.Runner.rules)
     androidTestImplementation(Libs.Coroutines.test)
     androidTestImplementation(Libs.Hilt.test)
-    // kaptAndroidTest(Libs.Hilt.compiler)
     kspAndroidTest(Libs.Hilt.compiler)
     // For MockwebServer
     androidTestImplementation(Libs.OkHttp3.mockWebServer)
