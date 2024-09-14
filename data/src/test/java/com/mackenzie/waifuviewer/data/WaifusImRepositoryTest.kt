@@ -91,9 +91,9 @@ class WaifusImRepositoryTest {
     @Test
     fun `Only waifu are taken to server data source`() = runTest {
         val remoteWaifu = sampleImWaifu.copy(6)
-        whenever(remoteDataSource.getOnlyWaifuIm()).thenReturn(remoteWaifu)
+        whenever(remoteDataSource.getOnlyWaifuIm(any())).thenReturn(remoteWaifu)
 
-        val result = repo.requestOnlyWaifuIm()
+        val result = repo.requestOnlyWaifuIm(false)
 
         assertEquals(remoteWaifu, result)
     }

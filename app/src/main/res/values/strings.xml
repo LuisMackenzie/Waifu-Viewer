@@ -44,6 +44,7 @@
     <string name="server_nekos_string">nekos</string>
     <string name="server_favorite_string">favorite</string>
     <string name="server_waifu_gpt_string">waifu_gpt</string>
+    <string name="image_description">Descripcion de una imagen</string>
 
 
 </resources>

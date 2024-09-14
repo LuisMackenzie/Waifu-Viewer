@@ -4,6 +4,7 @@ plugins {
     id(Plugins.application)
     id(Plugins.android)
     id(Plugins.kapt)
+    id(Plugins.ksp)
     id(Plugins.parcelize)
     id(Plugins.safeArgs)
     id(Plugins.hiltAndroid)
@@ -14,6 +15,7 @@ plugins {
 
 android {
     compileSdk = AppConfig.compileSdk
+    namespace = AppConfig.applicationId
 
     defaultConfig {
         applicationId = AppConfig.applicationId
@@ -29,38 +31,52 @@ android {
         val properties = Properties().apply {
             load(File(secrets.propertiesFileName).reader())
         }
-        create("release") {
-            keyAlias = (properties["keyAliasSign"] ?: "") as String
-            keyPassword = (properties["keyPassword"] ?: "") as String
-            storeFile = file((properties["ketStoreFile"] ?: "") as String)
-            storePassword = (properties["storePassword"] ?: "") as String
+        getByName(SignConstants.variantNameDebug) {
+            keyAlias = (properties[SignConstants.keyAliasSign] ?: "") as String
+            keyPassword = (properties[SignConstants.keyPassword] ?: "") as String
+            storeFile = file((properties[SignConstants.keyStoreFile] ?: "") as String)
+            storePassword = (properties[SignConstants.storePassword] ?: "") as String
         }
-        create("enhanced") {
-            keyAlias = (properties["keyAliasSign"] ?: "") as String
-            keyPassword = (properties["keyPassword"] ?: "") as String
-            storeFile = file((properties["ketStoreFile"] ?: "") as String)
-            storePassword = (properties["storePassword"] ?: "") as String
+        create(SignConstants.variantNameRelease) {
+            keyAlias = (properties[SignConstants.keyAliasSign] ?: "") as String
+            keyPassword = (properties[SignConstants.keyPassword] ?: "") as String
+            storeFile = file((properties[SignConstants.keyStoreFile] ?: "") as String)
+            storePassword = (properties[SignConstants.storePassword] ?: "") as String
+            enableV2Signing = true
+        }
+        create(SignConstants.variantNameEnhanced) {
+            keyAlias = (properties[SignConstants.keyAliasSign] ?: "") as String
+            keyPassword = (properties[SignConstants.keyPassword] ?: "") as String
+            storeFile = file((properties[SignConstants.keyStoreFile] ?: "") as String)
+            storePassword = (properties[SignConstants.storePassword] ?: "") as String
+            enableV2Signing = true
         }
     }
 
     buildTypes {
-        getByName("debug") {
-            applicationIdSuffix = ".debug"
-            versionNameSuffix = "-DEBUG"
+        getByName(SignConstants.variantNameDebug) {
+            applicationIdSuffix = SignConstants.appIdSuffixDebug
+            versionNameSuffix = SignConstants.versionNameSuffixDebug
             isDebuggable = true
+            resValue(Constants.type, SignConstants.varAppName, SignConstants.valueAppNameDebug)
+            resValue(Constants.type, SignConstants.varWaifuViewer, SignConstants.homeWaifuViewerDebug)
+            signingConfig = signingConfigs.getByName(SignConstants.variantNameDebug)
         }
-        getByName("release") {
+        getByName(SignConstants.variantNameRelease) {
             isMinifyEnabled = false
             // applicationIdSuffix = ".release"
-            versionNameSuffix = "-RELEASE"
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            signingConfig = signingConfigs.getByName("release")
+            versionNameSuffix = SignConstants.versionNameSuffixRelease
+            proguardFiles(getDefaultProguardFile(Constants.proGuardFile), Constants.proGuardRules)
+            signingConfig = signingConfigs.getByName(SignConstants.variantNameRelease)
         }
-        create("enhanced") {
-            applicationIdSuffix = ".prime"
-            versionNameSuffix = "-PRIME"
-            isDebuggable = true
-            signingConfig = signingConfigs.getByName("enhanced")
+        create(SignConstants.variantNameEnhanced) {
+            isMinifyEnabled = false
+            applicationIdSuffix = SignConstants.appIdSuffixEnhanced
+            versionNameSuffix = SignConstants.versionNameSuffixEnhanced
+            resValue(Constants.type, SignConstants.varAppName, SignConstants.valueAppNameEnhanced)
+            resValue(Constants.type, SignConstants.varWaifuViewer, SignConstants.homeWaifuViewerEnhanced)
+            proguardFiles(getDefaultProguardFile(Constants.proGuardFile), Constants.proGuardRules)
+            signingConfig = signingConfigs.getByName(SignConstants.variantNameEnhanced)
         }
     }
 
@@ -76,22 +92,21 @@ android {
     buildFeatures {
         buildConfig = true
         dataBinding = true
+        // viewBinding = true
     }
 
     sourceSets {
-        this.getByName("androidTest") {
+        this.getByName(Constants.androidTestSSName) {
             this.java.srcDir("$projectDir/src/testShared/androidTest")
         }
-        this.getByName("test") {
+        this.getByName(Constants.testSSName) {
             this.java.srcDir("$projectDir/src/testShared/test")
         }
     }
 
     packaging {
-        resources.excludes.add("META-INF/versions/9/previous-compilation-data.bin")
+        resources.excludes.add(Constants.metaInf)
     }
-
-    namespace = "com.mackenzie.waifuviewer"
 }
 
 dependencies {
@@ -125,15 +140,15 @@ dependencies {
     // Room DB
     implementation(Libs.AndroidX.Room.runtime)
     implementation(Libs.AndroidX.Room.ktx)
-    kapt(Libs.AndroidX.Room.compiler)
+    ksp(Libs.AndroidX.Room.compiler)
 
     // Hilt
     implementation(Libs.Hilt.android)
-    kapt(Libs.Hilt.compiler)
+    ksp(Libs.Hilt.compiler)
 
     // Glide libraries
     implementation(Libs.Glide.glide)
-    kapt(Libs.Glide.compiler)
+    ksp(Libs.Glide.compiler)
 
     // Retrofit Libraries
     implementation(Libs.Retrofit.retrofit)
@@ -141,7 +156,7 @@ dependencies {
     // Moshi converters
     implementation(Libs.Retrofit.moshiKtx)
     implementation(Libs.Retrofit.converterMoshi)
-    // annotationProcessor (Square.moshi.kotlinCodegen)
+    // ksp (Square.moshi.kotlinCodegen)
 
     // OKHttp3
     implementation(Libs.OkHttp3.okhttp3)
@@ -196,7 +211,7 @@ dependencies {
     androidTestImplementation(Libs.AndroidX.Test.Runner.rules)
     androidTestImplementation(Libs.Coroutines.test)
     androidTestImplementation(Libs.Hilt.test)
-    kaptAndroidTest(Libs.Hilt.compiler)
+    kspAndroidTest(Libs.Hilt.compiler)
     // For MockwebServer
     androidTestImplementation(Libs.OkHttp3.mockWebServer)
 

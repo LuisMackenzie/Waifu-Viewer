@@ -7,6 +7,7 @@ object Plugins {
     const val parcelize = "kotlin-parcelize"
     const val kotlinJVM = "org.jetbrains.kotlin.jvm"
     const val kapt = "org.jetbrains.kotlin.kapt"
+    const val ksp = "com.google.devtools.ksp"
     const val kotlinSerialization = "org.jetbrains.kotlin.plugin.serialization"
     const val hiltAndroid = "dagger.hilt.android.plugin"
     const val playServices = "com.google.gms.google-services"

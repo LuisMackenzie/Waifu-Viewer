@@ -22,9 +22,9 @@ class ServerImDataSource @Inject constructor(private val remoteService: RemoteCo
             .toDomainModel()
     }
 
-    override suspend fun getOnlyWaifuIm(): WaifuImItem? = trySave {
+    override suspend fun getOnlyWaifuIm(orientation: String): WaifuImItem? = trySave {
         remoteService.serviceIm
-            .getOnlyRandomWaifuIm()
+            .getOnlyRandomWaifuIm(orientation = orientation)
             .waifus
             .firstOrNull()?.toDomainModel()
     }
