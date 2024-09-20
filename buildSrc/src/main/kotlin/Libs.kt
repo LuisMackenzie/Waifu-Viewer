@@ -28,6 +28,18 @@ object Libs {
             const val fragmentKtx = "androidx.fragment:fragment-ktx:_"
         }
 
+        object Compose {
+            const val bom = "androidx.compose:compose-bom:_"
+            const val runtime = "androidx.compose.runtime:runtime"
+            const val livedata = "androidx.compose.runtime:runtime-livedata"
+            const val ui = "androidx.compose.ui:ui"
+            const val foundation = "androidx.compose.foundation:foundation"
+            const val animation = "androidx.compose.animation:animation"
+            const val material = "androidx.compose.material:material"
+            const val tooling = "androidx.compose.ui:ui-tooling"
+            const val navigation = "androidx.navigation:navigation-compose"
+        }
+
         object Lifecycle {
             const val viewmodelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:_"
             const val runtimeKtx = "androidx.lifecycle:lifecycle-runtime-ktx:_"

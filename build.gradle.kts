@@ -8,6 +8,7 @@ buildscript {
         classpath(ClassPath.androidGradlePlugin)
         classpath(ClassPath.navigationSafeArgs)
         classpath(ClassPath.hiltAndroidGradlePlugin)
+        classpath(ClassPath.composeGradlePluginCompiler)
         classpath(ClassPath.kotlinGradlePlugin)
         classpath(ClassPath.kotlinKspGradlePlugin)
         classpath(ClassPath.secretsGradlePlugin)
@@ -19,9 +20,7 @@ buildscript {
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
-// apply(from = "gradle-scripts/detekt.gradle")
-
-// apply(from = "com.github.ben-manes.versions")
+// apply(plugin = Plugins.composePlugin)
 
 tasks.register("clean", Delete::class) {
     delete(layout.buildDirectory)
