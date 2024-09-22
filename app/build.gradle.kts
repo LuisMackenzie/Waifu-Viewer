@@ -68,7 +68,6 @@ android {
         }
         getByName(SignConstants.variantNameRelease) {
             isMinifyEnabled = false
-            // applicationIdSuffix = ".release"
             versionNameSuffix = SignConstants.versionNameSuffixRelease
             proguardFiles(getDefaultProguardFile(Constants.proGuardFile), Constants.proGuardRules)
             signingConfig = signingConfigs.getByName(SignConstants.variantNameRelease)
