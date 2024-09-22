@@ -135,13 +135,14 @@ dependencies {
     // Compose Libraries
     val composeBom = platform(Libs.AndroidX.Compose.bom)
     implementation(composeBom)
+    implementation(Libs.AndroidX.Compose.material3)
+    implementation(Libs.AndroidX.Compose.foundation)
     implementation(Libs.AndroidX.Compose.runtime)
     implementation(Libs.AndroidX.Compose.livedata)
     implementation(Libs.AndroidX.Compose.ui)
-    implementation(Libs.AndroidX.Compose.foundation)
     implementation(Libs.AndroidX.Compose.animation)
-    implementation(Libs.AndroidX.Compose.material3)
-    implementation(Libs.AndroidX.Compose.tooling)
+    debugImplementation(Libs.AndroidX.Compose.tooling)
+    implementation(Libs.AndroidX.Compose.preview)
     implementation(Libs.AndroidX.Compose.navigation)
 
     implementation(Libs.AndroidX.coreKtx)
@@ -236,10 +237,14 @@ dependencies {
     androidTestImplementation(Libs.AndroidX.Test.Runner.rules)
     androidTestImplementation(Libs.Coroutines.test)
     androidTestImplementation(Libs.Hilt.test)
-    androidTestImplementation(composeBom)
     kspAndroidTest(Libs.Hilt.compiler)
     // For MockwebServer
     androidTestImplementation(Libs.OkHttp3.mockWebServer)
+
+    // For UI tests with compose
+    androidTestImplementation(composeBom)
+    androidTestImplementation(Libs.AndroidX.ComposeTesting.junit4AndroidTest)
+    debugImplementation(Libs.AndroidX.ComposeTesting.manifestDebugTest)
 
 
 }
