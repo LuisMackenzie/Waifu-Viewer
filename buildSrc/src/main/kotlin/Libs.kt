@@ -36,6 +36,7 @@ object Libs {
             const val foundation = "androidx.compose.foundation:foundation"
             const val animation = "androidx.compose.animation:animation"
             const val material = "androidx.compose.material:material"
+            const val material3 = "androidx.compose.material3:material3"
             const val tooling = "androidx.compose.ui:ui-tooling"
             const val navigation = "androidx.navigation:navigation-compose"
         }
