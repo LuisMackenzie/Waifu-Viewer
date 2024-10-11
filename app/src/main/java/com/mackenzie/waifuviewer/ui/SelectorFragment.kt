@@ -23,6 +23,7 @@ import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.databinding.FragmentSelectorBinding
+import com.mackenzie.waifuviewer.domain.RemoteConfigValues
 import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.ui.common.*
 import com.mackenzie.waifuviewer.ui.main.MainState
@@ -40,6 +41,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
     private var loaded: Boolean = false
     private lateinit var mainState: MainState
     private var serverMode = ServerType.NORMAL
+    private var remoteValues = RemoteConfigValues()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -65,14 +67,17 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         remoteConfig.setConfigSettingsAsync(configSettings)
         remoteConfig.fetchAndActivate().addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                val nsfw = remoteConfig.getBoolean("nsfw_mode")
-                val hasGpt = remoteConfig.getBoolean("waifu_gpt_service")
-                val isAutomatic = remoteConfig.getBoolean("automatic_server")
-                val mode = remoteConfig.getLong("server_mode")
+                remoteValues = RemoteConfigValues(
+                    remoteConfig.getBoolean("nsfw_mode"),
+                    remoteConfig.getBoolean("waifu_gpt_service"),
+                    remoteConfig.getBoolean("automatic_server"),
+                    remoteConfig.getLong("server_mode").toInt(),
+                    serverMode
+                )
                 if (serverMode != ServerType.NEKOS) {
-                    setNsfwMode(nsfw, hasGpt)
+                    setNsfwMode(remoteValues.nsfwIsActive, remoteValues.gptIsActive)
                 }
-                setAutoMode(isAutomatic)
+                setAutoMode(remoteValues.AutoModeIsEnabled)
             } else {
                 Toast.makeText(requireContext(), "Fetch failed", Toast.LENGTH_SHORT).show()
             }

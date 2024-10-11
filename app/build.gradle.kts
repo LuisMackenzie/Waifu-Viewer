@@ -11,6 +11,7 @@ plugins {
     id(Plugins.playServices)
     id(Plugins.crashlitycs)
     id(Plugins.secrets)
+    id(Plugins.composePlugin)
 }
 
 android {
@@ -24,6 +25,9 @@ android {
         versionCode = AppConfig.versionCode
         versionName = AppConfig.versionName
         testInstrumentationRunner = AppConfig.testInstrumentationRunnerHilt
+        /*vectorDrawables {
+            useSupportLibrary = true
+        }*/
 
     }
 
@@ -64,7 +68,6 @@ android {
         }
         getByName(SignConstants.variantNameRelease) {
             isMinifyEnabled = false
-            // applicationIdSuffix = ".release"
             versionNameSuffix = SignConstants.versionNameSuffixRelease
             proguardFiles(getDefaultProguardFile(Constants.proGuardFile), Constants.proGuardRules)
             signingConfig = signingConfigs.getByName(SignConstants.variantNameRelease)
@@ -89,9 +92,14 @@ android {
         jvmTarget = "17"
     }
 
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.3.2"
+    }
+
     buildFeatures {
         buildConfig = true
         dataBinding = true
+        compose = true
         // viewBinding = true
     }
 
@@ -105,7 +113,11 @@ android {
     }
 
     packaging {
-        resources.excludes.add(Constants.metaInf)
+        resources {
+            excludes += Constants.metaLicenses
+            excludes += Constants.metaInf
+        }
+        // resources.excludes.add(Constants.metaInf)
     }
 }
 
@@ -118,6 +130,19 @@ dependencies {
     implementation(project(Modules.testShared))
     testImplementation(project(Modules.testShared))
     androidTestImplementation(project(Modules.testShared))
+
+    // Compose Libraries
+    val composeBom = platform(Libs.AndroidX.Compose.bom)
+    implementation(composeBom)
+    implementation(Libs.AndroidX.Compose.material3)
+    implementation(Libs.AndroidX.Compose.foundation)
+    implementation(Libs.AndroidX.Compose.runtime)
+    implementation(Libs.AndroidX.Compose.livedata)
+    implementation(Libs.AndroidX.Compose.ui)
+    implementation(Libs.AndroidX.Compose.animation)
+    debugImplementation(Libs.AndroidX.Compose.tooling)
+    implementation(Libs.AndroidX.Compose.preview)
+    implementation(Libs.AndroidX.Compose.navigation)
 
     implementation(Libs.AndroidX.coreKtx)
     implementation(Libs.AndroidX.appCompat)
@@ -214,6 +239,11 @@ dependencies {
     kspAndroidTest(Libs.Hilt.compiler)
     // For MockwebServer
     androidTestImplementation(Libs.OkHttp3.mockWebServer)
+
+    // For UI tests with compose
+    androidTestImplementation(composeBom)
+    androidTestImplementation(Libs.AndroidX.ComposeTesting.junit4AndroidTest)
+    debugImplementation(Libs.AndroidX.ComposeTesting.manifestDebugTest)
 
 
 }

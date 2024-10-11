@@ -28,6 +28,30 @@ object Libs {
             const val fragmentKtx = "androidx.fragment:fragment-ktx:_"
         }
 
+        object Compose {
+            const val bom = "androidx.compose:compose-bom:_"
+            const val runtime = "androidx.compose.runtime:runtime"
+            const val livedata = "androidx.compose.runtime:runtime-livedata"
+            const val ui = "androidx.compose.ui:ui"
+            const val foundation = "androidx.compose.foundation:foundation"
+            const val animation = "androidx.compose.animation:animation"
+            const val material = "androidx.compose.material:material"
+            const val material3 = "androidx.compose.material3:material3"
+            const val tooling = "androidx.compose.ui:ui-tooling"
+            const val preview = "androidx.compose.ui:ui-tooling-preview"
+            const val navigation = "androidx.navigation:navigation-compose"
+            const val adaptive = "androidx.compose.material3.adaptive:adaptive"
+            const val iconsCore = "androidx.compose.material:material-icons-core"
+            const val iconsExtend = "androidx.compose.material:material-icons-extended"
+            const val activity = "androidx.activity:activity-compose"
+            const val vmLifecycle = "androidx.lifecycle:lifecycle-viewmodel-compose"
+        }
+
+        object ComposeTesting {
+            const val junit4AndroidTest = "androidx.compose.ui:ui-test-junit4"
+            const val manifestDebugTest = "androidx.compose.ui:ui-test-manifest"
+        }
+
         object Lifecycle {
             const val viewmodelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:_"
             const val runtimeKtx = "androidx.lifecycle:lifecycle-runtime-ktx:_"
