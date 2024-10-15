@@ -5,5 +5,5 @@ data class RemoteConfigValues(
     val gptIsActive: Boolean = false,
     val AutoModeIsEnabled: Boolean = false,
     val mode : Int = 0,
-    val serverType: ServerType? = null
+    var type: ServerType = ServerType.NORMAL
 )

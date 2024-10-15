@@ -143,6 +143,7 @@ dependencies {
     debugImplementation(Libs.AndroidX.Compose.tooling)
     implementation(Libs.AndroidX.Compose.preview)
     implementation(Libs.AndroidX.Compose.navigation)
+    debugImplementation(Libs.AndroidX.Compose.testManifest)
 
     implementation(Libs.AndroidX.coreKtx)
     implementation(Libs.AndroidX.appCompat)
@@ -174,6 +175,10 @@ dependencies {
     // Glide libraries
     implementation(Libs.Glide.glide)
     ksp(Libs.Glide.compiler)
+
+    // Coil libraries
+    implementation("io.coil-kt.coil3:coil-compose:3.0.0-rc01")
+    implementation("io.coil-kt.coil3:coil-network-okhttp:3.0.0-rc01")
 
     // Retrofit Libraries
     implementation(Libs.Retrofit.retrofit)
