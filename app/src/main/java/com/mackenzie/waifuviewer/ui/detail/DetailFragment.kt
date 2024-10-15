@@ -5,13 +5,34 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import coil3.compose.AsyncImage
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.databinding.FragmentDetailBinding
 import com.mackenzie.waifuviewer.domain.DownloadModel
@@ -39,15 +60,65 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
     private var serverMode: String = ""
     private var isWritePermissionGranted: Boolean = false
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    /*override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mainState = buildMainState()
         val binding = FragmentDetailBinding.bind(view)
         val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
         serverMode = sharedPref.getString(Constants.SERVER_MODE, "") ?: ""
         binding.setUpElements()
+    }*/
+
+    @Composable
+    fun DetailScreenContent(
+        state: DetailImViewModel.UiState? = null,
+        onFavoriteClicked: () -> Unit = {},
+        onDownloadClicked: () -> Unit = {}
+    ) {
+        Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+            Text(text = "Composable View", style = MaterialTheme.typography.bodyMedium)
+            state?.waifuIm?.let { waifu ->
+                Text(text = waifu.id.toString(), style = MaterialTheme.typography.bodyMedium)
+                AsyncImage(
+                    // painter = rememberImagePainter(waifu.url),
+                    model = waifu.url,
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxWidth(),
+                    contentScale = ContentScale.Inside
+                )
+                IconButton(onClick = onFavoriteClicked) {
+                    Icon(
+                        painter = painterResource(
+                            id = if (waifu.isFavorite) R.drawable.ic_favorite_on else R.drawable.ic_favorite_off
+                        ),
+                        contentDescription = null
+                    )
+                }
+                Button(onClick = onDownloadClicked) {
+                    Text(text = "Download")
+                }
+            }
+            state?.error?.let {
+
+                Text(text = it.toString(), color = MaterialTheme.colorScheme.error)
+            }
+        }
     }
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        // Instead of inflating an XML layout, return a ComposeView
+        return ComposeView(requireContext()).apply {
+            setContent {
+                DetailScreenContent()
+            }
+        }
+    }
+
+    // crear logica para abstraer las 4 funciones iguales
     private fun FragmentDetailBinding.launchPicsCollect() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
