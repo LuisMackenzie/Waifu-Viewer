@@ -37,9 +37,7 @@ object Libs {
             const val animation = "androidx.compose.animation:animation"
             const val material = "androidx.compose.material:material"
             const val material3 = "androidx.compose.material3:material3"
-            const val tooling = "androidx.compose.ui:ui-tooling"
             const val preview = "androidx.compose.ui:ui-tooling-preview"
-            const val testManifest = "androidx.compose.ui:ui-test-manifest"
             const val navigation = "androidx.navigation:navigation-compose"
             const val adaptive = "androidx.compose.material3.adaptive:adaptive"
             const val iconsCore = "androidx.compose.material:material-icons-core"
@@ -49,6 +47,7 @@ object Libs {
         }
 
         object ComposeTesting {
+            const val tooling = "androidx.compose.ui:ui-tooling"
             const val junit4AndroidTest = "androidx.compose.ui:ui-test-junit4"
             const val manifestDebugTest = "androidx.compose.ui:ui-test-manifest"
         }

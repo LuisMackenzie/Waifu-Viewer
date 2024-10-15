@@ -140,10 +140,8 @@ dependencies {
     implementation(Libs.AndroidX.Compose.livedata)
     implementation(Libs.AndroidX.Compose.ui)
     implementation(Libs.AndroidX.Compose.animation)
-    debugImplementation(Libs.AndroidX.Compose.tooling)
     implementation(Libs.AndroidX.Compose.preview)
     implementation(Libs.AndroidX.Compose.navigation)
-    debugImplementation(Libs.AndroidX.Compose.testManifest)
 
     implementation(Libs.AndroidX.coreKtx)
     implementation(Libs.AndroidX.appCompat)
@@ -248,6 +246,7 @@ dependencies {
     // For UI tests with compose
     androidTestImplementation(composeBom)
     androidTestImplementation(Libs.AndroidX.ComposeTesting.junit4AndroidTest)
+    debugImplementation(Libs.AndroidX.ComposeTesting.tooling)
     debugImplementation(Libs.AndroidX.ComposeTesting.manifestDebugTest)
 
 
