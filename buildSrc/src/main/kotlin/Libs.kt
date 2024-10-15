@@ -39,6 +39,7 @@ object Libs {
             const val material3 = "androidx.compose.material3:material3"
             const val tooling = "androidx.compose.ui:ui-tooling"
             const val preview = "androidx.compose.ui:ui-tooling-preview"
+            const val testManifest = "androidx.compose.ui:ui-test-manifest"
             const val navigation = "androidx.navigation:navigation-compose"
             const val adaptive = "androidx.compose.material3.adaptive:adaptive"
             const val iconsCore = "androidx.compose.material:material-icons-core"
