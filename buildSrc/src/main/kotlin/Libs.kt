@@ -98,6 +98,11 @@ object Libs {
         const val compiler = "com.github.bumptech.glide:compiler:_"
     }
 
+    object Coil {
+        const val coil = "io.coil-kt.coil3:coil-compose:_"
+        const val coilNetwork = "io.coil-kt.coil3:coil-network-okhttp:_"
+    }
+
     object OkHttp3 {
         const val okhttp3 = "com.squareup.okhttp3:okhttp:_"
         const val mockWebServer = "com.squareup.okhttp3:mockwebserver:_"
