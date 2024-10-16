@@ -22,6 +22,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
@@ -45,6 +46,7 @@ import com.mackenzie.waifuviewer.ui.common.loadUrl
 import com.mackenzie.waifuviewer.ui.common.visible
 import com.mackenzie.waifuviewer.ui.main.MainState
 import com.mackenzie.waifuviewer.ui.main.buildMainState
+import com.mackenzie.waifuviewer.ui.theme.WaifuViewerTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -52,7 +54,7 @@ import java.io.IOException
 import java.net.URL
 
 @AndroidEntryPoint
-class DetailFragment : Fragment(R.layout.fragment_detail) {
+class DetailFragment : Fragment() {
 
     private val picsViewModel: DetailPicsViewModel by viewModels()
     private val imViewModel: DetailImViewModel by viewModels()
@@ -60,7 +62,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
     private val favsViewModel: DetailFavsViewModel by viewModels()
     private lateinit var mainState: MainState
     private lateinit var download: DownloadModel
-    // private var serverMode: String = ""
+    // private var serverMode: ServerType = NORMAL
     private var isWritePermissionGranted: Boolean = false
 
     /*override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -74,20 +76,27 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val mode : String = requireActivity().getPreferences(Context.MODE_PRIVATE).getString(Constants.SERVER_MODE, "") ?: "normal"
-        setUpElements(mode.getTypes())
+        mainState = buildMainState()
+        /*serverMode = (requireActivity()
+            .getPreferences(Context.MODE_PRIVATE)
+            .getString(Constants.SERVER_MODE, "") ?: "normal"
+                ).getTypes()*/
+        // setUpElements(serverMode)
     }
 
     @Composable
     fun DetailScreenContent(
-        state: DetailImViewModel.UiState? = null,
+        // state: DetailImViewModel.UiState? = null,
         onFavoriteClicked: () -> Unit = {},
         onDownloadClicked: () -> Unit = {}
     ) {
+
+        val state = imViewModel.state.collectAsState().value
+
         Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-            Text(text = "Composable View", style = MaterialTheme.typography.bodyMedium)
-            state?.waifuIm?.let { waifu ->
-                Text(text = waifu.id.toString(), style = MaterialTheme.typography.bodyMedium)
+            state.waifuIm?.let { waifu ->
+                Log.e("DetailFragment", "WaifuIm: $waifu")
+                Text(text = waifu.imageId.toString(), style = MaterialTheme.typography.bodyMedium)
                 AsyncImage(
                     // painter = rememberImagePainter(waifu.url),
                     model = waifu.url,
@@ -107,7 +116,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
                     Text(text = "Download")
                 }
             }
-            state?.error?.let {
+            state.error?.let {
 
                 Text(text = it.toString(), color = MaterialTheme.colorScheme.error)
             }
@@ -119,147 +128,45 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         // Instead of inflating an XML layout, return a ComposeView
         return ComposeView(requireContext()).apply {
             setContent {
-                DetailScreenContent()
-            }
-        }
-    }
-
-    // crear logica para abstraer las 4 funciones iguales
-    private fun FragmentDetailBinding.launchPicsCollect() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                picsViewModel.state.collect {
-                    withPicsUpdateUI(it)
+                WaifuViewerTheme {
+                    DetailScreenContent()
                 }
             }
         }
     }
 
-    private fun FragmentDetailBinding.launchImCollect() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                imViewModel.state.collect {
-                    withImUpdateUI(it)
-                }
+    private fun getServerMode(mode: ServerType) {
+        when (mode) {
+            NORMAL -> {
+                launchImCollect()
+                // fab.setOnClickListener { imViewModel.onFavoriteClicked() }
+            }
+            ENHANCED -> {
+                // launchPicsCollect()
+                // fab.setOnClickListener { picsViewModel.onFavoriteClicked() }
+            }
+            NEKOS -> {
+                // launchBestCollect()
+                // fab.setOnClickListener { bestViewModel.onFavoriteClicked() }
+            }
+            FAVORITE -> {
+                // launchFavoriteCollect()
+                // fab.setOnClickListener { favsViewModel.onFavoriteClicked() }
+            }
+            else -> {
+                // fab.visible = false
             }
         }
-    }
-
-    private fun launchImCollect() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                imViewModel.state.collect {
-                    withImStateUpdateUI(it)
-                }
+        /*fabDownload.setOnClickListener {
+            if (isWritePermissionGranted != true) {
+                RequestPermision()
             }
-        }
-    }
-
-    private fun FragmentDetailBinding.launchBestCollect() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                bestViewModel.state.collect {
-                    withBestUpdateUI(it)
-                }
-            }
-        }
-    }
-
-    private fun FragmentDetailBinding.launchFavoriteCollect() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                favsViewModel.state.collect {
-                    withFavsUpdateUI(it)
-                }
-            }
-        }
-    }
-
-    private fun FragmentDetailBinding.withBestUpdateUI(state: DetailBestViewModel.UiState) {
-        pbLoading.visibility = View.GONE
-        state.waifu?.let {
-            val title = it.url.substringAfterLast('/').substringBeforeLast('.')
-            if (it.artistName.isEmpty()) {
-                tvDetail.text = it.animeName
-            } else {
-                tvDetail.text = it.artistName
-            }
-            ivDetail.loadUrl(it.url)
-            if (it.isFavorite) {
-                fab.setImageResource(R.drawable.ic_favorite_on)
-            } else {
-                fab.setImageResource(R.drawable.ic_favorite_off)
-            }
-            prepareDownload(title, it.url, it.url.substringAfterLast('.'))
-        }
-
-        state.error?.let {
-            tvDetail.text = getString(R.string.waifu_error)
-            ivDetail.setImageResource(R.drawable.ic_offline_background)
-            Toast.makeText(requireContext(), it.toString(), Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun FragmentDetailBinding.withFavsUpdateUI(state: DetailFavsViewModel.UiState) {
-        pbLoading.visibility = View.GONE
-        state.waifu?.let {
-            tvDetail.text = it.url.substringAfterLast('/').substringBeforeLast('.')
-            ivDetail.loadUrl(it.url)
-            if (it.isFavorite) {
-                fab.setImageResource(R.drawable.ic_favorite_on)
-            } else {
-                fab.setImageResource(R.drawable.ic_favorite_off)
-            }
-            prepareDownload(it.title, it.url, it.url.substringAfterLast('.'))
-        }
-
-        state.error?.let {
-            tvDetail.text = getString(R.string.waifu_error)
-            ivDetail.setImageResource(R.drawable.ic_offline_background)
-            Toast.makeText(requireContext(), it.toString(), Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun FragmentDetailBinding.withPicsUpdateUI(state: DetailPicsViewModel.UiState) {
-        pbLoading.visibility = View.GONE
-        state.waifuPic?.let {
-            val title = it.url.substringAfterLast('/').substringBeforeLast('.')
-            tvDetail.text = title
-            ivDetail.loadUrl(it.url)
-            if (it.isFavorite) {
-                fab.setImageResource(R.drawable.ic_favorite_on)
-            } else {
-                fab.setImageResource(R.drawable.ic_favorite_off)
-            }
-            prepareDownload(title, it.url, it.url.substringAfterLast('.'))
-        }
-
-        state.error?.let {
-            tvDetail.text = getString(R.string.waifu_error)
-            ivDetail.setImageResource(R.drawable.ic_offline_background)
-        }
-    }
-
-    private fun FragmentDetailBinding.withImUpdateUI(state: DetailImViewModel.UiState) {
-        pbLoading.visibility = View.GONE
-        state.waifuIm?.let {
-            tvDetail.text = it.imageId.toString()
-            ivDetail.loadUrl(it.url)
-            if (it.isFavorite) {
-                fab.setImageResource(R.drawable.ic_favorite_on)
-            } else {
-                fab.setImageResource(R.drawable.ic_favorite_off)
-            }
-            prepareDownload(it.imageId.toString(), it.url, it.url.substringAfterLast('.'))
-        }
-
-        state.error?.let {
-            tvDetail.text = getString(R.string.waifu_error)
-            ivDetail.setImageResource(R.drawable.ic_offline_background)
-        }
+            requestDownload()
+        }*/
     }
 
     private fun withImStateUpdateUI(state: DetailImViewModel.UiState) {
@@ -290,6 +197,141 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
             // ivDetail.setImageResource(R.drawable.ic_offline_background)
         }
     }
+
+    // crear logica para abstraer las 4 funciones iguales
+    /*private fun FragmentDetailBinding.launchPicsCollect() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                picsViewModel.state.collect {
+                    withPicsUpdateUI(it)
+                }
+            }
+        }
+    }*/
+
+    /*private fun FragmentDetailBinding.launchImCollect() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                imViewModel.state.collect {
+                    withImUpdateUI(it)
+                }
+            }
+        }
+    }*/
+
+    private fun launchImCollect() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                imViewModel.state.collect {
+                    withImStateUpdateUI(it)
+                }
+            }
+        }
+    }
+
+    /*private fun FragmentDetailBinding.launchBestCollect() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                bestViewModel.state.collect {
+                    withBestUpdateUI(it)
+                }
+            }
+        }
+    }*/
+
+    /*private fun FragmentDetailBinding.launchFavoriteCollect() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                favsViewModel.state.collect {
+                    withFavsUpdateUI(it)
+                }
+            }
+        }
+    }*/
+
+    /*private fun FragmentDetailBinding.withBestUpdateUI(state: DetailBestViewModel.UiState) {
+        pbLoading.visibility = View.GONE
+        state.waifu?.let {
+            val title = it.url.substringAfterLast('/').substringBeforeLast('.')
+            if (it.artistName.isEmpty()) {
+                tvDetail.text = it.animeName
+            } else {
+                tvDetail.text = it.artistName
+            }
+            ivDetail.loadUrl(it.url)
+            if (it.isFavorite) {
+                fab.setImageResource(R.drawable.ic_favorite_on)
+            } else {
+                fab.setImageResource(R.drawable.ic_favorite_off)
+            }
+            prepareDownload(title, it.url, it.url.substringAfterLast('.'))
+        }
+
+        state.error?.let {
+            tvDetail.text = getString(R.string.waifu_error)
+            ivDetail.setImageResource(R.drawable.ic_offline_background)
+            Toast.makeText(requireContext(), it.toString(), Toast.LENGTH_SHORT).show()
+        }
+    }*/
+
+    /*private fun FragmentDetailBinding.withFavsUpdateUI(state: DetailFavsViewModel.UiState) {
+        pbLoading.visibility = View.GONE
+        state.waifu?.let {
+            tvDetail.text = it.url.substringAfterLast('/').substringBeforeLast('.')
+            ivDetail.loadUrl(it.url)
+            if (it.isFavorite) {
+                fab.setImageResource(R.drawable.ic_favorite_on)
+            } else {
+                fab.setImageResource(R.drawable.ic_favorite_off)
+            }
+            prepareDownload(it.title, it.url, it.url.substringAfterLast('.'))
+        }
+
+        state.error?.let {
+            tvDetail.text = getString(R.string.waifu_error)
+            ivDetail.setImageResource(R.drawable.ic_offline_background)
+            Toast.makeText(requireContext(), it.toString(), Toast.LENGTH_SHORT).show()
+        }
+    }*/
+
+    /*private fun FragmentDetailBinding.withPicsUpdateUI(state: DetailPicsViewModel.UiState) {
+        pbLoading.visibility = View.GONE
+        state.waifuPic?.let {
+            val title = it.url.substringAfterLast('/').substringBeforeLast('.')
+            tvDetail.text = title
+            ivDetail.loadUrl(it.url)
+            if (it.isFavorite) {
+                fab.setImageResource(R.drawable.ic_favorite_on)
+            } else {
+                fab.setImageResource(R.drawable.ic_favorite_off)
+            }
+            prepareDownload(title, it.url, it.url.substringAfterLast('.'))
+        }
+
+        state.error?.let {
+            tvDetail.text = getString(R.string.waifu_error)
+            ivDetail.setImageResource(R.drawable.ic_offline_background)
+        }
+    }*/
+
+    /*private fun FragmentDetailBinding.withImUpdateUI(state: DetailImViewModel.UiState) {
+        pbLoading.visibility = View.GONE
+        state.waifuIm?.let {
+            tvDetail.text = it.imageId.toString()
+            ivDetail.loadUrl(it.url)
+            if (it.isFavorite) {
+                fab.setImageResource(R.drawable.ic_favorite_on)
+            } else {
+                fab.setImageResource(R.drawable.ic_favorite_off)
+            }
+            prepareDownload(it.imageId.toString(), it.url, it.url.substringAfterLast('.'))
+        }
+
+        state.error?.let {
+            tvDetail.text = getString(R.string.waifu_error)
+            ivDetail.setImageResource(R.drawable.ic_offline_background)
+        }
+    }*/
 
     private fun prepareDownload(title: String, link: String, imageExt: String) {
         download = DownloadModel(title, link, imageExt)
