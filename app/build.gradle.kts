@@ -175,8 +175,8 @@ dependencies {
     ksp(Libs.Glide.compiler)
 
     // Coil libraries
-    implementation("io.coil-kt.coil3:coil-compose:3.0.0-rc01")
-    implementation("io.coil-kt.coil3:coil-network-okhttp:3.0.0-rc01")
+    implementation(Libs.Coil.coil)
+    implementation(Libs.Coil.coilNetwork)
 
     // Retrofit Libraries
     implementation(Libs.Retrofit.retrofit)
