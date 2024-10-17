@@ -1,6 +1,5 @@
 package com.mackenzie.waifuviewer.ui.detail
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -8,42 +7,45 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import coil3.compose.AsyncImage
+import coil3.compose.rememberAsyncImagePainter
+import coil3.request.ImageRequest
+import coil3.request.crossfade
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.mackenzie.waifuviewer.R
-import com.mackenzie.waifuviewer.databinding.FragmentDetailBinding
 import com.mackenzie.waifuviewer.domain.DownloadModel
 import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.domain.ServerType.*
-import com.mackenzie.waifuviewer.domain.getTypes
 import com.mackenzie.waifuviewer.ui.common.Constants
 import com.mackenzie.waifuviewer.ui.common.SaveImage
-import com.mackenzie.waifuviewer.ui.common.loadUrl
-import com.mackenzie.waifuviewer.ui.common.visible
 import com.mackenzie.waifuviewer.ui.main.MainState
 import com.mackenzie.waifuviewer.ui.main.buildMainState
 import com.mackenzie.waifuviewer.ui.theme.WaifuViewerTheme
@@ -84,27 +86,35 @@ class DetailFragment : Fragment() {
         // setUpElements(serverMode)
     }
 
+    @Preview(showBackground = true, widthDp = 400, heightDp = 400)
     @Composable
-    fun DetailScreenContent(
-        // state: DetailImViewModel.UiState? = null,
-        onFavoriteClicked: () -> Unit = {},
-        onDownloadClicked: () -> Unit = {}
-    ) {
+    fun DetailScreenContent() {
 
         val state = imViewModel.state.collectAsState().value
 
-        Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+        Box(modifier = Modifier
+            .fillMaxSize()
+        ) {
             state.waifuIm?.let { waifu ->
-                Log.e("DetailFragment", "WaifuIm: $waifu")
-                Text(text = waifu.imageId.toString(), style = MaterialTheme.typography.bodyMedium)
                 AsyncImage(
-                    // painter = rememberImagePainter(waifu.url),
-                    model = waifu.url,
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(waifu.url)
+                        .crossfade(true)
+                        .build(),
+                    placeholder = painterResource(R.drawable.ic_baseline_download),
+                    // placeholder = lottiePlaceholder(),
+                    // onLoading = { LoadingAnimation(modifier = Modifier.fillMaxSize()) },
+                    error = painterResource(R.drawable.ic_failed),
                     contentDescription = null,
-                    modifier = Modifier.fillMaxWidth(),
-                    contentScale = ContentScale.Inside
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
                 )
-                IconButton(onClick = onFavoriteClicked) {
+                FloatingActionButton(
+                    modifier = Modifier
+                        .align(Alignment.BottomStart)
+                        .padding(16.dp),
+                    onClick = {imViewModel.onFavoriteClicked()}
+                ) {
                     Icon(
                         painter = painterResource(
                             id = if (waifu.isFavorite) R.drawable.ic_favorite_on else R.drawable.ic_favorite_off
@@ -112,13 +122,41 @@ class DetailFragment : Fragment() {
                         contentDescription = null
                     )
                 }
-                Button(onClick = onDownloadClicked) {
-                    Text(text = "Download")
+                Text(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(8.dp),
+                    text = waifu.imageId.toString(),
+                    fontSize = 25.sp,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+
+                FloatingActionButton(
+                    onClick = { onDownloadClick() },
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(16.dp),
+                    shape = MaterialTheme.shapes.extraLarge
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_baseline_download),
+                        contentDescription = null
+                    )
                 }
+                prepareDownload(waifu.imageId.toString(), waifu.url, waifu.url.substringAfterLast('.'))
             }
             state.error?.let {
 
-                Text(text = it.toString(), color = MaterialTheme.colorScheme.error)
+                LoadingAnimationError(modifier = Modifier.fillMaxSize())
+                Text(
+                    text = it.toString(),
+                    fontSize = 25.sp,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(8.dp)
+                )
             }
         }
     }
@@ -137,6 +175,30 @@ class DetailFragment : Fragment() {
                 }
             }
         }
+    }
+
+    @Composable
+    fun LoadingAnimation(modifier: Modifier = Modifier) {
+        val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading_animation))
+        LottieAnimation(
+            composition = composition,
+            modifier = modifier
+        )
+    }
+
+    @Composable
+    fun lottiePlaceholder(): Painter {
+        val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading_animation))
+        return rememberAsyncImagePainter(composition)
+    }
+
+    @Composable
+    fun LoadingAnimationError(modifier: Modifier = Modifier) {
+        val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.no_data))
+        LottieAnimation(
+            composition = composition,
+            modifier = modifier
+        )
     }
 
     private fun getServerMode(mode: ServerType) {
@@ -396,6 +458,13 @@ class DetailFragment : Fragment() {
             requestDownload()
         }
     }*/
+
+    private fun onDownloadClick() {
+        if (isWritePermissionGranted != true) {
+            RequestPermision()
+        }
+        requestDownload()
+    }
 
     private fun RequestPermision() {
         viewLifecycleOwner.lifecycleScope.launch {

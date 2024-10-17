@@ -211,6 +211,7 @@ dependencies {
 
     // Lottie files
     implementation(Libs.Lottie.core)
+    implementation(Libs.Lottie.compose)
 
     // Shimmer
     implementation(Libs.Shimmer.shimmer)
