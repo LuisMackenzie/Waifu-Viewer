@@ -1,5 +1,6 @@
 package com.mackenzie.waifuviewer.ui.detail
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -44,13 +45,18 @@ import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.domain.DownloadModel
 import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.domain.ServerType.*
+import com.mackenzie.waifuviewer.domain.getTypes
 import com.mackenzie.waifuviewer.ui.common.Constants
 import com.mackenzie.waifuviewer.ui.common.SaveImage
+import com.mackenzie.waifuviewer.ui.detail.ui.DetailScreenContent
+import com.mackenzie.waifuviewer.ui.detail.ui.LoadingAnimationError
 import com.mackenzie.waifuviewer.ui.main.MainState
 import com.mackenzie.waifuviewer.ui.main.buildMainState
+import com.mackenzie.waifuviewer.ui.main.ui.MainTheme
 import com.mackenzie.waifuviewer.ui.theme.WaifuViewerTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.io.IOException
 import java.net.URL
@@ -67,6 +73,32 @@ class DetailFragment : Fragment() {
     // private var serverMode: ServerType = NORMAL
     private var isWritePermissionGranted: Boolean = false
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+
+        mainState = buildMainState()
+        val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
+        val serverMode = sharedPref.getString(Constants.SERVER_MODE, "") ?: ""
+        // setUpElements(serverMode.getTypes())
+
+        // Instead of inflating an XML layout, return a ComposeView
+        return ComposeView(requireContext()).apply {
+            setContent {
+                MainTheme {
+                    DetailScreenContent(
+                        state = imViewModel.state.collectAsState().value,
+                        prepareDownload = { title, link, imageExt -> prepareDownload(title, link, imageExt) },
+                        onFavoriteClicked = { imViewModel.onFavoriteClicked() },
+                        onDownloadClick = { onDownloadClick() }
+                    )
+                }
+            }
+        }
+    }
+
     /*override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mainState = buildMainState()
@@ -78,7 +110,7 @@ class DetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mainState = buildMainState()
+        // mainState = buildMainState()
         /*serverMode = (requireActivity()
             .getPreferences(Context.MODE_PRIVATE)
             .getString(Constants.SERVER_MODE, "") ?: "normal"
@@ -86,7 +118,7 @@ class DetailFragment : Fragment() {
         // setUpElements(serverMode)
     }
 
-    @Preview(showBackground = true, widthDp = 400, heightDp = 400)
+    /*@Preview(showBackground = true, widthDp = 400, heightDp = 400)
     @Composable
     fun DetailScreenContent() {
 
@@ -159,52 +191,12 @@ class DetailFragment : Fragment() {
                 )
             }
         }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
-        // Instead of inflating an XML layout, return a ComposeView
-        return ComposeView(requireContext()).apply {
-            setContent {
-                WaifuViewerTheme {
-                    DetailScreenContent()
-                }
-            }
-        }
-    }
-
-    @Composable
-    fun LoadingAnimation(modifier: Modifier = Modifier) {
-        val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading_animation))
-        LottieAnimation(
-            composition = composition,
-            modifier = modifier
-        )
-    }
-
-    @Composable
-    fun lottiePlaceholder(): Painter {
-        val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading_animation))
-        return rememberAsyncImagePainter(composition)
-    }
-
-    @Composable
-    fun LoadingAnimationError(modifier: Modifier = Modifier) {
-        val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.no_data))
-        LottieAnimation(
-            composition = composition,
-            modifier = modifier
-        )
-    }
+    }*/
 
     private fun getServerMode(mode: ServerType) {
         when (mode) {
             NORMAL -> {
-                launchImCollect()
+                // launchImCollect()
                 // fab.setOnClickListener { imViewModel.onFavoriteClicked() }
             }
             ENHANCED -> {
