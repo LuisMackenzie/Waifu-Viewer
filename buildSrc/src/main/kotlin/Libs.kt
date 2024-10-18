@@ -149,7 +149,7 @@ object Libs {
 
     object Lottie {
         const val core = "com.airbnb.android:lottie:_"
-        const val compose = "com.airbnb.android:lottie-compose:5.2.0"
+        const val compose = "com.airbnb.android:lottie-compose:_"
     }
 
     object Klaxon {
