@@ -141,7 +141,6 @@ dependencies {
     implementation(Libs.AndroidX.Compose.ui)
     implementation(Libs.AndroidX.Compose.animation)
     implementation(Libs.AndroidX.Compose.preview)
-    implementation(Libs.AndroidX.Compose.navigation)
 
     implementation(Libs.AndroidX.coreKtx)
     implementation(Libs.AndroidX.appCompat)
@@ -155,6 +154,7 @@ dependencies {
     // Navigation
     implementation(Libs.AndroidX.Navigation.fragmentKtx)
     implementation(Libs.AndroidX.Navigation.uiKtx)
+    implementation(Libs.AndroidX.Navigation.navigationCompose)
 
     // Corrutinas
     // implementation(AndroidX.lifecycle.runtime.ktx)

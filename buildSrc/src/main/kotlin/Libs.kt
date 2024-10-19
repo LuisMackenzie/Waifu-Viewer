@@ -38,7 +38,6 @@ object Libs {
             const val material = "androidx.compose.material:material"
             const val material3 = "androidx.compose.material3:material3"
             const val preview = "androidx.compose.ui:ui-tooling-preview"
-            const val navigation = "androidx.navigation:navigation-compose"
             const val adaptive = "androidx.compose.material3.adaptive:adaptive"
             const val iconsCore = "androidx.compose.material:material-icons-core"
             const val iconsExtend = "androidx.compose.material:material-icons-extended"
@@ -67,6 +66,7 @@ object Libs {
         object Navigation {
             const val fragmentKtx = "androidx.navigation:navigation-fragment-ktx:_"
             const val uiKtx = "androidx.navigation:navigation-ui-ktx:_"
+            const val navigationCompose = "androidx.navigation:navigation-compose:_"
             const val gradlePlugin = "androidx.navigation:navigation-safe-args-gradle-plugin:_"
         }
 
