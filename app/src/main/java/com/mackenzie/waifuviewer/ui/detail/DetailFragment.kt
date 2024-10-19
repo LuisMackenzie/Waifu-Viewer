@@ -82,10 +82,13 @@ class DetailFragment : Fragment() {
         }
     }
 
+
+
     @Composable
     private fun DetailImScreen() {
         DetailImScreenContent(
             state = imViewModel.state.collectAsState().value,
+            isPreview = false,
             prepareDownload = { title, link, imageExt -> prepareDownload(title, link, imageExt) },
             onFavoriteClicked = { imViewModel.onFavoriteClicked() },
             onDownloadClick = { onDownloadClick() }

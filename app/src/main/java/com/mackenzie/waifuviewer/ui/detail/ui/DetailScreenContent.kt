@@ -1,6 +1,6 @@
 package com.mackenzie.waifuviewer.ui.detail.ui
 
-import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -9,7 +9,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
@@ -17,25 +16,23 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import arrow.core.compose
 import coil3.compose.AsyncImage
-import coil3.compose.AsyncImagePainter
 import coil3.request.ImageRequest
 import coil3.request.crossfade
-import com.airbnb.lottie.LottieComposition
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.ui.detail.DetailBestViewModel
 import com.mackenzie.waifuviewer.ui.detail.DetailFavsViewModel
 import com.mackenzie.waifuviewer.ui.detail.DetailImViewModel
 import com.mackenzie.waifuviewer.ui.detail.DetailPicsViewModel
 
+
 @Composable
 fun DetailImScreenContent(
     state: DetailImViewModel.UiState,
+    isPreview: Boolean,
     prepareDownload: (String, String, String) -> Unit,
     onFavoriteClicked: () -> Unit,
     onDownloadClick: () -> Unit
@@ -53,7 +50,9 @@ fun DetailImScreenContent(
                 placeholder = painterResource(R.drawable.ic_baseline_download),
                 // placeholder = { LottiePlaceholder2() },
                 // onLoading = {  },
-                error = painterResource(R.drawable.ic_failed),
+                // error = painterResource(R.drawable.ic_failed),
+                error = if (isPreview) painterResource(R.drawable.ic_offline_background) else painterResource(R.drawable.ic_failed),
+
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
@@ -62,7 +61,8 @@ fun DetailImScreenContent(
                 modifier = Modifier
                     .align(Alignment.BottomStart)
                     .padding(16.dp),
-                onClick = {onFavoriteClicked()}
+                onClick = {onFavoriteClicked()},
+                shape = MaterialTheme.shapes.extraLarge
             ) {
                 Icon(
                     painter = painterResource(
@@ -85,7 +85,6 @@ fun DetailImScreenContent(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(16.dp),
-                shape = MaterialTheme.shapes.extraLarge
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_baseline_download),
@@ -109,11 +108,6 @@ fun DetailImScreenContent(
         }
 
     }
-}
-
-@Composable
-fun lottiePlaceholder(): Painter {
-    return painterResource(R.drawable.ic_baseline_download)
 }
 
 @Composable
@@ -146,7 +140,8 @@ fun DetailPicsScreenContent(
                 modifier = Modifier
                     .align(Alignment.BottomStart)
                     .padding(16.dp),
-                onClick = {onFavoriteClicked()}
+                onClick = {onFavoriteClicked()},
+                shape = MaterialTheme.shapes.extraLarge
             ) {
                 Icon(
                     painter = painterResource(
@@ -169,7 +164,6 @@ fun DetailPicsScreenContent(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(16.dp),
-                shape = MaterialTheme.shapes.extraLarge
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_baseline_download),
@@ -225,7 +219,8 @@ fun DetailBestScreenContent(
                 modifier = Modifier
                     .align(Alignment.BottomStart)
                     .padding(16.dp),
-                onClick = {onFavoriteClicked()}
+                onClick = {onFavoriteClicked()},
+                shape = MaterialTheme.shapes.extraLarge
             ) {
                 Icon(
                     painter = painterResource(
@@ -248,7 +243,6 @@ fun DetailBestScreenContent(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(16.dp),
-                shape = MaterialTheme.shapes.extraLarge
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_baseline_download),
@@ -303,7 +297,8 @@ fun DetailFavsScreenContent(
                 modifier = Modifier
                     .align(Alignment.BottomStart)
                     .padding(16.dp),
-                onClick = {onFavoriteClicked()}
+                onClick = {onFavoriteClicked()},
+                shape = MaterialTheme.shapes.extraLarge
             ) {
                 Icon(
                     painter = painterResource(
@@ -326,7 +321,6 @@ fun DetailFavsScreenContent(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(16.dp),
-                shape = MaterialTheme.shapes.extraLarge
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_baseline_download),
