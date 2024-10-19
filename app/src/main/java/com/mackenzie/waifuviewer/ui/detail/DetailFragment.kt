@@ -8,55 +8,29 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import coil3.compose.AsyncImage
-import coil3.compose.rememberAsyncImagePainter
-import coil3.request.ImageRequest
-import coil3.request.crossfade
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.rememberLottieComposition
-import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.domain.DownloadModel
 import com.mackenzie.waifuviewer.domain.ServerType
-import com.mackenzie.waifuviewer.domain.ServerType.*
-import com.mackenzie.waifuviewer.domain.getTypes
+import com.mackenzie.waifuviewer.domain.ServerType.ENHANCED
+import com.mackenzie.waifuviewer.domain.ServerType.FAVORITE
+import com.mackenzie.waifuviewer.domain.ServerType.NEKOS
+import com.mackenzie.waifuviewer.domain.ServerType.NORMAL
 import com.mackenzie.waifuviewer.ui.common.Constants
 import com.mackenzie.waifuviewer.ui.common.SaveImage
-import com.mackenzie.waifuviewer.ui.detail.ui.DetailScreenContent
-import com.mackenzie.waifuviewer.ui.detail.ui.LoadingAnimationError
+import com.mackenzie.waifuviewer.ui.detail.ui.DetailImScreenContent
+import com.mackenzie.waifuviewer.ui.detail.ui.DetailPicsScreenContent
 import com.mackenzie.waifuviewer.ui.main.MainState
 import com.mackenzie.waifuviewer.ui.main.buildMainState
 import com.mackenzie.waifuviewer.ui.main.ui.MainTheme
-import com.mackenzie.waifuviewer.ui.theme.WaifuViewerTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.io.IOException
 import java.net.URL
@@ -88,15 +62,30 @@ class DetailFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 MainTheme {
-                    DetailScreenContent(
-                        state = imViewModel.state.collectAsState().value,
-                        prepareDownload = { title, link, imageExt -> prepareDownload(title, link, imageExt) },
-                        onFavoriteClicked = { imViewModel.onFavoriteClicked() },
-                        onDownloadClick = { onDownloadClick() }
-                    )
+                    DetailImScreen()
                 }
             }
         }
+    }
+
+    @Composable
+    private fun DetailImScreen() {
+        DetailImScreenContent(
+            state = imViewModel.state.collectAsState().value,
+            prepareDownload = { title, link, imageExt -> prepareDownload(title, link, imageExt) },
+            onFavoriteClicked = { imViewModel.onFavoriteClicked() },
+            onDownloadClick = { onDownloadClick() }
+        )
+    }
+
+    @Composable
+    private fun DetailPicsScreen() {
+        DetailPicsScreenContent(
+            state = picsViewModel.state.collectAsState().value,
+            prepareDownload = { title, link, imageExt -> prepareDownload(title, link, imageExt) },
+            onFavoriteClicked = { picsViewModel.onFavoriteClicked() },
+            onDownloadClick = { onDownloadClick() }
+        )
     }
 
     /*override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
