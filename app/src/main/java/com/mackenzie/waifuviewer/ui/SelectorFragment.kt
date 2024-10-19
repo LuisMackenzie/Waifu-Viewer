@@ -21,6 +21,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
+import com.mackenzie.waifuviewer.BuildConfig
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.databinding.FragmentSelectorBinding
 import com.mackenzie.waifuviewer.domain.RemoteConfigValues
@@ -254,8 +255,11 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
                 sNsfw.visible = false
                 sOrientation.visible = false
             }
+            null -> {
+                if (BuildConfig.DEBUG) Log.e("updateSwitches","${getString(R.string.unknown_mode)} ${remoteValues?.type?.value}")
+            }
             else -> {
-                Toast.makeText(requireContext(), "${getString(R.string.unknown_mode)} ${remoteValues?.type?.value}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "${getString(R.string.unknown_mode)}: ServerMode not Found Exception", Toast.LENGTH_SHORT).show()
             }
         }
     }
