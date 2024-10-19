@@ -40,8 +40,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
     private var backgroudImage: ImageView? = null
     private var loaded: Boolean = false
     private lateinit var mainState: MainState
-    // private var serverMode = ServerType.NORMAL
-    private var remoteValues = RemoteConfigValues()
+    private var remoteValues : RemoteConfigValues? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -54,7 +53,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         binding = FragmentSelectorBinding.bind(view)
         setUpElements()
         updateSpinner()
-        getRemoteConfig()
+        if (remoteValues == null) getRemoteConfig()
         loadInitialServer()
     }
 
@@ -74,10 +73,13 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
                     remoteConfig.getLong("server_mode").toInt(),
                     ServerType.NORMAL
                 )
-                if (remoteValues.type != ServerType.NEKOS) {
-                    setNsfwMode(remoteValues.nsfwIsActive, remoteValues.gptIsActive)
+                remoteValues?.let {
+                    if (it.type != ServerType.NEKOS) {
+                        setNsfwMode(it.nsfwIsActive, it.gptIsActive)
+                        Log.e("getRemoteConfig", "nsfwIsActive=${it.nsfwIsActive}, gptIsActive=${it.gptIsActive}")
+                    }
+                    setAutoMode(it.AutoModeIsEnabled)
                 }
-                setAutoMode(remoteValues.AutoModeIsEnabled)
             } else {
                 Toast.makeText(requireContext(), "Fetch failed", Toast.LENGTH_SHORT).show()
             }
@@ -117,7 +119,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
 
         state.type.let { type ->
             binding.type = type
-            remoteValues.type = type
+            remoteValues?.type = type
             updateSwitches()
             updateSpinner()
         }
@@ -143,7 +145,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
 
         state.type.let { type ->
             binding.type = type
-            remoteValues.type = type
+            remoteValues?.type = type
             updateSwitches()
             updateSpinner()
         }
@@ -166,8 +168,9 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
 
     private fun setUpElements() = with(binding) {
         onChooseTypeChanged = this@SelectorFragment
+        setNsfwMode(remoteValues?.nsfwIsActive ?: false, remoteValues?.gptIsActive ?: false)
         btnWaifu.setOnClickListener {
-            navigateTo(remoteValues.type)
+            navigateTo(remoteValues?.type)
         }
         sOrientation.setOnClickListener {
             if (sOrientation.isChecked) {
@@ -185,7 +188,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
             updateSpinner()
         }
         sGifs.setOnClickListener {
-            if (remoteValues.type == ServerType.NEKOS) {
+            if (remoteValues?.type == ServerType.NEKOS) {
                 if (sGifs.isChecked) {
                     // Toast.makeText(requireContext(), "Not implemented yet!", Toast.LENGTH_SHORT).show()
                 }
@@ -201,9 +204,11 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
             }
         }
         favorites.setOnClickListener {
+            remoteValues?.type = ServerType.FAVORITE
             navigateTo(ServerType.FAVORITE)
         }
         waifuGpt.setOnClickListener {
+            remoteValues?.type = ServerType.WAIFUGPT
             navigateTo(ServerType.WAIFUGPT)
             Snackbar.make(requireView(), "Not Implemented Yet!", Snackbar.LENGTH_SHORT).show()
         }
@@ -212,7 +217,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
 
     private fun updateSpinner() = with(binding) {
         val spinnerContent: Array<String>
-        when (remoteValues.type) {
+        when (remoteValues?.type) {
             ServerType.ENHANCED -> {
                 spinnerContent = if (sNsfw.isChecked) { Constants.ENHANCEDNSFW } else { Constants.ENHANCEDSFW }
             }
@@ -233,7 +238,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
     private fun updateSwitches() = with(binding) {
         val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
         val workMode = sharedPref.getBoolean(Constants.WORK_MODE, false)
-        when (remoteValues.type) {
+        when (remoteValues?.type) {
             ServerType.ENHANCED -> {
                 sNsfw.visible = workMode
                 sGifs.visible = false
@@ -250,12 +255,12 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
                 sOrientation.visible = false
             }
             else -> {
-                Toast.makeText(requireContext(), "${getString(R.string.unknown_mode)} ${remoteValues.type.value}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "${getString(R.string.unknown_mode)} ${remoteValues?.type?.value}", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    private fun navigateTo(mode: ServerType) {
+    private fun navigateTo(mode: ServerType?) {
         val bun = saveBundle()
         when (mode) {
             ServerType.FAVORITE -> mainState.onButtonFavoritesClicked(bun)
@@ -266,7 +271,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
 
     private fun saveBundle(): Bundle {
         val bun = bundleOf()
-        bun.putString(Constants.SERVER_MODE, remoteValues.type.value)
+        bun.putString(Constants.SERVER_MODE, remoteValues?.type?.value)
         bun.putBoolean(Constants.IS_NSFW_WAIFU, binding.sNsfw.isChecked)
         bun.putBoolean(Constants.IS_GIF_WAIFU, binding.sGifs.isChecked)
         bun.putBoolean(Constants.IS_LANDS_WAIFU, binding.sOrientation.isChecked)
@@ -274,7 +279,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
 
         val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
         with (sharedPref.edit()) {
-            putString(Constants.SERVER_MODE, remoteValues.type.value)
+            putString(Constants.SERVER_MODE, remoteValues?.type?.value)
             apply()
         }
         return bun
@@ -283,7 +288,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
     private fun tagFilter(tag: String): String {
         var updatedTag: String = tag
         if (tag == getString(R.string.categories)) {
-            when (remoteValues.type) {
+            when (remoteValues?.type) {
                 ServerType.ENHANCED -> {
                     updatedTag = getString(R.string.tag_waifu)
                 }

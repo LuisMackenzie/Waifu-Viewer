@@ -13,17 +13,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.mackenzie.waifuviewer.domain.DownloadModel
 import com.mackenzie.waifuviewer.domain.ServerType
-import com.mackenzie.waifuviewer.domain.ServerType.ENHANCED
-import com.mackenzie.waifuviewer.domain.ServerType.FAVORITE
-import com.mackenzie.waifuviewer.domain.ServerType.NEKOS
-import com.mackenzie.waifuviewer.domain.ServerType.NORMAL
+import com.mackenzie.waifuviewer.domain.ServerType.*
+import com.mackenzie.waifuviewer.domain.getTypes
 import com.mackenzie.waifuviewer.ui.common.Constants
 import com.mackenzie.waifuviewer.ui.common.SaveImage
+import com.mackenzie.waifuviewer.ui.detail.ui.DetailBestScreenContent
+import com.mackenzie.waifuviewer.ui.detail.ui.DetailFavsScreenContent
 import com.mackenzie.waifuviewer.ui.detail.ui.DetailImScreenContent
 import com.mackenzie.waifuviewer.ui.detail.ui.DetailPicsScreenContent
 import com.mackenzie.waifuviewer.ui.main.MainState
@@ -44,7 +42,6 @@ class DetailFragment : Fragment() {
     private val favsViewModel: DetailFavsViewModel by viewModels()
     private lateinit var mainState: MainState
     private lateinit var download: DownloadModel
-    // private var serverMode: ServerType = NORMAL
     private var isWritePermissionGranted: Boolean = false
 
     override fun onCreateView(
@@ -56,15 +53,32 @@ class DetailFragment : Fragment() {
         mainState = buildMainState()
         val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
         val serverMode = sharedPref.getString(Constants.SERVER_MODE, "") ?: ""
-        // setUpElements(serverMode.getTypes())
 
-        // Instead of inflating an XML layout, return a ComposeView
         return ComposeView(requireContext()).apply {
             setContent {
                 MainTheme {
-                    DetailImScreen()
+                    LaunchDefaultScreen(serverMode.getTypes())
                 }
             }
+        }
+    }
+
+    @Composable
+    private fun LaunchDefaultScreen(mode: ServerType) {
+        when (mode) {
+            NORMAL -> {
+                DetailImScreen()
+            }
+            ENHANCED -> {
+                DetailPicsScreen()
+            }
+            NEKOS -> {
+                DetailNekosScreen()
+            }
+            FAVORITE -> {
+                DetailFavsScreen()
+            }
+            WAIFUGPT -> {}
         }
     }
 
@@ -88,357 +102,29 @@ class DetailFragment : Fragment() {
         )
     }
 
-    /*override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        mainState = buildMainState()
-        val binding = FragmentDetailBinding.bind(view)
-        val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
-        serverMode = sharedPref.getString(Constants.SERVER_MODE, "") ?: ""
-        binding.setUpElements()
-    }*/
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        // mainState = buildMainState()
-        /*serverMode = (requireActivity()
-            .getPreferences(Context.MODE_PRIVATE)
-            .getString(Constants.SERVER_MODE, "") ?: "normal"
-                ).getTypes()*/
-        // setUpElements(serverMode)
-    }
-
-    /*@Preview(showBackground = true, widthDp = 400, heightDp = 400)
     @Composable
-    fun DetailScreenContent() {
-
-        val state = imViewModel.state.collectAsState().value
-
-        Box(modifier = Modifier
-            .fillMaxSize()
-        ) {
-            state.waifuIm?.let { waifu ->
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(waifu.url)
-                        .crossfade(true)
-                        .build(),
-                    placeholder = painterResource(R.drawable.ic_baseline_download),
-                    // placeholder = lottiePlaceholder(),
-                    // onLoading = { LoadingAnimation(modifier = Modifier.fillMaxSize()) },
-                    error = painterResource(R.drawable.ic_failed),
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop
-                )
-                FloatingActionButton(
-                    modifier = Modifier
-                        .align(Alignment.BottomStart)
-                        .padding(16.dp),
-                    onClick = {imViewModel.onFavoriteClicked()}
-                ) {
-                    Icon(
-                        painter = painterResource(
-                            id = if (waifu.isFavorite) R.drawable.ic_favorite_on else R.drawable.ic_favorite_off
-                        ),
-                        contentDescription = null
-                    )
-                }
-                Text(
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .padding(8.dp),
-                    text = waifu.imageId.toString(),
-                    fontSize = 25.sp,
-                    style = MaterialTheme.typography.bodyMedium
-                )
-
-                FloatingActionButton(
-                    onClick = { onDownloadClick() },
-                    modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                        .padding(16.dp),
-                    shape = MaterialTheme.shapes.extraLarge
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_baseline_download),
-                        contentDescription = null
-                    )
-                }
-                prepareDownload(waifu.imageId.toString(), waifu.url, waifu.url.substringAfterLast('.'))
-            }
-            state.error?.let {
-
-                LoadingAnimationError(modifier = Modifier.fillMaxSize())
-                Text(
-                    text = it.toString(),
-                    fontSize = 25.sp,
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .padding(8.dp)
-                )
-            }
-        }
-    }*/
-
-    private fun getServerMode(mode: ServerType) {
-        when (mode) {
-            NORMAL -> {
-                // launchImCollect()
-                // fab.setOnClickListener { imViewModel.onFavoriteClicked() }
-            }
-            ENHANCED -> {
-                // launchPicsCollect()
-                // fab.setOnClickListener { picsViewModel.onFavoriteClicked() }
-            }
-            NEKOS -> {
-                // launchBestCollect()
-                // fab.setOnClickListener { bestViewModel.onFavoriteClicked() }
-            }
-            FAVORITE -> {
-                // launchFavoriteCollect()
-                // fab.setOnClickListener { favsViewModel.onFavoriteClicked() }
-            }
-            else -> {
-                // fab.visible = false
-            }
-        }
-        /*fabDownload.setOnClickListener {
-            if (isWritePermissionGranted != true) {
-                RequestPermision()
-            }
-            requestDownload()
-        }*/
+    private fun DetailNekosScreen() {
+        DetailBestScreenContent(
+            state = bestViewModel.state.collectAsState().value,
+            prepareDownload = { title, link, imageExt -> prepareDownload(title, link, imageExt) },
+            onFavoriteClicked = { bestViewModel.onFavoriteClicked() },
+            onDownloadClick = { onDownloadClick() }
+        )
     }
 
-    private fun withImStateUpdateUI(state: DetailImViewModel.UiState) {
-        // pbLoading.visibility = View.GONE
-
-        /*setContent {
-            DetailScreenContent(
-                state = state,
-                onFavoriteClicked = { imViewModel.onFavoriteClicked() },
-                onDownloadClicked = { requestDownload() }
-            )
-        }*/
-
-        state.waifuIm?.let {
-            // tvDetail.text = it.imageId.toString()
-            // ivDetail.loadUrl(it.url)
-            Log.e("DetailFragment", "WaifuImItemURL: ${it.url}")
-            if (it.isFavorite) {
-                // fab.setImageResource(R.drawable.ic_favorite_on)
-            } else {
-                // fab.setImageResource(R.drawable.ic_favorite_off)
-            }
-            prepareDownload(it.imageId.toString(), it.url, it.url.substringAfterLast('.'))
-        }
-
-        state.error?.let {
-            // tvDetail.text = getString(R.string.waifu_error)
-            // ivDetail.setImageResource(R.drawable.ic_offline_background)
-        }
+    @Composable
+    private fun DetailFavsScreen() {
+        DetailFavsScreenContent(
+            state = favsViewModel.state.collectAsState().value,
+            prepareDownload = { title, link, imageExt -> prepareDownload(title, link, imageExt) },
+            onFavoriteClicked = { favsViewModel.onFavoriteClicked() },
+            onDownloadClick = { onDownloadClick() }
+        )
     }
-
-    // crear logica para abstraer las 4 funciones iguales
-    /*private fun FragmentDetailBinding.launchPicsCollect() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                picsViewModel.state.collect {
-                    withPicsUpdateUI(it)
-                }
-            }
-        }
-    }*/
-
-    /*private fun FragmentDetailBinding.launchImCollect() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                imViewModel.state.collect {
-                    withImUpdateUI(it)
-                }
-            }
-        }
-    }*/
-
-    private fun launchImCollect() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                imViewModel.state.collect {
-                    withImStateUpdateUI(it)
-                }
-            }
-        }
-    }
-
-    /*private fun FragmentDetailBinding.launchBestCollect() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                bestViewModel.state.collect {
-                    withBestUpdateUI(it)
-                }
-            }
-        }
-    }*/
-
-    /*private fun FragmentDetailBinding.launchFavoriteCollect() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                favsViewModel.state.collect {
-                    withFavsUpdateUI(it)
-                }
-            }
-        }
-    }*/
-
-    /*private fun FragmentDetailBinding.withBestUpdateUI(state: DetailBestViewModel.UiState) {
-        pbLoading.visibility = View.GONE
-        state.waifu?.let {
-            val title = it.url.substringAfterLast('/').substringBeforeLast('.')
-            if (it.artistName.isEmpty()) {
-                tvDetail.text = it.animeName
-            } else {
-                tvDetail.text = it.artistName
-            }
-            ivDetail.loadUrl(it.url)
-            if (it.isFavorite) {
-                fab.setImageResource(R.drawable.ic_favorite_on)
-            } else {
-                fab.setImageResource(R.drawable.ic_favorite_off)
-            }
-            prepareDownload(title, it.url, it.url.substringAfterLast('.'))
-        }
-
-        state.error?.let {
-            tvDetail.text = getString(R.string.waifu_error)
-            ivDetail.setImageResource(R.drawable.ic_offline_background)
-            Toast.makeText(requireContext(), it.toString(), Toast.LENGTH_SHORT).show()
-        }
-    }*/
-
-    /*private fun FragmentDetailBinding.withFavsUpdateUI(state: DetailFavsViewModel.UiState) {
-        pbLoading.visibility = View.GONE
-        state.waifu?.let {
-            tvDetail.text = it.url.substringAfterLast('/').substringBeforeLast('.')
-            ivDetail.loadUrl(it.url)
-            if (it.isFavorite) {
-                fab.setImageResource(R.drawable.ic_favorite_on)
-            } else {
-                fab.setImageResource(R.drawable.ic_favorite_off)
-            }
-            prepareDownload(it.title, it.url, it.url.substringAfterLast('.'))
-        }
-
-        state.error?.let {
-            tvDetail.text = getString(R.string.waifu_error)
-            ivDetail.setImageResource(R.drawable.ic_offline_background)
-            Toast.makeText(requireContext(), it.toString(), Toast.LENGTH_SHORT).show()
-        }
-    }*/
-
-    /*private fun FragmentDetailBinding.withPicsUpdateUI(state: DetailPicsViewModel.UiState) {
-        pbLoading.visibility = View.GONE
-        state.waifuPic?.let {
-            val title = it.url.substringAfterLast('/').substringBeforeLast('.')
-            tvDetail.text = title
-            ivDetail.loadUrl(it.url)
-            if (it.isFavorite) {
-                fab.setImageResource(R.drawable.ic_favorite_on)
-            } else {
-                fab.setImageResource(R.drawable.ic_favorite_off)
-            }
-            prepareDownload(title, it.url, it.url.substringAfterLast('.'))
-        }
-
-        state.error?.let {
-            tvDetail.text = getString(R.string.waifu_error)
-            ivDetail.setImageResource(R.drawable.ic_offline_background)
-        }
-    }*/
-
-    /*private fun FragmentDetailBinding.withImUpdateUI(state: DetailImViewModel.UiState) {
-        pbLoading.visibility = View.GONE
-        state.waifuIm?.let {
-            tvDetail.text = it.imageId.toString()
-            ivDetail.loadUrl(it.url)
-            if (it.isFavorite) {
-                fab.setImageResource(R.drawable.ic_favorite_on)
-            } else {
-                fab.setImageResource(R.drawable.ic_favorite_off)
-            }
-            prepareDownload(it.imageId.toString(), it.url, it.url.substringAfterLast('.'))
-        }
-
-        state.error?.let {
-            tvDetail.text = getString(R.string.waifu_error)
-            ivDetail.setImageResource(R.drawable.ic_offline_background)
-        }
-    }*/
 
     private fun prepareDownload(title: String, link: String, imageExt: String) {
         download = DownloadModel(title, link, imageExt)
     }
-
-    private fun setUpElements(mode: ServerType) {
-        when (mode) {
-            NORMAL -> {
-                launchImCollect()
-                // fab.setOnClickListener { imViewModel.onFavoriteClicked() }
-            }
-            ENHANCED -> {
-                // launchPicsCollect()
-                // fab.setOnClickListener { picsViewModel.onFavoriteClicked() }
-            }
-            NEKOS -> {
-                // launchBestCollect()
-                // fab.setOnClickListener { bestViewModel.onFavoriteClicked() }
-            }
-            FAVORITE -> {
-                // launchFavoriteCollect()
-                // fab.setOnClickListener { favsViewModel.onFavoriteClicked() }
-            }
-            else -> {
-                // fab.visible = false
-            }
-        }
-        /*fabDownload.setOnClickListener {
-            if (isWritePermissionGranted != true) {
-                RequestPermision()
-            }
-            requestDownload()
-        }*/
-    }
-
-    /*private fun FragmentDetailBinding.setUpElements() {
-        when (serverMode) {
-            getString(R.string.server_normal_string) -> {
-                launchImCollect()
-                fab.setOnClickListener { imViewModel.onFavoriteClicked() }
-            }
-            getString(R.string.server_enhanced_string) -> {
-                launchPicsCollect()
-                fab.setOnClickListener { picsViewModel.onFavoriteClicked() }
-            }
-            getString(R.string.server_nekos_string) -> {
-                launchBestCollect()
-                fab.setOnClickListener { bestViewModel.onFavoriteClicked() }
-            }
-            getString(R.string.server_favorite_string) -> {
-                launchFavoriteCollect()
-                fab.setOnClickListener { favsViewModel.onFavoriteClicked() }
-            }
-            else -> {
-                fab.visible = false
-            }
-        }
-        fabDownload.setOnClickListener {
-            if (isWritePermissionGranted != true) {
-                RequestPermision()
-            }
-            requestDownload()
-        }
-    }*/
 
     private fun onDownloadClick() {
         if (isWritePermissionGranted != true) {
@@ -462,12 +148,6 @@ class DetailFragment : Fragment() {
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val url = URL(link)
-
-                /*if (isGif(fileType)) {
-                    var imageGif: ViewTarget<ImageView, GifDrawable>
-                    Glide.with(requireContext()).asGif().load(link).into(imageGif)
-
-                }*/
                 val image: Bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream())
                 SaveImage().saveImageToStorage(
                     requireContext(),

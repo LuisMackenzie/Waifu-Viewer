@@ -12,8 +12,8 @@ import com.mackenzie.waifuviewer.R
 
 @Preview(showBackground = true)
 @Composable
-fun LoadingAnimationError(modifier: Modifier = Modifier) {
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.no_data))
+fun LoadingAnimation(modifier: Modifier = Modifier) {
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading_animation))
     LottieAnimation(
         composition = composition,
         modifier = modifier,
