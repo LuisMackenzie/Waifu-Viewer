@@ -10,7 +10,6 @@ import com.mackenzie.waifuviewer.ui.detail.DetailImViewModel
 private fun DetailScreenPreview() {
     DetailImScreenContent(
         state = previewState(),
-        isPreview = true,
         prepareDownload = { title, link, imageExt ->  },
         onFavoriteClicked = {  },
         onDownloadClick = {  }
