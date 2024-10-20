@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -55,6 +56,7 @@ class DetailFragment : Fragment() {
         val serverMode = sharedPref.getString(Constants.SERVER_MODE, "") ?: ""
 
         return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 MainTheme {
                     LaunchDefaultScreen(serverMode.getTypes())
