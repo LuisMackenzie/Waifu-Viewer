@@ -66,18 +66,10 @@ class DetailFragment : Fragment() {
     @Composable
     private fun LaunchDefaultScreen(mode: ServerType) {
         when (mode) {
-            NORMAL -> {
-                DetailImScreen()
-            }
-            ENHANCED -> {
-                DetailPicsScreen()
-            }
-            NEKOS -> {
-                DetailNekosScreen()
-            }
-            FAVORITE -> {
-                DetailFavsScreen()
-            }
+            NORMAL -> DetailImScreen()
+            ENHANCED -> DetailPicsScreen()
+            NEKOS -> DetailNekosScreen()
+            FAVORITE -> DetailFavsScreen()
             WAIFUGPT -> {}
         }
     }

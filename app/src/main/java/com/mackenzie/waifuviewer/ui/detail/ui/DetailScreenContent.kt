@@ -15,7 +15,6 @@ import com.mackenzie.waifuviewer.ui.detail.DetailPicsViewModel
 @Composable
 fun DetailImScreenContent(
     state: DetailImViewModel.UiState,
-    isPreview: Boolean = false,
     prepareDownload: (String, String, String) -> Unit,
     onFavoriteClicked: () -> Unit,
     onDownloadClick: () -> Unit
