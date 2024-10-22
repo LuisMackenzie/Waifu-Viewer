@@ -12,16 +12,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.domain.FavoriteItem
-import com.mackenzie.waifuviewer.ui.common.showToast
 import com.mackenzie.waifuviewer.ui.detail.ui.LoadingAnimation
 import com.mackenzie.waifuviewer.ui.detail.ui.LoadingAnimationError
 import com.mackenzie.waifuviewer.ui.favs.FavoriteViewModel
+import com.mackenzie.waifuviewer.ui.main.ui.LoadingErrorView
 
 @Composable
 fun FavoriteScreenContent(
@@ -29,18 +27,15 @@ fun FavoriteScreenContent(
     onItemClick: (FavoriteItem) -> Unit,
     onItemLongClick: (FavoriteItem) -> Unit,
     onFabClick: () -> Unit,
-    // isToastShowed: (Boolean) -> Unit
+    hideInfoCount: () -> Unit
 ) {
-    // TODO sacar este objeto de este composable y observarlo
-    // var numIsShowed: Boolean by remember { mutableStateOf(false) }
 
     var openAlertDialog by remember { mutableStateOf(false) }
 
     if (openAlertDialog) {
         WaifuDialog(
             onDismissRequest = { openAlertDialog = it },
-            onConfirmation = { onFabClick() ; openAlertDialog = false },
-            icon = painterResource(id = R.drawable.ic_baseline_delete)
+            onConfirmation = { onFabClick() ; openAlertDialog = false }
         )
     }
 
@@ -48,11 +43,9 @@ fun FavoriteScreenContent(
 
     state.waifus?.let { waifus ->
         val count = waifus.size
-        if (count != 0 && !numIsShowed) {
-            val temp = stringResource(id = R.string.waifus_size)
-            "$temp $count".showToast(LocalContext.current)
-            // simpleToast("${getString(R.string.waifus_size)} $count")
-            // isToastShowed(true)
+        if (count != 0 && !state.isShowedInfo) {
+            // "${stringResource(id = R.string.waifus_size)} $count".showToast(LocalContext.current)
+            hideInfoCount()
         }
         Box(modifier = Modifier.fillMaxSize()) {
             if (waifus.isEmpty()) LoadingAnimationError(modifier = Modifier.fillMaxSize())
@@ -71,16 +64,10 @@ fun FavoriteScreenContent(
                     contentDescription = null
                 )
             }
-
         }
     }
 
-
-    state.error?.let {
-        Box(modifier = Modifier.fillMaxSize()) {
-            LoadingAnimationError(modifier = Modifier.fillMaxSize())
-        }
+    state.error?.let { error ->
+        LoadingErrorView(error = error.toString())
     }
-
-
 }

@@ -47,8 +47,13 @@ class FavoriteViewModel @Inject constructor(
         }
     }
 
+    fun hideInfoCount() {
+        _state.update { _state.value.copy(isShowedInfo = true) }
+    }
+
     data class UiState(
         val isLoading: Boolean = false,
+        val isShowedInfo: Boolean = false,
         val waifus: List<FavoriteItem>? = null,
         val error: Error? = null
     )

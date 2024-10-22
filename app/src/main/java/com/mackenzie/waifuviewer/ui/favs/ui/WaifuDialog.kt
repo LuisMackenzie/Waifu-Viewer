@@ -5,7 +5,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.mackenzie.waifuviewer.R
 
@@ -13,13 +13,13 @@ import com.mackenzie.waifuviewer.R
 fun WaifuDialog(
     onDismissRequest: (Boolean) -> Unit,
     onConfirmation: () -> Unit,
-    icon: Painter,
 ) {
     AlertDialog(
         onDismissRequest = { onDismissRequest(false) },
         title = { Text(text = stringResource(id = R.string.favorite_delete_title)) },
         text = { Text(text = stringResource(id = R.string.favorite_delete_subtitle)) },
-        icon = { Icon(icon, contentDescription = "Example Icon") },
+        icon = { Icon(painter = painterResource(id = R.drawable.ic_baseline_delete), contentDescription = "Delete Icon") },
+        // icon = { Image(painter = painterResource(id = R.mipmap.ic_launcher), contentDescription = "Example Icon") },
         confirmButton = {
             Button(onClick = {
                 onConfirmation()
