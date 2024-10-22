@@ -1,6 +1,5 @@
 package com.mackenzie.waifuviewer.ui.favs.ui
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -14,12 +13,10 @@ import com.mackenzie.waifuviewer.domain.FavoriteItem
 fun FavoriteWaifuList(
     items: List<FavoriteItem>,
     modifier: Modifier = Modifier,
-    onItemClick: (FavoriteItem) -> Unit
+    onItemClick: (FavoriteItem) -> Unit,
+    onItemLongClick: (FavoriteItem) -> Unit,
 ) {
     LazyVerticalGrid(
-        // Ayuda a ver los margenes
-        // modifier = Modifier.background(Color.Cyan),
-        contentPadding = PaddingValues(4.dp),
         columns = GridCells.Fixed(2),
         // columns = GridCells.Adaptive(150.dp),
         modifier = modifier
@@ -27,9 +24,9 @@ fun FavoriteWaifuList(
         items(items) { item ->
             WaifuItem(
                 waifu = item,
-                modifier = Modifier.padding(4.dp),
+                modifier = Modifier.padding(6.dp),
                 onWaifuClick = { onItemClick(it) }
-            )
+            ) { onItemLongClick(it) }
         }
     }
 }

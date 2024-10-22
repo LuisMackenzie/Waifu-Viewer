@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="default_corner">40dp</dimen>
+    <dimen name="waifu_item_height">250sp</dimen>
+    <dimen name="waifu_item_text_size">18sp</dimen>
 </resources>

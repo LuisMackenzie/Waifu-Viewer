@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
@@ -50,6 +51,10 @@ fun ImageView.loadUrlCenterCrop(url: String) {
         .transition(DrawableTransitionOptions.withCrossFade())
         .error(R.drawable.ic_error_grey)
         .into(this)
+}
+
+fun String.showToast(context: Context) {
+    Toast.makeText(context, this, Toast.LENGTH_LONG).show()
 }
 
 fun Activity.showFullscreenCutout() {

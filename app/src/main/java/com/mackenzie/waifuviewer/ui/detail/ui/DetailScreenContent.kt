@@ -1,11 +1,9 @@
 package com.mackenzie.waifuviewer.ui.detail.ui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
 import com.mackenzie.waifuviewer.ui.detail.DetailBestViewModel
 import com.mackenzie.waifuviewer.ui.detail.DetailFavsViewModel
 import com.mackenzie.waifuviewer.ui.detail.DetailImViewModel
@@ -19,8 +17,9 @@ fun DetailImScreenContent(
     onFavoriteClicked: () -> Unit,
     onDownloadClick: () -> Unit
 ) {
-    Box(modifier = Modifier.fillMaxSize().background(colorResource(id = android.R.color.black))) {
+    Box(modifier = Modifier.fillMaxSize()) {
         state.waifuIm?.let { waifu ->
+
             ZoomableImage(waifu.url)
             DetailFabFavorites(isFavorite = waifu.isFavorite, onFavoriteClicked = onFavoriteClicked)
             DetailTitle(title = waifu.imageId.toString())
@@ -41,7 +40,7 @@ fun DetailPicsScreenContent(
     onFavoriteClicked: () -> Unit,
     onDownloadClick: () -> Unit
 ) {
-    Box(modifier = Modifier.fillMaxSize().background(colorResource(id = android.R.color.black))) {
+    Box(modifier = Modifier.fillMaxSize()) {
         state.waifuPic?.let { waifu ->
             val title = waifu.url.substringAfterLast('/').substringBeforeLast('.')
             ZoomableImage(waifu.url)
@@ -64,7 +63,7 @@ fun DetailBestScreenContent(
     onFavoriteClicked: () -> Unit,
     onDownloadClick: () -> Unit
 ) {
-    Box(modifier = Modifier.fillMaxSize().background(colorResource(id = android.R.color.black))) {
+    Box(modifier = Modifier.fillMaxSize()) {
         state.waifu?.let { waifu ->
             val title = waifu.url.substringAfterLast('/').substringBeforeLast('.')
             ZoomableImage(waifu.url)
@@ -87,7 +86,7 @@ fun DetailFavsScreenContent(
     onFavoriteClicked: () -> Unit,
     onDownloadClick: () -> Unit
 ) {
-    Box(modifier = Modifier.fillMaxSize().background(colorResource(id = android.R.color.black))) {
+    Box(modifier = Modifier.fillMaxSize()) {
         state.waifu?.let { waifu ->
             ZoomableImage(waifu.url)
             DetailFabFavorites(isFavorite = waifu.isFavorite, onFavoriteClicked = onFavoriteClicked)

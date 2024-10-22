@@ -1,7 +1,9 @@
 package com.mackenzie.waifuviewer.ui.favs.ui
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,38 +27,42 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.domain.FavoriteItem
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun WaifuItem(
     waifu: FavoriteItem,
     modifier: Modifier = Modifier,
-    onWaifuClick: (FavoriteItem) -> Unit
+    onWaifuClick: (FavoriteItem) -> Unit,
+    onWaifuLongClick: (FavoriteItem) -> Unit,
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .height(250.dp)
-            .padding(6.dp)
-            .clickable { onWaifuClick(waifu) },
+            .height(dimensionResource(id = R.dimen.waifu_item_height))
+            .combinedClickable(
+                onLongClick = { onWaifuLongClick(waifu) },
+                onClick = { onWaifuClick(waifu) }
+            ),
+            // .clickable { onWaifuClick(waifu) },
         elevation = CardDefaults.cardElevation(10.dp),
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.default_corner))
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-            /*ShimmerEffect(
+            ShimmerEffect(
                 modifier = Modifier.fillMaxSize()
-            )*/
-
+            )
             AsyncImage(
                 model= ImageRequest.Builder(LocalContext.current)
                     .data(waifu.url)
                     .crossfade(true)
                     .build(),
-                // placeholder = painterResource(R.drawable.baseline_downloading),
                 error = painterResource(R.drawable.ic_error_grey),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
@@ -65,6 +71,7 @@ fun WaifuItem(
 
             Text(
                 text = waifu.title,
+                fontSize = 18.sp,
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
@@ -72,16 +79,15 @@ fun WaifuItem(
                     .padding(bottom = 8.dp)
             )
 
-            if (waifu.isFavorite) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_favorite_on),
-                    contentDescription = stringResource(id = R.string.waifus_content),
-                    modifier = Modifier
-                        .size(90.dp)
-                        .align(Alignment.BottomStart)
-                        .padding(start = 20.dp, bottom = 8.dp)
-                )
-            }
+            Icon(
+                painter = if (waifu.isFavorite) painterResource(id = R.drawable.ic_favorite_on) else painterResource(id = R.drawable.ic_favorite_off),
+                contentDescription = stringResource(id = R.string.waifus_content),
+                tint = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier
+                    .size(58.dp)
+                    .align(Alignment.BottomStart)
+                    .padding(start = 20.dp, bottom = 8.dp)
+            )
         }
     }
 }
