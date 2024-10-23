@@ -2,7 +2,6 @@ package com.mackenzie.waifuviewer.ui.favs.ui
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,7 +24,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
@@ -36,7 +34,7 @@ import com.mackenzie.waifuviewer.domain.FavoriteItem
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun WaifuItem(
+fun WaifuFavoriteItem(
     waifu: FavoriteItem,
     modifier: Modifier = Modifier,
     onWaifuClick: (FavoriteItem) -> Unit,
