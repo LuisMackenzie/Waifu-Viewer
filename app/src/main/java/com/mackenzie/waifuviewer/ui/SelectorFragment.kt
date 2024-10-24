@@ -5,10 +5,14 @@ import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -26,10 +30,12 @@ import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.databinding.FragmentSelectorBinding
 import com.mackenzie.waifuviewer.domain.RemoteConfigValues
 import com.mackenzie.waifuviewer.domain.ServerType
+import com.mackenzie.waifuviewer.domain.getTypes
 import com.mackenzie.waifuviewer.ui.common.*
 import com.mackenzie.waifuviewer.ui.main.MainState
 import com.mackenzie.waifuviewer.ui.main.OnChooseTypeChanged
 import com.mackenzie.waifuviewer.ui.main.SelectorImViewModel
+import com.mackenzie.waifuviewer.ui.main.ui.MainTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -57,6 +63,34 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         if (remoteValues == null) getRemoteConfig()
         loadInitialServer()
     }
+
+    /*override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        mainState = MainState(
+            requireContext(),
+            viewLifecycleOwner.lifecycleScope,
+            findNavController(),
+            PermissionRequester(this , Manifest.permission.ACCESS_COARSE_LOCATION)
+        )
+        // TODO
+        // setUpElements()
+        // TODO
+        // updateSpinner()
+        if (remoteValues == null) getRemoteConfig()
+        // TODO
+        // loadInitialServer()
+        return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent {
+                MainTheme {
+                    // LaunchHomeScreen(serverMode.getTypes())
+                }
+            }
+        }
+    }*/
 
     private fun getRemoteConfig() {
         val remoteConfig: FirebaseRemoteConfig = Firebase.remoteConfig
@@ -167,6 +201,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         backgroudImage?.loadUrlCenterCrop(url)
     }
 
+    // TODO - Refactor this method
     private fun setUpElements() = with(binding) {
         onChooseTypeChanged = this@SelectorFragment
         setNsfwMode(remoteValues?.nsfwIsActive ?: false, remoteValues?.gptIsActive ?: false)
@@ -216,6 +251,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         backgroudImage = ivBackdrop
     }
 
+    // TODO - Refactor this method
     private fun updateSpinner() = with(binding) {
         val spinnerContent: Array<String>
         when (remoteValues?.type) {
@@ -236,6 +272,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         adapter.notifyDataSetChanged()
     }
 
+    // TODO - Refactor this method
     private fun updateSwitches() = with(binding) {
         val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
         val workMode = sharedPref.getBoolean(Constants.WORK_MODE, false)

@@ -47,7 +47,7 @@ fun WaifuPicsScreenContent(
         Box(modifier = Modifier.fillMaxSize()) {
             if (waifus.isEmpty()) LoadingAnimation(modifier = Modifier.fillMaxSize())
             WaifuPicsList(
-                items = waifus.reversed(),
+                items = waifus,
                 onItemClick = { onWaifuClicked(it) },
                 onLoadMore = { onRequestMore() },
             )

@@ -42,7 +42,7 @@ fun WaifuBestScreenContent(
         Box(modifier = Modifier.fillMaxSize()) {
             if (waifus.isEmpty()) LoadingAnimation(modifier = Modifier.fillMaxSize())
             WaifuBestList(
-                items = waifus.reversed(),
+                items = waifus,
                 onItemClick = { onWaifuClicked(it) },
                 onLoadMore = { onRequestMore() },
             )
