@@ -34,6 +34,7 @@ import com.mackenzie.waifuviewer.ui.main.adapters.WaifuImAdapter
 import com.mackenzie.waifuviewer.ui.main.adapters.WaifuPicsAdapter
 import com.mackenzie.waifuviewer.ui.main.adapters.WaifuBestAdapter
 import com.mackenzie.waifuviewer.ui.main.ui.MainTheme
+import com.mackenzie.waifuviewer.ui.main.ui.WaifuBestScreenContent
 import com.mackenzie.waifuviewer.ui.main.ui.WaifuImScreenContent
 import com.mackenzie.waifuviewer.ui.main.ui.WaifuPicsScreenContent
 import dagger.hilt.android.AndroidEntryPoint
@@ -101,7 +102,7 @@ class WaifuFragment : Fragment(R.layout.fragment_waifu) {
         when (mode) {
             NORMAL -> WaifuImScreen()
             ENHANCED -> WaifuPicsScreen()
-            NEKOS -> {}// WaifuNekosScreen()
+            NEKOS -> WaifuNekosScreen()
             FAVORITE -> {}
             WAIFUGPT -> {}
         }
@@ -131,6 +132,21 @@ class WaifuFragment : Fragment(R.layout.fragment_waifu) {
             onRequestMore = { onLoadMoreWaifusIm() },
             onFabClick = {
                 picsViewModel.onClearPicsDatabase()
+                requireActivity().onBackPressedDispatcher.onBackPressed()
+                Toast.makeText(requireContext(), getString(R.string.waifus_gone), Toast.LENGTH_SHORT).show()
+            }
+        )
+    }
+
+    @Composable
+    private fun WaifuNekosScreen() {
+        WaifuBestScreenContent(
+            state = bestViewModel.state.collectAsState().value,
+            // bun = bun,
+            onWaifuClicked = { mainState.onWaifuBestClicked(it) },
+            onRequestMore = { onLoadMoreWaifusIm() },
+            onFabClick = {
+                bestViewModel.onClearDatabase()
                 requireActivity().onBackPressedDispatcher.onBackPressed()
                 Toast.makeText(requireContext(), getString(R.string.waifus_gone), Toast.LENGTH_SHORT).show()
             }

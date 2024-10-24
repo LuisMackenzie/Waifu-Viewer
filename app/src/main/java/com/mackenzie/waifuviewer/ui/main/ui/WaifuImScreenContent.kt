@@ -39,9 +39,9 @@ fun WaifuImScreenContent(
         )
     }
 
-    state.isLoading?.let { isloading ->
+    /*state.isLoading?.let { isloading ->
         if (isloading) LoadingAnimation(modifier = Modifier.fillMaxSize())
-    }
+    }*/
 
     state.waifus?.let { waifus ->
         /*val count = waifus.size
@@ -50,7 +50,7 @@ fun WaifuImScreenContent(
             hideInfoCount()
         }*/
         Box(modifier = Modifier.fillMaxSize()) {
-            if (waifus.isEmpty()) LoadingAnimationError(modifier = Modifier.fillMaxSize())
+            if (waifus.isEmpty()) LoadingAnimation(modifier = Modifier.fillMaxSize())
             WaifuImList(
                 items = waifus.reversed(),
                 onItemClick = { onWaifuClicked(it) },

@@ -1,5 +1,6 @@
 package com.mackenzie.waifuviewer.ui.main.ui
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -16,17 +17,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.WaifuPicsViewModel
-import com.mackenzie.waifuviewer.domain.WaifuImItem
 import com.mackenzie.waifuviewer.domain.WaifuPicItem
 import com.mackenzie.waifuviewer.ui.detail.ui.LoadingAnimation
-import com.mackenzie.waifuviewer.ui.detail.ui.LoadingAnimationError
 import com.mackenzie.waifuviewer.ui.favs.ui.WaifuDialog
-import com.mackenzie.waifuviewer.ui.main.WaifuImViewModel
 
 @Composable
 fun WaifuPicsScreenContent(
     state: WaifuPicsViewModel.UiState,
-    // bun: Bundle,
     onWaifuClicked: (WaifuPicItem) -> Unit,
     onRequestMore: () -> Unit,
     onFabClick: () -> Unit
@@ -41,10 +38,6 @@ fun WaifuPicsScreenContent(
         )
     }
 
-    state.isLoading?.let { isloading ->
-        if (isloading) LoadingAnimation(modifier = Modifier.fillMaxSize())
-    }
-
     state.waifus?.let { waifus ->
         /*val count = waifus.size
         if (count != 0 && !state.isShowedInfo) {
@@ -52,7 +45,7 @@ fun WaifuPicsScreenContent(
             hideInfoCount()
         }*/
         Box(modifier = Modifier.fillMaxSize()) {
-            if (waifus.isEmpty()) LoadingAnimationError(modifier = Modifier.fillMaxSize())
+            if (waifus.isEmpty()) LoadingAnimation(modifier = Modifier.fillMaxSize())
             WaifuPicsList(
                 items = waifus.reversed(),
                 onItemClick = { onWaifuClicked(it) },
