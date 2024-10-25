@@ -9,62 +9,43 @@ import com.mackenzie.waifuviewer.ui.main.WaifuImViewModel
 
 // Vista Detalle
 @Composable
-fun previewDetailState() = DetailImViewModel.UiState(
-    waifuIm = WaifuImItem(
-        id = 1,
-        signature = "signature",
-        extension = "jpg",
-        dominantColor = "dominantColor",
-        source = "source",
-        uploadedAt = "uploadedAt",
-        isNsfw = false,
-        width = "width",
-        height = "height",
-        imageId = 11,
-        url = "https://nekos.best/api/v2/neko/f09f1d72-4d7d-43ac-9aec-79f0544b95c3.png",
-        previewUrl = "previewUrl",
-        isFavorite = false
-    ),
-    error = null
-)
+fun previewDetailState() = DetailImViewModel.UiState(waifuIm = getImMediaItem(), error = null)
 
 // Vista Favoritos
 @Composable
-fun previewFavoriteState() = FavoriteViewModel.UiState(
-    waifus = getFavoriteMedia(),
-    error = null
-)
+fun previewFavoriteState() = FavoriteViewModel.UiState(waifus = getFavoriteMedia(), error = null)
 
-private fun getFavoriteMedia() = (1..20).map {
-    FavoriteItem(
-        id = it,
-        url = "https://nekos.best/api/v2/neko/f09f1d72-4d7d-43ac-9aec-79f0544b95c3.png",
-        title = "title $it",
-        isFavorite = true
-    )
-}
+@Composable
+fun getFavoriteMedia() = (1..20).map { getFavoriteMediaItem(it) }
+
+@Composable
+fun getFavoriteMediaItem(id: Int = 1) = FavoriteItem(
+    id = id,
+    url = "https://nekos.best/api/v2/neko/f09f1d72-4d7d-43ac-9aec-79f0544b95c3.png",
+    title = "title",
+    isFavorite = true
+)
 
 // Vista Principal
 @Composable
-fun previewMainState() = WaifuImViewModel.UiState(
-    waifus = getImMedia(),
-    error = null
-)
+fun previewMainState() = WaifuImViewModel.UiState(waifus = getImMedia(), error = null)
 
-private fun getImMedia() = (1..20).map {
-    WaifuImItem(
-        id = it,
-        signature = "signature",
-        extension = "jpg",
-        dominantColor = "dominantColor",
-        source = "source",
-        uploadedAt = "uploadedAt",
-        isNsfw = false,
-        width = "width",
-        height = "height",
-        imageId = it,
-        url = "https://nekos.best/api/v2/neko/f09f1d72-4d7d-43ac-9aec-79f0544b95c3.png",
-        previewUrl = "previewUrl",
-        isFavorite = if(it % 3 == 0) true else false
-    )
-}
+@Composable
+fun getImMedia() = (1..20).map { getImMediaItem(it) }
+
+@Composable
+fun getImMediaItem(id: Int = 1) = WaifuImItem(
+    id = id,
+    signature = "signature",
+    extension = "jpg",
+    dominantColor = "dominantColor",
+    source = "source",
+    uploadedAt = "uploadedAt",
+    isNsfw = false,
+    width = "width",
+    height = "height",
+    imageId = id,
+    url = "https://nekos.best/api/v2/neko/f09f1d72-4d7d-43ac-9aec-79f0544b95c3.png",
+    previewUrl = "previewUrl",
+    isFavorite = if(id % 3 == 0 || id == 1) true else false
+)

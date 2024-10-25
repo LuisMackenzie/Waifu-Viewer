@@ -14,10 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 
+@Preview(showBackground = true, backgroundColor = 0xFFE1BEE7, widthDp = 400, heightDp = 400)
 @Composable
 fun ShimmerEffect(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     widthOfShadowBrush: Int = 500,
     angleOfAxisY: Float = 270f,
     durationMillis: Int = 1000,

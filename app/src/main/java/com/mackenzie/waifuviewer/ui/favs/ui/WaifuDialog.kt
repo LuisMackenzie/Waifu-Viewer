@@ -7,12 +7,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.mackenzie.waifuviewer.R
 
+@Preview(showBackground = true)
 @Composable
 fun WaifuDialog(
-    onDismissRequest: (Boolean) -> Unit,
-    onConfirmation: () -> Unit,
+    onDismissRequest: (Boolean) -> Unit = { },
+    onConfirmation: () -> Unit = { },
 ) {
     AlertDialog(
         onDismissRequest = { onDismissRequest(false) },

@@ -13,21 +13,24 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.domain.FavoriteItem
+import com.mackenzie.waifuviewer.ui.common.ui.previewFavoriteState
 import com.mackenzie.waifuviewer.ui.detail.ui.LoadingAnimation
 import com.mackenzie.waifuviewer.ui.detail.ui.LoadingAnimationError
 import com.mackenzie.waifuviewer.ui.favs.FavoriteViewModel
 import com.mackenzie.waifuviewer.ui.main.ui.LoadingErrorView
 
+@Preview(showBackground = true)
 @Composable
 fun FavoriteScreenContent(
-    state: FavoriteViewModel.UiState,
-    onItemClick: (FavoriteItem) -> Unit,
-    onItemLongClick: (FavoriteItem) -> Unit,
-    onFabClick: () -> Unit,
-    hideInfoCount: () -> Unit
+    state: FavoriteViewModel.UiState = previewFavoriteState(),
+    onItemClick: (FavoriteItem) -> Unit = { },
+    onItemLongClick: (FavoriteItem) -> Unit = { },
+    onFabClick: () -> Unit = { },
+    hideInfoCount: () -> Unit = { }
 ) {
 
     var openAlertDialog by remember { mutableStateOf(false) }

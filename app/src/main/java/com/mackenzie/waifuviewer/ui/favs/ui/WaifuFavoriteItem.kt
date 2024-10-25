@@ -24,6 +24,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
@@ -31,14 +32,16 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.domain.FavoriteItem
+import com.mackenzie.waifuviewer.ui.common.ui.getFavoriteMediaItem
 
 @OptIn(ExperimentalFoundationApi::class)
+@Preview(showBackground = true)
 @Composable
 fun WaifuFavoriteItem(
-    waifu: FavoriteItem,
+    waifu: FavoriteItem = getFavoriteMediaItem(),
     modifier: Modifier = Modifier,
-    onWaifuClick: (FavoriteItem) -> Unit,
-    onWaifuLongClick: (FavoriteItem) -> Unit,
+    onWaifuClick: (FavoriteItem) -> Unit = {},
+    onWaifuLongClick: (FavoriteItem) -> Unit = {},
 ) {
     Card(
         modifier = modifier

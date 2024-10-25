@@ -4,18 +4,20 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import com.mackenzie.waifuviewer.ui.common.ui.previewDetailState
 import com.mackenzie.waifuviewer.ui.detail.DetailBestViewModel
 import com.mackenzie.waifuviewer.ui.detail.DetailFavsViewModel
 import com.mackenzie.waifuviewer.ui.detail.DetailImViewModel
 import com.mackenzie.waifuviewer.ui.detail.DetailPicsViewModel
 
-
+@Preview(showBackground = true)
 @Composable
 fun DetailImScreenContent(
-    state: DetailImViewModel.UiState,
-    prepareDownload: (String, String, String) -> Unit,
-    onFavoriteClicked: () -> Unit,
-    onDownloadClick: () -> Unit
+    state: DetailImViewModel.UiState = previewDetailState(),
+    prepareDownload: (String, String, String) -> Unit = { _, _, _ -> },
+    onFavoriteClicked: () -> Unit = {},
+    onDownloadClick: () -> Unit = {}
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         state.waifuIm?.let { waifu ->

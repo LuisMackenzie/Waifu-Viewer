@@ -10,16 +10,19 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mackenzie.waifuviewer.domain.WaifuImItem
+import com.mackenzie.waifuviewer.ui.common.ui.getImMedia
 import kotlinx.coroutines.launch
 
+@Preview(showBackground = true)
 @Composable
 fun WaifuImList(
-    items: List<WaifuImItem>,
+    items: List<WaifuImItem> = getImMedia(),
     modifier: Modifier = Modifier,
-    onItemClick: (WaifuImItem) -> Unit,
-    onLoadMore: () -> Unit
+    onItemClick: (WaifuImItem) -> Unit = {},
+    onLoadMore: () -> Unit = {}
 ) {
     val listState = rememberLazyGridState()
     val coroutineScope = rememberCoroutineScope()

@@ -12,7 +12,6 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-import com.mackenzie.waifuviewer.domain.Error
 import com.mackenzie.waifuviewer.ui.detail.ui.LoadingAnimationError
 
 @Preview(showBackground = true)

@@ -26,7 +26,6 @@ import com.mackenzie.waifuviewer.ui.main.WaifuImViewModel
 @Composable
 fun WaifuImScreenContent(
     state: WaifuImViewModel.UiState = previewMainState(),
-    // bun: Bundle,
     onWaifuClicked: (WaifuImItem) -> Unit = {},
     onRequestMore: () -> Unit = {},
     onFabClick: () -> Unit = {}
