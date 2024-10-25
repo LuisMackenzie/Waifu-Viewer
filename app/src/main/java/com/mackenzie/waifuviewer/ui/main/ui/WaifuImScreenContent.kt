@@ -13,21 +13,23 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.domain.WaifuImItem
+import com.mackenzie.waifuviewer.ui.common.ui.previewMainState
 import com.mackenzie.waifuviewer.ui.detail.ui.LoadingAnimation
-import com.mackenzie.waifuviewer.ui.detail.ui.LoadingAnimationError
 import com.mackenzie.waifuviewer.ui.favs.ui.WaifuDialog
 import com.mackenzie.waifuviewer.ui.main.WaifuImViewModel
 
+@Preview(showBackground = true)
 @Composable
 fun WaifuImScreenContent(
-    state: WaifuImViewModel.UiState,
+    state: WaifuImViewModel.UiState = previewMainState(),
     // bun: Bundle,
-    onWaifuClicked: (WaifuImItem) -> Unit,
-    onRequestMore: () -> Unit,
-    onFabClick: () -> Unit
+    onWaifuClicked: (WaifuImItem) -> Unit = {},
+    onRequestMore: () -> Unit = {},
+    onFabClick: () -> Unit = {}
 ) {
 
     var openAlertDialog by remember { mutableStateOf(false) }
