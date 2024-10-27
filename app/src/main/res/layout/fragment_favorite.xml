@@ -3,14 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-        <import type="java.util.List" />
-        <import type="com.mackenzie.waifuviewer.domain.FavoriteItem"/>
-        <variable name="loading" type="boolean" />
-        <variable name="favoriteWaifus" type="List&lt;FavoriteItem>" />
-        <variable name="error" type="String" />
-    </data>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -48,7 +40,6 @@
             android:layout_height="match_parent"
             android:clipToPadding="false"
             android:padding="2dp"
-            app:items="@{favoriteWaifus}"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:spanCount="2"
             tools:itemCount="10"
