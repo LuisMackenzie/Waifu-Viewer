@@ -24,6 +24,7 @@ import com.mackenzie.waifuviewer.ui.common.ui.previewMainState
 import com.mackenzie.waifuviewer.ui.detail.ui.LoadingAnimation
 import com.mackenzie.waifuviewer.ui.favs.ui.WaifuDialog
 import com.mackenzie.waifuviewer.ui.main.WaifuImViewModel
+import com.mackenzie.waifuviewer.ui.theme.Dimens
 
 @Preview(showBackground = true)
 @Composable
@@ -61,11 +62,11 @@ fun WaifuImScreenContent(
                 onItemClick = { onWaifuClicked(it) },
                 onLoadMore = { onRequestMore() },
             )
-            FloatingActionButton(
+            if (waifus.isNotEmpty()) FloatingActionButton(
                 onClick = { openAlertDialog = true },
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
-                    .padding(16.dp),
+                    .padding(Dimens.fabDeletePadding),
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_baseline_delete),

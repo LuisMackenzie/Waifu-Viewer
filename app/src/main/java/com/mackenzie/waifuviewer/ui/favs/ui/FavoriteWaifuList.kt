@@ -8,10 +8,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.mackenzie.waifuviewer.domain.FavoriteItem
 import com.mackenzie.waifuviewer.ui.common.isLandscape
 import com.mackenzie.waifuviewer.ui.common.ui.getFavoriteMedia
+import com.mackenzie.waifuviewer.ui.theme.Dimens
 
 @Preview(showBackground = true)
 @Composable
@@ -23,13 +23,13 @@ fun FavoriteWaifuList(
 ) {
 
     LazyVerticalGrid(
-        columns = if (LocalContext.current.isLandscape()) GridCells.Adaptive(220.dp) else GridCells.Fixed(2),
+        columns = if (LocalContext.current.isLandscape()) GridCells.Adaptive(Dimens.waifuItemHeight) else GridCells.Fixed(2),
         modifier = modifier
     ) {
         items(items) { item ->
             WaifuFavoriteItem(
                 waifu = item,
-                modifier = Modifier.padding(if (LocalContext.current.isLandscape()) 10.dp else 4.dp),
+                modifier = Modifier.padding(if (LocalContext.current.isLandscape()) Dimens.waifuItemPaddingLandscape else Dimens.waifuItemPadding),
                 onWaifuClick = { onItemClick(it) }
             ) { onItemLongClick(it) }
         }

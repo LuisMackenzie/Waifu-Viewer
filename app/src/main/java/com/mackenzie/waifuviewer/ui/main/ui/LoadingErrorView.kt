@@ -11,8 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.sp
 import com.mackenzie.waifuviewer.ui.detail.ui.LoadingAnimationError
+import com.mackenzie.waifuviewer.ui.theme.Dimens
 
 @Preview(showBackground = true)
 @Composable
@@ -32,13 +32,13 @@ fun LoadingErrorView(
         ) {
             Text(
                 text = "Hubo algun Error",
-                fontSize = 28.sp,
+                fontSize = Dimens.errorViewFontSize,
                 fontWeight = FontWeight.Bold
             )
 
             Text(
                 text = error,
-                fontSize = 28.sp,
+                fontSize = Dimens.errorViewFontSize,
                 fontStyle = FontStyle.Italic,
                 color = MaterialTheme.colorScheme.error
             )

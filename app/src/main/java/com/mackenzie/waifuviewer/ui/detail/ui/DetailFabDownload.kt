@@ -10,8 +10,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.mackenzie.waifuviewer.R
+import com.mackenzie.waifuviewer.ui.theme.Dimens
 
 @Preview(showBackground = true)
 @Composable
@@ -23,7 +23,7 @@ fun DetailFabDownload(
             onClick = { onDownloadClick() },
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(16.dp),
+                .padding(Dimens.detailFabsPadding),
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_baseline_download),

@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.mackenzie.waifuviewer.ui.theme.Dimens
 
 @Preview(showBackground = true)
 @Composable
@@ -21,9 +22,9 @@ fun DetailTitle(
         Text(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(8.dp),
+                .padding(Dimens.detailTitlePadding),
             text = title,
-            fontSize = 25.sp,
+            fontSize = Dimens.detailTitleFontSize,
             style = MaterialTheme.typography.bodyMedium
         )
     }

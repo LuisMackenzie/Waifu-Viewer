@@ -20,12 +20,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
@@ -34,6 +31,7 @@ import com.mackenzie.waifuviewer.domain.WaifuImItem
 import com.mackenzie.waifuviewer.ui.common.isLandscape
 import com.mackenzie.waifuviewer.ui.common.ui.getImMediaItem
 import com.mackenzie.waifuviewer.ui.favs.ui.ShimmerEffect
+import com.mackenzie.waifuviewer.ui.theme.Dimens
 
 @Preview(showBackground = true)
 @Composable
@@ -46,12 +44,12 @@ fun WaifuImItemView(
         modifier = modifier
             .fillMaxWidth()
             .height(
-                 if (LocalContext.current.isLandscape()) dimensionResource(id = R.dimen.waifu_item_height_landscape)
-                 else dimensionResource(id = R.dimen.waifu_item_height)
+                if (LocalContext.current.isLandscape()) Dimens.itemHeightLandscape
+                else Dimens.itemHeight
             )
             .clickable { onWaifuClick(waifu) },
-        elevation = CardDefaults.cardElevation(10.dp),
-        shape = RoundedCornerShape(dimensionResource(id = R.dimen.default_corner))
+        elevation = CardDefaults.cardElevation(Dimens.cardElevation),
+        shape = RoundedCornerShape(Dimens.defaultCorner)
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             ShimmerEffect(
@@ -70,12 +68,12 @@ fun WaifuImItemView(
 
             Text(
                 text = waifu.imageId.toString(),
-                fontSize = 18.sp,
+                fontSize = Dimens.cardTextSize,
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .background(Color.Transparent)
-                    .padding(bottom = 8.dp)
+                    .padding(bottom = Dimens.cardPaddingBottom)
             )
 
             if (waifu.isFavorite) {
@@ -84,9 +82,9 @@ fun WaifuImItemView(
                     contentDescription = stringResource(id = R.string.waifus_content),
                     tint = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier
-                        .size(58.dp)
+                        .size(Dimens.cardIconSize)
                         .align(Alignment.BottomStart)
-                        .padding(start = 20.dp, bottom = 8.dp)
+                        .padding(start = Dimens.cardIconPaddingStart, bottom = Dimens.cardPaddingBottom)
                 )
             }
         }
