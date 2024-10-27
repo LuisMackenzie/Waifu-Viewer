@@ -12,11 +12,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.domain.WaifuImItem
+import com.mackenzie.waifuviewer.ui.common.showToast
 import com.mackenzie.waifuviewer.ui.common.ui.previewMainState
 import com.mackenzie.waifuviewer.ui.detail.ui.LoadingAnimation
 import com.mackenzie.waifuviewer.ui.favs.ui.WaifuDialog
@@ -45,6 +48,7 @@ fun WaifuImScreenContent(
     }*/
 
     state.waifus?.let { waifus ->
+        "${stringResource(id = R.string.waifus_size)} ${waifus.size}".showToast(LocalContext.current)
         /*val count = waifus.size
         if (count != 0 && !state.isShowedInfo) {
             "${stringResource(id = R.string.waifus_size)} $count".showToast(LocalContext.current)
