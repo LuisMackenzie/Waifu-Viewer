@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -28,11 +27,7 @@ import com.mackenzie.waifuviewer.domain.ServerType.NORMAL
 import com.mackenzie.waifuviewer.domain.ServerType.WAIFUGPT
 import com.mackenzie.waifuviewer.domain.getTypes
 import com.mackenzie.waifuviewer.ui.common.Constants
-import com.mackenzie.waifuviewer.ui.common.launchAndCollect
-import com.mackenzie.waifuviewer.ui.favs.ui.FavoriteScreenContent
-import com.mackenzie.waifuviewer.ui.main.adapters.WaifuImAdapter
-import com.mackenzie.waifuviewer.ui.main.adapters.WaifuPicsAdapter
-import com.mackenzie.waifuviewer.ui.main.adapters.WaifuBestAdapter
+import com.mackenzie.waifuviewer.ui.common.showToast
 import com.mackenzie.waifuviewer.ui.main.ui.MainTheme
 import com.mackenzie.waifuviewer.ui.main.ui.WaifuBestScreenContent
 import com.mackenzie.waifuviewer.ui.main.ui.WaifuImScreenContent
@@ -40,26 +35,24 @@ import com.mackenzie.waifuviewer.ui.main.ui.WaifuPicsScreenContent
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class WaifuFragment : Fragment(R.layout.fragment_waifu) {
+class WaifuFragment : Fragment() {
 
     private val safeArgs: WaifuFragmentArgs by navArgs()
     private val picsViewModel: WaifuPicsViewModel by viewModels()
     private val imViewModel: WaifuImViewModel by viewModels()
     private val bestViewModel: WaifuBestViewModel by viewModels()
-    // private val waifuImAdapter = WaifuImAdapter { mainState.onWaifuImClicked(it) }
-    // private val waifuPicsAdapter = WaifuPicsAdapter { mainState.onWaifuPicsClicked(it) }
-    // private val waifuBestAdapter = WaifuBestAdapter { mainState.onWaifuBestClicked(it) }
     private lateinit var mainState: MainState
     private lateinit var bun: Bundle
     private var serverMode: String = ""
     private var numIsShowed: Boolean = false
     private var loadingMore: Boolean = false
+    // TODO Clean this up
+    private var viewmodelCount : Int = 0
+    private var functionCount : Int = 0
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // mainState = buildMainState()
-        // serverMode = safeArgs.bundleInfo.getString(Constants.SERVER_MODE) ?: ""
-        // bun = safeArgs.bundleInfo
-        // val binding = FragmentWaifuBinding.bind(view)
+        
         when (serverMode) {
             getString(R.string.server_enhanced_string) -> {
                 // binding.recycler.adapter = waifuPicsAdapter
@@ -74,8 +67,6 @@ class WaifuFragment : Fragment(R.layout.fragment_waifu) {
                 // viewLifecycleOwner.launchAndCollect(bestViewModel.state) { binding withBestUpdateUI it }
             }
         }
-
-        // loadCustomResult(bun)
     }
 
     override fun onCreateView(
@@ -112,7 +103,6 @@ class WaifuFragment : Fragment(R.layout.fragment_waifu) {
     private fun WaifuImScreen() {
         WaifuImScreenContent(
             state = imViewModel.state.collectAsState().value,
-            // bun = bun,
             onWaifuClicked = { mainState.onWaifuImClicked(it) },
             onRequestMore = { onLoadMoreWaifusIm() },
             onFabClick = {
@@ -129,7 +119,7 @@ class WaifuFragment : Fragment(R.layout.fragment_waifu) {
             state = picsViewModel.state.collectAsState().value,
             // bun = bun,
             onWaifuClicked = { mainState.onWaifuPicsClicked(it) },
-            onRequestMore = { onLoadMoreWaifusIm() },
+            onRequestMore = {}, // { onLoadMoreWaifusPics() },
             onFabClick = {
                 picsViewModel.onClearPicsDatabase()
                 requireActivity().onBackPressedDispatcher.onBackPressed()
@@ -144,7 +134,7 @@ class WaifuFragment : Fragment(R.layout.fragment_waifu) {
             state = bestViewModel.state.collectAsState().value,
             // bun = bun,
             onWaifuClicked = { mainState.onWaifuBestClicked(it) },
-            onRequestMore = { onLoadMoreWaifusIm() },
+            onRequestMore = {}, // { onLoadMoreWaifusBest() },
             onFabClick = {
                 bestViewModel.onClearDatabase()
                 requireActivity().onBackPressedDispatcher.onBackPressed()
@@ -183,10 +173,26 @@ class WaifuFragment : Fragment(R.layout.fragment_waifu) {
         val isGif = bun.getBoolean(Constants.IS_GIF_WAIFU)
         val orientation = bun.getBoolean(Constants.IS_LANDS_WAIFU)
         val categoryTag = bun.getString(Constants.CATEGORY_TAG_WAIFU) ?: ""
-        // parece que es victima de la recomposicion
+        // parece que es victima de la recomposicion y al intentar llamar a la funcion
+        // onRequestMore()
+        if (!loadingMore ) {
+            imViewModel.onRequestMore(isNsfw, isGif, categoryTag , orientation)
+            loadingMore = true
+            Log.e("onLoadMoreWaifusIm", "Llamada al viewmodel numero =$viewmodelCount")
+            viewmodelCount++
+            getString(R.string.waifus_coming).showToast(requireContext())
+
+            Handler(Looper.getMainLooper()).postDelayed({
+                loadingMore = false
+            }, 10000)
+        }
+        Log.e("onLoadMoreWaifusIm", "loadingMore=$loadingMore,functionCount=$functionCount")
+        functionCount++
         // imViewModel.onRequestMore(isNsfw, isGif, categoryTag, orientation)
-        simpleToast(getString(R.string.waifus_coming))
+        // getString(R.string.waifus_coming).showToast(requireContext())
     }
+
+
 
     private infix fun FragmentWaifuBinding.withImUpdateUI(state: WaifuImViewModel.UiState) {
         var count: Int
@@ -341,9 +347,5 @@ class WaifuFragment : Fragment(R.layout.fragment_waifu) {
             Toast.makeText(requireContext(), getString(R.string.waifus_gone), Toast.LENGTH_SHORT).show()
         }
     }*/
-
-    private fun simpleToast(msg: String) {
-        Toast.makeText(requireContext(), msg, Toast.LENGTH_LONG).show()
-    }
 }
 

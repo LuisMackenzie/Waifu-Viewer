@@ -7,20 +7,6 @@ import com.google.android.material.chip.ChipGroup
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.domain.ServerType
 
-/*@BindingAdapter("itemsPics")
-fun RecyclerView.setPicsItems(waifus: List<WaifuPicItem>?) {
-    if (waifus != null) {
-        (adapter as? WaifuPicsAdapter)?.submitList(waifus)
-    }
-}*/
-
-/*@BindingAdapter("itemsIm")
-fun RecyclerView.setImItems(waifus: List<WaifuImItem>?) {
-    if (waifus != null) {
-        (adapter as? WaifuImAdapter)?.submitList(waifus)
-    }
-}*/
-
 @BindingAdapter("onChooseTypeChanged")
 fun ChipGroup.onChooseTypeChanged(listener: OnChooseTypeChanged?) {
     setOnCheckedStateChangeListener { group, checkedId ->

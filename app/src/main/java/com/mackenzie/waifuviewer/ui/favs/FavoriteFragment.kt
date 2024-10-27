@@ -13,6 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.mackenzie.waifuviewer.R
+import com.mackenzie.waifuviewer.ui.common.showToast
 import com.mackenzie.waifuviewer.ui.favs.ui.FavoriteScreenContent
 import com.mackenzie.waifuviewer.ui.main.MainState
 import com.mackenzie.waifuviewer.ui.main.buildMainState
@@ -47,13 +48,9 @@ class FavoriteFragment : Fragment() {
         FavoriteScreenContent(
             state = viewModel.state.collectAsState().value,
             onItemClick = { mainState.onWaifuFavoriteClicked(it) },
-            onItemLongClick = { viewModel.onDeleteFavorite(it); simpleToast(getString(R.string.waifu_deleted)) },
-            onFabClick = { viewModel.onDeleteAllFavorites(); simpleToast(getString(R.string.waifus_favorites_gone)) },
+            onItemLongClick = { viewModel.onDeleteFavorite(it); getString(R.string.waifu_deleted).showToast(requireContext()) },
+            onFabClick = { viewModel.onDeleteAllFavorites(); getString(R.string.waifus_favorites_gone).showToast(requireContext()) },
             hideInfoCount = { viewModel.hideInfoCount() }
         )
-    }
-
-    private fun simpleToast(msg: String = getString(R.string.waifu_favorite_delete)) {
-        Toast.makeText(requireContext(), msg, Toast.LENGTH_LONG).show()
     }
 }
