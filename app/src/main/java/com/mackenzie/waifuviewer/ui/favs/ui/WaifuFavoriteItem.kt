@@ -32,7 +32,9 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.domain.FavoriteItem
+import com.mackenzie.waifuviewer.ui.common.isLandscape
 import com.mackenzie.waifuviewer.ui.common.ui.getFavoriteMediaItem
+import com.mackenzie.waifuviewer.ui.theme.WaifuViewerTheme
 
 @OptIn(ExperimentalFoundationApi::class)
 @Preview(showBackground = true)
@@ -46,7 +48,10 @@ fun WaifuFavoriteItem(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .height(dimensionResource(id = R.dimen.waifu_item_height))
+            .height(
+                if (LocalContext.current.isLandscape()) dimensionResource(id = R.dimen.waifu_item_height_landscape)
+                else dimensionResource(id = R.dimen.waifu_item_height)
+            )
             .combinedClickable(
                 onLongClick = { onWaifuLongClick(waifu) },
                 onClick = { onWaifuClick(waifu) }
@@ -83,7 +88,7 @@ fun WaifuFavoriteItem(
             Icon(
                 painter = if (waifu.isFavorite) painterResource(id = R.drawable.ic_favorite_on) else painterResource(id = R.drawable.ic_favorite_off),
                 contentDescription = stringResource(id = R.string.waifus_content),
-                tint = MaterialTheme.colorScheme.onPrimary,
+                tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
                     .size(58.dp)
                     .align(Alignment.BottomStart)

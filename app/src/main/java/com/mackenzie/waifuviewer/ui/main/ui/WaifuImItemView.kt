@@ -31,6 +31,7 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.domain.WaifuImItem
+import com.mackenzie.waifuviewer.ui.common.isLandscape
 import com.mackenzie.waifuviewer.ui.common.ui.getImMediaItem
 import com.mackenzie.waifuviewer.ui.favs.ui.ShimmerEffect
 
@@ -44,7 +45,10 @@ fun WaifuImItemView(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .height(dimensionResource(id = R.dimen.waifu_item_height))
+            .height(
+                 if (LocalContext.current.isLandscape()) dimensionResource(id = R.dimen.waifu_item_height_landscape)
+                 else dimensionResource(id = R.dimen.waifu_item_height)
+            )
             .clickable { onWaifuClick(waifu) },
         elevation = CardDefaults.cardElevation(10.dp),
         shape = RoundedCornerShape(dimensionResource(id = R.dimen.default_corner))

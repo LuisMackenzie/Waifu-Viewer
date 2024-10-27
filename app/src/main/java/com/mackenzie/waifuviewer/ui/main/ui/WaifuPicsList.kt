@@ -6,8 +6,10 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.mackenzie.waifuviewer.domain.WaifuPicItem
+import com.mackenzie.waifuviewer.ui.common.isLandscape
 
 @Composable
 fun WaifuPicsList(
@@ -19,15 +21,14 @@ fun WaifuPicsList(
 
 
     LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
+        columns = if (LocalContext.current.isLandscape()) GridCells.Adaptive(220.dp) else GridCells.Fixed(2),
         // state = listState,
-        // columns = GridCells.Adaptive(150.dp),
         modifier = modifier
     ) {
         items(items) { item ->
             WaifuPicItemView(
                 waifu = item,
-                modifier = Modifier.padding(6.dp),
+                modifier = Modifier.padding(if (LocalContext.current.isLandscape()) 10.dp else 4.dp),
                 onWaifuClick = { onItemClick(it) }
             )
         }

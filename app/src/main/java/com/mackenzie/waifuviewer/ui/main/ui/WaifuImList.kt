@@ -10,9 +10,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.mackenzie.waifuviewer.domain.WaifuImItem
+import com.mackenzie.waifuviewer.ui.common.isLandscape
 import com.mackenzie.waifuviewer.ui.common.ui.getImMedia
 import kotlinx.coroutines.launch
 
@@ -37,15 +40,14 @@ fun WaifuImList(
     }
 
     LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        // state = listState,
-        // columns = GridCells.Adaptive(150.dp),
-        modifier = modifier
+        columns = if (LocalContext.current.isLandscape()) GridCells.Adaptive(220.dp) else GridCells.Fixed(2),
+        modifier = modifier,
+        state = listState
     ) {
         items(items) { item ->
             WaifuImItemView(
                 waifu = item,
-                modifier = Modifier.padding(6.dp),
+                modifier = Modifier.padding(if (LocalContext.current.isLandscape()) 10.dp else 4.dp),
                 onWaifuClick = { onItemClick(it) }
             )
         }
