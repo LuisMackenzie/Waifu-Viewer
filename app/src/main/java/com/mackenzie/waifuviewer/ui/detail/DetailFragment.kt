@@ -9,11 +9,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.mackenzie.waifuviewer.domain.DownloadModel
 import com.mackenzie.waifuviewer.domain.ServerType
@@ -81,7 +81,7 @@ class DetailFragment : Fragment() {
     @Composable
     private fun DetailImScreen() {
         DetailImScreenContent(
-            state = imViewModel.state.collectAsState().value,
+            state = imViewModel.state.collectAsStateWithLifecycle().value,
             prepareDownload = { title, link, imageExt -> prepareDownload(title, link, imageExt) },
             onFavoriteClicked = { imViewModel.onFavoriteClicked() },
             onDownloadClick = { onDownloadClick() }
@@ -91,7 +91,7 @@ class DetailFragment : Fragment() {
     @Composable
     private fun DetailPicsScreen() {
         DetailPicsScreenContent(
-            state = picsViewModel.state.collectAsState().value,
+            state = picsViewModel.state.collectAsStateWithLifecycle().value,
             prepareDownload = { title, link, imageExt -> prepareDownload(title, link, imageExt) },
             onFavoriteClicked = { picsViewModel.onFavoriteClicked() },
             onDownloadClick = { onDownloadClick() }
@@ -101,7 +101,7 @@ class DetailFragment : Fragment() {
     @Composable
     private fun DetailNekosScreen() {
         DetailBestScreenContent(
-            state = bestViewModel.state.collectAsState().value,
+            state = bestViewModel.state.collectAsStateWithLifecycle().value,
             prepareDownload = { title, link, imageExt -> prepareDownload(title, link, imageExt) },
             onFavoriteClicked = { bestViewModel.onFavoriteClicked() },
             onDownloadClick = { onDownloadClick() }
@@ -111,7 +111,7 @@ class DetailFragment : Fragment() {
     @Composable
     private fun DetailFavsScreen() {
         DetailFavsScreenContent(
-            state = favsViewModel.state.collectAsState().value,
+            state = favsViewModel.state.collectAsStateWithLifecycle().value,
             prepareDownload = { title, link, imageExt -> prepareDownload(title, link, imageExt) },
             onFavoriteClicked = { favsViewModel.onFavoriteClicked() },
             onDownloadClick = { onDownloadClick() }
