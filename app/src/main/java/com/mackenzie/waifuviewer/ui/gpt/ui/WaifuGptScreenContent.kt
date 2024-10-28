@@ -45,9 +45,9 @@ fun WaifuGptScreenContent() {
         )
 
 
-//        TextFieldChat(
-//            value = chatState,
-//            onValueChange = { chatState = it }
-//        )
+        TextFieldChat(
+            value = chatState,
+            onValueChange = { chatState = it }
+        )
     }
 }
