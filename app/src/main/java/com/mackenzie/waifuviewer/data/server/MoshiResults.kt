@@ -92,4 +92,22 @@ sealed class WaifuBestResult {
     data class WaifuBestGifResult(@Json(name = "results") val results: List<WaifuBestGif>)
 }
 
+@JsonClass(generateAdapter = true)
+data class TraceMoeResult(
+    @Json(name = "frameCount") val frameCount: Int,
+    @Json(name = "error") val error: String?,
+    @Json(name = "result") val result: List<AnimeResult>
+)
+
+@JsonClass(generateAdapter = true)
+data class AnimeResult(
+    @Json(name = "anilist") val anilist: Int,
+    @Json(name = "filename") val filename: String,
+    @Json(name = "episode") val episode: Int,
+    @Json(name = "from") val from: Float,
+    @Json(name = "to") val to: Float,
+    @Json(name = "similarity") val similarity: Float,
+    @Json(name = "video") val video: String,
+    @Json(name = "image") val image: String
+)
 

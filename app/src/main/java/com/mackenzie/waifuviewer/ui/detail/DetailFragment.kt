@@ -15,12 +15,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.domain.DownloadModel
 import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.domain.ServerType.*
 import com.mackenzie.waifuviewer.domain.getTypes
 import com.mackenzie.waifuviewer.ui.common.Constants
 import com.mackenzie.waifuviewer.ui.common.SaveImage
+import com.mackenzie.waifuviewer.ui.common.showToast
 import com.mackenzie.waifuviewer.ui.detail.ui.DetailBestScreenContent
 import com.mackenzie.waifuviewer.ui.detail.ui.DetailFavsScreenContent
 import com.mackenzie.waifuviewer.ui.detail.ui.DetailImScreenContent
@@ -84,7 +86,8 @@ class DetailFragment : Fragment() {
             state = imViewModel.state.collectAsStateWithLifecycle().value,
             prepareDownload = { title, link, imageExt -> prepareDownload(title, link, imageExt) },
             onFavoriteClicked = { imViewModel.onFavoriteClicked() },
-            onDownloadClick = { onDownloadClick() }
+            onDownloadClick = { onDownloadClick() },
+            onSearchClick = {notReady()} // { imViewModel.onSearchClick(it) }
         )
     }
 
@@ -94,7 +97,8 @@ class DetailFragment : Fragment() {
             state = picsViewModel.state.collectAsStateWithLifecycle().value,
             prepareDownload = { title, link, imageExt -> prepareDownload(title, link, imageExt) },
             onFavoriteClicked = { picsViewModel.onFavoriteClicked() },
-            onDownloadClick = { onDownloadClick() }
+            onDownloadClick = { onDownloadClick() },
+            onSearchClick = {notReady()} // { picsViewModel.onSearchClick(it) }
         )
     }
 
@@ -104,7 +108,8 @@ class DetailFragment : Fragment() {
             state = bestViewModel.state.collectAsStateWithLifecycle().value,
             prepareDownload = { title, link, imageExt -> prepareDownload(title, link, imageExt) },
             onFavoriteClicked = { bestViewModel.onFavoriteClicked() },
-            onDownloadClick = { onDownloadClick() }
+            onDownloadClick = { onDownloadClick() },
+            onSearchClick = {notReady()} // { bestViewModel.onSearchClick(it) }
         )
     }
 
@@ -114,8 +119,13 @@ class DetailFragment : Fragment() {
             state = favsViewModel.state.collectAsStateWithLifecycle().value,
             prepareDownload = { title, link, imageExt -> prepareDownload(title, link, imageExt) },
             onFavoriteClicked = { favsViewModel.onFavoriteClicked() },
-            onDownloadClick = { onDownloadClick() }
+            onDownloadClick = { onDownloadClick() },
+            onSearchClick = {notReady()} // { favsViewModel.onSearchClick(it) }
         )
+    }
+
+    private fun notReady() {
+        getString(R.string.function_not_implemented).showToast(requireContext())
     }
 
     private fun prepareDownload(title: String, link: String, imageExt: String) {

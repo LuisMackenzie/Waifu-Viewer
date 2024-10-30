@@ -1,6 +1,8 @@
 package com.mackenzie.waifuviewer.ui.detail.ui
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.FloatingActionButton
@@ -17,18 +19,31 @@ import com.mackenzie.waifuviewer.ui.theme.Dimens
 @Composable
 fun DetailFabDownload(
     onDownloadClick: () -> Unit = {},
+    onSearchClick: () -> Unit = {}
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
-        FloatingActionButton(
-            onClick = { onDownloadClick() },
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(Dimens.detailFabsPadding),
+        Column(
+            modifier = Modifier.align(Alignment.BottomEnd)
         ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_baseline_download),
-                contentDescription = null
-            )
+            FloatingActionButton(
+                onClick = { onSearchClick() },
+                modifier = Modifier.padding(Dimens.detailFabsPadding),
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_round_search),
+                    contentDescription = null
+                )
+            }
+            FloatingActionButton(
+                onClick = { onDownloadClick() },
+                modifier = Modifier.padding(Dimens.detailFabsPadding),
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_baseline_download),
+                    contentDescription = null
+                )
+            }
         }
+
     }
 }

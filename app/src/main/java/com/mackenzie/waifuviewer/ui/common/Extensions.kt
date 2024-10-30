@@ -57,6 +57,10 @@ fun String.showToast(context: Context) {
     Toast.makeText(context, this, Toast.LENGTH_LONG).show()
 }
 
+fun Context.showToast(msg: String) {
+    Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
+}
+
 fun Activity.showFullscreenCutout() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
         window.attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES

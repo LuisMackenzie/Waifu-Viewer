@@ -17,7 +17,8 @@ fun DetailImScreenContent(
     state: DetailImViewModel.UiState = previewDetailState(),
     prepareDownload: (String, String, String) -> Unit = { _, _, _ -> },
     onFavoriteClicked: () -> Unit = {},
-    onDownloadClick: () -> Unit = {}
+    onDownloadClick: () -> Unit = {},
+    onSearchClick: (String) -> Unit = {}
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         state.waifuIm?.let { waifu ->
@@ -25,7 +26,7 @@ fun DetailImScreenContent(
             ZoomableImage(waifu.url)
             DetailFabFavorites(isFavorite = waifu.isFavorite, onFavoriteClicked = onFavoriteClicked)
             DetailTitle(title = waifu.imageId.toString())
-            DetailFabDownload(onDownloadClick = onDownloadClick)
+            DetailFabDownload(onDownloadClick = onDownloadClick, onSearchClick = { onSearchClick(waifu.url) })
             prepareDownload(waifu.imageId.toString(), waifu.url, waifu.url.substringAfterLast('.'))
         }
         state.error?.let {
@@ -40,7 +41,8 @@ fun DetailPicsScreenContent(
     state: DetailPicsViewModel.UiState,
     prepareDownload: (String, String, String) -> Unit,
     onFavoriteClicked: () -> Unit,
-    onDownloadClick: () -> Unit
+    onDownloadClick: () -> Unit,
+    onSearchClick: (String) -> Unit = {}
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         state.waifuPic?.let { waifu ->
@@ -48,7 +50,7 @@ fun DetailPicsScreenContent(
             ZoomableImage(waifu.url)
             DetailFabFavorites(isFavorite = waifu.isFavorite, onFavoriteClicked = onFavoriteClicked)
             DetailTitle(title = title)
-            DetailFabDownload(onDownloadClick = onDownloadClick)
+            DetailFabDownload(onDownloadClick = onDownloadClick, onSearchClick = { onSearchClick(waifu.url) })
             prepareDownload(title,  waifu.url, waifu.url.substringAfterLast('.'))
         }
         state.error?.let {
@@ -63,7 +65,8 @@ fun DetailBestScreenContent(
     state: DetailBestViewModel.UiState,
     prepareDownload: (String, String, String) -> Unit,
     onFavoriteClicked: () -> Unit,
-    onDownloadClick: () -> Unit
+    onDownloadClick: () -> Unit,
+    onSearchClick: (String) -> Unit = {}
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         state.waifu?.let { waifu ->
@@ -71,7 +74,7 @@ fun DetailBestScreenContent(
             ZoomableImage(waifu.url)
             DetailFabFavorites(isFavorite = waifu.isFavorite, onFavoriteClicked = onFavoriteClicked)
             DetailTitle(title = if (waifu.artistName.isNotEmpty()) waifu.artistName else waifu.animeName)
-            DetailFabDownload(onDownloadClick = onDownloadClick)
+            DetailFabDownload(onDownloadClick = onDownloadClick, onSearchClick = { onSearchClick(waifu.url) })
             prepareDownload(title, waifu.url, waifu.url.substringAfterLast('.'))
         }
         state.error?.let {
@@ -86,14 +89,15 @@ fun DetailFavsScreenContent(
     state: DetailFavsViewModel.UiState,
     prepareDownload: (String, String, String) -> Unit,
     onFavoriteClicked: () -> Unit,
-    onDownloadClick: () -> Unit
+    onDownloadClick: () -> Unit,
+    onSearchClick: (String) -> Unit = {}
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         state.waifu?.let { waifu ->
             ZoomableImage(waifu.url)
             DetailFabFavorites(isFavorite = waifu.isFavorite, onFavoriteClicked = onFavoriteClicked)
             DetailTitle(title = waifu.title)
-            DetailFabDownload(onDownloadClick = onDownloadClick)
+            DetailFabDownload(onDownloadClick = onDownloadClick, onSearchClick = { onSearchClick(waifu.url) })
             prepareDownload(waifu.title, waifu.url, waifu.url.substringAfterLast('.'))
         }
         state.error?.let {

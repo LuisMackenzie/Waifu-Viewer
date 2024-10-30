@@ -208,7 +208,6 @@ class WaifuFragment : Fragment() {
                 2 -> lmState.loadMoreBest = false
                 else -> {lmState = LoadingState()}
             }
-            // lmState = LoadingState()
         }
     }
 }
