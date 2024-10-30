@@ -113,7 +113,7 @@
         android:layout_marginBottom="50dp"
         android:backgroundTint="@color/purple_200"
         android:text="@string/give_me_waifus"
-        app:cornerRadius="@dimen/default_corner"
+        app:cornerRadius="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

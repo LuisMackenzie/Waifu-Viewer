@@ -33,6 +33,7 @@
     <string name="categories">All Categories</string>
 
     <string name="waifus_gone">Some waifus are gone</string>
+    <string name="waifus_favorites_gone">Some Favorite waifus are gone. Are you sure?</string>
     <string name="waifu_deleted">Waifu Deleted!</string>
     <string name="waifu_favorite_delete">Delete All Favorites no implemented yet. Try Long Press on a waifu</string>
     <string name="waifus_coming">More Waifus are coming</string>
@@ -45,6 +46,11 @@
     <string name="server_favorite_string">favorite</string>
     <string name="server_waifu_gpt_string">waifu_gpt</string>
     <string name="image_description">Descripcion de una imagen</string>
+
+    <string name="favorite_delete_title">¿Quieres eleminar todas tus waifus?</string>
+    <string name="favorite_delete_subtitle">Estas Seguro? </string>
+    <string name="favorite_delete_accept">No Quiero Waifus</string>
+    <string name="favorite_delete_deny">Conservar</string>
 
 
 </resources>

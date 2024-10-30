@@ -3,6 +3,7 @@ package com.mackenzie.waifuviewer.ui.favs
 import com.mackenzie.testshared.sampleFavWaifu
 import com.mackenzie.waifuviewer.testrules.CoroutinesTestRule
 import com.mackenzie.waifuviewer.ui.favs.FavoriteViewModel.UiState
+import com.mackenzie.waifuviewer.usecases.DeleteAllFavoriteUseCase
 import com.mackenzie.waifuviewer.usecases.DeleteFavoriteUseCase
 import com.mackenzie.waifuviewer.usecases.GetFavoritesUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -34,6 +35,9 @@ class FavoriteViewModelTest {
     @Mock
     private lateinit var deleteFavoriteUseCase: DeleteFavoriteUseCase
 
+    @Mock
+    private lateinit var deleteAllFavoriteUseCase: DeleteAllFavoriteUseCase
+
     private lateinit var  vm: FavoriteViewModel
 
     private var favoriteSample = listOf(sampleFavWaifu.copy(id = 1))
@@ -41,7 +45,7 @@ class FavoriteViewModelTest {
     @Before
     fun setUp() {
         whenever(getFavoritesUseCase()).thenReturn(flowOf(favoriteSample))
-        vm = FavoriteViewModel(getFavoritesUseCase, deleteFavoriteUseCase)
+        vm = FavoriteViewModel(getFavoritesUseCase, deleteFavoriteUseCase, deleteAllFavoriteUseCase)
     }
 
     @After

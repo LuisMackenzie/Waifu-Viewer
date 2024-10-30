@@ -1,5 +1,7 @@
 package com.mackenzie.waifuviewer.domain
 
+import javax.swing.UIManager.getString
+
 data class RemoteConfigValues(
     val nsfwIsActive: Boolean = false,
     val gptIsActive: Boolean = false,

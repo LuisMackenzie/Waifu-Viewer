@@ -3,16 +3,23 @@ package com.mackenzie.waifuviewer.ui
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.databinding.ActivityNavHostBinding
 import com.mackenzie.waifuviewer.ui.common.isNightModeActive
+import com.mackenzie.waifuviewer.ui.gpt.ui.WaifuGptScreenContent
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -31,6 +38,34 @@ class NavHostActivity : AppCompatActivity(R.layout.activity_nav_host) {
         }
         binding = ActivityNavHostBinding.inflate(layoutInflater)
         firebaseAnalytics = Firebase.analytics
+
+        // Navigation Compose
+        /*setContent {
+            val navController = rememberNavController()
+
+            NavHost(navController = navController, startDestination = "selector") {
+                composable("selector") {
+                    // SelectorScreen()
+                }
+                composable("waifu_screen") {
+                    // WaifuScreen()
+                }
+                composable(
+                    route = "detail"
+                    // arguments = listOf(navArgument("waifuId") { type = NavType.IntType })
+                ) { backStackEntry ->
+                    // val waifuId = backStackEntry.arguments?.getInt("waifuId")
+                    // requireNotNull(waifuId)
+                    // DetailScreen(waifuId = waifuId)
+                }
+                composable("favorite") {
+                    // FavoriteScreen()
+                }
+                composable("waifu_gpt") {
+                    WaifuGptScreenContent()
+                }
+            }
+        }*/
 
         // val isNavbarVisible = isNavigationActive()
 

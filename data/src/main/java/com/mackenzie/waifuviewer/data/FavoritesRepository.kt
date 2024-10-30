@@ -22,6 +22,10 @@ class FavoritesRepository @Inject constructor(
         return favDataSource.delete(favoriteItem)
     }
 
+    suspend fun deleteAllFavorites(): Error? {
+        return favDataSource.deleteAll()
+    }
+
     suspend fun switchFavorite(favoriteItem: FavoriteItem): Error? {
         val updatedWaifu = favoriteItem.copy(isFavorite = !favoriteItem.isFavorite)
         return favDataSource.save(updatedWaifu)

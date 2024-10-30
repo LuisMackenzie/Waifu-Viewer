@@ -46,7 +46,8 @@ class FavoriteIntegrationTests {
 
         val getFavoritesUseCase = GetFavoritesUseCase(repo)
         val deleteFavoriteUseCase = DeleteFavoriteUseCase(repo)
-        val vm = FavoriteViewModel(getFavoritesUseCase, deleteFavoriteUseCase)
+        val deleteAllFavoriteUseCase = DeleteAllFavoriteUseCase(repo)
+        val vm = FavoriteViewModel(getFavoritesUseCase, deleteFavoriteUseCase, deleteAllFavoriteUseCase)
         return vm
     }
 
