@@ -6,6 +6,7 @@ import com.mackenzie.waifuviewer.data.toError
 import com.mackenzie.waifuviewer.domain.Error
 import com.mackenzie.waifuviewer.domain.FavoriteItem
 import com.mackenzie.waifuviewer.ui.common.Scope
+import com.mackenzie.waifuviewer.usecases.DeleteAllFavoriteUseCase
 import com.mackenzie.waifuviewer.usecases.DeleteFavoriteUseCase
 import com.mackenzie.waifuviewer.usecases.GetFavoritesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class FavoriteViewModel @Inject constructor(
     getFavoritesUseCase: GetFavoritesUseCase,
-    private val deleteFavoriteUseCase: DeleteFavoriteUseCase
+    private val deleteFavoriteUseCase: DeleteFavoriteUseCase,
+    private val deleteAllFavoriteUseCase: DeleteAllFavoriteUseCase
     ): ViewModel(), Scope by Scope.Impl() {
 
     private val _state = MutableStateFlow(UiState())
@@ -38,10 +40,21 @@ class FavoriteViewModel @Inject constructor(
         }
     }
 
+    fun onDeleteAllFavorites() {
+        viewModelScope.launch {
+            val error = deleteAllFavoriteUseCase()
+            _state.update { _state.value.copy(error = error) }
+        }
+    }
+
+    fun hideInfoCount() {
+        _state.update { _state.value.copy(isShowedInfo = true) }
+    }
+
     data class UiState(
         val isLoading: Boolean = false,
+        val isShowedInfo: Boolean = false,
         val waifus: List<FavoriteItem>? = null,
         val error: Error? = null
     )
-
 }

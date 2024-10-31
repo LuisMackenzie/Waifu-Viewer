@@ -14,8 +14,10 @@ import android.view.ViewGroup
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.annotation.RequiresApi
+import androidx.compose.runtime.Composable
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
@@ -49,6 +51,14 @@ fun ImageView.loadUrlCenterCrop(url: String) {
         .transition(DrawableTransitionOptions.withCrossFade())
         .error(R.drawable.ic_error_grey)
         .into(this)
+}
+
+fun String.showToast(context: Context) {
+    Toast.makeText(context, this, Toast.LENGTH_LONG).show()
+}
+
+fun Context.showToast(msg: String) {
+    Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
 }
 
 fun Activity.showFullscreenCutout() {
@@ -158,6 +168,11 @@ fun <T> LifecycleOwner.launchAndCollect(
             flow.collect(body)
         }
     }
+}
+
+@Composable
+fun <T> ComposableWrapper(value: T, body: @Composable (T) -> Unit) {
+    body(value)
 }
 
 val Context.app: App get() = applicationContext as App

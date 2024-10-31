@@ -43,7 +43,7 @@ class SelectorPicViewModel @Inject constructor(
 
     data class UiState(
         val waifu: WaifuPicItem? = null,
-        val type: ServerType = ServerType.NORMAL,
+        val type: ServerType = ServerType.ENHANCED,
         val error: Error? = null
     )
 }

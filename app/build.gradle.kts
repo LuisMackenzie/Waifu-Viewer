@@ -140,9 +140,7 @@ dependencies {
     implementation(Libs.AndroidX.Compose.livedata)
     implementation(Libs.AndroidX.Compose.ui)
     implementation(Libs.AndroidX.Compose.animation)
-    debugImplementation(Libs.AndroidX.Compose.tooling)
     implementation(Libs.AndroidX.Compose.preview)
-    implementation(Libs.AndroidX.Compose.navigation)
 
     implementation(Libs.AndroidX.coreKtx)
     implementation(Libs.AndroidX.appCompat)
@@ -156,6 +154,7 @@ dependencies {
     // Navigation
     implementation(Libs.AndroidX.Navigation.fragmentKtx)
     implementation(Libs.AndroidX.Navigation.uiKtx)
+    implementation(Libs.AndroidX.Navigation.navigationCompose)
 
     // Corrutinas
     // implementation(AndroidX.lifecycle.runtime.ktx)
@@ -174,6 +173,10 @@ dependencies {
     // Glide libraries
     implementation(Libs.Glide.glide)
     ksp(Libs.Glide.compiler)
+
+    // Coil libraries
+    implementation(Libs.Coil.coil)
+    implementation(Libs.Coil.coilNetwork)
 
     // Retrofit Libraries
     implementation(Libs.Retrofit.retrofit)
@@ -208,6 +211,7 @@ dependencies {
 
     // Lottie files
     implementation(Libs.Lottie.core)
+    implementation(Libs.Lottie.compose)
 
     // Shimmer
     implementation(Libs.Shimmer.shimmer)
@@ -243,6 +247,7 @@ dependencies {
     // For UI tests with compose
     androidTestImplementation(composeBom)
     androidTestImplementation(Libs.AndroidX.ComposeTesting.junit4AndroidTest)
+    debugImplementation(Libs.AndroidX.ComposeTesting.tooling)
     debugImplementation(Libs.AndroidX.ComposeTesting.manifestDebugTest)
 
 

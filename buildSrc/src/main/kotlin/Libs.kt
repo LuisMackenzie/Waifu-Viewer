@@ -37,9 +37,7 @@ object Libs {
             const val animation = "androidx.compose.animation:animation"
             const val material = "androidx.compose.material:material"
             const val material3 = "androidx.compose.material3:material3"
-            const val tooling = "androidx.compose.ui:ui-tooling"
             const val preview = "androidx.compose.ui:ui-tooling-preview"
-            const val navigation = "androidx.navigation:navigation-compose"
             const val adaptive = "androidx.compose.material3.adaptive:adaptive"
             const val iconsCore = "androidx.compose.material:material-icons-core"
             const val iconsExtend = "androidx.compose.material:material-icons-extended"
@@ -48,6 +46,7 @@ object Libs {
         }
 
         object ComposeTesting {
+            const val tooling = "androidx.compose.ui:ui-tooling"
             const val junit4AndroidTest = "androidx.compose.ui:ui-test-junit4"
             const val manifestDebugTest = "androidx.compose.ui:ui-test-manifest"
         }
@@ -67,6 +66,7 @@ object Libs {
         object Navigation {
             const val fragmentKtx = "androidx.navigation:navigation-fragment-ktx:_"
             const val uiKtx = "androidx.navigation:navigation-ui-ktx:_"
+            const val navigationCompose = "androidx.navigation:navigation-compose:_"
             const val gradlePlugin = "androidx.navigation:navigation-safe-args-gradle-plugin:_"
         }
 
@@ -96,6 +96,11 @@ object Libs {
     object Glide {
         const val glide = "com.github.bumptech.glide:glide:_"
         const val compiler = "com.github.bumptech.glide:compiler:_"
+    }
+
+    object Coil {
+        const val coil = "io.coil-kt.coil3:coil-compose:_"
+        const val coilNetwork = "io.coil-kt.coil3:coil-network-okhttp:_"
     }
 
     object OkHttp3 {
@@ -144,6 +149,7 @@ object Libs {
 
     object Lottie {
         const val core = "com.airbnb.android:lottie:_"
+        const val compose = "com.airbnb.android:lottie-compose:_"
     }
 
     object Klaxon {
