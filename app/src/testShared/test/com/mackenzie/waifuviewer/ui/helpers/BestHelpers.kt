@@ -20,9 +20,8 @@ fun buildBestRepositoryWith(
     val remoteDataSource = ServerBestDataSource( RemoteConnect(
         FakeRemoteImService(listOf()),
         FakeRemotePicsService(listOf()),
-        FakeRemoteBestService(remoteDataPng, remoteDataGif)
-    )
-    )
+        FakeRemoteBestService(remoteDataPng, remoteDataGif),
+        FakeRemoteMoeService(listOf())))
     return WaifusBestRepository(localDataSource, favoriteDataSource , remoteDataSource)
 }
 

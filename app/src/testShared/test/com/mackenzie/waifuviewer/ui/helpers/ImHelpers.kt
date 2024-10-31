@@ -16,7 +16,8 @@ fun buildImRepositoryWith(
     val remoteImDataSource = ServerImDataSource( RemoteConnect(
         FakeRemoteImService(remoteData),
         FakeRemotePicsService(listOf()),
-        FakeRemoteBestService(listOf())))
+        FakeRemoteBestService(listOf()),
+        FakeRemoteMoeService(listOf())))
     return WaifusImRepository(localImDataSource, favoriteDataSource , remoteImDataSource)
 }
 
