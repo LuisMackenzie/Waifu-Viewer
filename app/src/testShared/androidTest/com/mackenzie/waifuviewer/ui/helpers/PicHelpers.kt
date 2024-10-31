@@ -16,7 +16,8 @@ fun buildPicRepositoryWith(
     val remotePicDataSource = ServerPicDataSource( RemoteConnect(
         FakeRemoteImService(listOf()),
         FakeRemotePicsService(remoteData),
-        FakeRemoteBestService(listOf())))
+        FakeRemoteBestService(listOf()),
+        FakeRemoteMoeService(listOf())))
     return WaifusPicRepository(localPicDataSource, favoriteDataSource , remotePicDataSource)
 }
 

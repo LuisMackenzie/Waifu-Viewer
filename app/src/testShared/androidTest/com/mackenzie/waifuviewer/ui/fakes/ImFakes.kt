@@ -2,9 +2,12 @@ package com.mackenzie.waifuviewer.ui.fakes
 
 import com.mackenzie.waifuviewer.data.db.WaifuImDao
 import com.mackenzie.waifuviewer.data.db.WaifuImDbItem
+import com.mackenzie.waifuviewer.data.server.AnimeResult
+import com.mackenzie.waifuviewer.data.server.TraceMoeResult
 import com.mackenzie.waifuviewer.data.server.WaifuIm
 import com.mackenzie.waifuviewer.data.server.WaifuImService
 import com.mackenzie.waifuviewer.data.server.WaifuImResult
+import com.mackenzie.waifuviewer.data.server.WaifuTraceMoeService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -68,5 +71,16 @@ class FakeRemoteImService(private val waifus: List<WaifuIm> = emptyList()) : Wai
         isGif: Boolean,
         orientation: String
     ) = WaifuImResult(waifus)
+
+}
+
+class FakeRemoteMoeService(private val waifus: List<AnimeResult> = emptyList()) :
+    WaifuTraceMoeService {
+
+    override suspend fun searchAnime(imageUrl: String) = TraceMoeResult(
+        frameCount = 0,
+        error = null,
+        result = waifus
+    )
 
 }

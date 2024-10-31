@@ -7,6 +7,7 @@ import com.mackenzie.waifuviewer.data.server.RemoteConnect
 import com.mackenzie.waifuviewer.data.server.WaifuBestService
 import com.mackenzie.waifuviewer.data.server.WaifuImService
 import com.mackenzie.waifuviewer.data.server.WaifuPicService
+import com.mackenzie.waifuviewer.data.server.WaifuTraceMoeService
 import com.mackenzie.waifuviewer.domain.ApiUrl
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -92,11 +93,18 @@ object TestAppModule {
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
 
+        val builderMoe = Retrofit.Builder()
+            .baseUrl(apiUrl.traceMoeBaseUrl)
+            .client(client)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .build()
+
         val serviceIm = builderIm.create(WaifuImService::class.java)
         val servicePics = builderPics.create(WaifuPicService::class.java)
         val serviceBest = builderBest.create(WaifuBestService::class.java)
+        val serviceMoe = builderBest.create(WaifuTraceMoeService::class.java)
 
-        val connection = RemoteConnect(serviceIm, servicePics, serviceBest)
+        val connection = RemoteConnect(serviceIm, servicePics, serviceBest, serviceMoe)
 
         return connection
     }
