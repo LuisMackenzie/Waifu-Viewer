@@ -61,7 +61,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         setUpElements()
         updateSpinner()
         if (remoteValues == null) getRemoteConfig()
-        loadInitialServer()
+        if (BuildConfig.BUILD_TYPE == ServerType.ENHANCED.value) loadPics() else loadInitialServer()
     }
 
     /*override fun onCreateView(
