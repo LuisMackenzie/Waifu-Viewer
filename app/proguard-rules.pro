@@ -20,7 +20,7 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
- -keepattributes *Annotation* -keep class retrofit.** { *; }
+ -keep class retrofit.** { *; }
  -keepclasseswithmembers class * { @retrofit.http.* <methods>; }
  -keepattributes Signature
 
@@ -31,7 +31,7 @@
      @com.squareup.moshi.* <methods>;
  }
 
- -keep @com.squareup.moshi.JsonQualifier @interface *
+ -keep @interface com.squareup.moshi.JsonQualifier
 
  # Enum field names are used by the integrated EnumJsonAdapter.
  # values() is synthesized by the Kotlin compiler and is used by EnumJsonAdapter indirectly
@@ -51,3 +51,64 @@
    @com.squareup.moshi.FromJson <methods>;
    @com.squareup.moshi.ToJson <methods>;
  }
+
+ # Excluir Firebase Analytics de la ofuscación
+ -keep class com.google.firebase.analytics.** { *; }
+ -keep class com.google.firebase.** { *; }
+ -keep class com.google.android.gms.** { *; }
+
+ # Excluir la actividad NavHostActivity de la ofuscación
+ -keep class com.mackenzie.waifuviewer.ui.NavHostActivity { *; }
+
+ # Excluir las clases de Dagger de la ofuscación
+ -keep class dagger.hilt.** { *; }
+ -keep class javax.inject.** { *; }
+ -keep class dagger.** { *; }
+ -keep class hilt_aggregated_deps.** { *; }
+
+
+ # Mantener las clases generadas por Hilt
+ -keep class * extends dagger.hilt.internal.GeneratedComponentManager { *; }
+ -keep class * extends dagger.hilt.android.internal.managers.ViewComponentManager$FragmentContextWrapper { *; }
+ -keep class * extends dagger.hilt.android.internal.managers.ViewComponentManager$ViewComponentBuilderEntryPoint { *; }
+ -keep class * extends dagger.hilt.android.internal.managers.ActivityComponentManager$ActivityComponentBuilderEntryPoint { *; }
+
+ # Mantener las clases de Hilt que implementan interfaces
+ -keep class * implements dagger.hilt.internal.GeneratedComponent { *; }
+ -keep class * implements dagger.hilt.internal.GeneratedComponentManager { *; }
+ -keep class * implements dagger.hilt.android.internal.managers.ViewComponentManager$FragmentContextWrapper { *; }
+ -keep class * implements dagger.hilt.android.internal.managers.ViewComponentManager$ViewComponentBuilderEntryPoint { *; }
+ -keep class * implements dagger.hilt.android.internal.managers.ActivityComponentManager$ActivityComponentBuilderEntryPoint { *; }
+
+ # Mantener las anotaciones de Hilt
+ -keepattributes *Annotation*
+
+ # Mantener las clases de Hilt que usan anotaciones específicas
+
+# -keep class ** {
+#     @dagger.hilt.InstallIn *;
+#     @dagger.hilt.android.HiltAndroidApp *;
+#     @dagger.hilt.android.lifecycle.HiltViewModel *;
+#     @dagger.hilt.android.scopes.* *;
+#     @dagger.hilt.components.* *;
+#     @dagger.hilt.EntryPoint *;
+#     @dagger.hilt.DefineComponent *;
+#     @dagger.hilt.DefineComponent.Builder *;
+#     @dagger.hilt.migration.* *;
+# }
+
+ #Glide
+ -keep public class * implements com.bumptech.glide.module.GlideModule
+ -keep public class * extends com.bumptech.glide.GeneratedAppGlideModule
+ -keep public class * extends com.bumptech.glide.module.LibraryGlideModule
+
+ # Room
+ -keep class androidx.room.** { *; }
+ -keepclassmembers class * {
+     @androidx.room.* <methods>;
+ }
+
+ # Lottie Coil Arrow
+ -keep class com.airbnb.lottie.** { *; }
+ -keep class coil.** { *; }
+ -keep class arrow.** { *; }
