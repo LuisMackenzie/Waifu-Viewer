@@ -103,8 +103,8 @@ data class TraceMoeResult(
 data class AnimeResult(
     @Json(name = "anilist") val anilist: Int,
     @Json(name = "filename") val filename: String,
-    @Json(name = "episode") val episode: Int,
-    @Json(name = "from") val from: Float,
+    @Json(name = "episode") val episode: Int?,
+    @Json(name = "from") val from: Float?,
     @Json(name = "to") val to: Float,
     @Json(name = "similarity") val similarity: Float,
     @Json(name = "video") val video: String,

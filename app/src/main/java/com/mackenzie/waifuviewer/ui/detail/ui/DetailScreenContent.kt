@@ -3,6 +3,10 @@ package com.mackenzie.waifuviewer.ui.detail.ui
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.mackenzie.waifuviewer.ui.common.ui.previewDetailState
@@ -20,6 +24,9 @@ fun DetailImScreenContent(
     onDownloadClick: () -> Unit = {},
     onSearchClick: (String) -> Unit = {}
 ) {
+
+    var showBottomSheet by remember { mutableStateOf(false) }
+
     Box(modifier = Modifier.fillMaxSize()) {
         state.waifuIm?.let { waifu ->
 
@@ -28,6 +35,14 @@ fun DetailImScreenContent(
             DetailTitle(title = waifu.imageId.toString())
             DetailFabDownload(onDownloadClick = onDownloadClick, onSearchClick = { onSearchClick(waifu.url) })
             prepareDownload(waifu.imageId.toString(), waifu.url, waifu.url.substringAfterLast('.'))
+        }
+        state.search?.let { search ->
+            showBottomSheet = true
+            ModalBottomSheetLayout(
+                showBottomSheet = showBottomSheet,
+                onDismissRequest = { showBottomSheet = false },
+                searchResults = search
+            )
         }
         state.error?.let {
             LoadingAnimationError()

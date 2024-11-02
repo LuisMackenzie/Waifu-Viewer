@@ -87,7 +87,8 @@ class DetailFragment : Fragment() {
             prepareDownload = { title, link, imageExt -> prepareDownload(title, link, imageExt) },
             onFavoriteClicked = { imViewModel.onFavoriteClicked() },
             onDownloadClick = { onDownloadClick() },
-            onSearchClick = {notReady()} // { imViewModel.onSearchClick(it) }
+            onSearchClick = {notReady()} // { imViewModel.onSearchClicked(it) }
+            // onSearchClick = { imViewModel.onSearchClicked2(it) }
         )
     }
 
