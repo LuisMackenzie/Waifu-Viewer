@@ -87,8 +87,7 @@ class DetailFragment : Fragment() {
             prepareDownload = { title, link, imageExt -> prepareDownload(title, link, imageExt) },
             onFavoriteClicked = { imViewModel.onFavoriteClicked() },
             onDownloadClick = { onDownloadClick() },
-            onSearchClick = {notReady()} // { imViewModel.onSearchClicked(it) }
-            // onSearchClick = { imViewModel.onSearchClicked2(it) }
+            onSearchClick = { imViewModel.onSearchClicked(it) }
         )
     }
 
@@ -99,7 +98,7 @@ class DetailFragment : Fragment() {
             prepareDownload = { title, link, imageExt -> prepareDownload(title, link, imageExt) },
             onFavoriteClicked = { picsViewModel.onFavoriteClicked() },
             onDownloadClick = { onDownloadClick() },
-            onSearchClick = {notReady()} // { picsViewModel.onSearchClick(it) }
+            onSearchClick = { picsViewModel.onSearchClicked(it) }
         )
     }
 
@@ -110,7 +109,7 @@ class DetailFragment : Fragment() {
             prepareDownload = { title, link, imageExt -> prepareDownload(title, link, imageExt) },
             onFavoriteClicked = { bestViewModel.onFavoriteClicked() },
             onDownloadClick = { onDownloadClick() },
-            onSearchClick = {notReady()} // { bestViewModel.onSearchClick(it) }
+            onSearchClick = { bestViewModel.onSearchClicked(it) }
         )
     }
 
@@ -121,7 +120,7 @@ class DetailFragment : Fragment() {
             prepareDownload = { title, link, imageExt -> prepareDownload(title, link, imageExt) },
             onFavoriteClicked = { favsViewModel.onFavoriteClicked() },
             onDownloadClick = { onDownloadClick() },
-            onSearchClick = {notReady()} // { favsViewModel.onSearchClick(it) }
+            onSearchClick = { favsViewModel.onSearchClicked(it) }
         )
     }
 

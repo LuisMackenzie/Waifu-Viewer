@@ -40,7 +40,6 @@ fun DetailImScreenContent(
             showBottomSheet = true
             ModalBottomSheetLayout(
                 showBottomSheet = showBottomSheet,
-                onDismissRequest = { showBottomSheet = false },
                 searchResults = search
             )
         }
@@ -59,6 +58,9 @@ fun DetailPicsScreenContent(
     onDownloadClick: () -> Unit,
     onSearchClick: (String) -> Unit = {}
 ) {
+
+    var showBottomSheet by remember { mutableStateOf(false) }
+
     Box(modifier = Modifier.fillMaxSize()) {
         state.waifuPic?.let { waifu ->
             val title = waifu.url.substringAfterLast('/').substringBeforeLast('.')
@@ -67,6 +69,13 @@ fun DetailPicsScreenContent(
             DetailTitle(title = title)
             DetailFabDownload(onDownloadClick = onDownloadClick, onSearchClick = { onSearchClick(waifu.url) })
             prepareDownload(title,  waifu.url, waifu.url.substringAfterLast('.'))
+        }
+        state.search?.let { search ->
+            showBottomSheet = true
+            ModalBottomSheetLayout(
+                showBottomSheet = showBottomSheet,
+                searchResults = search
+            )
         }
         state.error?.let {
             LoadingAnimationError(modifier = Modifier.fillMaxSize())
@@ -83,6 +92,9 @@ fun DetailBestScreenContent(
     onDownloadClick: () -> Unit,
     onSearchClick: (String) -> Unit = {}
 ) {
+
+    var showBottomSheet by remember { mutableStateOf(false) }
+
     Box(modifier = Modifier.fillMaxSize()) {
         state.waifu?.let { waifu ->
             val title = waifu.url.substringAfterLast('/').substringBeforeLast('.')
@@ -91,6 +103,13 @@ fun DetailBestScreenContent(
             DetailTitle(title = if (waifu.artistName.isNotEmpty()) waifu.artistName else waifu.animeName)
             DetailFabDownload(onDownloadClick = onDownloadClick, onSearchClick = { onSearchClick(waifu.url) })
             prepareDownload(title, waifu.url, waifu.url.substringAfterLast('.'))
+        }
+        state.search?.let { search ->
+            showBottomSheet = true
+            ModalBottomSheetLayout(
+                showBottomSheet = showBottomSheet,
+                searchResults = search
+            )
         }
         state.error?.let {
             LoadingAnimationError(modifier = Modifier.fillMaxSize())
@@ -107,6 +126,9 @@ fun DetailFavsScreenContent(
     onDownloadClick: () -> Unit,
     onSearchClick: (String) -> Unit = {}
 ) {
+
+    var showBottomSheet by remember { mutableStateOf(false) }
+
     Box(modifier = Modifier.fillMaxSize()) {
         state.waifu?.let { waifu ->
             ZoomableImage(waifu.url)
@@ -114,6 +136,13 @@ fun DetailFavsScreenContent(
             DetailTitle(title = waifu.title)
             DetailFabDownload(onDownloadClick = onDownloadClick, onSearchClick = { onSearchClick(waifu.url) })
             prepareDownload(waifu.title, waifu.url, waifu.url.substringAfterLast('.'))
+        }
+        state.search?.let { search ->
+            showBottomSheet = true
+            ModalBottomSheetLayout(
+                showBottomSheet = showBottomSheet,
+                searchResults = search
+            )
         }
         state.error?.let {
             LoadingAnimationError(modifier = Modifier.fillMaxSize())

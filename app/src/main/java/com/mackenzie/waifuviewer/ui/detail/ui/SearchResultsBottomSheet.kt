@@ -1,12 +1,8 @@
 package com.mackenzie.waifuviewer.ui.detail.ui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -27,7 +23,7 @@ import com.mackenzie.waifuviewer.domain.AnimeSearchItem
 
 @Composable
 fun SearchResultsBottomSheet(
-    searchResults: List<AnimeSearchItem>,
+    searchResults: List<AnimeSearchItem>
 ) {
     LazyColumn(modifier = Modifier.fillMaxWidth()) {
         items(searchResults) { item ->
@@ -39,7 +35,6 @@ fun SearchResultsBottomSheet(
                 Column(modifier = Modifier.weight(3f)) {
                     Text(
                         text = "Name: ${item.filename}",
-                        // color = Color.Green,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
                         textAlign = androidx.compose.ui.text.style.TextAlign.Start
@@ -59,14 +54,10 @@ fun SearchResultsBottomSheet(
                         .build(),
                     error = painterResource(R.drawable.ic_error_grey),
                     contentDescription = null,
-                    // alignment = Alignment.End,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.weight(1f),
                 )
             }
-
-            // Text(text = item.image)
-
         }
     }
 }
