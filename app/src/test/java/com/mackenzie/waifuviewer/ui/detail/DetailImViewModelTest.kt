@@ -6,6 +6,7 @@ import com.mackenzie.waifuviewer.testrules.CoroutinesTestRule
 import com.mackenzie.waifuviewer.ui.detail.DetailImViewModel.UiState
 import com.mackenzie.waifuviewer.usecases.im.FindWaifuImUseCase
 import com.mackenzie.waifuviewer.usecases.im.SwitchImFavoriteUseCase
+import com.mackenzie.waifuviewer.usecases.moe.GetSearchMoeUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runCurrent
@@ -33,6 +34,9 @@ class DetailImViewModelTest {
     @Mock
     private lateinit var switchImFavoriteUseCase: SwitchImFavoriteUseCase
 
+    @Mock
+    private lateinit var getSearchMoeUseCase: GetSearchMoeUseCase
+
     private lateinit var  vm: DetailImViewModel
 
     private var imSample = sampleImWaifu.copy(id = 7)
@@ -40,7 +44,7 @@ class DetailImViewModelTest {
     @Before
     fun setUp() {
         whenever(findWaifuImUseCase(7)).thenReturn(flowOf(imSample))
-        vm = DetailImViewModel(7, findWaifuImUseCase, switchImFavoriteUseCase)
+        vm = DetailImViewModel(7, findWaifuImUseCase, switchImFavoriteUseCase, getSearchMoeUseCase)
     }
 
     @Test

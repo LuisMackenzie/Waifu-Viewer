@@ -54,7 +54,7 @@ class FakeWaifuPicDao(waifusPic: List<WaifuPicDbItem> = emptyList()) : WaifuPicD
 
 }
 
-class FakeRemotePicsService(private val waifus: List<String>) : WaifuPicService {
+class FakeRemotePicsService(private val waifus: List<String> = emptyList()) : WaifuPicService {
 
     override suspend fun getRandomWaifuPics(
         many: String,

@@ -9,7 +9,6 @@ import com.mackenzie.waifuviewer.usecases.im.SwitchImFavoriteUseCase
 import com.mackenzie.waifuviewer.domain.WaifuImItem
 import com.mackenzie.waifuviewer.domain.Error
 import com.mackenzie.waifuviewer.usecases.moe.GetSearchMoeUseCase
-import com.mackenzie.waifuviewer.usecases.moe.GetSearchMoeUseCase2
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -24,7 +23,7 @@ class DetailImViewModel @Inject constructor (
     findWaifuImUseCase: FindWaifuImUseCase,
     private val switchImFavoriteUseCase : SwitchImFavoriteUseCase,
     private val getSearchMoeUseCase : GetSearchMoeUseCase,
-    private val getSearchMoeUseCase2 : GetSearchMoeUseCase2
+    // private val getSearchMoeUseCase2 : GetSearchMoeUseCase2
     ): ViewModel() {
 
     private val _state = MutableStateFlow(UiState())
@@ -57,12 +56,12 @@ class DetailImViewModel @Inject constructor (
         }
     }
 
-    fun onSearchClicked2(url: String) {
+    /*fun onSearchClicked2(url: String) {
         viewModelScope.launch {
             val search = getSearchMoeUseCase2(url)
             _state.update { it.copy(search = search) }
         }
-    }
+    }*/
 
     data class UiState(
         val waifuIm: WaifuImItem? = null,
