@@ -36,3 +36,31 @@ fun WaifuDialog(
         }
     )
 }
+
+@Preview(showBackground = true)
+@Composable
+fun WaifuSearchDialog(
+    onDismissRequest: (Boolean) -> Unit = { },
+    onConfirmation: () -> Unit = { },
+) {
+    AlertDialog(
+        onDismissRequest = { onDismissRequest(false) },
+        title = { Text(text = stringResource(id = R.string.dialog_search_title)) },
+        text = { Text(text = stringResource(id = R.string.dialog_search_subtitle)) },
+        icon = { Icon(painter = painterResource(id = R.drawable.ic_round_search), contentDescription = "Search Icon") },
+        // icon = { Image(painter = painterResource(id = R.mipmap.ic_launcher), contentDescription = "Example Icon") },
+        confirmButton = {
+            Button(onClick = {
+                onConfirmation()
+            }) {
+                Text(text = stringResource(id = R.string.dialog_search_accept))
+            }
+        },
+        dismissButton = {
+            Button(onClick = { onDismissRequest(false) }) {
+                Text(text = stringResource(id = R.string.dialog_search_deny))
+            }
+        }
+    )
+}
+

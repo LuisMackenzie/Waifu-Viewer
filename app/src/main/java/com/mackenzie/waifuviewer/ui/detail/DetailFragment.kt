@@ -109,7 +109,7 @@ class DetailFragment : Fragment() {
             prepareDownload = { title, link, imageExt -> prepareDownload(title, link, imageExt) },
             onFavoriteClicked = { bestViewModel.onFavoriteClicked() },
             onDownloadClick = { onDownloadClick() },
-            onSearchClick = { bestViewModel.onSearchClicked(it) }
+            onSearchClick = { notReady() } //  { bestViewModel.onSearchClicked(it) }
         )
     }
 

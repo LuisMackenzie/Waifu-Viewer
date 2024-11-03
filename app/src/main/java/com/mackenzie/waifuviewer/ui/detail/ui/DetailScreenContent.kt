@@ -14,6 +14,7 @@ import com.mackenzie.waifuviewer.ui.detail.DetailBestViewModel
 import com.mackenzie.waifuviewer.ui.detail.DetailFavsViewModel
 import com.mackenzie.waifuviewer.ui.detail.DetailImViewModel
 import com.mackenzie.waifuviewer.ui.detail.DetailPicsViewModel
+import com.mackenzie.waifuviewer.ui.favs.ui.WaifuSearchDialog
 
 @Preview(showBackground = true)
 @Composable
@@ -26,14 +27,24 @@ fun DetailImScreenContent(
 ) {
 
     var showBottomSheet by remember { mutableStateOf(false) }
+    var openAlertDialog by remember { mutableStateOf(false) }
+    var waifuUrl by remember { mutableStateOf("") }
+
+
+    if (openAlertDialog) {
+        WaifuSearchDialog(
+            onDismissRequest = { openAlertDialog = it },
+            onConfirmation = { onSearchClick(waifuUrl) ; openAlertDialog = false }
+        )
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         state.waifuIm?.let { waifu ->
-
+            waifuUrl = waifu.url
             ZoomableImage(waifu.url)
             DetailFabFavorites(isFavorite = waifu.isFavorite, onFavoriteClicked = onFavoriteClicked)
             DetailTitle(title = waifu.imageId.toString())
-            DetailFabDownload(onDownloadClick = onDownloadClick, onSearchClick = { onSearchClick(waifu.url) })
+            DetailFabDownload(onDownloadClick = onDownloadClick, onSearchClick = { openAlertDialog = true })
             prepareDownload(waifu.imageId.toString(), waifu.url, waifu.url.substringAfterLast('.'))
         }
         state.search?.let { search ->
@@ -60,14 +71,24 @@ fun DetailPicsScreenContent(
 ) {
 
     var showBottomSheet by remember { mutableStateOf(false) }
+    var openAlertDialog by remember { mutableStateOf(false) }
+    var waifuUrl by remember { mutableStateOf("") }
+
+    if (openAlertDialog) {
+        WaifuSearchDialog(
+            onDismissRequest = { openAlertDialog = it },
+            onConfirmation = { onSearchClick(waifuUrl) ; openAlertDialog = false }
+        )
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         state.waifuPic?.let { waifu ->
+            waifuUrl = waifu.url
             val title = waifu.url.substringAfterLast('/').substringBeforeLast('.')
             ZoomableImage(waifu.url)
             DetailFabFavorites(isFavorite = waifu.isFavorite, onFavoriteClicked = onFavoriteClicked)
             DetailTitle(title = title)
-            DetailFabDownload(onDownloadClick = onDownloadClick, onSearchClick = { onSearchClick(waifu.url) })
+            DetailFabDownload(onDownloadClick = onDownloadClick, onSearchClick = { openAlertDialog = true })
             prepareDownload(title,  waifu.url, waifu.url.substringAfterLast('.'))
         }
         state.search?.let { search ->
@@ -94,14 +115,24 @@ fun DetailBestScreenContent(
 ) {
 
     var showBottomSheet by remember { mutableStateOf(false) }
+    var openAlertDialog by remember { mutableStateOf(false) }
+    var waifuUrl by remember { mutableStateOf("") }
+
+    if (openAlertDialog) {
+        WaifuSearchDialog(
+            onDismissRequest = { openAlertDialog = it },
+            onConfirmation = { onSearchClick(waifuUrl) ; openAlertDialog = false }
+        )
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         state.waifu?.let { waifu ->
+            waifuUrl = waifu.url
             val title = waifu.url.substringAfterLast('/').substringBeforeLast('.')
             ZoomableImage(waifu.url)
             DetailFabFavorites(isFavorite = waifu.isFavorite, onFavoriteClicked = onFavoriteClicked)
             DetailTitle(title = if (waifu.artistName.isNotEmpty()) waifu.artistName else waifu.animeName)
-            DetailFabDownload(onDownloadClick = onDownloadClick, onSearchClick = { onSearchClick(waifu.url) })
+            DetailFabDownload(onDownloadClick = onDownloadClick, onSearchClick = { openAlertDialog = true })
             prepareDownload(title, waifu.url, waifu.url.substringAfterLast('.'))
         }
         state.search?.let { search ->
@@ -128,13 +159,23 @@ fun DetailFavsScreenContent(
 ) {
 
     var showBottomSheet by remember { mutableStateOf(false) }
+    var openAlertDialog by remember { mutableStateOf(false) }
+    var waifuUrl by remember { mutableStateOf("") }
+
+    if (openAlertDialog) {
+        WaifuSearchDialog(
+            onDismissRequest = { openAlertDialog = it },
+            onConfirmation = { onSearchClick(waifuUrl) ; openAlertDialog = false }
+        )
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         state.waifu?.let { waifu ->
+            waifuUrl = waifu.url
             ZoomableImage(waifu.url)
             DetailFabFavorites(isFavorite = waifu.isFavorite, onFavoriteClicked = onFavoriteClicked)
             DetailTitle(title = waifu.title)
-            DetailFabDownload(onDownloadClick = onDownloadClick, onSearchClick = { onSearchClick(waifu.url) })
+            DetailFabDownload(onDownloadClick = onDownloadClick, onSearchClick = { openAlertDialog = true })
             prepareDownload(waifu.title, waifu.url, waifu.url.substringAfterLast('.'))
         }
         state.search?.let { search ->

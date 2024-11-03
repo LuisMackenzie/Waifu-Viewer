@@ -52,5 +52,12 @@
     <string name="favorite_delete_accept">No Quiero Waifus</string>
     <string name="favorite_delete_deny">Conservar</string>
 
+    <string name="dialog_search_title">¿Quieres buscar refencias sobre el origen de tu waifu?</string>
+    <string name="dialog_search_subtitle">La busqueda avanzada tardara unos segundos…</string>
+    <string name="dialog_search_accept">Buscar Waifu</string>
+    <string name="dialog_search_deny">Cancelar Busqueda</string>
+
+
+
 
 </resources>
