@@ -109,6 +109,7 @@ class DetailFragment : Fragment() {
             prepareDownload = { title, link, imageExt -> prepareDownload(title, link, imageExt) },
             onFavoriteClicked = { bestViewModel.onFavoriteClicked() },
             onDownloadClick = { onDownloadClick() },
+            // El servicio no permite enviar imagenes de este server
             onSearchClick = { notReady() } //  { bestViewModel.onSearchClicked(it) }
         )
     }
