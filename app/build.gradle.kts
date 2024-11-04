@@ -25,9 +25,7 @@ android {
         versionCode = AppConfig.versionCode
         versionName = AppConfig.versionName
         testInstrumentationRunner = AppConfig.testInstrumentationRunnerHilt
-        /*vectorDrawables {
-            useSupportLibrary = true
-        }*/
+        vectorDrawables.useSupportLibrary = true
 
     }
 
@@ -235,6 +233,7 @@ dependencies {
 
     // For instrumentation tests
     androidTestImplementation(Libs.AndroidX.Test.Ext.junit)
+    androidTestImplementation(Libs.AndroidX.Test.Espresso.core)
     androidTestImplementation(Libs.AndroidX.Test.Espresso.contrib)
     androidTestImplementation(Libs.AndroidX.Test.Runner.runner)
     androidTestImplementation(Libs.AndroidX.Test.Runner.rules)
