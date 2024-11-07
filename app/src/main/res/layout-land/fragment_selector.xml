@@ -184,6 +184,22 @@ xmlns:tools="http://schemas.android.com/tools">
         android:visibility="invisible"
         tools:visibility="visible"
         app:backgroundTint="@color/purple_200"
+        app:layout_constraintBottom_toTopOf="@+id/waifu_gemini"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/waifu_gemini"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:clickable="true"
+        android:contentDescription="@string/download_image"
+        android:focusable="true"
+        android:src="@drawable/ic_waifu_gemini"
+        android:visibility="invisible"
+        tools:visibility="visible"
+        app:backgroundTint="@color/purple_200"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

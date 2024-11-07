@@ -98,13 +98,14 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
                 remoteValues = RemoteConfigValues(
                     remoteConfig.getBoolean("nsfw_mode"),
                     remoteConfig.getBoolean("waifu_gpt_service"),
+                    remoteConfig.getBoolean("waifu_gemini_service"),
                     remoteConfig.getBoolean("automatic_server"),
                     remoteConfig.getLong("server_mode").toInt(),
                     ServerType.NORMAL
                 )
                 remoteValues?.let {
                     if (it.type != ServerType.NEKOS) {
-                        setNsfwMode(it.nsfwIsActive, it.gptIsActive)
+                        setNsfwMode(it.nsfwIsActive, it.gptIsActive, it.geminiIsActive)
                         Log.e("getRemoteConfig", "nsfwIsActive=${it.nsfwIsActive}, gptIsActive=${it.gptIsActive}")
                     }
                     setAutoMode(it.AutoModeIsEnabled)
@@ -125,19 +126,17 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         }
     }
 
-    private fun setNsfwMode(nsfw: Boolean, hasGpt: Boolean) {
+    private fun setNsfwMode(nsfw: Boolean, hasGpt: Boolean, hasGemini: Boolean) {
         val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
         with (sharedPref.edit()) {
             putBoolean(Constants.WORK_MODE, nsfw)
             putBoolean(Constants.IS_WAIFU_GPT, hasGpt)
+            putBoolean(Constants.IS_WAIFU_GEMINI, hasGemini)
             apply()
         }
-        if (nsfw) {
-            binding.sNsfw.visibility = View.VISIBLE
-        }
-        if (hasGpt) {
-            binding.waifuGpt.visibility = View.VISIBLE
-        }
+        binding.sNsfw.visible = nsfw
+        binding.waifuGpt.visible = hasGpt
+        binding.waifuGemini.visible = hasGemini
     }
 
     private fun updateImWaifu(state: SelectorImViewModel.UiState) {
@@ -198,7 +197,10 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
     // TODO - Refactor this method
     private fun setUpElements() = with(binding) {
         onChooseTypeChanged = this@SelectorFragment
-        setNsfwMode(remoteValues?.nsfwIsActive ?: false, remoteValues?.gptIsActive ?: false)
+        setNsfwMode(
+            remoteValues?.nsfwIsActive ?: false,
+            remoteValues?.gptIsActive ?: false,
+            remoteValues?.geminiIsActive ?: false)
         btnWaifu.setOnClickListener {
             navigateTo(remoteValues?.type)
         }
@@ -240,7 +242,9 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         waifuGpt.setOnClickListener {
             remoteValues?.type = ServerType.WAIFUGPT
             navigateTo(ServerType.WAIFUGPT)
-            Snackbar.make(requireView(), "Not Implemented Yet!", Snackbar.LENGTH_SHORT).show()
+        }
+        waifuGemini.setOnClickListener {
+            Snackbar.make(requireView(), "Under Development!", Snackbar.LENGTH_SHORT).show()
         }
         backgroudImage = ivBackdrop
     }
