@@ -14,8 +14,8 @@ class WaifuChatViewModel(generativeModel: GenerativeModel) : ViewModel() {
 
     private val chat = generativeModel.startChat(
         history = listOf(
-            content(role = "user") { text("Hello, I have 2 dogs in my house.") },
-            content(role = "model") { text("Great to meet you. What would you like to know?") }
+            content(role = "user") { text("Hola, soy desarrollador Android.") },
+            content(role = "model") { text("Encantado de conocerte. Como podría ayudarte?") }
         )
     )
 
