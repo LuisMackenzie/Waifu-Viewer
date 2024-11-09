@@ -244,6 +244,8 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
             navigateTo(ServerType.WAIFUGPT)
         }
         waifuGemini.setOnClickListener {
+            remoteValues?.type = ServerType.WAIFUGEMINI
+            navigateTo(ServerType.WAIFUGEMINI)
             Snackbar.make(requireView(), "Under Development!", Snackbar.LENGTH_SHORT).show()
         }
         backgroudImage = ivBackdrop
@@ -304,6 +306,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         when (mode) {
             ServerType.FAVORITE -> mainState.onButtonFavoritesClicked(bun)
             ServerType.WAIFUGPT -> mainState.onButtonGptClicked()
+            ServerType.WAIFUGEMINI -> mainState.onButtonGeminiClicked()
             else -> mainState.onButtonGetWaifuClicked(bun)
         }
     }

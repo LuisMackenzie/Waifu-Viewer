@@ -5,7 +5,8 @@ enum class ServerType(val value: String)  {
     ENHANCED("enhanced"),
     NEKOS("nekos"),
     FAVORITE("favorite"),
-    WAIFUGPT("waifugpt")
+    WAIFUGPT("waifugpt"),
+    WAIFUGEMINI("waifugemini")
 }
 
 fun String.getTypes(): ServerType {
@@ -15,6 +16,7 @@ fun String.getTypes(): ServerType {
         ServerType.NEKOS.value -> ServerType.NEKOS
         ServerType.FAVORITE.value -> ServerType.FAVORITE
         ServerType.WAIFUGPT.value -> ServerType.WAIFUGPT
+        ServerType.WAIFUGEMINI.value -> ServerType.WAIFUGEMINI
         else -> ServerType.NORMAL
     }
 }

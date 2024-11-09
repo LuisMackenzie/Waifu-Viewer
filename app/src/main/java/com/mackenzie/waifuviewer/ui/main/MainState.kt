@@ -60,6 +60,11 @@ class MainState(
         navController.navigate(action)
     }
 
+    fun onButtonGeminiClicked() {
+        val action = SelectorFragmentDirections.actionSelectorToGemini()
+        navController.navigate(action)
+    }
+
     fun requestPermissionLauncher(afterRequest: (Boolean) -> Unit) {
         scope.launch {
             val result = permissionRequester.request()

@@ -34,6 +34,14 @@
             app:launchSingleTop="false"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@android:anim/slide_out_right" />
+        <action
+            android:id="@+id/action_selector_to_gemini"
+            app:destination="@id/waifu_gemini_dest"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/side_out_left"
+            app:launchSingleTop="false"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@android:anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/waifu_dest"
@@ -100,11 +108,16 @@
     <fragment
         android:id="@+id/waifu_gpt_dest"
         android:name="com.mackenzie.waifuviewer.ui.gpt.WaifuGptFragment"
-        android:label="fragment_waifu_gpt"
-        tools:layout="@layout/fragment_waifu_gpt" >
+        android:label="fragment_waifu_gpt">
 
         <!--<argument
             android:name="waifuId"
             app:argType="integer" />-->
+    </fragment>
+
+    <fragment
+        android:id="@+id/waifu_gemini_dest"
+        android:name="com.mackenzie.waifuviewer.ui.gemini.WaifuGeminiFragment"
+        android:label="fragment_waifu_gpt">
     </fragment>
 </navigation>
