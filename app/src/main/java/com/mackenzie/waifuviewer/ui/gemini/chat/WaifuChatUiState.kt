@@ -1,5 +1,7 @@
 package com.mackenzie.waifuviewer.ui.gemini.chat
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.toMutableStateList
 
 class WaifuChatUiState(messages: List<WaifuChatMessage> = emptyList()) {
@@ -16,7 +18,7 @@ class WaifuChatUiState(messages: List<WaifuChatMessage> = emptyList()) {
         val lastMessage = _messages.lastOrNull()
         lastMessage?.let {
             val newMessage = lastMessage.apply { isPending = false }
-            _messages.removeLast()
+            _messages.removeAt(_messages.lastIndex)
             _messages.add(newMessage)
         }
     }
