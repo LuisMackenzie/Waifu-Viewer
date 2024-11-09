@@ -44,11 +44,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil3.Image
 import coil3.ImageLoader
+import coil3.asDrawable
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.SuccessResult
 import coil3.size.Precision
+import coil3.toBitmap
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.ui.common.GenerativeViewModelFactory
 import com.mackenzie.waifuviewer.ui.common.UriSaver
@@ -59,14 +62,14 @@ import kotlinx.coroutines.launch
 internal fun WaifuInfoRoute(
     viewModel: WaifuInfoViewModel = viewModel(factory = GenerativeViewModelFactory)
 ) {
-    val photoReasoningUiState by viewModel.uiState.collectAsState()
+    val waifuInfoUiState by viewModel.uiState.collectAsState()
 
     val coroutineScope = rememberCoroutineScope()
     val imageRequestBuilder = ImageRequest.Builder(LocalContext.current)
     val imageLoader = ImageLoader.Builder(LocalContext.current).build()
 
     WaifuInfoScreen(
-        uiState = photoReasoningUiState,
+        uiState = waifuInfoUiState,
         onReasonClicked = { inputText, selectedItems ->
             coroutineScope.launch {
                 val bitmaps = selectedItems.mapNotNull {
@@ -81,6 +84,7 @@ internal fun WaifuInfoRoute(
                         if (result is SuccessResult) {
                             // return@mapNotNull (result.drawable as BitmapDrawable).bitmap
                             return@mapNotNull (result.image as BitmapDrawable).bitmap
+                            // return@mapNotNull result.image
                         } else {
                             return@mapNotNull null
                         }
