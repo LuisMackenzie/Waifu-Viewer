@@ -1,6 +1,5 @@
 package com.mackenzie.waifuviewer.ui.gemini.info
 
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -44,14 +43,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil3.Image
+import coil3.BitmapImage
 import coil3.ImageLoader
-import coil3.asDrawable
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.SuccessResult
 import coil3.size.Precision
-import coil3.toBitmap
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.ui.common.GenerativeViewModelFactory
 import com.mackenzie.waifuviewer.ui.common.UriSaver
@@ -82,9 +79,7 @@ internal fun WaifuInfoRoute(
                     try {
                         val result = imageLoader.execute(imageRequest)
                         if (result is SuccessResult) {
-                            // return@mapNotNull (result.drawable as BitmapDrawable).bitmap
-                            return@mapNotNull (result.image as BitmapDrawable).bitmap
-                            // return@mapNotNull result.image
+                            return@mapNotNull (result.image as BitmapImage).bitmap
                         } else {
                             return@mapNotNull null
                         }

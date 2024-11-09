@@ -23,7 +23,7 @@ class WaifuInfoViewModel(private val generativeModel: GenerativeModel) : ViewMod
         selectedImages: List<Bitmap>
     ) {
         _uiState.value = WaifuInfoUiState.Loading
-        val prompt = "Mira la imagen, y entonces responde la pregunta: $userInput"
+        val prompt = "Fijate en la imagen, y entonces responde la siguiente question: $userInput"
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
