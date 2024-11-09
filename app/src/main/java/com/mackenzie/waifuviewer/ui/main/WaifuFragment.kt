@@ -22,6 +22,7 @@ import com.mackenzie.waifuviewer.domain.ServerType.ENHANCED
 import com.mackenzie.waifuviewer.domain.ServerType.FAVORITE
 import com.mackenzie.waifuviewer.domain.ServerType.NEKOS
 import com.mackenzie.waifuviewer.domain.ServerType.NORMAL
+import com.mackenzie.waifuviewer.domain.ServerType.WAIFUGEMINI
 import com.mackenzie.waifuviewer.domain.ServerType.WAIFUGPT
 import com.mackenzie.waifuviewer.domain.getTypes
 import com.mackenzie.waifuviewer.ui.common.Constants
@@ -92,8 +93,7 @@ class WaifuFragment : Fragment() {
             NORMAL -> WaifuImScreen()
             ENHANCED -> WaifuPicsScreen()
             NEKOS -> WaifuNekosScreen()
-            FAVORITE -> {}
-            WAIFUGPT -> {}
+            else -> {}
         }
     }
 

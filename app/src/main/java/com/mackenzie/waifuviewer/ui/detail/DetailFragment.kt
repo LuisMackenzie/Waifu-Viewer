@@ -74,7 +74,7 @@ class DetailFragment : Fragment() {
             ENHANCED -> DetailPicsScreen()
             NEKOS -> DetailNekosScreen()
             FAVORITE -> DetailFavsScreen()
-            WAIFUGPT -> {}
+            else -> {}
         }
     }
 
