@@ -57,7 +57,25 @@
     <string name="dialog_search_accept">Buscar Waifu</string>
     <string name="dialog_search_deny">Cancelar Busqueda</string>
 
-
+    <!-- Gemini Menu strings -->
+    <string name="menu_summarize_title">Generar texto desde un Input de texto</string>
+    <string name="menu_summarize_description">App de ejemplo que resume texto</string>
+    <string name="menu_reason_title">Genera respuesta desde un texto y una imagen (multimodal)</string>
+    <string name="menu_reason_description">App de ejemplo para subir imagenes y preguntar sobre ellas.</string>
+    <string name="menu_chat_title">Conversaciones Multiturno (chat)</string>
+    <string name="menu_chat_description">App de ejemplo que muestra una UI conversacional</string>
+    <string name="action_try">Probar Waifu</string>
+    <string name="action_go">Ir</string>
+    <!-- Summarize sample strings -->
+    <string name="summarize_label">Texto</string>
+    <string name="summarize_hint">Introduce el texto a resumir</string>
+    <!-- Photo Reasoning sample strings -->
+    <string name="reason_label">Pregunta</string>
+    <string name="reason_hint">Subir una imagen y entoces preguntar</string>
+    <string name="add_image">Añadir Imagen</string>
+    <!-- Chat sample strings -->
+    <string name="chat_label">Mensaje</string>
+    <string name="action_send">Enviar</string>
 
 
 </resources>
