@@ -324,6 +324,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
             putString(Constants.SERVER_MODE, remoteValues?.type?.value)
             apply()
         }
+        Log.v("saveBundle", "SERVER_MODE=${remoteValues?.type?.value}")
         return bun
     }
 
