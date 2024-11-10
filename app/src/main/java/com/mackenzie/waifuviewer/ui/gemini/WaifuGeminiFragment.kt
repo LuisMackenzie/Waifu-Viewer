@@ -17,6 +17,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.mackenzie.waifuviewer.ui.gemini.chat.WaifuChatRoute
 import com.mackenzie.waifuviewer.ui.gemini.info.WaifuInfoRoute
+import com.mackenzie.waifuviewer.ui.gemini.menu.WaifuGeminiScreenMenuContent
 import com.mackenzie.waifuviewer.ui.gemini.resume.SummarizeWaifuRoute
 import com.mackenzie.waifuviewer.ui.main.ui.MainTheme
 
