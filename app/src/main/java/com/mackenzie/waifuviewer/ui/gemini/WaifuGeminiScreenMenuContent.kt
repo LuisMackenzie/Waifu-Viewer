@@ -16,22 +16,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mackenzie.waifuviewer.R
-
-data class MenuItem(
-    val routeId: String,
-    val titleResId: Int,
-    val descriptionResId: Int
-)
+import com.mackenzie.waifuviewer.domain.GeminiMenuItem
+import com.mackenzie.waifuviewer.ui.common.ui.menuGenerator
+import com.mackenzie.waifuviewer.ui.main.ui.MainTheme
+import com.mackenzie.waifuviewer.ui.main.ui.MainThemeForPreview
 
 @Composable
 fun WaifuGeminiScreenMenuContent(
+    menuItems: List<GeminiMenuItem> = menuGenerator(),
     onItemClicked: (String) -> Unit = { }
 ) {
-    val menuItems = listOf(
-        MenuItem("summarize", R.string.menu_summarize_title, R.string.menu_summarize_description),
-        MenuItem("photo_reasoning", R.string.menu_reason_title, R.string.menu_reason_description),
-        MenuItem("chat", R.string.menu_chat_title, R.string.menu_chat_description)
-    )
     LazyColumn(
         Modifier
             .padding(top = 16.dp, bottom = 16.dp)
@@ -73,5 +67,7 @@ fun WaifuGeminiScreenMenuContent(
 @Preview(showSystemUi = true)
 @Composable
 fun MenuScreenPreview() {
-    WaifuGeminiScreenMenuContent()
+    MainThemeForPreview(darkTheme = false) {
+        WaifuGeminiScreenMenuContent()
+    }
 }

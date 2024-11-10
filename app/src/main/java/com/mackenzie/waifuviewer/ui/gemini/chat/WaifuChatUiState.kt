@@ -1,7 +1,5 @@
 package com.mackenzie.waifuviewer.ui.gemini.chat
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.runtime.toMutableStateList
 
 class WaifuChatUiState(messages: List<WaifuChatMessage> = emptyList()) {

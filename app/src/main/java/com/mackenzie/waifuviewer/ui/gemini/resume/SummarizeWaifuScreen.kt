@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.ui.common.GenerativeViewModelFactory
-import com.mackenzie.waifuviewer.ui.theme.WaifuViewerTheme
+import com.mackenzie.waifuviewer.ui.main.ui.MainThemeForPreview
 
 @Composable
 internal fun SummarizeWaifuRoute(
@@ -164,7 +164,7 @@ fun SummarizeWaifuScreen(
 @Composable
 @Preview(showSystemUi = true)
 fun SummarizeScreenPreview() {
-    WaifuViewerTheme (darkTheme = true) {
+    MainThemeForPreview(darkTheme = false) {
         SummarizeWaifuScreen()
     }
 }

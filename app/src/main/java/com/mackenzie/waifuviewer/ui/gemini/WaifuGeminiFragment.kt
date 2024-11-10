@@ -45,19 +45,19 @@ class WaifuGeminiFragment : Fragment() {
         ) {
             val navController = rememberNavController()
 
-            NavHost(navController = navController, startDestination = "menu") {
-                composable("menu") {
+            NavHost(navController = navController, startDestination = "gemini_menu") {
+                composable("gemini_menu") {
                     WaifuGeminiScreenMenuContent(onItemClicked = { routeId ->
                         navController.navigate(routeId)
                     })
                 }
-                composable("summarize") {
+                composable("waifu_summarize") {
                     SummarizeWaifuRoute()
                 }
-                composable("photo_reasoning") {
+                composable("waifu_info") {
                     WaifuInfoRoute()
                 }
-                composable("chat") {
+                composable("waifu_chat") {
                     WaifuChatRoute()
                 }
             }
