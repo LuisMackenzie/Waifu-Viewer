@@ -94,12 +94,19 @@ object AppModule {
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
 
+        val builderOpenAi = Retrofit.Builder()
+            .baseUrl(apiUrl.openAiBaseUrl)
+            .client(client)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .build()
+
         val serviceIm = builderIm.create(WaifuImService::class.java)
         val servicePics = builderPics.create(WaifuPicService::class.java)
         val serviceBest = builderBest.create(WaifuBestService::class.java)
         val serviceMoe = builderMoe.create(WaifuTraceMoeService::class.java)
+        val serviceOpenAi = builderOpenAi.create(OpenAIService::class.java)
 
-        val connection = RemoteConnect(serviceIm, servicePics, serviceBest, serviceMoe)
+        val connection = RemoteConnect(serviceIm, servicePics, serviceBest, serviceMoe, serviceOpenAi)
 
         return connection
     }

@@ -4,5 +4,6 @@ data class RemoteConnect(
     val serviceIm: WaifuImService,
     val servicePic: WaifuPicService,
     val serviceBest: WaifuBestService,
-    val serviceMoe: WaifuTraceMoeService
+    val serviceMoe: WaifuTraceMoeService,
+    val serviceOpenAi: OpenAIService
     )
