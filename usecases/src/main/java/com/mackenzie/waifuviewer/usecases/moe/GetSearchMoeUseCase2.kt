@@ -6,7 +6,6 @@ import javax.inject.Inject
 
 class GetSearchMoeUseCase2 @Inject constructor(private val repo: TraceMoeRepository) {
 
-    suspend operator fun invoke(imageUrl: String): List<AnimeSearchItem>? {
-        return repo.getMoeWaifuSearch2(imageUrl)
-    }
+    suspend operator fun invoke(imageUrl: String) = repo.getMoeWaifuSearch2(imageUrl)
+
 }
