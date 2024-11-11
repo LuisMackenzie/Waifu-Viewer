@@ -2,15 +2,21 @@ package com.mackenzie.waifuviewer.ui.fakes
 
 import com.mackenzie.waifuviewer.data.db.WaifuImDao
 import com.mackenzie.waifuviewer.data.db.WaifuImDbItem
+import com.mackenzie.waifuviewer.data.server.OpenAIService
 import com.mackenzie.waifuviewer.data.server.models.AnimeResult
 import com.mackenzie.waifuviewer.data.server.models.TraceMoeResult
 import com.mackenzie.waifuviewer.data.server.models.WaifuIm
 import com.mackenzie.waifuviewer.data.server.WaifuImService
 import com.mackenzie.waifuviewer.data.server.models.WaifuImResult
 import com.mackenzie.waifuviewer.data.server.WaifuTraceMoeService
+import com.mackenzie.waifuviewer.data.server.models.ImageGenerationApiRequestBody
+import com.mackenzie.waifuviewer.data.server.models.ImageGenerationApiResponse
+import com.mackenzie.waifuviewer.data.server.models.TextCompletionApiRequestBody
+import com.mackenzie.waifuviewer.data.server.models.TextCompletionApiResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import retrofit2.Response
 
 class FakeWaifuImDao(waifusIm: List<WaifuImDbItem> = emptyList()) : WaifuImDao {
 
@@ -74,13 +80,3 @@ class FakeRemoteImService(private val waifus: List<WaifuIm> = emptyList()) : Wai
 
 }
 
-class FakeRemoteMoeService(private val waifus: List<AnimeResult> = emptyList()) :
-    WaifuTraceMoeService {
-
-    override suspend fun searchAnime(imageUrl: String) = TraceMoeResult(
-        frameCount = 0,
-        error = null,
-        result = waifus
-    )
-
-}

@@ -72,13 +72,3 @@ class FakeRemoteImService(private val waifus: List<WaifuIm> = emptyList()) : Wai
         orientation: String
     ) = WaifuImResult(waifus)
 }
-
-class FakeRemoteMoeService(private val waifus: List<AnimeResult> = emptyList()) : WaifuTraceMoeService {
-
-    override suspend fun searchAnime(imageUrl: String) = TraceMoeResult(
-        frameCount = 0,
-        error = null,
-        result = waifus
-    )
-
-}

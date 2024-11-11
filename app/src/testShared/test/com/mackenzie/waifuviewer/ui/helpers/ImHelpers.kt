@@ -19,7 +19,9 @@ fun buildImRepositoryWith(
         FakeRemoteImService(remoteData),
         FakeRemotePicsService(listOf()),
         FakeRemoteBestService(listOf()),
-        FakeRemoteMoeService(listOf()))
+        FakeRemoteMoeService(listOf()),
+        FakeRemoteOpenAiService()
+    )
     )
     return WaifusImRepository(localImDataSource, favoriteDataSource , remoteImDataSource)
 }
