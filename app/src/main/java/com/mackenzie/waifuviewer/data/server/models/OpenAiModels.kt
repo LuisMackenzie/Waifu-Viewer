@@ -8,7 +8,7 @@ import kotlinx.parcelize.Parcelize
 // TEXT COMPLETION REQUEST BODY
 @JsonClass(generateAdapter = true)
 data class TextCompletionApiRequestBody (
-    @Json(name = "prompt") val prompt: String,
+    @Json(name = "messages") val prompt: String,
     @Json(name = "model")  val model: String,
     @Json(name = "temperature")  val temperature: Float,
     @Json(name = "max_tokens") val maxTokens: Int,
@@ -43,6 +43,7 @@ data class TextCompletionError(
 @JsonClass(generateAdapter = true)
 data class ImageGenerationApiRequestBody (
     @Json(name = "prompt") val prompt: String,
+    @Json(name = "model") val model: String,
     @Json(name = "size") val size: String,
     @Json(name = "n") val generateCount: Int,
     @Json(name = "response_format") val responseFormat: String,

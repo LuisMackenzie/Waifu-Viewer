@@ -9,6 +9,7 @@ data class TextRequestBody (
 
 data class ImageRequestBody (
     val prompt: String,
+    val model: String = "dall-e-3",
     val size: String = "1024x1024",
     val generateCount: Int = 1,
     val responseFormat: String = "url"

@@ -13,7 +13,7 @@ import retrofit2.http.POST
 interface OpenAIService {
 
     @Headers("content-type: application/json")
-    @POST("completions")
+    @POST("chat/completions")
     suspend fun textCompletion(
         @Header("Authorization") authorization: String,
         @Body requestBody: TextCompletionApiRequestBody
