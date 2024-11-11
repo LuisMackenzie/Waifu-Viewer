@@ -3,10 +3,10 @@ package com.mackenzie.waifuviewer.ui.detail
 import app.cash.turbine.test
 import com.mackenzie.waifuviewer.data.TraceMoeRepository
 import com.mackenzie.waifuviewer.data.db.WaifuBestDbItem
-import com.mackenzie.waifuviewer.data.server.RemoteConnect
+import com.mackenzie.waifuviewer.data.server.models.RemoteConnect
 import com.mackenzie.waifuviewer.data.server.ServerMoeDataSource
-import com.mackenzie.waifuviewer.data.server.WaifuBestGif
-import com.mackenzie.waifuviewer.data.server.WaifuBestPng
+import com.mackenzie.waifuviewer.data.server.models.WaifuBestGif
+import com.mackenzie.waifuviewer.data.server.models.WaifuBestPng
 import com.mackenzie.waifuviewer.testrules.CoroutinesTestRule
 import com.mackenzie.waifuviewer.ui.helpers.buildBestDatabaseWaifus
 import com.mackenzie.waifuviewer.ui.helpers.buildBestRepositoryWith
@@ -72,7 +72,8 @@ class DetailBestIntegrationTests {
         val findWaifuUseCase = FindWaifuBestUseCase(repo)
         val switchFavoriteUseCase = SwitchBestFavoriteUseCase(repo)
         val getSearchMoeUseCase = GetSearchMoeUseCase(repo = TraceMoeRepository(ServerMoeDataSource(
-            RemoteConnect(FakeRemoteImService(), FakeRemotePicsService(), FakeRemoteBestService(), FakeRemoteMoeService()))
+            RemoteConnect(FakeRemoteImService(), FakeRemotePicsService(), FakeRemoteBestService(), FakeRemoteMoeService())
+        )
             )
         )
         val vm = DetailBestViewModel(id , findWaifuUseCase, switchFavoriteUseCase, getSearchMoeUseCase)

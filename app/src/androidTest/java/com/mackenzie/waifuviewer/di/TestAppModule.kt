@@ -3,7 +3,7 @@ package com.mackenzie.waifuviewer.di
 import android.app.Application
 import androidx.room.Room
 import com.mackenzie.waifuviewer.data.db.*
-import com.mackenzie.waifuviewer.data.server.RemoteConnect
+import com.mackenzie.waifuviewer.data.server.models.RemoteConnect
 import com.mackenzie.waifuviewer.data.server.WaifuBestService
 import com.mackenzie.waifuviewer.data.server.WaifuImService
 import com.mackenzie.waifuviewer.data.server.WaifuPicService

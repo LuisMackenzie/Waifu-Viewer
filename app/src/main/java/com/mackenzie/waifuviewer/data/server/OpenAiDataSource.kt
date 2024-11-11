@@ -5,6 +5,7 @@ import com.mackenzie.waifuviewer.data.datasource.OpenAiRemoteDataSource
 import com.mackenzie.waifuviewer.data.server.models.ImageGenerateImageData
 import com.mackenzie.waifuviewer.data.server.models.ImageGenerationApiRequestBody
 import com.mackenzie.waifuviewer.data.server.models.ImageGenerationApiResponse
+import com.mackenzie.waifuviewer.data.server.models.RemoteConnect
 import com.mackenzie.waifuviewer.data.server.models.TextCompletionApiRequestBody
 import com.mackenzie.waifuviewer.data.server.models.TextCompletionApiResponse
 import com.mackenzie.waifuviewer.data.server.models.TextCompletionChoice

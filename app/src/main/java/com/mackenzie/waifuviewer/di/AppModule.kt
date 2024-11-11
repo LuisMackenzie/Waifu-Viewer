@@ -7,6 +7,7 @@ import com.mackenzie.waifuviewer.data.datasource.*
 import com.mackenzie.waifuviewer.data.db.WaifuDataBase
 import com.mackenzie.waifuviewer.data.db.datasources.*
 import com.mackenzie.waifuviewer.data.server.*
+import com.mackenzie.waifuviewer.data.server.models.RemoteConnect
 import com.mackenzie.waifuviewer.domain.ApiUrl
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory

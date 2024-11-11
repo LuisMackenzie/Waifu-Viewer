@@ -2,11 +2,11 @@ package com.mackenzie.waifuviewer.ui.fakes
 
 import com.mackenzie.waifuviewer.data.db.WaifuImDao
 import com.mackenzie.waifuviewer.data.db.WaifuImDbItem
-import com.mackenzie.waifuviewer.data.server.AnimeResult
-import com.mackenzie.waifuviewer.data.server.TraceMoeResult
-import com.mackenzie.waifuviewer.data.server.WaifuIm
+import com.mackenzie.waifuviewer.data.server.models.AnimeResult
+import com.mackenzie.waifuviewer.data.server.models.TraceMoeResult
+import com.mackenzie.waifuviewer.data.server.models.WaifuIm
 import com.mackenzie.waifuviewer.data.server.WaifuImService
-import com.mackenzie.waifuviewer.data.server.WaifuImResult
+import com.mackenzie.waifuviewer.data.server.models.WaifuImResult
 import com.mackenzie.waifuviewer.data.server.WaifuTraceMoeService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

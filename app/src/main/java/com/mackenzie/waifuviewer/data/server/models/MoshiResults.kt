@@ -1,4 +1,4 @@
-package com.mackenzie.waifuviewer.data.server
+package com.mackenzie.waifuviewer.data.server.models
 
 import android.os.Parcelable
 import com.squareup.moshi.Json

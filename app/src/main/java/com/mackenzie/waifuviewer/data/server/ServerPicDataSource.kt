@@ -2,6 +2,8 @@ package com.mackenzie.waifuviewer.data.server
 
 import arrow.core.Either
 import com.mackenzie.waifuviewer.data.datasource.WaifusPicRemoteDataSource
+import com.mackenzie.waifuviewer.data.server.models.RemoteConnect
+import com.mackenzie.waifuviewer.data.server.models.WaifuPicsRequest
 import com.mackenzie.waifuviewer.data.tryCall
 import com.mackenzie.waifuviewer.domain.Error
 import com.mackenzie.waifuviewer.domain.WaifuPicItem

@@ -3,7 +3,7 @@ package com.mackenzie.waifuviewer.ui.detail
 import app.cash.turbine.test
 import com.mackenzie.waifuviewer.data.TraceMoeRepository
 import com.mackenzie.waifuviewer.data.db.FavoriteDbItem
-import com.mackenzie.waifuviewer.data.server.RemoteConnect
+import com.mackenzie.waifuviewer.data.server.models.RemoteConnect
 import com.mackenzie.waifuviewer.data.server.ServerMoeDataSource
 import com.mackenzie.waifuviewer.testrules.CoroutinesTestRule
 import com.mackenzie.waifuviewer.ui.buildFavDatabaseWaifus

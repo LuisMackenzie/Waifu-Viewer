@@ -4,10 +4,10 @@ import com.mackenzie.waifuviewer.data.WaifusBestRepository
 import com.mackenzie.waifuviewer.data.db.WaifuBestDbItem
 import com.mackenzie.waifuviewer.data.db.datasources.FavoriteDataSource
 import com.mackenzie.waifuviewer.data.db.datasources.RoomBestDataSource
-import com.mackenzie.waifuviewer.data.server.RemoteConnect
+import com.mackenzie.waifuviewer.data.server.models.RemoteConnect
 import com.mackenzie.waifuviewer.data.server.ServerBestDataSource
-import com.mackenzie.waifuviewer.data.server.WaifuBestGif
-import com.mackenzie.waifuviewer.data.server.WaifuBestPng
+import com.mackenzie.waifuviewer.data.server.models.WaifuBestGif
+import com.mackenzie.waifuviewer.data.server.models.WaifuBestPng
 import com.mackenzie.waifuviewer.ui.fakes.*
 
 fun buildBestRepositoryWith(
@@ -21,7 +21,8 @@ fun buildBestRepositoryWith(
         FakeRemoteImService(listOf()),
         FakeRemotePicsService(listOf()),
         FakeRemoteBestService(remoteDataPng, remoteDataGif),
-        FakeRemoteMoeService(listOf())))
+        FakeRemoteMoeService(listOf()))
+    )
     return WaifusBestRepository(localDataSource, favoriteDataSource , remoteDataSource)
 }
 
