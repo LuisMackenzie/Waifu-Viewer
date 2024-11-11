@@ -149,6 +149,9 @@ abstract class AppDataModule {
     abstract fun bindRemoteMoeDataSource(remoteMoeDataSource: ServerMoeDataSource): WaifusMoeRemoteDataSource
 
     @Binds
+    abstract fun bindRemoteOpenAiDataSource(remoteOpenAiDataSource: OpenAiDataSource): OpenAiRemoteDataSource
+
+    @Binds
     abstract fun bindLocationDataSource(locationDataSource: PlayServicesLocationDataSource): LocationDataSource
 
     @Binds
