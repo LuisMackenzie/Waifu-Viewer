@@ -1,12 +1,16 @@
 package com.mackenzie.waifuviewer.data.server
 
+import com.mackenzie.waifuviewer.data.server.models.ImageGenerationApiRequestBody
+import com.mackenzie.waifuviewer.data.server.models.ImageGenerationApiResponse
+import com.mackenzie.waifuviewer.data.server.models.TextCompletionApiRequestBody
+import com.mackenzie.waifuviewer.data.server.models.TextCompletionApiResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.POST
 
-interface OpenAIService {
+internal interface OpenAIService {
 
     @Headers("content-type: application/json")
     @POST("completions")
