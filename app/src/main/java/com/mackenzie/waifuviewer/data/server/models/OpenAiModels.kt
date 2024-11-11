@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 
 // TEXT COMPLETION REQUEST BODY
 @JsonClass(generateAdapter = true)
-internal data class TextCompletionApiRequestBody internal constructor(
+data class TextCompletionApiRequestBody (
     @Json(name = "prompt") val prompt: String,
     @Json(name = "model")  val model: String,
     @Json(name = "temperature")  val temperature: Float,
@@ -41,7 +41,7 @@ data class TextCompletionError(
 // IMAGE GENERATION REQUEST BODY
 
 @JsonClass(generateAdapter = true)
-internal data class ImageGenerationApiRequestBody internal constructor(
+data class ImageGenerationApiRequestBody (
     @Json(name = "prompt") val prompt: String,
     @Json(name = "size") val size: String,
     @Json(name = "n") val generateCount: Int,
