@@ -1,6 +1,7 @@
 package com.mackenzie.waifuviewer.data.server
 
 import com.mackenzie.waifuviewer.data.server.models.WaifuImResult
+import com.mackenzie.waifuviewer.data.server.models.WaifuImTagResult
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -22,4 +23,9 @@ interface WaifuImService {
         @Query("gif") isGif:Boolean = false,
         @Query("orientation") orientation:String = "PORTRAIT"
     ): WaifuImResult
+
+    @GET("tags/")
+    suspend fun getTagsWaifuIm(
+        @Query("full") full:Boolean = false,
+    ): WaifuImTagResult
 }

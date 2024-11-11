@@ -11,6 +11,12 @@ data class WaifuImResult(
 )
 
 @JsonClass(generateAdapter = true)
+data class WaifuImTagResult(
+    @Json(name = "versatile") val versatile: List<String>,
+    @Json(name = "nsfw") val nsfw: List<String>
+)
+
+@JsonClass(generateAdapter = true)
 data class WaifuPicsResult(
     @Json(name = "files") val images: List<String>
 )
