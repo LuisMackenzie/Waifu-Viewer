@@ -53,6 +53,10 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideTagsDao(db: WaifuDataBase) = db.waifuImTagsDao()
+
+    @Provides
+    @Singleton
     fun provideApiUrl(): ApiUrl = ApiUrl()
 
     @Provides

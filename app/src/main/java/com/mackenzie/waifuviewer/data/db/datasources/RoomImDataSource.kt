@@ -3,7 +3,10 @@ package com.mackenzie.waifuviewer.data.db.datasources
 import com.mackenzie.waifuviewer.data.datasource.WaifusImLocalDataSource
 import com.mackenzie.waifuviewer.data.db.WaifuImDao
 import com.mackenzie.waifuviewer.data.db.WaifuImDbItem
+import com.mackenzie.waifuviewer.data.db.WaifuImTagDb
+import com.mackenzie.waifuviewer.data.db.WaifuImTagsDao
 import com.mackenzie.waifuviewer.data.db.datasources.RoomImDataSource.Companion.artistAdapter
+import com.mackenzie.waifuviewer.data.db.datasources.RoomImDataSource.Companion.stringAdapter
 import com.mackenzie.waifuviewer.data.db.datasources.RoomImDataSource.Companion.tagsAdapter
 import com.mackenzie.waifuviewer.data.tryCall
 import com.mackenzie.waifuviewer.domain.Error
@@ -18,21 +21,24 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class RoomImDataSource @Inject constructor(private val imDao: WaifuImDao) : WaifusImLocalDataSource {
+class RoomImDataSource @Inject constructor(private val imDao: WaifuImDao, private val tagsDao: WaifuImTagsDao) : WaifusImLocalDataSource {
 
     companion object {
         private val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
         val artistAdapter = moshi.adapter(ArtistIm::class.java)
-        private val type = Types.newParameterizedType(List::class.java, TagItem::class.java)
-        val tagsAdapter = moshi.adapter<List<TagItem?>>(type)
+        private val typeTag = Types.newParameterizedType(List::class.java, TagItem::class.java)
+        val tagsAdapter = moshi.adapter<List<TagItem?>>(typeTag)
+        private val typeString = Types.newParameterizedType(List::class.java, String::class.java)
+        val stringAdapter = moshi.adapter<List<String>>(typeString)
     }
 
     override val waifusIm: Flow<List<WaifuImItem>> = imDao.getAllIm().map { it.toDomainModel() }
 
-    override val waifuImTags: Flow<WaifuImTagList>
-        get() = TODO("Not yet implemented")
+    override val waifuImTags: Flow<WaifuImTagList> = tagsDao.getAllImTags().map { it.toDomainModel() }
 
     override suspend fun isImEmpty(): Boolean = imDao.waifuImCount() == 0
+
+    override suspend fun isTagsImEmpty(): Boolean = tagsDao.waifuImTagCount() == 0
 
     override fun findImById(id: Int): Flow<WaifuImItem> = imDao.findImById(id).map { it.toDomainModel() }
 
@@ -40,9 +46,9 @@ class RoomImDataSource @Inject constructor(private val imDao: WaifuImDao) : Waif
         imDao.insertAllWaifuIm(waifus.fromDomainModel())
     }.fold(ifLeft = { it }, ifRight = { null })
 
-    override suspend fun saveImTags(waifus: WaifuImTagList): Error? {
-        TODO("Not yet implemented")
-    }
+    override suspend fun saveImTags(tags: WaifuImTagList): Error? = tryCall {
+        tagsDao.insertAllImTags(tags.fromDomainModel())
+    }.fold(ifLeft = { it }, ifRight = { null })
 
     override suspend fun saveOnlyIm(waifu: WaifuImItem): Error? = tryCall {
         imDao.updateWaifuIm(waifu.fromDomainModel())
@@ -113,6 +119,18 @@ private fun WaifuImItem.fromDomainModel(): WaifuImDbItem = WaifuImDbItem(
     previewUrl,
     tagsAdapter.toJson(tags),
     isFavorite
+)
+
+private fun WaifuImTagList.fromDomainModel(): WaifuImTagDb = WaifuImTagDb(
+    id,
+    stringAdapter.toJson(versatile),
+    stringAdapter.toJson(nsfw)
+)
+
+private fun WaifuImTagDb.toDomainModel(): WaifuImTagList = WaifuImTagList(
+    id,
+    stringAdapter.fromJson(versatile) ?: emptyList(),
+    stringAdapter.fromJson(nsfw) ?: emptyList()
 )
 
 
