@@ -9,9 +9,10 @@ interface WaifusImLocalDataSource {
     val waifusIm: Flow<List<WaifuImItem>>
     val waifuImTags: Flow<WaifuImTagList>
     suspend fun isImEmpty(): Boolean
+    suspend fun isTagsImEmpty(): Boolean
     fun findImById(id: Int): Flow<WaifuImItem>
     suspend fun saveIm(waifus: List<WaifuImItem>): Error?
-    suspend fun saveImTags(waifus: WaifuImTagList): Error?
+    suspend fun saveImTags(tags: WaifuImTagList): Error?
     suspend fun saveOnlyIm(waifu: WaifuImItem): Error?
     suspend fun deleteAll(): Error?
 }
