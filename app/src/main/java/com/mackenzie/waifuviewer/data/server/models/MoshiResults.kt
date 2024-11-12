@@ -46,7 +46,7 @@ data class WaifuBestGifResult(
 @Parcelize
 @JsonClass(generateAdapter = true)
 data class WaifuIm(
-    @Json(name = "artist") val artist: ArtistImResult,
+    @Json(name = "artist") val artist: ArtistImResult?,
     @Json(name = "byte_size") val byteSize: Long,
     @Json(name = "signature") val signature: String,
     @Json(name = "extension") val extension: String,
@@ -67,12 +67,12 @@ data class WaifuIm(
 @Parcelize
 @JsonClass(generateAdapter = true)
 data class ArtistImResult(
-    @Json(name = "artist_id") val artistId: String,
-    @Json(name = "deviant_art") val deviantArt: String,
-    @Json(name = "name") val name: String,
-    @Json(name = "patreon") val patreon: String,
-    @Json(name = "pixiv") val pixiv: String,
-    @Json(name = "twitter") val twitter: String
+    @Json(name = "artist_id") val artistId: String?,
+    @Json(name = "deviant_art") val deviantArt: String?,
+    @Json(name = "name") val name: String?,
+    @Json(name = "patreon") val patreon: String?,
+    @Json(name = "pixiv") val pixiv: String?,
+    @Json(name = "twitter") val twitter: String?
 ) : Parcelable
 
 @Parcelize

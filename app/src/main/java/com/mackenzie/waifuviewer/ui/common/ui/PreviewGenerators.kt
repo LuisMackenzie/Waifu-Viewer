@@ -2,6 +2,7 @@ package com.mackenzie.waifuviewer.ui.common.ui
 
 import androidx.compose.runtime.Composable
 import com.mackenzie.waifuviewer.domain.FavoriteItem
+import com.mackenzie.waifuviewer.domain.im.ArtistIm
 import com.mackenzie.waifuviewer.domain.im.WaifuImItem
 import com.mackenzie.waifuviewer.ui.detail.DetailImViewModel
 import com.mackenzie.waifuviewer.ui.favs.FavoriteViewModel
@@ -36,6 +37,8 @@ fun getImMedia() = (1..20).map { getImMediaItem(it) }
 @Composable
 fun getImMediaItem(id: Int = 1) = WaifuImItem(
     id = id,
+    artist = ArtistIm("", "", "", "", "", ""),
+    byteSize = 0,
     signature = "signature",
     extension = "jpg",
     dominantColor = "dominantColor",
@@ -47,5 +50,6 @@ fun getImMediaItem(id: Int = 1) = WaifuImItem(
     imageId = id,
     url = "https://nekos.best/api/v2/neko/f09f1d72-4d7d-43ac-9aec-79f0544b95c3.png",
     previewUrl = "previewUrl",
+    tags = listOf(),
     isFavorite = if(id % 3 == 0 || id == 1) true else false
 )

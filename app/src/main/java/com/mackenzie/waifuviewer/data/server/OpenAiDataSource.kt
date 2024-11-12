@@ -84,6 +84,7 @@ private fun ImageGenerateImageData.toDomainModel(): ImageGenerateItemData = Imag
 
 private fun ImageRequestBody.fromDomainModel(): ImageGenerationApiRequestBody = ImageGenerationApiRequestBody(
     prompt = prompt,
+    model = model,
     size = size,
     generateCount = generateCount,
     responseFormat = responseFormat

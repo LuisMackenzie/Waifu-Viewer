@@ -7,7 +7,7 @@ import com.mackenzie.waifuviewer.domain.im.ArtistIm
 import com.mackenzie.waifuviewer.domain.im.TagItem
 import com.mackenzie.waifuviewer.domain.im.WaifuImItem
 
-fun List<WaifuImItem>.fromDomainModel(): List<WaifuImDbItem> = map { it.fromDomainModel() }
+/*fun List<WaifuImItem>.fromDomainModel(): List<WaifuImDbItem> = map { it.fromDomainModel() }
 
 fun WaifuImItem.fromDomainModel(): WaifuImDbItem = WaifuImDbItem(
     id,
@@ -26,8 +26,9 @@ fun WaifuImItem.fromDomainModel(): WaifuImDbItem = WaifuImDbItem(
     previewUrl,
     tags.fromDomainModel(),
     isFavorite
-)
+)*/
 
+/*
 fun ArtistIm.fromDomainModel(): ArtistImResult = ArtistImResult(
     artistId,
     deviantArt,
@@ -45,4 +46,4 @@ fun TagItem.fromDomainModel(): Tag = Tag(
     isNsfw,
     name,
     tagId
-)
+)*/

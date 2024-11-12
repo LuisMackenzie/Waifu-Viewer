@@ -7,8 +7,6 @@ import androidx.room.RoomDatabase
     WaifuPicDbItem::class,
     WaifuImDbItem::class,
     WaifuBestDbItem::class,
-    ArtistImDb::class,
-    TagDb::class,
     FavoriteDbItem::class], version = 1, exportSchema = false)
 abstract class WaifuDataBase: RoomDatabase() {
     abstract fun waifuPicDao(): WaifuPicDao

@@ -16,6 +16,6 @@ data class WaifuImItem (
     val imageId: Int,
     val url: String,
     val previewUrl: String,
-    val tags: List<TagItem>,
+    val tags: List<TagItem?>,
     val isFavorite: Boolean
     )

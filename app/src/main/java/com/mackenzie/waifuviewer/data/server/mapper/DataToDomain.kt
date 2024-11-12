@@ -9,7 +9,7 @@ import com.mackenzie.waifuviewer.domain.im.TagItem
 import com.mackenzie.waifuviewer.domain.im.WaifuImItem
 import com.mackenzie.waifuviewer.domain.im.WaifuImTagList
 
-fun WaifuImTagResult.toDomainModel(): WaifuImTagList = WaifuImTagList(
+/*fun WaifuImTagResult.toDomainModel(): WaifuImTagList = WaifuImTagList(
     versatile,
     nsfw
 )
@@ -19,7 +19,7 @@ fun List<WaifuIm>.toDomainModel(): List<WaifuImItem> = map { it.toDomainModel() 
 fun WaifuIm.toDomainModel(): WaifuImItem =
     WaifuImItem(
         0,
-        artist.toDomainModel(),
+        artist?.toArtistDomainModel() ?: ArtistIm("", "", "", "", "", ""),
         byteSize,
         signature,
         extension,
@@ -32,11 +32,11 @@ fun WaifuIm.toDomainModel(): WaifuImItem =
         imageId,
         url,
         previewUrl,
-        tags?.toDomainModel() ?: emptyList(),
+        tags?.toTagDomainModel() ?: emptyList(),
         false
     )
 
-fun ArtistImResult.toDomainModel(): ArtistIm = ArtistIm(
+fun ArtistImResult.toArtistDomainModel(): ArtistIm = ArtistIm(
     artistId,
     deviantArt,
     name,
@@ -45,11 +45,12 @@ fun ArtistImResult.toDomainModel(): ArtistIm = ArtistIm(
     twitter
 )
 
-fun List<Tag>.toDomainModel() : List<TagItem> = map { it.toDomainModel()}
+fun List<Tag>.toTagDomainModel() : List<TagItem> = map { it.toTagDomainModel()}
 
-fun Tag.toDomainModel(): TagItem = TagItem(
+
+fun Tag.toTagDomainModel(): TagItem = TagItem(
     description,
     isNsfw,
     name,
     tagId
-)
+)*/
