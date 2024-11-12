@@ -8,12 +8,13 @@ import com.mackenzie.waifuviewer.data.server.*
 import com.mackenzie.waifuviewer.data.server.models.RemoteConnect
 import com.mackenzie.waifuviewer.data.server.models.WaifuIm
 import com.mackenzie.waifuviewer.ui.fakes.*
+import org.mockito.kotlin.any
 
 fun buildImRepositoryWith(
     localData: List<WaifuImDbItem>,
     remoteData: List<WaifuIm>
 ): WaifusImRepository {
-    val localImDataSource = RoomImDataSource(FakeWaifuImDao(localData))
+    val localImDataSource = RoomImDataSource(FakeWaifuImDao(localData), FakeWaifuImTagsDao() )
     val favoriteDataSource = FavoriteDataSource(FakeFavoriteDao())
     val remoteImDataSource = ServerImDataSource( RemoteConnect(
         FakeRemoteImService(remoteData),
@@ -29,6 +30,8 @@ fun buildImRepositoryWith(
 fun buildImDatabaseWaifus(vararg id: Int) = id.map {
     WaifuImDbItem(
         id = it,
+        artist = "",
+        byteSize = 0,
         signature = "",
         extension = "",
         dominantColor = "",
@@ -40,12 +43,15 @@ fun buildImDatabaseWaifus(vararg id: Int) = id.map {
         imageId = 6969,
         url = "https://cdn.waifu.im/5f7e656343cb7be1.jpg",
         previewUrl = "https://cdn.waifu.im/5f7e656343cb7be1.jpg",
+        tags = "",
         isFavorite = false
     )
 }
 
 fun buildImRemoteWaifus(vararg id: Int) = id.map {
     WaifuIm(
+        artist = null,
+        byteSize = 0,
         signature = "",
         extension = "",
         imageId = 6969,
@@ -58,7 +64,7 @@ fun buildImRemoteWaifus(vararg id: Int) = id.map {
         height = "",
         width = "",
         url = "https://cdn.waifu.im/5f7e656343cb7be1.jpg",
-        previewUrl = ""
-        // tags = ,
+        previewUrl = "",
+        tags = emptyList()
     )
 }

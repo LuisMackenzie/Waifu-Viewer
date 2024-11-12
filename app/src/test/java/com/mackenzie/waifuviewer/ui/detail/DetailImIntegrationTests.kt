@@ -12,7 +12,8 @@ import com.mackenzie.waifuviewer.ui.buildImRepositoryWith
 import com.mackenzie.waifuviewer.ui.detail.DetailImViewModel.UiState
 import com.mackenzie.waifuviewer.ui.fakes.FakeRemoteBestService
 import com.mackenzie.waifuviewer.ui.fakes.FakeRemoteImService
-import com.mackenzie.waifuviewer.ui.fakes.FakeRemoteMoeService
+import com.mackenzie.waifuviewer.ui.FakeRemoteMoeService
+import com.mackenzie.waifuviewer.ui.FakeRemoteOpenAiService
 import com.mackenzie.waifuviewer.ui.fakes.FakeRemotePicsService
 import com.mackenzie.waifuviewer.usecases.im.FindWaifuImUseCase
 import com.mackenzie.waifuviewer.usecases.im.SwitchImFavoriteUseCase
@@ -22,6 +23,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.kotlin.any
 
 @ExperimentalCoroutinesApi
 class DetailImIntegrationTests {
@@ -71,8 +73,13 @@ class DetailImIntegrationTests {
         val switchImFavoriteUseCase = SwitchImFavoriteUseCase(repo)
         val getSearchMoeUseCase = GetSearchMoeUseCase(repo = TraceMoeRepository(
             ServerMoeDataSource(
-            RemoteConnect(FakeRemoteImService(), FakeRemotePicsService(), FakeRemoteBestService(), FakeRemoteMoeService())
-            )
+                RemoteConnect(
+                    FakeRemoteImService(),
+                    FakeRemotePicsService(),
+                    FakeRemoteBestService(),
+                    FakeRemoteMoeService(),
+                    FakeRemoteOpenAiService()
+                )            )
         )
         )
         val vm = DetailImViewModel(id , findWaifuImUseCase, switchImFavoriteUseCase, getSearchMoeUseCase)

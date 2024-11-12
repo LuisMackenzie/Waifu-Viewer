@@ -8,7 +8,9 @@ import com.mackenzie.waifuviewer.ui.buildImDatabaseWaifus
 import com.mackenzie.waifuviewer.ui.buildImRepositoryWith
 import com.mackenzie.waifuviewer.ui.buildImRemoteWaifus
 import com.mackenzie.waifuviewer.ui.main.SelectorImViewModel.UiState
+import com.mackenzie.waifuviewer.usecases.im.GetWaifuImTagsUseCase
 import com.mackenzie.waifuviewer.usecases.im.RequestOnlyWaifuImUseCase
+import com.mackenzie.waifuviewer.usecases.im.RequestWaifuImTagsUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -70,8 +72,10 @@ class SelectorImIntegrationTests {
 
         val repo = buildImRepositoryWith(localData, remoteData)
 
+        val getWaifuImTagsUseCase = GetWaifuImTagsUseCase(repo)
         val requestOnlyWaifuImUseCase = RequestOnlyWaifuImUseCase(repo)
-        val vm = SelectorImViewModel(requestOnlyWaifuImUseCase)
+        val requestWaifuImTagsUseCase = RequestWaifuImTagsUseCase(repo)
+        val vm = SelectorImViewModel(getWaifuImTagsUseCase, requestOnlyWaifuImUseCase, requestWaifuImTagsUseCase)
         return vm
     }
 

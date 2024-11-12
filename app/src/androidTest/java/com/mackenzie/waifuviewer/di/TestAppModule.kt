@@ -3,6 +3,7 @@ package com.mackenzie.waifuviewer.di
 import android.app.Application
 import androidx.room.Room
 import com.mackenzie.waifuviewer.data.db.*
+import com.mackenzie.waifuviewer.data.server.OpenAIService
 import com.mackenzie.waifuviewer.data.server.models.RemoteConnect
 import com.mackenzie.waifuviewer.data.server.WaifuBestService
 import com.mackenzie.waifuviewer.data.server.WaifuImService
@@ -53,6 +54,10 @@ object TestAppModule {
 
     @Provides
     @Singleton
+    fun provideTagsDao(db: WaifuDataBase): WaifuImTagsDao = db.waifuImTagsDao()
+
+    @Provides
+    @Singleton
     fun provideApiUrl(): ApiUrl = ApiUrl(
         "http://localhost:8080",
         "http://localhost:8080",
@@ -99,12 +104,19 @@ object TestAppModule {
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
 
+        val builderOpenAi = Retrofit.Builder()
+            .baseUrl(apiUrl.openAiBaseUrl)
+            .client(client)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .build()
+
         val serviceIm = builderIm.create(WaifuImService::class.java)
         val servicePics = builderPics.create(WaifuPicService::class.java)
         val serviceBest = builderBest.create(WaifuBestService::class.java)
-        val serviceMoe = builderBest.create(WaifuTraceMoeService::class.java)
+        val serviceMoe = builderMoe.create(WaifuTraceMoeService::class.java)
+        val serviceOpenAi = builderOpenAi.create(OpenAIService::class.java)
 
-        val connection = RemoteConnect(serviceIm, servicePics, serviceBest, serviceMoe)
+        val connection = RemoteConnect(serviceIm, servicePics, serviceBest, serviceMoe, serviceOpenAi)
 
         return connection
     }

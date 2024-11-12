@@ -4,7 +4,9 @@ import app.cash.turbine.test
 import com.mackenzie.testshared.sampleImWaifu
 import com.mackenzie.waifuviewer.testrules.CoroutinesTestRule
 import com.mackenzie.waifuviewer.ui.main.SelectorImViewModel.UiState
+import com.mackenzie.waifuviewer.usecases.im.GetWaifuImTagsUseCase
 import com.mackenzie.waifuviewer.usecases.im.RequestOnlyWaifuImUseCase
+import com.mackenzie.waifuviewer.usecases.im.RequestWaifuImTagsUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
@@ -27,7 +29,13 @@ class SelectorImViewModelTest {
     val coroutinesTestRule = CoroutinesTestRule()
 
     @Mock
+    private lateinit var getWaifuImTagsUseCase: GetWaifuImTagsUseCase
+
+    @Mock
     private lateinit var requestOnlyWaifuImUseCase: RequestOnlyWaifuImUseCase
+
+    @Mock
+    private lateinit var requestWaifuImTagsUseCase: RequestWaifuImTagsUseCase
 
     private lateinit var  vm: SelectorImViewModel
 
@@ -36,7 +44,7 @@ class SelectorImViewModelTest {
 
     @Before
     fun setUp() {
-        vm = SelectorImViewModel(requestOnlyWaifuImUseCase)
+        vm = SelectorImViewModel(getWaifuImTagsUseCase, requestOnlyWaifuImUseCase, requestWaifuImTagsUseCase)
     }
 
     @Test
