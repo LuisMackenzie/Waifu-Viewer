@@ -46,6 +46,14 @@ data class WaifuBestDbItem(
     val isFavorite: Boolean
 ) : Parcelable
 
+@Parcelize
+@Entity
+data class WaifuImTagDb(
+    @PrimaryKey(autoGenerate = true) val id: Int,
+    val versatile: String,
+    val nsfw: String
+): Parcelable
+
 /*@Parcelize
 @Entity
 data class WaifuBestPngDbItem(
