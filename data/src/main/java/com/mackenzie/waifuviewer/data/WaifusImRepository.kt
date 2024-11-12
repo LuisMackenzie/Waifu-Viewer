@@ -15,6 +15,7 @@ class WaifusImRepository @Inject constructor(
 ) {
 
     val savedWaifusIm = localImDataSource.waifusIm
+    val savedImTags = localImDataSource.waifuImTags
 
     fun findImById(id: Int): Flow<WaifuImItem> = localImDataSource.findImById(id)
 
@@ -42,15 +43,19 @@ class WaifusImRepository @Inject constructor(
     }
 
     suspend fun requestOnlyWaifuIm(orientation: Boolean): WaifuImItem? {
+        //TODO Quitar esta llamada de aqui
+        requestWaifuImTags()
         val waifuIm = remoteImDataSource.getOnlyWaifuIm(getOrientation(orientation))
         if (waifuIm != null) return waifuIm else return null
     }
 
     suspend fun requestWaifuImTags(): Error? {
-        val waifuImTags = remoteImDataSource.getWaifuImTags()
-        if (waifuImTags != null) {
-            // val error = localImDataSource.saveWaifuImTags(waifuImTags)
-            // if (error != null) return error
+        if (localImDataSource.isTagsImEmpty()) {
+            val waifuImTags = remoteImDataSource.getWaifuImTags()
+            if (waifuImTags != null) {
+                val error = localImDataSource.saveImTags(waifuImTags)
+                if (error != null) return error
+            }
         }
         return null
     }
