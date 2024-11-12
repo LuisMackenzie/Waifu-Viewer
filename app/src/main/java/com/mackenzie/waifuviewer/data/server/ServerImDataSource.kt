@@ -2,12 +2,13 @@ package com.mackenzie.waifuviewer.data.server
 
 import arrow.core.Either
 import com.mackenzie.waifuviewer.data.datasource.WaifusImRemoteDataSource
+import com.mackenzie.waifuviewer.data.server.mapper.toDomainModel
 import com.mackenzie.waifuviewer.data.server.models.RemoteConnect
-import com.mackenzie.waifuviewer.data.server.models.WaifuIm
 import com.mackenzie.waifuviewer.data.tryCall
 import com.mackenzie.waifuviewer.data.trySave
 import com.mackenzie.waifuviewer.domain.Error
-import com.mackenzie.waifuviewer.domain.WaifuImItem
+import com.mackenzie.waifuviewer.domain.im.WaifuImItem
+import com.mackenzie.waifuviewer.domain.im.WaifuImTagList
 import javax.inject.Inject
 
 
@@ -30,23 +31,12 @@ class ServerImDataSource @Inject constructor(private val remoteService: RemoteCo
             .firstOrNull()?.toDomainModel()
     }
 
+    override suspend fun getWaifuImTags(): WaifuImTagList? = trySave {
+        remoteService.serviceIm
+            .getTagsWaifuIm()
+            .toDomainModel()
+    }
+
 }
 
-private fun List<WaifuIm>.toDomainModel(): List<WaifuImItem> = map { it.toDomainModel() }
 
-private fun WaifuIm.toDomainModel(): WaifuImItem =
-    WaifuImItem(
-        0,
-        signature,
-        extension,
-        dominant_color,
-        source ?: "",
-        uploadedAt,
-        isNsfw,
-        width,
-        height,
-        imageId,
-        url,
-        previewUrl,
-        false
-    )

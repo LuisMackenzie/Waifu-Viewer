@@ -6,7 +6,7 @@ import com.mackenzie.waifuviewer.di.WaifuId
 import com.mackenzie.waifuviewer.domain.AnimeSearchItem
 import com.mackenzie.waifuviewer.usecases.im.FindWaifuImUseCase
 import com.mackenzie.waifuviewer.usecases.im.SwitchImFavoriteUseCase
-import com.mackenzie.waifuviewer.domain.WaifuImItem
+import com.mackenzie.waifuviewer.domain.im.WaifuImItem
 import com.mackenzie.waifuviewer.domain.Error
 import com.mackenzie.waifuviewer.usecases.moe.GetSearchMoeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel

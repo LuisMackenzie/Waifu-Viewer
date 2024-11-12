@@ -17,7 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.mackenzie.waifuviewer.R
-import com.mackenzie.waifuviewer.domain.WaifuImItem
+import com.mackenzie.waifuviewer.domain.im.WaifuImItem
 import com.mackenzie.waifuviewer.ui.common.showToast
 import com.mackenzie.waifuviewer.ui.common.ui.previewMainState
 import com.mackenzie.waifuviewer.ui.detail.ui.LoadingAnimation

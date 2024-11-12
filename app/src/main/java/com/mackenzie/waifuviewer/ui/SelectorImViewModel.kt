@@ -3,7 +3,7 @@ package com.mackenzie.waifuviewer.ui.main
 import androidx.lifecycle.*
 import com.mackenzie.waifuviewer.domain.Error
 import com.mackenzie.waifuviewer.domain.ServerType
-import com.mackenzie.waifuviewer.domain.WaifuImItem
+import com.mackenzie.waifuviewer.domain.im.WaifuImItem
 import com.mackenzie.waifuviewer.usecases.im.RequestOnlyWaifuImUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*

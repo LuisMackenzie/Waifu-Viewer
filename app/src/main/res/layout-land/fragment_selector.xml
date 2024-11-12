@@ -5,11 +5,11 @@ xmlns:tools="http://schemas.android.com/tools">
 
 <data>
     <import type="com.mackenzie.waifuviewer.domain.WaifuPicItem"/>
-    <import type="com.mackenzie.waifuviewer.domain.WaifuImItem"/>
+    <import type="com.mackenzie.waifuviewer.domain.im.WaifuImItem"/>
     <import type="com.mackenzie.waifuviewer.domain.ServerType"/>
     <import type="com.mackenzie.waifuviewer.ui.main.OnChooseTypeChanged"/>
     <variable name="waifuPic" type="WaifuPicItem" />
-    <variable name="waifuIm" type="WaifuImItem"/>
+    <variable name="waifuIm" type="com.mackenzie.waifuviewer.domain.im.WaifuImItem"/>
     <variable name="type" type="ServerType" />
     <variable name="onChooseTypeChanged" type="OnChooseTypeChanged" />
 </data>

@@ -2,7 +2,7 @@ package com.mackenzie.waifuviewer.ui.common.ui
 
 import androidx.compose.runtime.Composable
 import com.mackenzie.waifuviewer.domain.FavoriteItem
-import com.mackenzie.waifuviewer.domain.WaifuImItem
+import com.mackenzie.waifuviewer.domain.im.WaifuImItem
 import com.mackenzie.waifuviewer.ui.detail.DetailImViewModel
 import com.mackenzie.waifuviewer.ui.favs.FavoriteViewModel
 import com.mackenzie.waifuviewer.ui.main.WaifuImViewModel

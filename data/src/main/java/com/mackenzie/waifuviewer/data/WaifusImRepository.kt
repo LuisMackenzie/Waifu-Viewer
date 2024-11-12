@@ -3,7 +3,7 @@ package com.mackenzie.waifuviewer.data
 import com.mackenzie.waifuviewer.data.datasource.FavoriteLocalDataSource
 import com.mackenzie.waifuviewer.data.datasource.WaifusImLocalDataSource
 import com.mackenzie.waifuviewer.data.datasource.WaifusImRemoteDataSource
-import com.mackenzie.waifuviewer.domain.WaifuImItem
+import com.mackenzie.waifuviewer.domain.im.WaifuImItem
 import com.mackenzie.waifuviewer.domain.Error
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -44,6 +44,15 @@ class WaifusImRepository @Inject constructor(
     suspend fun requestOnlyWaifuIm(orientation: Boolean): WaifuImItem? {
         val waifuIm = remoteImDataSource.getOnlyWaifuIm(getOrientation(orientation))
         if (waifuIm != null) return waifuIm else return null
+    }
+
+    suspend fun requestWaifuImTags(): Error? {
+        val waifuImTags = remoteImDataSource.getWaifuImTags()
+        if (waifuImTags != null) {
+            // val error = localImDataSource.saveWaifuImTags(waifuImTags)
+            // if (error != null) return error
+        }
+        return null
     }
 
     private fun getOrientation(ori: Boolean): String {

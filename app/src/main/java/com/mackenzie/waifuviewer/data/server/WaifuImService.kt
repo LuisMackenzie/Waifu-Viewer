@@ -1,6 +1,7 @@
 package com.mackenzie.waifuviewer.data.server
 
 import com.mackenzie.waifuviewer.data.server.models.WaifuImResult
+import com.mackenzie.waifuviewer.data.server.models.WaifuImTagFullResult
 import com.mackenzie.waifuviewer.data.server.models.WaifuImTagResult
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -28,4 +29,9 @@ interface WaifuImService {
     suspend fun getTagsWaifuIm(
         @Query("full") full:Boolean = false,
     ): WaifuImTagResult
+
+    @GET("tags/")
+    suspend fun getTagsWaifuImFull(
+        @Query("full") full:Boolean = true,
+    ): WaifuImTagFullResult
 }

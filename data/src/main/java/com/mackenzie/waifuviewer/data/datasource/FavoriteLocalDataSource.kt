@@ -1,6 +1,7 @@
 package com.mackenzie.waifuviewer.data.datasource
 
 import com.mackenzie.waifuviewer.domain.*
+import com.mackenzie.waifuviewer.domain.im.WaifuImItem
 import kotlinx.coroutines.flow.Flow
 
 interface FavoriteLocalDataSource {

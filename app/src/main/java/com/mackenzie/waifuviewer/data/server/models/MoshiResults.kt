@@ -17,6 +17,12 @@ data class WaifuImTagResult(
 )
 
 @JsonClass(generateAdapter = true)
+data class WaifuImTagFullResult(
+    @Json(name = "versatile") val versatile: List<Tag>,
+    @Json(name = "nsfw") val nsfw: List<Tag>
+)
+
+@JsonClass(generateAdapter = true)
 data class WaifuPicsResult(
     @Json(name = "files") val images: List<String>
 )
@@ -40,6 +46,8 @@ data class WaifuBestGifResult(
 @Parcelize
 @JsonClass(generateAdapter = true)
 data class WaifuIm(
+    @Json(name = "artist") val artist: ArtistImResult,
+    @Json(name = "byte_size") val byteSize: Long,
     @Json(name = "signature") val signature: String,
     @Json(name = "extension") val extension: String,
     @Json(name = "image_id") val imageId: Int,
@@ -53,7 +61,18 @@ data class WaifuIm(
     @Json(name = "height") val height: String,
     @Json(name = "url") val url: String,
     @Json(name = "preview_url") val previewUrl: String,
-    // @Json(name = "tags")val tags: List<Tag>?
+    @Json(name = "tags")val tags: List<Tag>?
+) : Parcelable
+
+@Parcelize
+@JsonClass(generateAdapter = true)
+data class ArtistImResult(
+    @Json(name = "artist_id") val artistId: String,
+    @Json(name = "deviant_art") val deviantArt: String,
+    @Json(name = "name") val name: String,
+    @Json(name = "patreon") val patreon: String,
+    @Json(name = "pixiv") val pixiv: String,
+    @Json(name = "twitter") val twitter: String
 ) : Parcelable
 
 @Parcelize

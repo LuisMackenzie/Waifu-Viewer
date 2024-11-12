@@ -9,6 +9,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.domain.*
+import com.mackenzie.waifuviewer.domain.im.WaifuImItem
 import com.mackenzie.waifuviewer.ui.SelectorFragmentDirections
 import com.mackenzie.waifuviewer.ui.common.PermissionRequester
 import com.mackenzie.waifuviewer.ui.favs.FavoriteFragmentDirections
