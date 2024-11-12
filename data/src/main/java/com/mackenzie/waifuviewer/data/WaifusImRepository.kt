@@ -43,8 +43,6 @@ class WaifusImRepository @Inject constructor(
     }
 
     suspend fun requestOnlyWaifuIm(orientation: Boolean): WaifuImItem? {
-        //TODO Quitar esta llamada de aqui
-        requestWaifuImTags()
         val waifuIm = remoteImDataSource.getOnlyWaifuIm(getOrientation(orientation))
         if (waifuIm != null) return waifuIm else return null
     }
@@ -54,7 +52,7 @@ class WaifusImRepository @Inject constructor(
             val waifuImTags = remoteImDataSource.getWaifuImTags()
             if (waifuImTags != null) {
                 val error = localImDataSource.saveImTags(waifuImTags)
-                if (error != null) return error
+                if (error != null) return error else return null
             }
         }
         return null

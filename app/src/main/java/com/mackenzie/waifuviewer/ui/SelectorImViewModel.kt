@@ -4,7 +4,10 @@ import androidx.lifecycle.*
 import com.mackenzie.waifuviewer.domain.Error
 import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.domain.im.WaifuImItem
+import com.mackenzie.waifuviewer.domain.im.WaifuImTagList
+import com.mackenzie.waifuviewer.usecases.im.GetWaifuImTagsUseCase
 import com.mackenzie.waifuviewer.usecases.im.RequestOnlyWaifuImUseCase
+import com.mackenzie.waifuviewer.usecases.im.RequestWaifuImTagsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -12,7 +15,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SelectorImViewModel @Inject constructor(
-    private val requestOnlyImWaifu: RequestOnlyWaifuImUseCase
+    private val getWaifuImTagsUseCase: GetWaifuImTagsUseCase,
+    private val requestOnlyImWaifu: RequestOnlyWaifuImUseCase,
+    private val requestWaifuImTagsUseCase: RequestWaifuImTagsUseCase
     ): ViewModel() {
 
     private val _state = MutableStateFlow(UiState())
@@ -30,6 +35,23 @@ class SelectorImViewModel @Inject constructor(
         }
     }
 
+    fun requestTags() {
+        viewModelScope.launch {
+            val error = requestWaifuImTagsUseCase()
+            loadTags()
+            if (error != null) _state.update { it.copy(error = error) }
+        }
+    }
+
+    private fun loadTags() {
+        viewModelScope.launch {
+            getWaifuImTagsUseCase()
+                .catch { cause -> }
+                .collect{ tags -> _state.update { it.copy(tags = tags) } }
+
+        }
+    }
+
     fun onChangeType(type: ServerType) {
             _state.update { it.copy(type = type) }
     }
@@ -41,6 +63,7 @@ class SelectorImViewModel @Inject constructor(
     data class UiState(
         val waifu: WaifuImItem? = null,
         val type: ServerType = ServerType.NORMAL,
+        val tags: WaifuImTagList? = null,
         val error: Error? = null
     )
 
