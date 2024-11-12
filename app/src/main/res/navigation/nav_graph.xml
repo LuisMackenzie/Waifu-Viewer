@@ -46,8 +46,7 @@
     <fragment
         android:id="@+id/waifu_dest"
         android:name="com.mackenzie.waifuviewer.ui.main.WaifuFragment"
-        android:label="fragment_waifu"
-        tools:layout="@layout/fragment_waifu" >
+        android:label="fragment_waifu">
         <action
             android:id="@+id/action_waifu_im_to_detail"
             app:destination="@id/detail_dest"
@@ -77,8 +76,7 @@
     <fragment
         android:id="@+id/favorites_dest"
         android:name="com.mackenzie.waifuviewer.ui.favs.FavoriteFragment"
-        android:label="fragment_favorites"
-        tools:layout="@layout/fragment_favorite" >
+        android:label="fragment_favorites">
         <action
             android:id="@+id/action_favorites_to_detail"
             app:destination="@id/detail_dest"
@@ -94,12 +92,7 @@
     <fragment
         android:id="@+id/detail_dest"
         android:name="com.mackenzie.waifuviewer.ui.detail.DetailFragment"
-        android:label="fragment_detail"
-        tools:layout="@layout/fragment_detail" >
-        <!--<argument
-            android:name="waifu"
-            app:argType="com.mackenzie.waifuviewer.models.Waifu"
-            app:nullable="true" />-->
+        android:label="fragment_detail">
         <argument
             android:name="waifuId"
             app:argType="integer" />
@@ -109,10 +102,6 @@
         android:id="@+id/waifu_gpt_dest"
         android:name="com.mackenzie.waifuviewer.ui.gpt.WaifuGptFragment"
         android:label="fragment_waifu_gpt">
-
-        <!--<argument
-            android:name="waifuId"
-            app:argType="integer" />-->
     </fragment>
 
     <fragment
