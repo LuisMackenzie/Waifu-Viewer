@@ -26,6 +26,7 @@ import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.databinding.FragmentSelectorBinding
 import com.mackenzie.waifuviewer.domain.RemoteConfigValues
 import com.mackenzie.waifuviewer.domain.ServerType
+import com.mackenzie.waifuviewer.domain.im.WaifuImTagList
 import com.mackenzie.waifuviewer.ui.common.*
 import com.mackenzie.waifuviewer.ui.main.MainState
 import com.mackenzie.waifuviewer.ui.main.OnChooseTypeChanged
@@ -40,8 +41,10 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
     private lateinit var binding: FragmentSelectorBinding
     private var backgroudImage: ImageView? = null
     private var loaded: Boolean = false
+    private var requirePermissions: Boolean = false
     private lateinit var mainState: MainState
-    private var remoteValues : RemoteConfigValues? = null
+    private var tagsIm: WaifuImTagList? = null
+    private var remoteValues : RemoteConfigValues = RemoteConfigValues()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -53,9 +56,8 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         )
         binding = FragmentSelectorBinding.bind(view)
         setUpElements()
-        updateSpinner()
-        if (remoteValues == null) getRemoteConfig()
-        if (BuildConfig.BUILD_TYPE == ServerType.ENHANCED.value) loadPics() else loadInitialServer()
+        getRemoteConfig()
+        if (BuildConfig.BUILD_TYPE == ServerType.ENHANCED.value) loadPics(requirePermissions) else loadInitialServer()
     }
 
     /*override fun onCreateView(
@@ -103,12 +105,12 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
                     remoteConfig.getLong("server_mode").toInt(),
                     ServerType.NORMAL
                 )
-                remoteValues?.let {
-                    if (it.type != ServerType.NEKOS) {
-                        setNsfwMode(it.nsfwIsActive, it.gptIsActive, it.geminiIsActive)
-                        Log.e("getRemoteConfig", "nsfwIsActive=${it.nsfwIsActive}, gptIsActive=${it.gptIsActive}")
+                remoteValues.apply {
+                    if (type != ServerType.NEKOS) {
+                        setNsfwMode(nsfwIsActive, gptIsActive, geminiIsActive)
+                        Log.e("getRemoteConfig", "nsfwIsActive=${nsfwIsActive}, gptIsActive=${gptIsActive}")
                     }
-                    setAutoMode(it.AutoModeIsEnabled)
+                    setAutoMode(AutoModeIsEnabled)
                 }
             } else {
                 Toast.makeText(requireContext(), "Fetch failed", Toast.LENGTH_SHORT).show()
@@ -142,6 +144,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
     private fun updateImWaifu(state: SelectorImViewModel.UiState) {
         state.waifu?.let { waifu ->
             setBackground(waifu.url)
+            imViewModel.requestTags()
             loaded = true
         }
 
@@ -149,7 +152,11 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
             binding.type = type
             remoteValues?.type = type
             updateSwitches()
-            updateSpinner()
+        }
+
+        state.tags?.let {
+            tagsIm = it
+            updateSpinner(tagsIm)
         }
 
         state.error?.let { error ->
@@ -159,7 +166,6 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .error(R.drawable.ic_error_grey)
                 .into(binding.ivBackdrop)
-            // Toast.makeText(requireContext(), getString(R.string.require_connection), Toast.LENGTH_SHORT).show()
             Toast.makeText(requireContext(), mainState.errorToString(error), Toast.LENGTH_SHORT).show()
             Log.e(Constants.CATEGORY_TAG_SELECTOR_IM_ERROR, mainState.errorToString(error))
         }
@@ -175,7 +181,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
             binding.type = type
             remoteValues?.type = type
             updateSwitches()
-            updateSpinner()
+            updateSpinner(tagsIm)
         }
 
         state.error?.let { error ->
@@ -217,7 +223,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
             } else {
                 sNsfw.text = getString(R.string.sfw_content)
             }
-            updateSpinner()
+            updateSpinner(tagsIm)
         }
         sGifs.setOnClickListener {
             if (remoteValues?.type == ServerType.NEKOS) {
@@ -225,7 +231,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
                     // Toast.makeText(requireContext(), "Not implemented yet!", Toast.LENGTH_SHORT).show()
                 }
                 // btnWaifu.isEnabled = !sGifs.isChecked
-                updateSpinner()
+                updateSpinner(tagsIm)
             }
         }
         reloadBackground.setOnClickListener {
@@ -252,17 +258,28 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
     }
 
     // TODO - Refactor this method
-    private fun updateSpinner() = with(binding) {
+    private fun updateSpinner(tags: WaifuImTagList?) = with(binding) {
+
+        if (tags == null) {
+           Log.e("updateSpinner", "Tags is null=$tags")
+        }
         val spinnerContent: Array<String>
         when (remoteValues?.type) {
             ServerType.ENHANCED -> {
                 spinnerContent = if (sNsfw.isChecked) { Constants.ENHANCEDNSFW } else { Constants.ENHANCEDSFW }
             }
             ServerType.NORMAL -> {
-                spinnerContent = if (sNsfw.isChecked) { Constants.NORMALNSFW } else { Constants.NORMALSFW }
+                spinnerContent = if (sNsfw.isChecked) {
+                    tags?.nsfw?.toTypedArray() ?: Constants.NORMALNSFW
+                } else {
+                     tags?.versatile?.toTypedArray() ?: Constants.NORMALSFW
+                }
+            }
+            ServerType.NEKOS -> {
+                spinnerContent = if (sGifs.isChecked) { Constants.NEKOSGIF } else { Constants.NEKOSPNG }
             }
             else -> {
-                spinnerContent = if (sGifs.isChecked) { Constants.NEKOSGIF } else { Constants.NEKOSPNG }
+                spinnerContent = if (sNsfw.isChecked) { Constants.NORMALNSFW } else { Constants.NORMALSFW }
             }
         }
 
@@ -356,25 +373,40 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
 
     private fun loadInitialServer() {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
-            loadIm()
+            loadIm(requirePermissions)
         } else {
-            loadPics()
+            loadPics(requirePermissions)
         }
     }
 
-    private fun loadIm() {
+    private fun loadIm(reqPermisions: Boolean) {
         viewLifecycleOwner.launchAndCollect(imViewModel.state) { updateImWaifu(it) }
-        mainState.requestPermissionLauncher {
+        if (reqPermisions) {
+            mainState.requestPermissionLauncher {
+                if (!loaded) {
+                    imViewModel.loadErrorOrWaifu(requireContext().isLandscape())
+                    Toast.makeText(requireContext(), getString(R.string.server_normal_toast), Toast.LENGTH_SHORT).show()
+                }
+            }
+        } else {
             if (!loaded) {
                 imViewModel.loadErrorOrWaifu(requireContext().isLandscape())
                 Toast.makeText(requireContext(), getString(R.string.server_normal_toast), Toast.LENGTH_SHORT).show()
             }
         }
+
     }
 
-    private fun loadPics() {
+    private fun loadPics(reqPermisions: Boolean) {
         viewLifecycleOwner.launchAndCollect(picsViewModel.state) { updatePicWaifu(it) }
-        mainState.requestPermissionLauncher {
+        if (reqPermisions) {
+            mainState.requestPermissionLauncher {
+                if (!loaded) {
+                    picsViewModel.loadErrorOrWaifu()
+                    Toast.makeText(requireContext(), getString(R.string.server_enhanced_toast), Toast.LENGTH_SHORT).show()
+                }
+            }
+        } else {
             if (!loaded) {
                 picsViewModel.loadErrorOrWaifu()
                 Toast.makeText(requireContext(), getString(R.string.server_enhanced_toast), Toast.LENGTH_SHORT).show()
