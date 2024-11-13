@@ -5,6 +5,7 @@ import com.mackenzie.waifuviewer.data.datasource.WaifusImLocalDataSource
 import com.mackenzie.waifuviewer.data.datasource.WaifusImRemoteDataSource
 import com.mackenzie.waifuviewer.domain.im.WaifuImItem
 import com.mackenzie.waifuviewer.domain.Error
+import com.mackenzie.waifuviewer.domain.im.WaifuImTagList
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -48,10 +49,14 @@ class WaifusImRepository @Inject constructor(
     }
 
     suspend fun requestWaifuImTags(): Error? {
+        val versatileTags: MutableList<String> = mutableListOf("All Items")
+        val nsfwTags: MutableList<String> = mutableListOf("All Items")
         if (localImDataSource.isTagsImEmpty()) {
             val waifuImTags = remoteImDataSource.getWaifuImTags()
             if (waifuImTags != null) {
-                val error = localImDataSource.saveImTags(waifuImTags)
+                versatileTags.addAll(waifuImTags.versatile)
+                nsfwTags.addAll(waifuImTags.nsfw)
+                val error = localImDataSource.saveImTags(WaifuImTagList(waifuImTags.id, versatileTags, nsfwTags))
                 if (error != null) return error else return null
             }
         }

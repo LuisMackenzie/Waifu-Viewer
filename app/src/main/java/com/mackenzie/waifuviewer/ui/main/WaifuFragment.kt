@@ -154,6 +154,9 @@ class WaifuFragment : Fragment() {
                 "mori-calliope", "raiden-shogun" -> {
                     imViewModel.onImReady(isNsfw, isGif = false, categoryTag, false)
                 }
+                "All Items" -> {
+                    imViewModel.onImReady(isNsfw, isGif, "waifu", orientation)
+                }
                 else -> {
                     imViewModel.onImReady(isNsfw, isGif, categoryTag, orientation)
                 }
