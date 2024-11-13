@@ -3,17 +3,6 @@
 xmlns:app="http://schemas.android.com/apk/res-auto"
 xmlns:tools="http://schemas.android.com/tools">
 
-<data>
-    <import type="com.mackenzie.waifuviewer.domain.WaifuPicItem"/>
-    <import type="com.mackenzie.waifuviewer.domain.im.WaifuImItem"/>
-    <import type="com.mackenzie.waifuviewer.domain.ServerType"/>
-    <import type="com.mackenzie.waifuviewer.ui.main.OnChooseTypeChanged"/>
-    <variable name="waifuPic" type="WaifuPicItem" />
-    <variable name="waifuIm" type="com.mackenzie.waifuviewer.domain.im.WaifuImItem"/>
-    <variable name="type" type="ServerType" />
-    <variable name="onChooseTypeChanged" type="OnChooseTypeChanged" />
-</data>
-
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -61,8 +50,7 @@ xmlns:tools="http://schemas.android.com/tools">
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:singleSelection="true"
-        app:onChooseTypeChanged="@{onChooseTypeChanged}">
+        app:singleSelection="true">
 
         <com.google.android.material.chip.Chip
             android:id="@+id/c_normal"
@@ -70,9 +58,8 @@ xmlns:tools="http://schemas.android.com/tools">
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.Chip.Choice"
             app:chipBackgroundColor="@color/chip_bg_states"
-            android:clickable="@{type != ServerType.NORMAL}"
-            android:checked="@{type == ServerType.NORMAL}"
-            android:textColor="@{type == ServerType.NORMAL ? @color/white : @color/black}"
+            android:clickable="true"
+            android:textColor="@color/black"
             android:text="@string/server_normal" />
 
         <com.google.android.material.chip.Chip
@@ -81,9 +68,8 @@ xmlns:tools="http://schemas.android.com/tools">
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.Chip.Choice"
             app:chipBackgroundColor="@color/chip_bg_states"
-            android:clickable="@{type != ServerType.ENHANCED}"
-            android:checked="@{type == ServerType.ENHANCED}"
-            android:textColor="@{type == ServerType.ENHANCED ? @color/white : @color/black}"
+            android:clickable="true"
+            android:textColor="@color/black"
             android:text="@string/server_enhanced" />
 
         <com.google.android.material.chip.Chip
@@ -92,9 +78,8 @@ xmlns:tools="http://schemas.android.com/tools">
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.Chip.Choice"
             app:chipBackgroundColor="@color/chip_bg_states"
-            android:clickable="@{type != ServerType.NEKOS}"
-            android:checked="@{type == ServerType.NEKOS}"
-            android:textColor="@{type == ServerType.NEKOS ? @color/white : @color/black}"
+            android:clickable="true"
+            android:textColor="@color/black"
             android:text="@string/server_best" />
     </com.google.android.material.chip.ChipGroup>
 
