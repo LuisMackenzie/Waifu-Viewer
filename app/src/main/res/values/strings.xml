@@ -31,6 +31,7 @@
     <string name="tag_neko">neko</string>
     <string name="tag_pat">pat</string>
     <string name="categories">All Categories</string>
+    <string name="categories_items">All Items</string>
 
     <string name="waifus_gone">Some waifus are gone</string>
     <string name="waifus_favorites_gone">Some Favorite waifus are gone. Are you sure?</string>

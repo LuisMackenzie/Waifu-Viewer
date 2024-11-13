@@ -103,7 +103,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
                     remoteConfig.getBoolean("waifu_gemini_service"),
                     remoteConfig.getBoolean("automatic_server"),
                     remoteConfig.getLong("server_mode").toInt(),
-                    ServerType.NORMAL
+                    getServerMode()
                 )
                 remoteValues.apply {
                     if (type != ServerType.NEKOS) {
@@ -113,7 +113,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
                     setAutoMode(AutoModeIsEnabled)
                 }
             } else {
-                Toast.makeText(requireContext(), "Fetch failed", Toast.LENGTH_SHORT).show()
+                Log.e("getRemoteConfig", "Hubo un Error al recuperar de remote config: ${task.exception}")
             }
         }
     }
@@ -136,7 +136,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
             putBoolean(Constants.IS_WAIFU_GEMINI, hasGemini)
             apply()
         }
-        binding.sNsfw.visible = nsfw
+        if (remoteValues.type == ServerType.NORMAL) binding.sNsfw.visible = nsfw
         binding.waifuGpt.visible = hasGpt
         binding.waifuGemini.visible = hasGemini
     }
@@ -203,11 +203,6 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
     // TODO - Refactor this method
     private fun setUpElements() = with(binding) {
         onChooseTypeChanged = this@SelectorFragment
-        setNsfwMode(
-            remoteValues.nsfwIsActive,
-            remoteValues.gptIsActive,
-            remoteValues.geminiIsActive
-        )
         btnWaifu.setOnClickListener { navigateTo(remoteValues.type) }
         sOrientation.setOnClickListener {
             if (sOrientation.isChecked) sOrientation.text = getString(R.string.landscape)
@@ -316,29 +311,41 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         bun.putBoolean(Constants.IS_GIF_WAIFU, binding.sGifs.isChecked)
         bun.putBoolean(Constants.IS_LANDS_WAIFU, binding.sOrientation.isChecked)
         bun.putString(Constants.CATEGORY_TAG_WAIFU, tagFilter(binding.spinner.selectedItem.toString()))
+        saveServerMode()
+        Log.v("saveBundle", "SERVER_MODE=${remoteValues.type.value}")
+        return bun
+    }
 
+    private fun saveServerMode() {
         val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
         with (sharedPref.edit()) {
             putString(Constants.SERVER_MODE, remoteValues.type.value)
             apply()
         }
-        Log.v("saveBundle", "SERVER_MODE=${remoteValues.type.value}")
-        return bun
+    }
+
+    private fun getServerMode(): ServerType {
+        val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
+        val mode = sharedPref.getString(Constants.SERVER_MODE, ServerType.NORMAL.value)
+        Log.v("getServerMode", "SERVER_MODE=${mode}")
+        // requireNotNull(mode)
+        return when (mode) {
+            ServerType.NORMAL.value -> ServerType.NORMAL
+            ServerType.ENHANCED.value -> ServerType.ENHANCED
+            ServerType.NEKOS.value -> ServerType.NEKOS
+            ServerType.FAVORITE.value -> ServerType.FAVORITE
+            ServerType.WAIFUGPT.value -> ServerType.WAIFUGPT
+            ServerType.WAIFUGEMINI.value -> ServerType.WAIFUGEMINI
+            else -> ServerType.NORMAL
+        }
     }
 
     private fun tagFilter(tag: String): String {
         var updatedTag: String = tag
-        if (tag == getString(R.string.categories)) {
+        if (tag == getString(R.string.categories) || tag == getString(R.string.categories_items)) {
             when (remoteValues.type) {
-                ServerType.ENHANCED -> {
+                ServerType.NORMAL, ServerType.ENHANCED -> {
                     updatedTag = getString(R.string.tag_waifu)
-                }
-                ServerType.NORMAL -> {
-                    if (!binding.sNsfw.isChecked) {
-                        updatedTag = getString(R.string.tag_waifu)
-                    } else {
-                        updatedTag = getString(R.string.tag_ecchi)
-                    }
                 }
                 else -> {
                     if (!binding.sGifs.isChecked) {
@@ -396,6 +403,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
     }
 
     override fun onChooseTypeChanged(type: ServerType) {
+        remoteValues.type = type
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
             imViewModel.onChangeType(type)
         } else {
