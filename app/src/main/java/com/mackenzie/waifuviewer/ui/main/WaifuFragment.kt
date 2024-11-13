@@ -1,8 +1,6 @@
 package com.mackenzie.waifuviewer.ui.main
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,11 +17,8 @@ import com.mackenzie.waifuviewer.WaifuPicsViewModel
 import com.mackenzie.waifuviewer.domain.LoadingState
 import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.domain.ServerType.ENHANCED
-import com.mackenzie.waifuviewer.domain.ServerType.FAVORITE
 import com.mackenzie.waifuviewer.domain.ServerType.NEKOS
 import com.mackenzie.waifuviewer.domain.ServerType.NORMAL
-import com.mackenzie.waifuviewer.domain.ServerType.WAIFUGEMINI
-import com.mackenzie.waifuviewer.domain.ServerType.WAIFUGPT
 import com.mackenzie.waifuviewer.domain.getTypes
 import com.mackenzie.waifuviewer.ui.common.Constants
 import com.mackenzie.waifuviewer.ui.common.showToast
@@ -153,9 +148,6 @@ class WaifuFragment : Fragment() {
                 }
                 "mori-calliope", "raiden-shogun" -> {
                     imViewModel.onImReady(isNsfw, isGif = false, categoryTag, false)
-                }
-                "All Items" -> {
-                    imViewModel.onImReady(isNsfw, isGif, "waifu", orientation)
                 }
                 else -> {
                     imViewModel.onImReady(isNsfw, isGif, categoryTag, orientation)
