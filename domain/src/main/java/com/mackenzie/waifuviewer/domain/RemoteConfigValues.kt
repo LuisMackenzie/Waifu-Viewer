@@ -8,5 +8,5 @@ data class RemoteConfigValues(
     val geminiIsActive: Boolean = false,
     val AutoModeIsEnabled: Boolean = false,
     val mode : Int = 0,
-    var type: ServerType = ServerType.NORMAL
+    var type: ServerType? = null
 )

@@ -49,7 +49,6 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
     private var remoteValues : RemoteConfigValues = RemoteConfigValues()
 
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mainState = MainState(
@@ -59,8 +58,8 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
             PermissionRequester(this , Manifest.permission.ACCESS_COARSE_LOCATION)
         )
         binding = FragmentSelectorBinding.bind(view)
-        setUpElements()
         getRemoteConfig()
+        setUpElements()
         if (BuildConfig.BUILD_TYPE == ServerType.ENHANCED.value) loadPics(requirePermissions) else loadInitialServer()
     }
 
@@ -110,10 +109,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
                     getServerMode()
                 )
                 remoteValues.apply {
-                    if (type != ServerType.NEKOS) {
-                        setNsfwMode(nsfwIsActive, gptIsActive, geminiIsActive)
-                        Log.e("getRemoteConfig", "nsfwIsActive=${nsfwIsActive}, gptIsActive=${gptIsActive}")
-                    }
+                    setNsfwMode(nsfwIsActive, gptIsActive, geminiIsActive)
                     setAutoMode(AutoModeIsEnabled)
                 }
             } else {
@@ -146,16 +142,17 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
     }
 
     private fun updateImWaifu(state: SelectorImViewModel.UiState) {
+        updateChips(getServerMode())
         state.waifu?.let { waifu ->
             setBackground(waifu.url)
             imViewModel.requestTags()
             loaded = true
         }
 
-        state.type.let { type ->
+        /*state.type.let { type ->
             updateChips(type)
             updateSwitches()
-        }
+        }*/
 
         state.tags?.let {
             tagsIm = it
@@ -180,11 +177,11 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
             loaded = true
         }
 
-        state.type.let { type ->
+        updateChips(getServerMode())
+        /*state.type.let { type ->
             updateChips(type)
             updateSwitches()
-            updateSpinner(tagsIm)
-        }
+        }*/
 
         state.error?.let { error ->
             Glide.with(requireContext())
@@ -219,7 +216,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
             }
 
         }
-        btnWaifu.setOnClickListener { navigateTo(remoteValues.type) }
+        btnWaifu.setOnClickListener { navigateTo(remoteValues?.type) }
         sOrientation.setOnClickListener {
             if (sOrientation.isChecked) sOrientation.text = getString(R.string.landscape)
             else sOrientation.text = getString(R.string.portrait_default)
@@ -307,6 +304,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
         }
         saveServerMode()
         updateSpinner(tagsIm)
+        updateSwitches()
     }
 
     // TODO - Refactor this method
@@ -374,20 +372,20 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
 
     private fun saveBundle(): Bundle {
         val bun = bundleOf()
-        bun.putString(Constants.SERVER_MODE, remoteValues.type.value)
+        bun.putString(Constants.SERVER_MODE, remoteValues?.type?.value)
         bun.putBoolean(Constants.IS_NSFW_WAIFU, binding.sNsfw.isChecked)
         bun.putBoolean(Constants.IS_GIF_WAIFU, binding.sGifs.isChecked)
         bun.putBoolean(Constants.IS_LANDS_WAIFU, binding.sOrientation.isChecked)
         bun.putString(Constants.CATEGORY_TAG_WAIFU, tagFilter(binding.spinner.selectedItem.toString()))
         saveServerMode()
-        Log.v("saveBundle", "SERVER_MODE=${remoteValues.type.value}")
+        Log.v("saveBundle", "SERVER_MODE=${remoteValues?.type?.value}")
         return bun
     }
 
     private fun saveServerMode() {
         val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
         with (sharedPref.edit()) {
-            putString(Constants.SERVER_MODE, remoteValues.type.value)
+            putString(Constants.SERVER_MODE, remoteValues?.type?.value)
             apply()
         }
     }
@@ -411,7 +409,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
     private fun tagFilter(tag: String): String {
         var updatedTag: String = tag
         if (tag == getString(R.string.categories) || tag == getString(R.string.categories_items)) {
-            when (remoteValues.type) {
+            when (remoteValues?.type) {
                 ServerType.NORMAL, ServerType.ENHANCED -> {
                     updatedTag = getString(R.string.tag_waifu)
                 }
