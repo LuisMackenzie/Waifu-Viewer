@@ -204,7 +204,6 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
 
     // TODO - Refactor this method
     private fun setUpElements() = with(binding) {
-        // onChooseTypeChanged = this@SelectorFragment
         cGroup.setOnCheckedStateChangeListener { group, checkedId ->
             group.forEach {
                 val chip = it as Chip
@@ -216,8 +215,6 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
                         else -> ServerType.NORMAL
                     }
                     updateChips(type)
-
-                    // listener?.onChooseTypeChanged(type)
                 }
             }
 
@@ -309,6 +306,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
             }
         }
         saveServerMode()
+        updateSpinner(tagsIm)
     }
 
     // TODO - Refactor this method
