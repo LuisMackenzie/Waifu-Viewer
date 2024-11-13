@@ -248,10 +248,6 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
 
     // TODO - Refactor this method
     private fun updateSpinner(tags: WaifuImTagList?) = with(binding) {
-
-        if (tags == null) {
-           Log.e("updateSpinner", "Tags is null=$tags")
-        }
         val spinnerContent: Array<String>
         when (remoteValues.type) {
             ServerType.ENHANCED -> {
@@ -272,8 +268,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
             }
         }
 
-        val adapter: ArrayAdapter<String> =
-            ArrayAdapter<String>(requireContext(), R.layout.spinner_item_calc, spinnerContent)
+        val adapter = ArrayAdapter(requireContext(), R.layout.spinner_item_calc, spinnerContent)
         spinner.adapter = adapter
         adapter.notifyDataSetChanged()
     }
@@ -297,9 +292,6 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
                 sGifs.visible = true
                 sNsfw.visible = false
                 sOrientation.visible = false
-            }
-            null -> {
-                if (BuildConfig.DEBUG) Log.e("updateSwitches","${getString(R.string.unknown_mode)} ${remoteValues?.type?.value}")
             }
             else -> {
                 Toast.makeText(requireContext(), "${getString(R.string.unknown_mode)}: ServerMode not Found Exception", Toast.LENGTH_SHORT).show()
