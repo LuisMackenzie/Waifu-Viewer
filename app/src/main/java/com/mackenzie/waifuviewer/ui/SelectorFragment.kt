@@ -9,13 +9,16 @@ import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat.getColor
 import androidx.core.os.bundleOf
+import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -29,12 +32,11 @@ import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.domain.im.WaifuImTagList
 import com.mackenzie.waifuviewer.ui.common.*
 import com.mackenzie.waifuviewer.ui.main.MainState
-import com.mackenzie.waifuviewer.ui.main.OnChooseTypeChanged
 import com.mackenzie.waifuviewer.ui.main.SelectorImViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChanged {
+class SelectorFragment : Fragment(R.layout.fragment_selector) {
 
     private val picsViewModel: SelectorPicViewModel by viewModels()
     private val imViewModel: SelectorImViewModel by viewModels()
@@ -45,6 +47,8 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
     private lateinit var mainState: MainState
     private var tagsIm: WaifuImTagList? = null
     private var remoteValues : RemoteConfigValues = RemoteConfigValues()
+
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -149,8 +153,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         }
 
         state.type.let { type ->
-            binding.type = type
-            remoteValues.type = type
+            updateChips(type)
             updateSwitches()
         }
 
@@ -178,8 +181,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         }
 
         state.type.let { type ->
-            binding.type = type
-            remoteValues.type = type
+            updateChips(type)
             updateSwitches()
             updateSpinner(tagsIm)
         }
@@ -202,7 +204,24 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
 
     // TODO - Refactor this method
     private fun setUpElements() = with(binding) {
-        onChooseTypeChanged = this@SelectorFragment
+        // onChooseTypeChanged = this@SelectorFragment
+        cGroup.setOnCheckedStateChangeListener { group, checkedId ->
+            group.forEach {
+                val chip = it as Chip
+                if (chip.id == checkedId.first()) {
+                    val type = when (chip.text) {
+                        getString(R.string.server_normal) -> ServerType.NORMAL
+                        getString(R.string.server_enhanced) -> ServerType.ENHANCED
+                        getString(R.string.server_best) -> ServerType.NEKOS
+                        else -> ServerType.NORMAL
+                    }
+                    updateChips(type)
+
+                    // listener?.onChooseTypeChanged(type)
+                }
+            }
+
+        }
         btnWaifu.setOnClickListener { navigateTo(remoteValues.type) }
         sOrientation.setOnClickListener {
             if (sOrientation.isChecked) sOrientation.text = getString(R.string.landscape)
@@ -239,6 +258,57 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
             Snackbar.make(requireView(), "Under Development!", Snackbar.LENGTH_SHORT).show()
         }
         backgroudImage = ivBackdrop
+    }
+
+    private fun updateChips(type: ServerType) {
+        remoteValues.type = type
+        when (type) {
+            ServerType.NORMAL -> {
+                binding.cNormal.isChecked = true
+                binding.cEnhanced.isChecked = false
+                binding.cNekos.isChecked = false
+                binding.cNormal.isClickable = false
+                binding.cEnhanced.isClickable = true
+                binding.cNekos.isClickable = true
+                binding.cNormal.setTextColor(getColor(resources, R.color.white, null))
+                binding.cEnhanced.setTextColor(getColor(resources, R.color.black, null))
+                binding.cNekos.setTextColor(getColor(resources, R.color.black, null))
+            }
+            ServerType.ENHANCED -> {
+                binding.cNormal.isChecked = false
+                binding.cEnhanced.isChecked = true
+                binding.cNekos.isChecked = false
+                binding.cNormal.isClickable = true
+                binding.cEnhanced.isClickable = false
+                binding.cNekos.isClickable = true
+                binding.cNormal.setTextColor(getColor(resources, R.color.black, null))
+                binding.cEnhanced.setTextColor(getColor(resources, R.color.white, null))
+                binding.cNekos.setTextColor(getColor(resources, R.color.black, null))
+            }
+            ServerType.NEKOS -> {
+                binding.cNormal.isChecked = false
+                binding.cEnhanced.isChecked = false
+                binding.cNekos.isChecked = true
+                binding.cNormal.isClickable = true
+                binding.cEnhanced.isClickable = true
+                binding.cNekos.isClickable = false
+                binding.cNormal.setTextColor(getColor(resources, R.color.black, null))
+                binding.cEnhanced.setTextColor(getColor(resources, R.color.black, null))
+                binding.cNekos.setTextColor(getColor(resources, R.color.white, null))
+            }
+            else -> {
+                binding.cNormal.isChecked = true
+                binding.cEnhanced.isChecked = false
+                binding.cNekos.isChecked = false
+                binding.cNormal.isClickable = false
+                binding.cEnhanced.isClickable = true
+                binding.cNekos.isClickable = true
+                binding.cNormal.setTextColor(getColor(resources, R.color.white, null))
+                binding.cEnhanced.setTextColor(getColor(resources, R.color.black, null))
+                binding.cNekos.setTextColor(getColor(resources, R.color.black, null))
+            }
+        }
+        saveServerMode()
     }
 
     // TODO - Refactor this method
@@ -402,13 +472,14 @@ class SelectorFragment : Fragment(R.layout.fragment_selector), OnChooseTypeChang
         }
     }
 
-    override fun onChooseTypeChanged(type: ServerType) {
+    /*override fun onChooseTypeChanged(type: ServerType) {
         remoteValues.type = type
+        Log.v("onChooseTypeChanged", "SERVER_MODE=${type}")
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
             imViewModel.onChangeType(type)
         } else {
             picsViewModel.onChangeType(type)
         }
-    }
+    }*/
 
 }

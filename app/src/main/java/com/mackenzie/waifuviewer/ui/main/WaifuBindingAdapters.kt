@@ -7,7 +7,7 @@ import com.google.android.material.chip.ChipGroup
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.domain.ServerType
 
-@BindingAdapter("onChooseTypeChanged")
+/*@BindingAdapter("onChooseTypeChanged")
 fun ChipGroup.onChooseTypeChanged(listener: OnChooseTypeChanged?) {
     setOnCheckedStateChangeListener { group, checkedId ->
         group.forEach {
@@ -15,15 +15,17 @@ fun ChipGroup.onChooseTypeChanged(listener: OnChooseTypeChanged?) {
             if (chip.id == checkedId.first()) {
                 val type = when (chip.text) {
                     context.getString(R.string.server_normal) -> ServerType.NORMAL
+                    context.getString(R.string.server_enhanced) -> ServerType.ENHANCED
                     context.getString(R.string.server_best) -> ServerType.NEKOS
-                    else -> ServerType.ENHANCED
+                    else -> ServerType.NORMAL
                 }
                 listener?.onChooseTypeChanged(type)
             }
         }
     }
-}
+}*/
 
+/*
 interface OnChooseTypeChanged {
     fun onChooseTypeChanged(type: ServerType)
-}
+}*/
