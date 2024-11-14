@@ -150,16 +150,19 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
         state.waifuIm?.let { waifu ->
             setBackground(waifu.url)
             loaded = true
+            updateSwitches()
         }
 
         state.waifuPic?.let { waifu ->
             setBackground(waifu.url)
             loaded = true
+            updateSwitches()
         }
 
         state.waifuNeko?.let { waifu ->
             setBackground(waifu.url)
             loaded = true
+            updateSwitches()
         }
 
         state.tags?.let { updateSpinner(it) }
@@ -203,7 +206,10 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
         sOrientation.setOnClickListener { updateSwitches() }
 
         if (sNsfw.isChecked) sNsfw.text = getString(R.string.nsfw_content)
-        sNsfw.setOnClickListener { updateSwitches() ; updateSpinner(tagsIm) }
+        sNsfw.setOnClickListener {
+            updateSwitches()
+            updateSpinner(tagsIm)
+        }
         sGifs.setOnClickListener {
             if (remoteValues.type == ServerType.NEKOS) { updateSpinner(tagsIm) }
             updateSwitches()
@@ -265,7 +271,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
                 binding.cNekos.setTextColor(getColor(resources, R.color.white, null))
             }
             else -> {
-                binding.cNormal.isChecked = true
+                /*binding.cNormal.isChecked = true
                 binding.cEnhanced.isChecked = false
                 binding.cNekos.isChecked = false
                 binding.cNormal.isClickable = false
@@ -273,7 +279,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
                 binding.cNekos.isClickable = true
                 binding.cNormal.setTextColor(getColor(resources, R.color.white, null))
                 binding.cEnhanced.setTextColor(getColor(resources, R.color.black, null))
-                binding.cNekos.setTextColor(getColor(resources, R.color.black, null))
+                binding.cNekos.setTextColor(getColor(resources, R.color.black, null))*/
             }
         }
         saveServerMode()
@@ -407,11 +413,13 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
 
     private fun loadInitialServer() {
         when (Build.VERSION.SDK_INT) {
-            in 0..Build.VERSION_CODES.Q -> {
+            in 0..Build.VERSION_CODES.P -> {
+                // Android 9 Hacia Abajo
                 loadedServer = ServerType.ENHANCED
                 loadWaifu(requirePermissions, loadedServer)
             }
             in Build.VERSION_CODES.VANILLA_ICE_CREAM..40 -> {
+                // Android 15 Hacia Arriba
                 loadedServer = ServerType.NEKOS
                 loadWaifu(requirePermissions, loadedServer)
             }
