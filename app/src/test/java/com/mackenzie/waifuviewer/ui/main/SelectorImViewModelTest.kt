@@ -2,11 +2,16 @@ package com.mackenzie.waifuviewer.ui.main
 
 import app.cash.turbine.test
 import com.mackenzie.testshared.sampleImWaifu
+import com.mackenzie.testshared.samplePicWaifu
+import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.testrules.CoroutinesTestRule
-import com.mackenzie.waifuviewer.ui.main.SelectorImViewModel.UiState
+import com.mackenzie.waifuviewer.ui.SelectorViewModel
+import com.mackenzie.waifuviewer.ui.SelectorViewModel.UiState
+import com.mackenzie.waifuviewer.usecases.best.RequestOnlyWaifuBestUseCase
 import com.mackenzie.waifuviewer.usecases.im.GetWaifuImTagsUseCase
 import com.mackenzie.waifuviewer.usecases.im.RequestOnlyWaifuImUseCase
 import com.mackenzie.waifuviewer.usecases.im.RequestWaifuImTagsUseCase
+import com.mackenzie.waifuviewer.usecases.pics.RequestOnlyWaifuPicUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
@@ -35,48 +40,55 @@ class SelectorImViewModelTest {
     private lateinit var requestOnlyWaifuImUseCase: RequestOnlyWaifuImUseCase
 
     @Mock
+    private lateinit var requestOnlyWaifuPicUseCase: RequestOnlyWaifuPicUseCase
+
+    @Mock
+    private lateinit var requestOnlyWaifuBestUseCase: RequestOnlyWaifuBestUseCase
+
+    @Mock
     private lateinit var requestWaifuImTagsUseCase: RequestWaifuImTagsUseCase
 
-    private lateinit var  vm: SelectorImViewModel
+    private lateinit var  vm: SelectorViewModel
 
     private var imSample = sampleImWaifu.copy(id = 1)
+    private var picsSample = samplePicWaifu.copy(id = 1)
 
 
     @Before
     fun setUp() {
-        vm = SelectorImViewModel(getWaifuImTagsUseCase, requestOnlyWaifuImUseCase, requestWaifuImTagsUseCase)
+        vm = SelectorViewModel(getWaifuImTagsUseCase, requestOnlyWaifuImUseCase,requestOnlyWaifuPicUseCase, requestOnlyWaifuBestUseCase, requestWaifuImTagsUseCase)
     }
 
     @Test
-    fun `State is updated with current cached content inmediately`() = runTest {
+    fun `State IM is updated with current cached content inmediately`() = runTest {
         whenever(requestOnlyWaifuImUseCase(any())).thenReturn(imSample)
 
-        vm.loadErrorOrWaifu()
+        vm.loadErrorOrWaifu(serverType = ServerType.NORMAL)
 
         vm.state.test {
             assertEquals(UiState(), awaitItem())
-            assertEquals(UiState(waifu = imSample), awaitItem())
+            assertEquals(UiState(waifuIm = imSample), awaitItem())
             cancel()
         }
     }
 
     @Test
-    fun `Progress is shown when screen start and hidden when it finishes`() = runTest {
+    fun `Progress IM is shown when screen start and hidden when it finishes`() = runTest {
 
         whenever(requestOnlyWaifuImUseCase(any())).thenReturn(imSample)
 
-        vm.loadErrorOrWaifu()
+        vm.loadErrorOrWaifu(serverType = ServerType.NORMAL)
 
         vm.state.test {
             assertEquals(UiState(), awaitItem())
-            assertEquals(UiState(waifu = imSample), awaitItem())
+            assertEquals(UiState(waifuIm = imSample), awaitItem())
             cancel()
         }
     }
 
     @Test
-    fun `Waifu are requested when button Pressed`() = runTest {
-        vm.loadErrorOrWaifu()
+    fun `Waifu IM are requested when button Pressed`() = runTest {
+        vm.loadErrorOrWaifu(serverType = ServerType.NORMAL)
 
         runCurrent()
 
@@ -84,7 +96,39 @@ class SelectorImViewModelTest {
     }
 
     @Test
-    fun onChangeType() {
+    fun `State PICS is updated with current cached content inmediately`() = runTest {
+        whenever(requestOnlyWaifuPicUseCase()).thenReturn(picsSample)
+
+        vm.loadErrorOrWaifu(serverType = ServerType.ENHANCED)
+
+        vm.state.test {
+            assertEquals(UiState(), awaitItem())
+            assertEquals(UiState(waifuPic = picsSample), awaitItem())
+            cancel()
+        }
+    }
+
+    @Test
+    fun `Progress PICS is shown when screen start and hidden when it finishes`() = runTest {
+
+        whenever(requestOnlyWaifuPicUseCase()).thenReturn(picsSample)
+
+        vm.loadErrorOrWaifu(serverType = ServerType.ENHANCED)
+
+        vm.state.test {
+            assertEquals(UiState(), awaitItem())
+            assertEquals(UiState(waifuPic = picsSample), awaitItem())
+            cancel()
+        }
+    }
+
+    @Test
+    fun `Waifu PICS are requested when button Pressed`() = runTest {
+        vm.loadErrorOrWaifu(serverType = ServerType.ENHANCED)
+
+        runCurrent()
+
+        verify(requestOnlyWaifuPicUseCase).invoke()
     }
 
 }
