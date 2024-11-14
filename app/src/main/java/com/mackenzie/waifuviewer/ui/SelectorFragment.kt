@@ -32,17 +32,16 @@ import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.domain.im.WaifuImTagList
 import com.mackenzie.waifuviewer.ui.common.*
 import com.mackenzie.waifuviewer.ui.main.MainState
-import com.mackenzie.waifuviewer.ui.main.SelectorImViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class SelectorFragment : Fragment(R.layout.fragment_selector) {
 
-    private val picsViewModel: SelectorPicViewModel by viewModels()
-    private val imViewModel: SelectorImViewModel by viewModels()
+    private val vm: SelectorViewModel by viewModels()
     private lateinit var binding: FragmentSelectorBinding
     private var backgroudImage: ImageView? = null
     private var loaded: Boolean = false
+    private lateinit var loadedServer: ServerType
     private var requirePermissions: Boolean = false
     private lateinit var mainState: MainState
     private var tagsIm: WaifuImTagList? = null
@@ -60,7 +59,10 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
         binding = FragmentSelectorBinding.bind(view)
         getRemoteConfig()
         setUpElements()
-        if (BuildConfig.BUILD_TYPE == ServerType.ENHANCED.value) loadPics(requirePermissions) else loadInitialServer()
+        if (BuildConfig.BUILD_TYPE == ServerType.ENHANCED.value) {
+            loadedServer = ServerType.ENHANCED
+            loadWaifu(requirePermissions, loadedServer)
+        } else loadInitialServer()
     }
 
     /*override fun onCreateView(
@@ -136,28 +138,32 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
             putBoolean(Constants.IS_WAIFU_GEMINI, hasGemini)
             apply()
         }
-        if (remoteValues.type == ServerType.NORMAL) binding.sNsfw.visible = nsfw
+        if (remoteValues.type != ServerType.NEKOS) binding.sNsfw.visible = nsfw
         binding.waifuGpt.visible = hasGpt
         binding.waifuGemini.visible = hasGemini
     }
 
-    private fun updateImWaifu(state: SelectorImViewModel.UiState) {
-        updateChips(getServerMode())
-        state.waifu?.let { waifu ->
+    private fun updateWaifu(state: SelectorViewModel.UiState) {
+
+        if (!loaded) remoteValues.type?.let { updateChips(it) }
+
+        state.waifuIm?.let { waifu ->
             setBackground(waifu.url)
-            imViewModel.requestTags()
+            vm.requestTags()
             loaded = true
         }
 
-        /*state.type.let { type ->
-            updateChips(type)
-            updateSwitches()
-        }*/
-
-        state.tags?.let {
-            tagsIm = it
-            updateSpinner(tagsIm)
+        state.waifuPic?.let { waifu ->
+            setBackground(waifu.url)
+            loaded = true
         }
+
+        state.waifuNeko?.let { waifu ->
+            setBackground(waifu.url)
+            loaded = true
+        }
+
+        state.tags?.let { updateSpinner(it) }
 
         state.error?.let { error ->
             Glide.with(requireContext())
@@ -168,30 +174,6 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
                 .into(binding.ivBackdrop)
             Toast.makeText(requireContext(), mainState.errorToString(error), Toast.LENGTH_SHORT).show()
             Log.e(Constants.CATEGORY_TAG_SELECTOR_IM_ERROR, mainState.errorToString(error))
-        }
-    }
-
-    private fun updatePicWaifu(state: SelectorPicViewModel.UiState) {
-        state.waifu?.let { waifu ->
-            setBackground(waifu.url)
-            loaded = true
-        }
-
-        updateChips(getServerMode())
-        /*state.type.let { type ->
-            updateChips(type)
-            updateSwitches()
-        }*/
-
-        state.error?.let { error ->
-            Glide.with(requireContext())
-                .load(R.drawable.ic_offline_background)
-                .centerCrop()
-                .transition(DrawableTransitionOptions.withCrossFade())
-                .error(R.drawable.ic_error_grey)
-                .into(binding.ivBackdrop)
-            Toast.makeText(requireContext(), getString(R.string.require_connection), Toast.LENGTH_SHORT).show()
-            Log.e(Constants.CATEGORY_TAG_SELECTOR_PICS_ERROR, mainState.errorToString(error))
         }
     }
 
@@ -228,11 +210,8 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
             updateSwitches()
         }
         reloadBackground.setOnClickListener {
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
-                imViewModel.loadErrorOrWaifu(requireContext().isLandscape())
-            } else {
-                picsViewModel.loadErrorOrWaifu()
-            }
+            vm.loadErrorOrWaifu(orientation = requireContext().isLandscape(), serverType = loadedServer)
+            Snackbar.make(requireView(), "server=$loadedServer", Snackbar.LENGTH_SHORT).show()
         }
         favorites.setOnClickListener {
             remoteValues.type = ServerType.FAVORITE
@@ -299,12 +278,13 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
             }
         }
         saveServerMode()
-        updateSpinner(tagsIm)
+        tagsIm?.let { updateSpinner(it) }
         updateSwitches()
     }
 
     // TODO - Refactor this method
     private fun updateSpinner(tags: WaifuImTagList?) = with(binding) {
+        tagsIm = tags
         val spinnerContent: Array<String>
         when (remoteValues.type) {
             ServerType.ENHANCED -> {
@@ -396,7 +376,6 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
         val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
         val mode = sharedPref.getString(Constants.SERVER_MODE, ServerType.NORMAL.value)
         Log.v("getServerMode", "SERVER_MODE=${mode}")
-        // requireNotNull(mode)
         return when (mode) {
             ServerType.NORMAL.value -> ServerType.NORMAL
             ServerType.ENHANCED.value -> ServerType.ENHANCED
@@ -428,56 +407,55 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
     }
 
     private fun loadInitialServer() {
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
-            loadIm(requirePermissions)
-        } else {
-            loadPics(requirePermissions)
+        when (Build.VERSION.SDK_INT) {
+            in 0..Build.VERSION_CODES.Q -> {
+                loadedServer = ServerType.ENHANCED
+                loadWaifu(requirePermissions, loadedServer)
+            }
+            in Build.VERSION_CODES.VANILLA_ICE_CREAM..40 -> {
+                loadedServer = ServerType.NEKOS
+                loadWaifu(requirePermissions, loadedServer)
+            }
+            else -> {
+                loadedServer = ServerType.NORMAL
+                loadWaifu(requirePermissions, loadedServer)
+            }
         }
     }
 
-    private fun loadIm(reqPermisions: Boolean) {
-        viewLifecycleOwner.launchAndCollect(imViewModel.state) { updateImWaifu(it) }
+    private fun loadWaifu(reqPermisions: Boolean, serverType: ServerType) {
+        remoteValues.type = serverType
+        viewLifecycleOwner.launchAndCollect(vm.state) { updateWaifu(it) }
         if (reqPermisions) {
             mainState.requestPermissionLauncher {
                 if (!loaded) {
-                    imViewModel.loadErrorOrWaifu(requireContext().isLandscape())
-                    Toast.makeText(requireContext(), getString(R.string.server_normal_toast), Toast.LENGTH_SHORT).show()
+                    vm.loadErrorOrWaifu(
+                        orientation = requireContext().isLandscape(),
+                        serverType = serverType
+                    )
+                    vm.requestTags()
+                    Toast.makeText(requireContext(), getString(R.string.server_toast_holder, getSimpleText(serverType.value)), Toast.LENGTH_SHORT).show()
                 }
             }
         } else {
             if (!loaded) {
-                imViewModel.loadErrorOrWaifu(requireContext().isLandscape())
-                Toast.makeText(requireContext(), getString(R.string.server_normal_toast), Toast.LENGTH_SHORT).show()
-            }
-        }
-
-    }
-
-    private fun loadPics(reqPermisions: Boolean) {
-        viewLifecycleOwner.launchAndCollect(picsViewModel.state) { updatePicWaifu(it) }
-        if (reqPermisions) {
-            mainState.requestPermissionLauncher {
-                if (!loaded) {
-                    picsViewModel.loadErrorOrWaifu()
-                    Toast.makeText(requireContext(), getString(R.string.server_enhanced_toast), Toast.LENGTH_SHORT).show()
-                }
-            }
-        } else {
-            if (!loaded) {
-                picsViewModel.loadErrorOrWaifu()
-                Toast.makeText(requireContext(), getString(R.string.server_enhanced_toast), Toast.LENGTH_SHORT).show()
+                vm.loadErrorOrWaifu(
+                    orientation = requireContext().isLandscape(),
+                    serverType = serverType
+                )
+                vm.requestTags()
+                Toast.makeText(requireContext(), getString(R.string.server_toast_holder, getSimpleText(serverType.value)), Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    /*override fun onChooseTypeChanged(type: ServerType) {
-        remoteValues.type = type
-        Log.v("onChooseTypeChanged", "SERVER_MODE=${type}")
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
-            imViewModel.onChangeType(type)
-        } else {
-            picsViewModel.onChangeType(type)
-        }
-    }*/
+    private fun getSimpleText(type: String): String {
 
+        return when (type) {
+            ServerType.NORMAL.value -> getString(R.string.server_normal_toast)
+            ServerType.ENHANCED.value -> getString(R.string.server_enhanced_toast)
+            ServerType.NEKOS.value -> getString(R.string.server_best_toast)
+            else -> getString(R.string.server_unknown_toast)
+        }
+    }
 }
