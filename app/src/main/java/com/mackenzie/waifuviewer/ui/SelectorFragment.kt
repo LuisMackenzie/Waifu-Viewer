@@ -149,7 +149,6 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
 
         state.waifuIm?.let { waifu ->
             setBackground(waifu.url)
-            vm.requestTags()
             loaded = true
         }
 
