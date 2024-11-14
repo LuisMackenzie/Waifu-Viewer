@@ -216,20 +216,16 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
             }
 
         }
-        btnWaifu.setOnClickListener { navigateTo(remoteValues?.type) }
-        sOrientation.setOnClickListener {
-            if (sOrientation.isChecked) sOrientation.text = getString(R.string.landscape)
-            else sOrientation.text = getString(R.string.portrait_default)
-        }
-        sNsfw.setOnClickListener {
-            if (sNsfw.isChecked) sNsfw.text = getString(R.string.nsfw_content)
-            else sNsfw.text = getString(R.string.sfw_content)
-            updateSpinner(tagsIm)
-        }
+        btnWaifu.setOnClickListener { navigateTo(remoteValues.type) }
+
+        if (sOrientation.isChecked) sOrientation.text = getString(R.string.landscape)
+        sOrientation.setOnClickListener { updateSwitches() }
+
+        if (sNsfw.isChecked) sNsfw.text = getString(R.string.nsfw_content)
+        sNsfw.setOnClickListener { updateSwitches() ; updateSpinner(tagsIm) }
         sGifs.setOnClickListener {
-            if (remoteValues.type == ServerType.NEKOS) {
-                updateSpinner(tagsIm)
-            }
+            if (remoteValues.type == ServerType.NEKOS) { updateSpinner(tagsIm) }
+            updateSwitches()
         }
         reloadBackground.setOnClickListener {
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
@@ -343,11 +339,17 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
                 sNsfw.visible = workMode
                 sGifs.visible = false
                 sOrientation.visible = false
+                if (sNsfw.isChecked) sNsfw.text = getString(R.string.nsfw_content)
+                else sNsfw.text = getString(R.string.sfw_content)
             }
             ServerType.NORMAL -> {
                 sNsfw.visible = workMode
                 sGifs.visible = true
                 sOrientation.visible = true
+                if (sOrientation.isChecked) sOrientation.text = getString(R.string.landscape)
+                else sOrientation.text = getString(R.string.portrait_default)
+                if (sNsfw.isChecked) sNsfw.text = getString(R.string.nsfw_content)
+                else sNsfw.text = getString(R.string.sfw_content)
             }
             ServerType.NEKOS -> {
                 sGifs.visible = true
@@ -372,20 +374,20 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
 
     private fun saveBundle(): Bundle {
         val bun = bundleOf()
-        bun.putString(Constants.SERVER_MODE, remoteValues?.type?.value)
+        bun.putString(Constants.SERVER_MODE, remoteValues.type?.value)
         bun.putBoolean(Constants.IS_NSFW_WAIFU, binding.sNsfw.isChecked)
         bun.putBoolean(Constants.IS_GIF_WAIFU, binding.sGifs.isChecked)
         bun.putBoolean(Constants.IS_LANDS_WAIFU, binding.sOrientation.isChecked)
         bun.putString(Constants.CATEGORY_TAG_WAIFU, tagFilter(binding.spinner.selectedItem.toString()))
         saveServerMode()
-        Log.v("saveBundle", "SERVER_MODE=${remoteValues?.type?.value}")
+        Log.v("saveBundle", "SERVER_MODE=${remoteValues.type?.value}")
         return bun
     }
 
     private fun saveServerMode() {
         val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
         with (sharedPref.edit()) {
-            putString(Constants.SERVER_MODE, remoteValues?.type?.value)
+            putString(Constants.SERVER_MODE, remoteValues.type?.value)
             apply()
         }
     }
@@ -409,7 +411,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
     private fun tagFilter(tag: String): String {
         var updatedTag: String = tag
         if (tag == getString(R.string.categories) || tag == getString(R.string.categories_items)) {
-            when (remoteValues?.type) {
+            when (remoteValues.type) {
                 ServerType.NORMAL, ServerType.ENHANCED -> {
                     updatedTag = getString(R.string.tag_waifu)
                 }
