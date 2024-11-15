@@ -1,4 +1,4 @@
-package com.mackenzie.waifuviewer.ui
+package com.mackenzie.waifuviewer.ui.selector
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
