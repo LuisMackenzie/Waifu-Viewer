@@ -7,10 +7,15 @@ import com.mackenzie.waifuviewer.domain.im.WaifuImItem
 import com.mackenzie.waifuviewer.ui.detail.DetailImViewModel
 import com.mackenzie.waifuviewer.ui.favs.FavoriteViewModel
 import com.mackenzie.waifuviewer.ui.main.WaifuImViewModel
+import com.mackenzie.waifuviewer.ui.selector.SelectorViewModel
 
 // Vista Detalle
 @Composable
 fun previewDetailState() = DetailImViewModel.UiState(waifuIm = getImMediaItem(), error = null)
+
+// Vista Detalle
+@Composable
+fun previewSelectorState() = SelectorViewModel.UiState(waifuIm = getImMediaItem(), error = null)
 
 // Vista Favoritos
 @Composable

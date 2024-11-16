@@ -26,11 +26,15 @@ import com.mackenzie.waifuviewer.ui.theme.Dimens
 
 @Composable
 fun SelectorMainButtons(
-    categorias: Array<String> = arrayOf(),
-    onWaifuButtonClicked: (String) -> Unit = {}
+    categorias: Pair< Array<String>, Array<String>> = Pair(arrayOf(), arrayOf()),
+    onServerButtonClicked: (String) -> Unit = {},
+    onWaifuButtonClicked: (String) -> Unit = {},
+    nsfwState: Boolean = false,
 ) {
 
     var expandido by remember { mutableStateOf(false) }
+
+    // var nsfwSwitchState by remember { mutableStateOf(nsfwState) }
 
     var indiceSeleccionado by remember { mutableStateOf(-1) }
 
@@ -42,6 +46,20 @@ fun SelectorMainButtons(
             modifier = Modifier.align(Alignment.BottomCenter)
         ) {
             Button(
+                onClick = {  },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = colorResource(id = R.color.transparent),
+                    // contentColor = colorResource(id = R.color.purple_200)
+                ),
+            ) {
+                Text(
+                    text = stringResource(id = R.string.server_normal),
+                    color = colorResource(id = R.color.white),
+                    fontSize = Dimens.homeButtonServerFontSize
+                )
+            }
+
+            Button(
                 modifier = Modifier
                     // .align(Alignment.BottomCenter)
                     .padding(Dimens.homeButtonFabPadding),
@@ -51,26 +69,42 @@ fun SelectorMainButtons(
                     if (indiceSeleccionado == -1)
                         "Selecciona una categoría"
                     else
-                        categorias[indiceSeleccionado]
+                        categorias.first[indiceSeleccionado]
                 )
             }
             DropdownMenu(
                 expanded = expandido,
                 onDismissRequest = { expandido = false }
             ) {
-                categorias.forEachIndexed { indice, categoria ->
-                    DropdownMenuItem(
-                        text = { Text(categoria) },
-                        onClick = {
-                            indiceSeleccionado = indice
-                            expandido = false
-                        }
-                    )
+                if (nsfwState) {
+                    categorias.second.forEachIndexed { indice, categoria ->
+                        DropdownMenuItem(
+                            text = { Text(categoria) },
+                            onClick = {
+                                indiceSeleccionado = indice
+                                expandido = false
+                            }
+                        )
+                    }
+                } else {
+                    categorias.first.forEachIndexed { indice, categoria ->
+                        DropdownMenuItem(
+                            text = { Text(categoria) },
+                            onClick = {
+                                indiceSeleccionado = indice
+                                expandido = false
+                            }
+                        )
+                    }
                 }
+
             }
 
             Button(
-                onClick = { onWaifuButtonClicked( categorias[indiceSeleccionado] ) },
+                onClick = {
+                    if(nsfwState) onWaifuButtonClicked( categorias.second[indiceSeleccionado] )
+                    else onWaifuButtonClicked( categorias.first[indiceSeleccionado] )
+                },
                 modifier = Modifier
                     // .align(Alignment.BottomCenter)
                     .padding(bottom = Dimens.homeButtonPadding),

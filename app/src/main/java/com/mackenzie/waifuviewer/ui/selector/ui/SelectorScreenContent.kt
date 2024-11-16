@@ -26,20 +26,30 @@ import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.google.android.material.color.MaterialColors
+import com.google.firebase.annotations.concurrent.Background
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.ui.common.Constants
 import com.mackenzie.waifuviewer.ui.common.isLandscape
+import com.mackenzie.waifuviewer.ui.common.ui.previewSelectorState
+import com.mackenzie.waifuviewer.ui.selector.SelectorViewModel
 import com.mackenzie.waifuviewer.ui.theme.Dimens
 import com.mackenzie.waifuviewer.ui.theme.WaifuViewerTheme
 
 @Composable
 fun SelectorScreenContent(
-    onWaifuButtonClicked: (String) -> Unit = {}
+    state : SelectorViewModel.UiState = previewSelectorState(),
+    onWaifuButtonClicked: (String) -> Unit = {},
+    onFavoriteClicked: () -> Unit = {},
+    onRestartClicked: () -> Unit = {},
+    onGptClicked: () -> Unit = {},
+    onGeminiClicked: () -> Unit = {},
+    nsfwState: (Boolean) -> Unit = {},
+    gifState: (Boolean) -> Unit = {},
+    portraitState: (Boolean) -> Unit = {},
+    backgroundState: (Boolean) -> Unit = {},
 ) {
 
-    var nsfwSwitch by remember { mutableStateOf(false) }
-    var gifSwitch by remember { mutableStateOf(false) }
-    var portraitSwitch by remember { mutableStateOf(false) }
+    // var nsfwSwitchState by remember { mutableStateOf(nsfwStateSwitch) }
 
     Box(
         modifier = Modifier
@@ -47,17 +57,26 @@ fun SelectorScreenContent(
             .background(MaterialTheme.colorScheme.background)
     ) {
 
-        val background = if (LocalContext.current.isLandscape()) "https://cdn.waifu.im/808.png" else "https://nekos.best/api/v2/neko/f09f1d72-4d7d-43ac-9aec-79f0544b95c3.png"
-        AsyncImage(
-            model= ImageRequest.Builder(LocalContext.current)
-                .data(background)
-                .crossfade(true)
-                .build(),
-            error = painterResource(R.drawable.ic_error_grey),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize(),
-        )
+        state.waifuIm?.let { waifu ->
+            BackgroundImage(waifu.url)
+            backgroundState(true)
+        }
+        state.waifuPic?.let { waifu ->
+            BackgroundImage(waifu.url)
+            backgroundState(true)
+        }
+        state.waifuNeko?.let { waifu ->
+            BackgroundImage(waifu.url)
+            backgroundState(true)
+        }
+
+        state.tags?.let {
+
+        }
+
+        state.error?.let {
+            BackgroundImageError(R.drawable.ic_offline_background)
+        }
 
         Text(
             modifier = Modifier
@@ -69,134 +88,27 @@ fun SelectorScreenContent(
             style = MaterialTheme.typography.bodyMedium
         )
         SelectorMainButtons(
-            categorias = Constants.NORMALSFW,
-            onWaifuButtonClicked = onWaifuButtonClicked
+            categorias = Pair(Constants.NORMALSFW, Constants.NORMALNSFW),
+            onWaifuButtonClicked = onWaifuButtonClicked,
+            // nsfwState = nsfwStateSwitch
         )
 
-        SelectorFabFavorites()
+        SelectorFabFavorites(
+            onFavoriteClicked = onFavoriteClicked,
+            onRestartClicked = onRestartClicked,
+            onGptClicked = onGptClicked,
+            onGeminiClicked = onGeminiClicked
+        )
 
-        Row(modifier = Modifier
-            .align(Alignment.BottomEnd)
-            .padding(all = Dimens.homeSwitchesPadding)
-            .padding(end = Dimens.homeSwitchesPaddingEnd)
-        ) {
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Switch(
-                    checked = gifSwitch,
-                    onCheckedChange = { gifSwitch = !gifSwitch },
-                    colors = SwitchDefaults.colors(
-                        checkedThumbColor = Color.White,
-                        checkedTrackColor = MaterialTheme.colorScheme.primaryContainer
-                    )
-                )
-                Text(
-                    text = stringResource(id = R.string.gif_content),
-                    // color = MaterialTheme.colorScheme.onPrimary
-                )
-            }
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Switch(
-                    checked = nsfwSwitch,
-                    onCheckedChange = { nsfwSwitch = !nsfwSwitch },
-                    colors = SwitchDefaults.colors(
-                        checkedThumbColor = Color.Black,
-                        checkedTrackColor = MaterialTheme.colorScheme.primaryContainer
-                    )
-                )
-                Text(
-                    text = stringResource(id = if(nsfwSwitch) R.string.nsfw_content else R.string.sfw_content),
-                    // color = MaterialTheme.colorScheme.onPrimary
-                )
-            }
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Switch(
-                    checked = portraitSwitch,
-                    onCheckedChange = { portraitSwitch = !portraitSwitch },
-                    colors = SwitchDefaults.colors(
-                        checkedThumbColor = Color.White,
-                        checkedTrackColor = MaterialTheme.colorScheme.primaryContainer
-                    )
-                )
-                Text(
-                    text = stringResource(id = if(portraitSwitch) R.string.landscape else R.string.portrait_default),
-                    // color = MaterialTheme.colorScheme.onPrimary
-                )
-            }
-        }
-
-
-
-
-
-
-
-
-
-        /*ChipGroup(
-            modifier = Modifier.constrainAs(chipGroup) {
-                top.linkTo(titleText.bottom, margin = 16.dp)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            }
-        ) {
-            Chip(
-                onClick = { *//* TODO *//* },
-                colors = ChipDefaults.chipColors(backgroundColor = Color.Gray)
-            ) {
-                Text(text = stringResource(id = R.string.server_normal))
-            }
-            Chip(
-                onClick = { *//* TODO *//* },
-                colors = ChipDefaults.chipColors(backgroundColor = Color.Gray)
-            ) {
-                Text(text = stringResource(id = R.string.server_enhanced))
-            }
-            Chip(
-                onClick = { *//* TODO *//* },
-                colors = ChipDefaults.chipColors(backgroundColor = Color.Gray)
-            ) {
-                Text(text = stringResource(id = R.string.server_best))
-            }
-        }*/
-
-        /*Row(
+        SelectorSwitches(
             modifier = Modifier
-                .constrainAs(switchGroup) {
-                    bottom.linkTo(parent.bottom, margin = 4.dp)
-                    start.linkTo(favorites.end, margin = 12.dp)
-                    end.linkTo(parent.end, margin = 12.dp)
-                }
-        ) {
-            Switch(
-                checked = false,
-                onCheckedChange = { *//* TODO *//* },
-                colors = SwitchDefaults.colors(checkedThumbColor = Color.White)
-            )
-            Text(text = stringResource(id = R.string.gif_content), color = Color.White)
-
-            Switch(
-                checked = false,
-                onCheckedChange = { *//* TODO *//* },
-                colors = SwitchDefaults.colors(checkedThumbColor = Color.White)
-            )
-            Text(text = stringResource(id = R.string.sfw_content), color = Color.White)
-
-            Switch(
-                checked = false,
-                onCheckedChange = { *//* TODO *//* },
-                colors = SwitchDefaults.colors(checkedThumbColor = Color.White)
-            )
-            Text(text = stringResource(id = R.string.portrait_default), color = Color.White)
-        }*/
+                .align(Alignment.BottomEnd)
+                .padding(all = Dimens.homeSwitchesPadding)
+                .padding(end = Dimens.homeSwitchesPaddingEnd),
+            nsfwState = nsfwState,
+            gifState = gifState,
+            portraitState = portraitState,
+        )
     }
 }
 
