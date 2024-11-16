@@ -29,6 +29,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
+import com.mackenzie.waifuviewer.BuildConfig
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.databinding.FragmentSelectorBinding
 import com.mackenzie.waifuviewer.domain.RemoteConfigValues
@@ -85,6 +86,14 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
             findNavController(),
             PermissionRequester(this , Manifest.permission.ACCESS_COARSE_LOCATION)
         )
+        getRemoteConfig()
+        // Refactor this
+        // setUpElements()
+
+        /*if (BuildConfig.BUILD_TYPE == ENHANCED.value) {
+            loadedServer = ENHANCED
+            loadWaifu(requirePermissions, loadedServer)
+        } else loadInitialServer()*/
 
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
@@ -98,7 +107,12 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
 
     @Composable
     private fun LaunchSelectorScreen() {
-        SelectorScreenContent()
+        SelectorScreenContent(
+            onWaifuButtonClicked = {
+                "Showing waifus from $it".showToast(requireContext())
+                // navigateTo(remoteValues.type)
+            }
+        )
     }
 
     private fun getRemoteConfig() {
@@ -146,9 +160,9 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
             putBoolean(Constants.IS_WAIFU_GEMINI, hasGemini)
             apply()
         }
-        if (remoteValues.type != ServerType.NEKOS) binding.sNsfw.visible = nsfw
-        binding.waifuGpt.visible = hasGpt
-        binding.waifuGemini.visible = hasGemini
+        // if (remoteValues.type != NEKOS) binding.sNsfw.visible = nsfw
+        // binding.waifuGpt.visible = hasGpt
+        // binding.waifuGemini.visible = hasGemini
     }
 
     private fun updateWaifu(state: SelectorViewModel.UiState) {
@@ -173,7 +187,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
             updateSwitches()
         }
 
-        state.tags?.let { updateSpinner(it) }
+        // state.tags?.let { updateSpinner(it) }
 
         state.error?.let { error ->
             Glide.with(requireContext())
@@ -191,8 +205,57 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
         backgroudImage?.loadUrlCenterCrop(url)
     }
 
-    // TODO - Refactor this method
     private fun setUpElements() = with(binding) {
+        /*cGroup.setOnCheckedStateChangeListener { group, checkedId ->
+            group.forEach {
+                val chip = it as Chip
+                if (chip.id == checkedId.first()) {
+                    val type = when (chip.text) {
+                        getString(R.string.server_normal) -> ServerType.NORMAL
+                        getString(R.string.server_enhanced) -> ServerType.ENHANCED
+                        getString(R.string.server_best) -> ServerType.NEKOS
+                        else -> ServerType.NORMAL
+                    }
+                    updateChips(type)
+                }
+            }
+        }*/
+        btnWaifu.setOnClickListener { navigateTo(remoteValues.type) }
+
+        if (sOrientation.isChecked) sOrientation.text = getString(R.string.landscape)
+        sOrientation.setOnClickListener { updateSwitches() }
+
+        if (sNsfw.isChecked) sNsfw.text = getString(R.string.nsfw_content)
+        sNsfw.setOnClickListener {
+            updateSwitches()
+            // updateSpinner(tagsIm)
+        }
+        sGifs.setOnClickListener {
+            // if (remoteValues.type == ServerType.NEKOS) { updateSpinner(tagsIm) }
+            updateSwitches()
+        }
+        reloadBackground.setOnClickListener {
+            vm.loadErrorOrWaifu(orientation = requireContext().isLandscape(), serverType = loadedServer)
+            Snackbar.make(requireView(), "server=$loadedServer", Snackbar.LENGTH_SHORT).show()
+        }
+        favorites.setOnClickListener {
+            remoteValues.type = ServerType.FAVORITE
+            navigateTo(ServerType.FAVORITE)
+        }
+        waifuGpt.setOnClickListener {
+            remoteValues.type = ServerType.WAIFUGPT
+            navigateTo(ServerType.WAIFUGPT)
+        }
+        waifuGemini.setOnClickListener {
+            remoteValues.type = ServerType.WAIFUGEMINI
+            navigateTo(ServerType.WAIFUGEMINI)
+            Snackbar.make(requireView(), "Under Development!", Snackbar.LENGTH_SHORT).show()
+        }
+        backgroudImage = ivBackdrop
+    }
+
+    // TODO - Refactor this method
+    /*private fun setUpElements() = with(binding) {
         cGroup.setOnCheckedStateChangeListener { group, checkedId ->
             group.forEach {
                 val chip = it as Chip
@@ -216,10 +279,10 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
         if (sNsfw.isChecked) sNsfw.text = getString(R.string.nsfw_content)
         sNsfw.setOnClickListener {
             updateSwitches()
-            updateSpinner(tagsIm)
+            // updateSpinner(tagsIm)
         }
         sGifs.setOnClickListener {
-            if (remoteValues.type == ServerType.NEKOS) { updateSpinner(tagsIm) }
+            // if (remoteValues.type == ServerType.NEKOS) { updateSpinner(tagsIm) }
             updateSwitches()
         }
         reloadBackground.setOnClickListener {
@@ -240,12 +303,12 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
             Snackbar.make(requireView(), "Under Development!", Snackbar.LENGTH_SHORT).show()
         }
         backgroudImage = ivBackdrop
-    }
+    }*/
 
     private fun updateChips(type: ServerType) {
         remoteValues.type = type
         when (type) {
-            ServerType.NORMAL -> {
+            NORMAL -> {
                 binding.cNormal.isChecked = true
                 binding.cEnhanced.isChecked = false
                 binding.cNekos.isChecked = false
@@ -256,7 +319,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
                 binding.cEnhanced.setTextColor(getColor(resources, R.color.black, null))
                 binding.cNekos.setTextColor(getColor(resources, R.color.black, null))
             }
-            ServerType.ENHANCED -> {
+            ENHANCED -> {
                 binding.cNormal.isChecked = false
                 binding.cEnhanced.isChecked = true
                 binding.cNekos.isChecked = false
@@ -267,7 +330,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
                 binding.cEnhanced.setTextColor(getColor(resources, R.color.white, null))
                 binding.cNekos.setTextColor(getColor(resources, R.color.black, null))
             }
-            ServerType.NEKOS -> {
+            NEKOS -> {
                 binding.cNormal.isChecked = false
                 binding.cEnhanced.isChecked = false
                 binding.cNekos.isChecked = true
@@ -278,39 +341,51 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
                 binding.cEnhanced.setTextColor(getColor(resources, R.color.black, null))
                 binding.cNekos.setTextColor(getColor(resources, R.color.white, null))
             }
-            else -> {
-                /*binding.cNormal.isChecked = true
-                binding.cEnhanced.isChecked = false
-                binding.cNekos.isChecked = false
-                binding.cNormal.isClickable = false
-                binding.cEnhanced.isClickable = true
-                binding.cNekos.isClickable = true
-                binding.cNormal.setTextColor(getColor(resources, R.color.white, null))
-                binding.cEnhanced.setTextColor(getColor(resources, R.color.black, null))
-                binding.cNekos.setTextColor(getColor(resources, R.color.black, null))*/
-            }
+            else -> {}
         }
         saveServerMode()
-        tagsIm?.let { updateSpinner(it) }
+        // tagsIm?.let { updateSpinner(it) }
         updateSwitches()
     }
 
+    private fun getTagsForSpinner(tags: WaifuImTagList?, isNsfw: Boolean = false, isGif: Boolean = false): Array<String> {
+        tagsIm = tags
+        return when (remoteValues.type) {
+            ENHANCED -> {
+                if (isNsfw) { Constants.ENHANCEDNSFW } else { Constants.ENHANCEDSFW }
+            }
+            NORMAL -> {
+                if (isNsfw) {
+                    tags?.nsfw?.toTypedArray() ?: Constants.NORMALNSFW
+                } else {
+                     tags?.versatile?.toTypedArray() ?: Constants.NORMALSFW
+                }
+            }
+            NEKOS -> {
+                if (isGif) { Constants.NEKOSGIF } else { Constants.NEKOSPNG }
+            }
+            else -> {
+                if (isNsfw) { Constants.NORMALNSFW } else { Constants.NORMALSFW }
+            }
+        }
+    }
+
     // TODO - Refactor this method
-    private fun updateSpinner(tags: WaifuImTagList?) = with(binding) {
+    /*private fun updateSpinner(tags: WaifuImTagList?) = with(binding) {
         tagsIm = tags
         val spinnerContent: Array<String>
         when (remoteValues.type) {
-            ServerType.ENHANCED -> {
+            ENHANCED -> {
                 spinnerContent = if (sNsfw.isChecked) { Constants.ENHANCEDNSFW } else { Constants.ENHANCEDSFW }
             }
-            ServerType.NORMAL -> {
+            NORMAL -> {
                 spinnerContent = if (sNsfw.isChecked) {
                     tags?.nsfw?.toTypedArray() ?: Constants.NORMALNSFW
                 } else {
                      tags?.versatile?.toTypedArray() ?: Constants.NORMALSFW
                 }
             }
-            ServerType.NEKOS -> {
+            NEKOS -> {
                 spinnerContent = if (sGifs.isChecked) { Constants.NEKOSGIF } else { Constants.NEKOSPNG }
             }
             else -> {
@@ -321,7 +396,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
         val adapter = ArrayAdapter(requireContext(), R.layout.spinner_item_calc, spinnerContent)
         spinner.adapter = adapter
         adapter.notifyDataSetChanged()
-    }
+    }*/
 
     // TODO - Refactor this method
     private fun updateSwitches() = with(binding) {

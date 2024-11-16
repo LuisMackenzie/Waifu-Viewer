@@ -2,26 +2,44 @@ package com.mackenzie.waifuviewer.ui.selector.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
+import com.google.android.material.color.MaterialColors
 import com.mackenzie.waifuviewer.R
+import com.mackenzie.waifuviewer.ui.common.Constants
+import com.mackenzie.waifuviewer.ui.common.isLandscape
 import com.mackenzie.waifuviewer.ui.theme.Dimens
+import com.mackenzie.waifuviewer.ui.theme.WaifuViewerTheme
 
 @Composable
-fun SelectorScreenContent() {
+fun SelectorScreenContent(
+    onWaifuButtonClicked: (String) -> Unit = {}
+) {
+
+    var nsfwSwitch by remember { mutableStateOf(false) }
+    var gifSwitch by remember { mutableStateOf(false) }
+    var portraitSwitch by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -29,9 +47,10 @@ fun SelectorScreenContent() {
             .background(MaterialTheme.colorScheme.background)
     ) {
 
+        val background = if (LocalContext.current.isLandscape()) "https://cdn.waifu.im/808.png" else "https://nekos.best/api/v2/neko/f09f1d72-4d7d-43ac-9aec-79f0544b95c3.png"
         AsyncImage(
             model= ImageRequest.Builder(LocalContext.current)
-                .data("https://nekos.best/api/v2/neko/f09f1d72-4d7d-43ac-9aec-79f0544b95c3.png")
+                .data(background)
                 .crossfade(true)
                 .build(),
             error = painterResource(R.drawable.ic_error_grey),
@@ -43,30 +62,84 @@ fun SelectorScreenContent() {
         Text(
             modifier = Modifier
                 .align(Alignment.TopCenter)
-                .padding(Dimens.detailTitlePadding),
-            text = "title",
-            fontSize = Dimens.detailTitleFontSize,
+                .padding(Dimens.homeTitlePadding),
+            text = stringResource(id = R.string.waifu_viewer),
+            color = Color.White,
+            fontSize = Dimens.homeTitleFontSize,
             style = MaterialTheme.typography.bodyMedium
         )
-        Button(
-            onClick = {},
-            modifier = Modifier.align(Alignment.BottomCenter),
-            // colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFBB86FC))
+        SelectorMainButtons(
+            categorias = Constants.NORMALSFW,
+            onWaifuButtonClicked = onWaifuButtonClicked
+        )
+
+        SelectorFabFavorites()
+
+        Row(modifier = Modifier
+            .align(Alignment.BottomEnd)
+            .padding(all = Dimens.homeSwitchesPadding)
+            .padding(end = Dimens.homeSwitchesPaddingEnd)
         ) {
-            Text(text = stringResource(id = R.string.give_me_waifus))
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Switch(
+                    checked = gifSwitch,
+                    onCheckedChange = { gifSwitch = !gifSwitch },
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = Color.White,
+                        checkedTrackColor = MaterialTheme.colorScheme.primaryContainer
+                    )
+                )
+                Text(
+                    text = stringResource(id = R.string.gif_content),
+                    // color = MaterialTheme.colorScheme.onPrimary
+                )
+            }
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Switch(
+                    checked = nsfwSwitch,
+                    onCheckedChange = { nsfwSwitch = !nsfwSwitch },
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = Color.Black,
+                        checkedTrackColor = MaterialTheme.colorScheme.primaryContainer
+                    )
+                )
+                Text(
+                    text = stringResource(id = if(nsfwSwitch) R.string.nsfw_content else R.string.sfw_content),
+                    // color = MaterialTheme.colorScheme.onPrimary
+                )
+            }
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Switch(
+                    checked = portraitSwitch,
+                    onCheckedChange = { portraitSwitch = !portraitSwitch },
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = Color.White,
+                        checkedTrackColor = MaterialTheme.colorScheme.primaryContainer
+                    )
+                )
+                Text(
+                    text = stringResource(id = if(portraitSwitch) R.string.landscape else R.string.portrait_default),
+                    // color = MaterialTheme.colorScheme.onPrimary
+                )
+            }
         }
 
-        /*Text(
-            text = stringResource(id = R.string.waifu_viewer),
-            fontSize = 48.sp,
-            color = Color.White,
-            modifier = Modifier
-                .constrainAs(titleText) {
-                    top.linkTo(parent.top, margin = 16.dp)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }
-        )*/
+
+
+
+
+
+
+
 
         /*ChipGroup(
             modifier = Modifier.constrainAs(chipGroup) {
@@ -93,26 +166,6 @@ fun SelectorScreenContent() {
             ) {
                 Text(text = stringResource(id = R.string.server_best))
             }
-        }*/
-
-        /*Spinner(
-            modifier = Modifier.constrainAs(spinner) {
-                top.linkTo(chipGroup.bottom, margin = 16.dp)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            }
-        )*/
-
-        /*Button(
-            onClick = { *//* TODO *//* },
-            modifier = Modifier.constrainAs(waifuButton) {
-                bottom.linkTo(parent.bottom, margin = 50.dp)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            },
-            colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFBB86FC))
-        ) {
-            Text(text = stringResource(id = R.string.give_me_waifus))
         }*/
 
         /*Row(
@@ -144,49 +197,13 @@ fun SelectorScreenContent() {
             )
             Text(text = stringResource(id = R.string.portrait_default), color = Color.White)
         }*/
+    }
+}
 
-        /*FloatingActionButton(
-            onClick = { *//* TODO *//* },
-            modifier = Modifier.constrainAs(waifuGpt) {
-                bottom.linkTo(waifuGemini.top, margin = 10.dp)
-                start.linkTo(parent.start, margin = 10.dp)
-            },
-            backgroundColor = Color(0xFFBB86FC)
-        ) {
-            Icon(painter = painterResource(id = R.drawable.ic_waifu_gpt), contentDescription = stringResource(id = R.string.download_image))
-        }*/
-
-        /*FloatingActionButton(
-            onClick = { *//* TODO *//* },
-            modifier = Modifier.constrainAs(waifuGemini) {
-                bottom.linkTo(reloadBackground.top, margin = 70.dp)
-                start.linkTo(parent.start, margin = 10.dp)
-            },
-            backgroundColor = Color(0xFFBB86FC)
-        ) {
-            Icon(painter = painterResource(id = R.drawable.ic_waifu_gemini), contentDescription = stringResource(id = R.string.download_image))
-        }*/
-
-        /*FloatingActionButton(
-            onClick = { *//* TODO *//* },
-            modifier = Modifier.constrainAs(reloadBackground) {
-                bottom.linkTo(favorites.top, margin = 10.dp)
-                start.linkTo(parent.start, margin = 10.dp)
-            },
-            backgroundColor = Color(0xFFBB86FC)
-        ) {
-            Icon(painter = painterResource(id = R.drawable.ic_baseline_update), contentDescription = stringResource(id = R.string.download_image))
-        }*/
-
-        /*FloatingActionButton(
-            onClick = { *//* TODO *//* },
-            modifier = Modifier.constrainAs(favorites) {
-                bottom.linkTo(parent.bottom, margin = 10.dp)
-                start.linkTo(parent.start, margin = 10.dp)
-            },
-            backgroundColor = Color(0xFFBB86FC)
-        ) {
-            Icon(painter = painterResource(id = R.drawable.ic_favorite_off), contentDescription = stringResource(id = R.string.download_image))
-        }*/
+@Preview(showBackground = true)
+@Composable
+fun PreviewSelector() {
+    WaifuViewerTheme(darkTheme = false) {
+        SelectorScreenContent()
     }
 }
