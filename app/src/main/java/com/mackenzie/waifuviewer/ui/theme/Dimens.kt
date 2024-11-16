@@ -20,4 +20,11 @@ object Dimens {
     val detailTitlePadding = 8.dp
     val detailTitleFontSize = 25.sp
     val errorViewFontSize = 28.sp
+    //Selector
+    val homeTitleFontSize = 48.sp
+    val homeTitlePadding = 16.dp
+    val homeButtonPadding = 50.dp
+    val homeButtonFabPadding = 16.dp
+    val homeSwitchesPadding = 8.dp
+    val homeSwitchesPaddingEnd = 16.dp
 }
