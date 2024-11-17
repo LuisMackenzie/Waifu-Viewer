@@ -8,6 +8,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -15,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.domain.ServerType
+import com.mackenzie.waifuviewer.domain.ServerType.NORMAL
 import com.mackenzie.waifuviewer.ui.common.ui.previewSelectorState
 import com.mackenzie.waifuviewer.ui.selector.SelectorViewModel
 import com.mackenzie.waifuviewer.ui.theme.Dimens
@@ -33,8 +38,10 @@ fun SelectorScreenContent(
     switchState: Triple<Boolean, Boolean, Boolean> = Triple(false, false, false),
     tags: Triple<Pair<Array<String>, Array<String>>, Pair<Array<String>, Array<String>>, Pair<Array<String>, Array<String>>> = Triple(Pair(arrayOf(), arrayOf()), Pair(arrayOf(), arrayOf()), Pair(arrayOf(), arrayOf())),
     backgroundState: (Boolean) -> Unit = {},
-    server: ServerType = ServerType.NORMAL,
+    server: ServerType = NORMAL,
 ) {
+
+    var tagsState by remember { mutableStateOf(tags) }
 
     Box(
         modifier = Modifier
@@ -55,8 +62,12 @@ fun SelectorScreenContent(
             backgroundState(true)
         }
 
-        state.tags?.let {
-
+        state.tags?.let { imTags ->
+            tagsState = Triple(
+                Pair(imTags.versatile.toTypedArray(), imTags.nsfw.toTypedArray()),
+                Pair(tagsState.second.first, tagsState.second.second),
+                Pair(tagsState.third.first, tagsState.third.second)
+            )
         }
 
         state.error?.let {
@@ -74,7 +85,7 @@ fun SelectorScreenContent(
             style = MaterialTheme.typography.bodyMedium
         )
         SelectorMainButtons(
-            tags = tags,
+            tags = tagsState,
             onServerButtonClicked = onServerButtonClicked,
             onWaifuButtonClicked = onWaifuButtonClicked,
             switchState = switchState,

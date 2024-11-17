@@ -55,10 +55,9 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
 
     private val vm: SelectorViewModel by viewModels()
     private var loaded: Boolean = false
-    private lateinit var loadedServer: ServerType
+    private var loadedServer: ServerType? = null
     private var requirePermissions: Boolean = false
     private lateinit var mainState: MainState
-    private var tagsIm: WaifuImTagList? = null
     private var selectedTag: String = ""
     private var remoteValues : RemoteConfigValues = RemoteConfigValues()
     // Aqui se guardan 3 valores de los Switches en este orden 1. NSFW, 2. Gifs, 3. Portrait
@@ -79,8 +78,10 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
 
         if (BuildConfig.BUILD_TYPE == ENHANCED.value) {
             loadedServer = ENHANCED
-            loadWaifu(requirePermissions, loadedServer)
-        } else loadInitialServer()
+            loadedServer?.let { loadWaifu(requirePermissions, it) }
+            // loadWaifu(requirePermissions, loadedServer)
+        } else if (loadedServer == null) loadInitialServer()
+
 
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
@@ -96,7 +97,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
     private fun LaunchSelectorScreen() {
         var switchState by remember { mutableStateOf(Triple(false, false, false)) }
         var serverState by remember { mutableStateOf(remoteValues.type ?: NORMAL) }
-        var tagsState by remember { mutableStateOf(Triple(
+        val tagsState by remember { mutableStateOf(Triple(
             Pair(Constants.NORMALSFW, Constants.NORMALNSFW),
             Pair(Constants.ENHANCEDSFW, Constants.ENHANCEDNSFW),
             Pair(Constants.NEKOSPNG, Constants.NEKOSGIF)
@@ -109,48 +110,33 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
                     NORMAL -> {
                         remoteValues.type = ENHANCED
                         serverState = ENHANCED
-                        "Changed to $serverState".showToast(requireContext())
+                        saveServerMode()
                     }
                     ENHANCED -> {
                         remoteValues.type = NEKOS
                         serverState = NEKOS
-                        "Changed to $serverState".showToast(requireContext())
+                        saveServerMode()
                     }
                     NEKOS -> {
                         remoteValues.type = NORMAL
                         serverState = NORMAL
-                        "Changed to $serverState".showToast(requireContext())
+                        saveServerMode()
                     }
-                    else -> {}
+                    else -> {
+                        "WTF=$serverState".showToast(requireContext())
+                    }
                 }
             },
-            onWaifuButtonClicked = {
-                selectedTag = it
-                "Showing waifus from ${tagFilter(it)}".showToast(requireContext())
-                remoteValues.type = serverState
-                navigateTo(serverState)
-            },
-            onFavoriteClicked = {
-                remoteValues.type = ServerType.FAVORITE
-                navigateTo(ServerType.FAVORITE)
-                Snackbar.make(requireView(), "Under Development!", Snackbar.LENGTH_SHORT).show()
-            },
+            onWaifuButtonClicked = {  tag -> selectedTag = tag ;navigateTo(serverState) },
+            onFavoriteClicked = { navigateTo(ServerType.FAVORITE) },
             onRestartClicked = {
-                vm.loadErrorOrWaifu(orientation = requireContext().isLandscape(), serverType = loadedServer)
+                loadedServer?.let{ vm.loadErrorOrWaifu(orientation = requireContext().isLandscape(), serverType = it) }
                 Snackbar.make(requireView(), "server=$loadedServer", Snackbar.LENGTH_SHORT).show()
             },
-            onGptClicked = {
-                remoteValues.type = ServerType.WAIFUGPT
-                navigateTo(ServerType.WAIFUGPT)
-                Snackbar.make(requireView(), "Under Development!", Snackbar.LENGTH_SHORT).show()
-            },
-            onGeminiClicked = {
-                remoteValues.type = ServerType.WAIFUGEMINI
-                navigateTo(ServerType.WAIFUGEMINI)
-                Snackbar.make(requireView(), "Under Development!", Snackbar.LENGTH_SHORT).show()
-            },
-            switchStateCallback = {
-                switchState = Triple(it.first, it.second, it.third)
+            onGptClicked = { navigateTo(ServerType.WAIFUGPT) },
+            onGeminiClicked = { navigateTo(ServerType.WAIFUGEMINI) },
+            switchStateCallback = { stateCallback ->
+                switchState = stateCallback
                 switchValues = switchState
             },
             switchState = switchState,
@@ -210,29 +196,8 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
         // binding.waifuGemini.visible = hasGemini
     }
 
-    private fun getTagsForSpinner(tags: WaifuImTagList?, isNsfw: Boolean = false, isGif: Boolean = false): Array<String> {
-        tagsIm = tags
-        return when (remoteValues.type) {
-            ENHANCED -> {
-                if (isNsfw) { Constants.ENHANCEDNSFW } else { Constants.ENHANCEDSFW }
-            }
-            NORMAL -> {
-                if (isNsfw) {
-                    tags?.nsfw?.toTypedArray() ?: Constants.NORMALNSFW
-                } else {
-                     tags?.versatile?.toTypedArray() ?: Constants.NORMALSFW
-                }
-            }
-            NEKOS -> {
-                if (isGif) { Constants.NEKOSGIF } else { Constants.NEKOSPNG }
-            }
-            else -> {
-                if (isNsfw) { Constants.NORMALNSFW } else { Constants.NORMALSFW }
-            }
-        }
-    }
-
     private fun navigateTo(mode: ServerType?) {
+        remoteValues.type = mode
         val bun = saveBundle(mode)
         when (mode) {
             ServerType.FAVORITE -> mainState.onButtonFavoritesClicked(bun)
@@ -301,16 +266,16 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
             in 0..Build.VERSION_CODES.P -> {
                 // Android 9 Hacia Abajo
                 loadedServer = ENHANCED
-                loadWaifu(requirePermissions, loadedServer)
+                loadedServer?.let { loadWaifu(requirePermissions, it) }
             }
             in Build.VERSION_CODES.VANILLA_ICE_CREAM..40 -> {
                 // Android 15 Hacia Arriba
                 loadedServer = NEKOS
-                loadWaifu(requirePermissions, loadedServer)
+                loadedServer?.let { loadWaifu(requirePermissions, it) }
             }
             else -> {
                 loadedServer = NORMAL
-                loadWaifu(requirePermissions, loadedServer)
+                loadedServer?.let { loadWaifu(requirePermissions, it) }
             }
         }
     }
@@ -324,8 +289,8 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
                         orientation = requireContext().isLandscape(),
                         serverType = serverType
                     )
-                    // TODO actualizar la lista de tags cuando este listo la vista selector
                     vm.requestTags()
+                    loaded = true
                     Toast.makeText(requireContext(), getString(R.string.server_toast_holder, getSimpleText(serverType.value)), Toast.LENGTH_SHORT).show()
                 }
             }
