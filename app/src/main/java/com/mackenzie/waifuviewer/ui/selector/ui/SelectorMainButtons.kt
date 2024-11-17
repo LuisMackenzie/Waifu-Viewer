@@ -27,16 +27,14 @@ import com.mackenzie.waifuviewer.ui.theme.Dimens
 @Composable
 fun SelectorMainButtons(
     categorias: Pair< Array<String>, Array<String>> = Pair(arrayOf(), arrayOf()),
-    onServerButtonClicked: (String) -> Unit = {},
+    // onServerButtonClicked: (String) -> Unit = {},
     onWaifuButtonClicked: (String) -> Unit = {},
-    nsfwState: Boolean = false,
+    switchState: Triple<Boolean, Boolean, Boolean> = Triple(false, false, false),
 ) {
 
     var expandido by remember { mutableStateOf(false) }
 
-    // var nsfwSwitchState by remember { mutableStateOf(nsfwState) }
-
-    var indiceSeleccionado by remember { mutableStateOf(-1) }
+    var indiceSeleccionado by remember { mutableStateOf(0) }
 
     Box(modifier = Modifier.fillMaxSize()) {
 
@@ -66,17 +64,19 @@ fun SelectorMainButtons(
                 onClick = { expandido = true }
             ) {
                 Text(
-                    if (indiceSeleccionado == -1)
+                    if (indiceSeleccionado == 0)
                         "Selecciona una categoría"
-                    else
-                        categorias.first[indiceSeleccionado]
+                    else {
+                        if(switchState.first || switchState.second) categorias.second[indiceSeleccionado]
+                        else categorias.first[indiceSeleccionado]
+                    }
                 )
             }
             DropdownMenu(
                 expanded = expandido,
                 onDismissRequest = { expandido = false }
             ) {
-                if (nsfwState) {
+                if (switchState.first || switchState.second) {
                     categorias.second.forEachIndexed { indice, categoria ->
                         DropdownMenuItem(
                             text = { Text(categoria) },
@@ -102,16 +102,13 @@ fun SelectorMainButtons(
 
             Button(
                 onClick = {
-                    if(nsfwState) onWaifuButtonClicked( categorias.second[indiceSeleccionado] )
+                    if(switchState.first || switchState.second) onWaifuButtonClicked( categorias.second[indiceSeleccionado] )
                     else onWaifuButtonClicked( categorias.first[indiceSeleccionado] )
                 },
                 modifier = Modifier
                     // .align(Alignment.BottomCenter)
                     .padding(bottom = Dimens.homeButtonPadding),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = colorResource(id = R.color.purple_200),
-                    // contentColor = colorResource(id = R.color.purple_200)
-                ),
+                colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.purple_200)),
             ) {
                 Text(
                     text = stringResource(id = R.string.give_me_waifus)

@@ -1,5 +1,6 @@
 package com.mackenzie.waifuviewer.ui.selector.ui
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -43,13 +44,13 @@ fun SelectorScreenContent(
     onRestartClicked: () -> Unit = {},
     onGptClicked: () -> Unit = {},
     onGeminiClicked: () -> Unit = {},
-    nsfwState: (Boolean) -> Unit = {},
-    gifState: (Boolean) -> Unit = {},
-    portraitState: (Boolean) -> Unit = {},
-    backgroundState: (Boolean) -> Unit = {},
+    switchStateCallback: (Triple<Boolean, Boolean, Boolean>) -> Unit = {},
+    switchState: Triple<Boolean, Boolean, Boolean> = Triple(false, false, false),
+    // nsfwStateSwitch: Boolean = false,
+    // gifStateSwitch: Boolean = false,
+    // portraitState: (Boolean) -> Unit = {},
+    backgroundState: (Boolean) -> Unit = {}
 ) {
-
-    // var nsfwSwitchState by remember { mutableStateOf(nsfwStateSwitch) }
 
     Box(
         modifier = Modifier
@@ -76,6 +77,7 @@ fun SelectorScreenContent(
 
         state.error?.let {
             BackgroundImageError(R.drawable.ic_offline_background)
+            Log.e("Selector State Error", "Error: $it")
         }
 
         Text(
@@ -90,7 +92,9 @@ fun SelectorScreenContent(
         SelectorMainButtons(
             categorias = Pair(Constants.NORMALSFW, Constants.NORMALNSFW),
             onWaifuButtonClicked = onWaifuButtonClicked,
-            // nsfwState = nsfwStateSwitch
+            switchState = switchState
+            // nsfwState = nsfwStateSwitch,
+            // gifState = gifStateSwitch
         )
 
         SelectorFabFavorites(
@@ -105,9 +109,7 @@ fun SelectorScreenContent(
                 .align(Alignment.BottomEnd)
                 .padding(all = Dimens.homeSwitchesPadding)
                 .padding(end = Dimens.homeSwitchesPaddingEnd),
-            nsfwState = nsfwState,
-            gifState = gifState,
-            portraitState = portraitState,
+            switchStateCallback = switchStateCallback
         )
     }
 }

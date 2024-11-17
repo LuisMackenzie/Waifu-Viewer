@@ -21,9 +21,10 @@ import com.mackenzie.waifuviewer.ui.theme.Dimens
 @Composable
 fun SelectorSwitches(
     modifier: Modifier = Modifier,
-    nsfwState: (Boolean) -> Unit = {},
-    gifState: (Boolean) -> Unit = {},
-    portraitState: (Boolean) -> Unit = {},
+    switchStateCallback: (Triple<Boolean, Boolean, Boolean>) -> Unit = {},
+    // nsfwState: (Boolean) -> Unit = {},
+    // gifState: (Boolean) -> Unit = {},
+    // portraitState: (Boolean) -> Unit = {},
 ) {
 
     var nsfwSwitch by remember { mutableStateOf(false) }
@@ -37,7 +38,7 @@ fun SelectorSwitches(
         ) {
             Switch(
                 checked = gifSwitch,
-                onCheckedChange = { gifSwitch = !gifSwitch; gifState(gifSwitch) },
+                onCheckedChange = { gifSwitch = !gifSwitch; switchStateCallback(Triple(nsfwSwitch, gifSwitch, portraitSwitch)) },
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = Color.White,
                     checkedTrackColor = MaterialTheme.colorScheme.primaryContainer
@@ -54,7 +55,7 @@ fun SelectorSwitches(
         ) {
             Switch(
                 checked = nsfwSwitch,
-                onCheckedChange = { nsfwSwitch = !nsfwSwitch; nsfwState(nsfwSwitch) },
+                onCheckedChange = { nsfwSwitch = !nsfwSwitch; switchStateCallback(Triple(nsfwSwitch, gifSwitch, portraitSwitch)) },
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = Color.Black,
                     checkedTrackColor = MaterialTheme.colorScheme.primaryContainer
@@ -71,7 +72,7 @@ fun SelectorSwitches(
         ) {
             Switch(
                 checked = portraitSwitch,
-                onCheckedChange = { portraitSwitch = !portraitSwitch; portraitState(portraitSwitch) },
+                onCheckedChange = { portraitSwitch = !portraitSwitch; switchStateCallback(Triple(nsfwSwitch, gifSwitch, portraitSwitch)) },
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = Color.White,
                     checkedTrackColor = MaterialTheme.colorScheme.primaryContainer
