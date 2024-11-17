@@ -5,8 +5,8 @@ import com.mackenzie.testshared.sampleImWaifu
 import com.mackenzie.testshared.samplePicWaifu
 import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.testrules.CoroutinesTestRule
-import com.mackenzie.waifuviewer.ui.SelectorViewModel
-import com.mackenzie.waifuviewer.ui.SelectorViewModel.UiState
+import com.mackenzie.waifuviewer.ui.selector.SelectorViewModel
+import com.mackenzie.waifuviewer.ui.selector.SelectorViewModel.UiState
 import com.mackenzie.waifuviewer.usecases.best.RequestOnlyWaifuBestUseCase
 import com.mackenzie.waifuviewer.usecases.im.GetWaifuImTagsUseCase
 import com.mackenzie.waifuviewer.usecases.im.RequestOnlyWaifuImUseCase

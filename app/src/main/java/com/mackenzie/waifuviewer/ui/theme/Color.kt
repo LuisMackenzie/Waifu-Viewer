@@ -3,6 +3,7 @@ package com.mackenzie.waifuviewer.ui.theme
 import androidx.compose.ui.graphics.Color
 
 val Purple80 = Color(0xFFD0BCFF)
+val Purple800 = Color(0xFFBB86FC)
 val PurpleGrey80 = Color(0xFFCCC2DC)
 val Pink80 = Color(0xFFEFB8C8)
 

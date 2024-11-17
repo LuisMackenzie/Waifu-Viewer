@@ -6,13 +6,11 @@ import com.mackenzie.waifuviewer.data.db.WaifuPicDbItem
 import com.mackenzie.waifuviewer.data.server.models.WaifuIm
 import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.testrules.CoroutinesTestRule
-import com.mackenzie.waifuviewer.ui.SelectorViewModel
-import com.mackenzie.waifuviewer.ui.SelectorViewModel.UiState
+import com.mackenzie.waifuviewer.ui.selector.SelectorViewModel
+import com.mackenzie.waifuviewer.ui.selector.SelectorViewModel.UiState
 import com.mackenzie.waifuviewer.ui.buildImDatabaseWaifus
 import com.mackenzie.waifuviewer.ui.buildImRepositoryWith
 import com.mackenzie.waifuviewer.ui.buildImRemoteWaifus
-import com.mackenzie.waifuviewer.ui.buildPicDatabaseWaifus
-import com.mackenzie.waifuviewer.ui.buildPicRemoteWaifus
 import com.mackenzie.waifuviewer.ui.buildPicRepositoryWith
 import com.mackenzie.waifuviewer.ui.helpers.buildBestRepositoryWith
 import com.mackenzie.waifuviewer.usecases.best.RequestOnlyWaifuBestUseCase
