@@ -22,14 +22,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import com.mackenzie.waifuviewer.R
+import com.mackenzie.waifuviewer.domain.ServerType
+import com.mackenzie.waifuviewer.domain.ServerType.*
 import com.mackenzie.waifuviewer.ui.theme.Dimens
 
 @Composable
 fun SelectorMainButtons(
-    categorias: Pair< Array<String>, Array<String>> = Pair(arrayOf(), arrayOf()),
-    // onServerButtonClicked: (String) -> Unit = {},
+    tags: Triple<Pair<Array<String>, Array<String>>, Pair<Array<String>, Array<String>>, Pair<Array<String>, Array<String>>> = Triple(Pair(arrayOf(), arrayOf()), Pair(arrayOf(), arrayOf()), Pair(arrayOf(), arrayOf())),
+    onServerButtonClicked: () -> Unit = {},
     onWaifuButtonClicked: (String) -> Unit = {},
     switchState: Triple<Boolean, Boolean, Boolean> = Triple(false, false, false),
+    server: ServerType = NORMAL,
 ) {
 
     var expandido by remember { mutableStateOf(false) }
@@ -44,14 +47,20 @@ fun SelectorMainButtons(
             modifier = Modifier.align(Alignment.BottomCenter)
         ) {
             Button(
-                onClick = {  },
+                onClick = { onServerButtonClicked() },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = colorResource(id = R.color.transparent),
                     // contentColor = colorResource(id = R.color.purple_200)
                 ),
             ) {
                 Text(
-                    text = stringResource(id = R.string.server_normal),
+                    text = stringResource(
+                        id = when (server) {
+                            NEKOS -> R.string.server_best
+                            ENHANCED -> R.string.server_enhanced
+                            else -> R.string.server_normal
+                        }
+                    ),
                     color = colorResource(id = R.color.white),
                     fontSize = Dimens.homeButtonServerFontSize
                 )
@@ -67,8 +76,20 @@ fun SelectorMainButtons(
                     if (indiceSeleccionado == 0)
                         "Selecciona una categoría"
                     else {
-                        if(switchState.first || switchState.second) categorias.second[indiceSeleccionado]
-                        else categorias.first[indiceSeleccionado]
+                        when (server) {
+                            NEKOS -> {
+                                if (switchState.second) tags.third.second[indiceSeleccionado]
+                                else tags.third.first[indiceSeleccionado]
+                            }
+                            ENHANCED -> {
+                                if (switchState.first) tags.second.second[indiceSeleccionado]
+                                else tags.second.first[indiceSeleccionado]
+                            }
+                            else -> {
+                                if (switchState.first) tags.first.second[indiceSeleccionado]
+                                else tags.first.first[indiceSeleccionado]
+                            }
+                        }
                     }
                 )
             }
@@ -76,34 +97,95 @@ fun SelectorMainButtons(
                 expanded = expandido,
                 onDismissRequest = { expandido = false }
             ) {
-                if (switchState.first || switchState.second) {
-                    categorias.second.forEachIndexed { indice, categoria ->
-                        DropdownMenuItem(
-                            text = { Text(categoria) },
-                            onClick = {
-                                indiceSeleccionado = indice
-                                expandido = false
+                when (server) {
+                    NEKOS -> {
+                        if (switchState.second) {
+                            tags.third.second.forEachIndexed { indice, categoria ->
+                                DropdownMenuItem(
+                                    text = { Text(categoria) },
+                                    onClick = {
+                                        indiceSeleccionado = indice
+                                        expandido = false
+                                    }
+                                )
                             }
-                        )
+                        } else {
+                            tags.third.first.forEachIndexed { indice, categoria ->
+                                DropdownMenuItem(
+                                    text = { Text(categoria) },
+                                    onClick = {
+                                        indiceSeleccionado = indice
+                                        expandido = false
+                                    }
+                                )
+                            }
+                        }
                     }
-                } else {
-                    categorias.first.forEachIndexed { indice, categoria ->
-                        DropdownMenuItem(
-                            text = { Text(categoria) },
-                            onClick = {
-                                indiceSeleccionado = indice
-                                expandido = false
+                    ENHANCED -> {
+                        if (switchState.first) {
+                            tags.second.second.forEachIndexed { indice, categoria ->
+                                DropdownMenuItem(
+                                    text = { Text(categoria) },
+                                    onClick = {
+                                        indiceSeleccionado = indice
+                                        expandido = false
+                                    }
+                                )
                             }
-                        )
+                        } else {
+                            tags.second.first.forEachIndexed { indice, categoria ->
+                                DropdownMenuItem(
+                                    text = { Text(categoria) },
+                                    onClick = {
+                                        indiceSeleccionado = indice
+                                        expandido = false
+                                    }
+                                )
+                            }
+                        }
+                    }
+                    else -> {
+                        if (switchState.first) {
+                            tags.first.second.forEachIndexed { indice, categoria ->
+                                DropdownMenuItem(
+                                    text = { Text(categoria) },
+                                    onClick = {
+                                        indiceSeleccionado = indice
+                                        expandido = false
+                                    }
+                                )
+                            }
+                        } else {
+                            tags.first.first.forEachIndexed { indice, categoria ->
+                                DropdownMenuItem(
+                                    text = { Text(categoria) },
+                                    onClick = {
+                                        indiceSeleccionado = indice
+                                        expandido = false
+                                    }
+                                )
+                            }
+                        }
                     }
                 }
-
             }
 
             Button(
                 onClick = {
-                    if(switchState.first || switchState.second) onWaifuButtonClicked( categorias.second[indiceSeleccionado] )
-                    else onWaifuButtonClicked( categorias.first[indiceSeleccionado] )
+                    when (server) {
+                        NEKOS -> {
+                            if(switchState.second) onWaifuButtonClicked( tags.third.second[indiceSeleccionado] )
+                            else onWaifuButtonClicked( tags.third.first[indiceSeleccionado] )
+                        }
+                        ENHANCED -> {
+                            if (switchState.first) onWaifuButtonClicked(tags.second.second[indiceSeleccionado])
+                            else onWaifuButtonClicked(tags.second.first[indiceSeleccionado])
+                        }
+                        else -> {
+                            if(switchState.first) onWaifuButtonClicked( tags.first.second[indiceSeleccionado] )
+                            else onWaifuButtonClicked( tags.first.first[indiceSeleccionado] )
+                        }
+                    }
                 },
                 modifier = Modifier
                     // .align(Alignment.BottomCenter)

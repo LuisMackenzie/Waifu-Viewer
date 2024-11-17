@@ -95,13 +95,40 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
     @Composable
     private fun LaunchSelectorScreen() {
         var switchState by remember { mutableStateOf(Triple(false, false, false)) }
+        var serverState by remember { mutableStateOf(remoteValues.type ?: NORMAL) }
+        var tagsState by remember { mutableStateOf(Triple(
+            Pair(Constants.NORMALSFW, Constants.NORMALNSFW),
+            Pair(Constants.ENHANCEDSFW, Constants.ENHANCEDNSFW),
+            Pair(Constants.NEKOSPNG, Constants.NEKOSGIF)
+        )) }
 
         SelectorScreenContent(
             state = vm.state.collectAsStateWithLifecycle().value,
+            onServerButtonClicked = {
+                when (serverState) {
+                    NORMAL -> {
+                        remoteValues.type = ENHANCED
+                        serverState = ENHANCED
+                        "Changed to $serverState".showToast(requireContext())
+                    }
+                    ENHANCED -> {
+                        remoteValues.type = NEKOS
+                        serverState = NEKOS
+                        "Changed to $serverState".showToast(requireContext())
+                    }
+                    NEKOS -> {
+                        remoteValues.type = NORMAL
+                        serverState = NORMAL
+                        "Changed to $serverState".showToast(requireContext())
+                    }
+                    else -> {}
+                }
+            },
             onWaifuButtonClicked = {
                 selectedTag = it
                 "Showing waifus from ${tagFilter(it)}".showToast(requireContext())
-                // navigateTo(remoteValues.type)
+                remoteValues.type = serverState
+                navigateTo(serverState)
             },
             onFavoriteClicked = {
                 remoteValues.type = ServerType.FAVORITE
@@ -127,7 +154,9 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
                 switchValues = switchState
             },
             switchState = switchState,
+            tags = tagsState,
             backgroundState = { backgroundLoaded() },
+            server = serverState
         )
     }
 
@@ -204,7 +233,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
     }
 
     private fun navigateTo(mode: ServerType?) {
-        val bun = saveBundle()
+        val bun = saveBundle(mode)
         when (mode) {
             ServerType.FAVORITE -> mainState.onButtonFavoritesClicked(bun)
             ServerType.WAIFUGPT -> mainState.onButtonGptClicked()
@@ -213,9 +242,9 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
         }
     }
 
-    private fun saveBundle(): Bundle {
+    private fun saveBundle(mode: ServerType?): Bundle {
         val bun = bundleOf()
-        bun.putString(Constants.SERVER_MODE, remoteValues.type?.value)
+        bun.putString(Constants.SERVER_MODE, mode?.value)
         bun.putBoolean(Constants.IS_NSFW_WAIFU, switchValues.first)
         bun.putBoolean(Constants.IS_GIF_WAIFU, switchValues.second)
         bun.putBoolean(Constants.IS_LANDS_WAIFU, switchValues.third)
@@ -288,7 +317,6 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
 
     private fun loadWaifu(reqPermisions: Boolean, serverType: ServerType) {
         remoteValues.type = serverType
-        // viewLifecycleOwner.launchAndCollect(vm.state) { updateWaifu(it) }
         if (reqPermisions) {
             mainState.requestPermissionLauncher {
                 if (!loaded) {
@@ -297,7 +325,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
                         serverType = serverType
                     )
                     // TODO actualizar la lista de tags cuando este listo la vista selector
-                    // vm.requestTags()
+                    vm.requestTags()
                     Toast.makeText(requireContext(), getString(R.string.server_toast_holder, getSimpleText(serverType.value)), Toast.LENGTH_SHORT).show()
                 }
             }
@@ -308,7 +336,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
                     serverType = serverType
                 )
                 // TODO actualizar la lista de tags cuando este listo la vista selector
-                // vm.requestTags()
+                vm.requestTags()
                 Toast.makeText(requireContext(), getString(R.string.server_toast_holder, getSimpleText(serverType.value)), Toast.LENGTH_SHORT).show()
             }
         }
@@ -326,133 +354,4 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
             else -> getString(R.string.server_unknown_toast)
         }
     }
-
-    /*private fun updateSwitches() {
-        val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
-        val workMode = sharedPref.getBoolean(Constants.WORK_MODE, false)
-        when (remoteValues.type) {
-            ENHANCED -> {
-                *//*binding.sNsfw.visible = workMode
-                binding.sGifs.visible = false
-                binding.sOrientation.visible = false*//*
-            }
-            NORMAL -> {
-                *//*binding.sNsfw.visible = workMode
-                binding.sGifs.visible = true
-                binding.sOrientation.visible = true*//*
-            }
-            NEKOS -> {
-                *//*binding.sGifs.visible = true
-                binding.sNsfw.visible = false
-                binding.sOrientation.visible = false*//*
-            }
-            else -> {
-                Toast.makeText(requireContext(), "${getString(R.string.unknown_mode)}: ServerMode not Found Exception", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }*/
-
-    // TODO - Delete
-    /*private fun updateChips(type: ServerType) {
-        remoteValues.type = type
-        when (type) {
-            NORMAL -> {
-                binding.cNormal.isChecked = true
-                binding.cEnhanced.isChecked = false
-                binding.cNekos.isChecked = false
-                binding.cNormal.isClickable = false
-                binding.cEnhanced.isClickable = true
-                binding.cNekos.isClickable = true
-                binding.cNormal.setTextColor(getColor(resources, R.color.white, null))
-                binding.cEnhanced.setTextColor(getColor(resources, R.color.black, null))
-                binding.cNekos.setTextColor(getColor(resources, R.color.black, null))
-            }
-            ENHANCED -> {
-                binding.cNormal.isChecked = false
-                binding.cEnhanced.isChecked = true
-                binding.cNekos.isChecked = false
-                binding.cNormal.isClickable = true
-                binding.cEnhanced.isClickable = false
-                binding.cNekos.isClickable = true
-                binding.cNormal.setTextColor(getColor(resources, R.color.black, null))
-                binding.cEnhanced.setTextColor(getColor(resources, R.color.white, null))
-                binding.cNekos.setTextColor(getColor(resources, R.color.black, null))
-            }
-            NEKOS -> {
-                binding.cNormal.isChecked = false
-                binding.cEnhanced.isChecked = false
-                binding.cNekos.isChecked = true
-                binding.cNormal.isClickable = true
-                binding.cEnhanced.isClickable = true
-                binding.cNekos.isClickable = false
-                binding.cNormal.setTextColor(getColor(resources, R.color.black, null))
-                binding.cEnhanced.setTextColor(getColor(resources, R.color.black, null))
-                binding.cNekos.setTextColor(getColor(resources, R.color.white, null))
-            }
-            else -> {}
-        }
-        saveServerMode()
-        // tagsIm?.let { updateSpinner(it) }
-        // updateSwitches()
-    }*/
-
-    // TODO - delete this method
-    /*private fun updateSpinner(tags: WaifuImTagList?) = with(binding) {
-        tagsIm = tags
-        val spinnerContent: Array<String>
-        when (remoteValues.type) {
-            ENHANCED -> {
-                spinnerContent = if (sNsfw.isChecked) { Constants.ENHANCEDNSFW } else { Constants.ENHANCEDSFW }
-            }
-            NORMAL -> {
-                spinnerContent = if (sNsfw.isChecked) {
-                    tags?.nsfw?.toTypedArray() ?: Constants.NORMALNSFW
-                } else {
-                     tags?.versatile?.toTypedArray() ?: Constants.NORMALSFW
-                }
-            }
-            NEKOS -> {
-                spinnerContent = if (sGifs.isChecked) { Constants.NEKOSGIF } else { Constants.NEKOSPNG }
-            }
-            else -> {
-                spinnerContent = if (sNsfw.isChecked) { Constants.NORMALNSFW } else { Constants.NORMALSFW }
-            }
-        }
-
-        val adapter = ArrayAdapter(requireContext(), R.layout.spinner_item_calc, spinnerContent)
-        spinner.adapter = adapter
-        adapter.notifyDataSetChanged()
-    }*/
-
-    // TODO - Delete
-    /*private fun updateSwitches2() = with(binding) {
-        val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
-        val workMode = sharedPref.getBoolean(Constants.WORK_MODE, false)
-        when (remoteValues.type) {
-            ServerType.ENHANCED -> {
-                sNsfw.visible = workMode
-                sGifs.visible = false
-                sOrientation.visible = false
-                if (sNsfw.isChecked) sNsfw.text = getString(R.string.nsfw_content)
-                else sNsfw.text = getString(R.string.sfw_content)
-            }
-            ServerType.NORMAL -> {
-                sNsfw.visible = workMode
-                sGifs.visible = true
-                sOrientation.visible = true
-                if (sOrientation.isChecked) sOrientation.text = getString(R.string.landscape)
-                else sOrientation.text = getString(R.string.portrait_default)
-                if (sNsfw.isChecked) sNsfw.text = getString(R.string.nsfw_content)
-                else sNsfw.text = getString(R.string.sfw_content)
-            }
-            ServerType.NEKOS -> {
-                sGifs.visible = true
-                sNsfw.visible = false
-                sOrientation.visible = false
-            }
-            else -> {
-                Toast.makeText(requireContext(), "${getString(R.string.unknown_mode)}: ServerMode not Found Exception", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }*/
 }

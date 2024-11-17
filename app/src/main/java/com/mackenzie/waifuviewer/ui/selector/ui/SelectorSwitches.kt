@@ -16,15 +16,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import com.mackenzie.waifuviewer.R
+import com.mackenzie.waifuviewer.domain.ServerType
+import com.mackenzie.waifuviewer.domain.ServerType.*
 import com.mackenzie.waifuviewer.ui.theme.Dimens
 
 @Composable
 fun SelectorSwitches(
     modifier: Modifier = Modifier,
     switchStateCallback: (Triple<Boolean, Boolean, Boolean>) -> Unit = {},
-    // nsfwState: (Boolean) -> Unit = {},
-    // gifState: (Boolean) -> Unit = {},
-    // portraitState: (Boolean) -> Unit = {},
+    server: ServerType = NORMAL,
 ) {
 
     var nsfwSwitch by remember { mutableStateOf(false) }
@@ -33,55 +33,61 @@ fun SelectorSwitches(
 
     Row(modifier = modifier) {
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Switch(
-                checked = gifSwitch,
-                onCheckedChange = { gifSwitch = !gifSwitch; switchStateCallback(Triple(nsfwSwitch, gifSwitch, portraitSwitch)) },
-                colors = SwitchDefaults.colors(
-                    checkedThumbColor = Color.White,
-                    checkedTrackColor = MaterialTheme.colorScheme.primaryContainer
+        if (server == NORMAL || server == NEKOS) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Switch(
+                    checked = gifSwitch,
+                    onCheckedChange = { gifSwitch = !gifSwitch; switchStateCallback(Triple(nsfwSwitch, gifSwitch, portraitSwitch)) },
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = Color.White,
+                        checkedTrackColor = MaterialTheme.colorScheme.primaryContainer
+                    )
                 )
-            )
-            Text(
-                text = stringResource(id = R.string.gif_content),
-                // color = MaterialTheme.colorScheme.onPrimary
-            )
+                Text(
+                    text = stringResource(id = R.string.gif_content),
+                    // color = MaterialTheme.colorScheme.onPrimary
+                )
+            }
         }
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Switch(
-                checked = nsfwSwitch,
-                onCheckedChange = { nsfwSwitch = !nsfwSwitch; switchStateCallback(Triple(nsfwSwitch, gifSwitch, portraitSwitch)) },
-                colors = SwitchDefaults.colors(
-                    checkedThumbColor = Color.Black,
-                    checkedTrackColor = MaterialTheme.colorScheme.primaryContainer
+        if (server == NORMAL || server == ENHANCED) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Switch(
+                    checked = nsfwSwitch,
+                    onCheckedChange = { nsfwSwitch = !nsfwSwitch; switchStateCallback(Triple(nsfwSwitch, gifSwitch, portraitSwitch)) },
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = Color.Black,
+                        checkedTrackColor = MaterialTheme.colorScheme.primaryContainer
+                    )
                 )
-            )
-            Text(
-                text = stringResource(id = if(nsfwSwitch) R.string.nsfw_content else R.string.sfw_content),
-                // color = MaterialTheme.colorScheme.onPrimary
-            )
+                Text(
+                    text = stringResource(id = if(nsfwSwitch) R.string.nsfw_content else R.string.sfw_content),
+                    // color = MaterialTheme.colorScheme.onPrimary
+                )
+            }
         }
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Switch(
-                checked = portraitSwitch,
-                onCheckedChange = { portraitSwitch = !portraitSwitch; switchStateCallback(Triple(nsfwSwitch, gifSwitch, portraitSwitch)) },
-                colors = SwitchDefaults.colors(
-                    checkedThumbColor = Color.White,
-                    checkedTrackColor = MaterialTheme.colorScheme.primaryContainer
+        if (server == NORMAL) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Switch(
+                    checked = portraitSwitch,
+                    onCheckedChange = { portraitSwitch = !portraitSwitch; switchStateCallback(Triple(nsfwSwitch, gifSwitch, portraitSwitch)) },
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = Color.White,
+                        checkedTrackColor = MaterialTheme.colorScheme.primaryContainer
+                    )
                 )
-            )
-            Text(
-                text = stringResource(id = if(portraitSwitch) R.string.landscape else R.string.portrait_default),
-                // color = MaterialTheme.colorScheme.onPrimary
-            )
+                Text(
+                    text = stringResource(id = if(portraitSwitch) R.string.landscape else R.string.portrait_default),
+                    // color = MaterialTheme.colorScheme.onPrimary
+                )
+            }
         }
     }
 }
