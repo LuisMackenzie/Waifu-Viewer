@@ -44,25 +44,6 @@ class WaifuFragment : Fragment() {
     private var serverMode: String = ""
     private var lmState: LoadingState = LoadingState()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        
-        when (serverMode) {
-            getString(R.string.server_enhanced_string) -> {
-                // binding.recycler.adapter = waifuPicsAdapter
-                // viewLifecycleOwner.launchAndCollect(picsViewModel.state) { binding withPicsUpdateUI it }
-            }
-            getString(R.string.server_normal_string) -> {
-                // binding.recycler.adapter = waifuImAdapter
-                // viewLifecycleOwner.launchAndCollect(imViewModel.state) { binding withImUpdateUI it }
-            }
-            getString(R.string.server_nekos_string) -> {
-                // binding.recycler.adapter = waifuBestAdapter
-                // viewLifecycleOwner.launchAndCollect(bestViewModel.state) { binding withBestUpdateUI it }
-            }
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

@@ -290,7 +290,6 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
                         serverType = serverType
                     )
                     vm.requestTags()
-                    loaded = true
                     Toast.makeText(requireContext(), getString(R.string.server_toast_holder, getSimpleText(serverType.value)), Toast.LENGTH_SHORT).show()
                 }
             }
@@ -300,7 +299,6 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
                     orientation = requireContext().isLandscape(),
                     serverType = serverType
                 )
-                // TODO actualizar la lista de tags cuando este listo la vista selector
                 vm.requestTags()
                 Toast.makeText(requireContext(), getString(R.string.server_toast_holder, getSimpleText(serverType.value)), Toast.LENGTH_SHORT).show()
             }
