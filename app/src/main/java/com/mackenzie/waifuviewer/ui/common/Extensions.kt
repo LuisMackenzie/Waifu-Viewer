@@ -54,7 +54,7 @@ fun ImageView.loadUrlCenterCrop(url: String) {
 }
 
 fun String.showToast(context: Context) {
-    Toast.makeText(context, this, Toast.LENGTH_LONG).show()
+    Toast.makeText(context, this, Toast.LENGTH_SHORT).show()
 }
 
 fun Context.showToast(msg: String) {
