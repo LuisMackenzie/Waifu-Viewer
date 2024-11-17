@@ -47,7 +47,7 @@ fun SelectorSwitches(
                 )
                 Text(
                     text = stringResource(id = R.string.gif_content),
-                    // color = MaterialTheme.colorScheme.onPrimary
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
             }
         }
@@ -66,7 +66,7 @@ fun SelectorSwitches(
                 )
                 Text(
                     text = stringResource(id = if(nsfwSwitch) R.string.nsfw_content else R.string.sfw_content),
-                    // color = MaterialTheme.colorScheme.onPrimary
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
             }
         }
@@ -85,7 +85,7 @@ fun SelectorSwitches(
                 )
                 Text(
                     text = stringResource(id = if(portraitSwitch) R.string.landscape else R.string.portrait_default),
-                    // color = MaterialTheme.colorScheme.onPrimary
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
             }
         }
