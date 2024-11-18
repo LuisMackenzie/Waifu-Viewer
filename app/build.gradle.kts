@@ -174,6 +174,7 @@ dependencies {
 
     // Coil libraries
     implementation(Libs.Coil.coil)
+    implementation(Libs.Coil.coilGif)
     implementation(Libs.Coil.coilNetwork)
 
     // Retrofit Libraries
