@@ -77,9 +77,10 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
         getRemoteConfig()
 
         if (BuildConfig.BUILD_TYPE == ENHANCED.value) {
-            loadedServer = ENHANCED
-            loadedServer?.let { loadWaifu(requirePermissions, it) }
-            // loadWaifu(requirePermissions, loadedServer)
+            if (loadedServer == null) {
+                loadedServer = ENHANCED
+                loadedServer?.let { loadWaifu(requirePermissions, it) }
+            }
         } else if (loadedServer == null) loadInitialServer()
 
 
