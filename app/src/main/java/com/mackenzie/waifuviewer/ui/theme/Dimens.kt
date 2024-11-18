@@ -23,10 +23,11 @@ object Dimens {
     //Selector
     val homeTitleFontSize = 48.sp
     val homeTitlePadding = 16.dp
-    // val homeButtonServerPadding = 4.dp
     val homeButtonServerFontSize = 24.sp
     val homeButtonPadding = 50.dp
     val homeButtonFabPadding = 16.dp
     val homeSwitchesPadding = 8.dp
     val homeSwitchesPaddingEnd = 16.dp
+    val homeTagsItemFontSize = 18.sp
+    val homeTagsItemPaddings = 4.dp
 }

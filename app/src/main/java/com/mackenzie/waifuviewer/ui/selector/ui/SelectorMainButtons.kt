@@ -1,16 +1,16 @@
 package com.mackenzie.waifuviewer.ui.selector.ui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.domain.ServerType.*
@@ -102,21 +103,37 @@ fun SelectorMainButtons(
                         if (switchState.second) {
                             tags.third.second.forEachIndexed { indice, categoria ->
                                 DropdownMenuItem(
-                                    text = { Text(categoria) },
+                                    text = {
+                                        Text(
+                                            text = categoria,
+                                            fontSize = Dimens.homeTagsItemFontSize,
+                                            modifier = Modifier.fillMaxWidth(),
+                                            textAlign = TextAlign.Center
+                                        )
+                                    },
                                     onClick = {
                                         indiceSeleccionado = indice
                                         expandido = false
-                                    }
+                                    },
+                                    contentPadding = PaddingValues(Dimens.homeTagsItemPaddings)
                                 )
                             }
                         } else {
                             tags.third.first.forEachIndexed { indice, categoria ->
                                 DropdownMenuItem(
-                                    text = { Text(categoria) },
+                                    text = {
+                                        Text(
+                                            text = categoria,
+                                            fontSize = Dimens.homeTagsItemFontSize,
+                                            modifier = Modifier.fillMaxWidth(),
+                                            textAlign = TextAlign.Center
+                                        )
+                                    },
                                     onClick = {
                                         indiceSeleccionado = indice
                                         expandido = false
-                                    }
+                                    },
+                                    contentPadding = PaddingValues(Dimens.homeTagsItemPaddings)
                                 )
                             }
                         }
@@ -125,21 +142,37 @@ fun SelectorMainButtons(
                         if (switchState.first) {
                             tags.second.second.forEachIndexed { indice, categoria ->
                                 DropdownMenuItem(
-                                    text = { Text(categoria) },
+                                    text = {
+                                        Text(
+                                            text = categoria,
+                                            fontSize = Dimens.homeTagsItemFontSize,
+                                            modifier = Modifier.fillMaxWidth(),
+                                            textAlign = TextAlign.Center
+                                        )
+                                    },
                                     onClick = {
                                         indiceSeleccionado = indice
                                         expandido = false
-                                    }
+                                    },
+                                    contentPadding = PaddingValues(Dimens.homeTagsItemPaddings)
                                 )
                             }
                         } else {
                             tags.second.first.forEachIndexed { indice, categoria ->
                                 DropdownMenuItem(
-                                    text = { Text(categoria) },
+                                    text = {
+                                        Text(
+                                            text = categoria,
+                                            fontSize = Dimens.homeTagsItemFontSize,
+                                            modifier = Modifier.fillMaxWidth(),
+                                            textAlign = TextAlign.Center
+                                        )
+                                    },
                                     onClick = {
                                         indiceSeleccionado = indice
                                         expandido = false
-                                    }
+                                    },
+                                    contentPadding = PaddingValues(Dimens.homeTagsItemPaddings)
                                 )
                             }
                         }
@@ -148,21 +181,39 @@ fun SelectorMainButtons(
                         if (switchState.first) {
                             tags.first.second.forEachIndexed { indice, categoria ->
                                 DropdownMenuItem(
-                                    text = { Text(categoria) },
+                                    text = {
+                                        Text(
+                                            text = categoria,
+                                            fontSize = Dimens.homeTagsItemFontSize,
+                                            modifier = Modifier.fillMaxWidth(),
+                                            textAlign = TextAlign.Center
+                                        )
+                                    },
                                     onClick = {
                                         indiceSeleccionado = indice
                                         expandido = false
-                                    }
+                                    },
+                                    // modifier = Modifier.align(Alignment.CenterHorizontally),
+                                    contentPadding = PaddingValues(Dimens.homeTagsItemPaddings)
                                 )
                             }
                         } else {
                             tags.first.first.forEachIndexed { indice, categoria ->
                                 DropdownMenuItem(
-                                    text = { Text(categoria) },
+                                    text = {
+                                        Text(
+                                            text = categoria,
+                                            fontSize = Dimens.homeTagsItemFontSize,
+                                            modifier = Modifier.fillMaxWidth(),
+                                            textAlign = TextAlign.Center
+                                        )
+                                    },
                                     onClick = {
                                         indiceSeleccionado = indice
                                         expandido = false
-                                    }
+                                    },
+                                    // modifier = Modifier.align(Alignment.CenterHorizontally),
+                                    contentPadding = PaddingValues(Dimens.homeTagsItemPaddings)
                                 )
                             }
                         }
