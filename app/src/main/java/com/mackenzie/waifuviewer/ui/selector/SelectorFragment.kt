@@ -266,17 +266,21 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
         when (Build.VERSION.SDK_INT) {
             in 0..Build.VERSION_CODES.P -> {
                 // Android 9 Hacia Abajo
-                loadedServer = ENHANCED
-                loadedServer?.let { loadWaifu(requirePermissions, it) }
+                loadWaifu(requirePermissions, ENHANCED).apply { loadedServer = ENHANCED }
+                // loadedServer = ENHANCED
+                // loadedServer?.let { loadWaifu(requirePermissions, it) }
             }
             in Build.VERSION_CODES.VANILLA_ICE_CREAM..40 -> {
                 // Android 15 Hacia Arriba
-                loadedServer = NEKOS
-                loadedServer?.let { loadWaifu(requirePermissions, it) }
+                loadWaifu(requirePermissions, NEKOS).apply { loadedServer = NEKOS }
+                // loadedServer = NEKOS
+                // loadedServer?.let { loadWaifu(requirePermissions, it) }
             }
             else -> {
-                loadedServer = NORMAL
-                loadedServer?.let { loadWaifu(requirePermissions, it) }
+
+                loadWaifu(requirePermissions, NORMAL).apply { loadedServer = NORMAL }
+                // loadedServer = NORMAL
+                // loadedServer?.let { loadWaifu(requirePermissions, it) }
             }
         }
     }
