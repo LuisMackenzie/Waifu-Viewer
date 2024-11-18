@@ -11,6 +11,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -71,7 +72,11 @@ fun SelectorMainButtons(
                 modifier = Modifier
                     // .align(Alignment.BottomCenter)
                     .padding(Dimens.homeButtonFabPadding),
-                onClick = { expandido = true }
+                onClick = { expandido = true },
+                colors =  ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.tertiary,
+                    contentColor = MaterialTheme.colorScheme.onTertiary
+                )
             ) {
                 Text(
                     if (indiceSeleccionado == 0)
@@ -108,7 +113,7 @@ fun SelectorMainButtons(
                                             text = categoria,
                                             fontSize = Dimens.homeTagsItemFontSize,
                                             modifier = Modifier.fillMaxWidth(),
-                                            textAlign = TextAlign.Center
+                                            textAlign = TextAlign.Center,
                                         )
                                     },
                                     onClick = {
