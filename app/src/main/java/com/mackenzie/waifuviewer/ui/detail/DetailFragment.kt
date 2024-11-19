@@ -161,6 +161,7 @@ class DetailFragment : Fragment() {
                     image,
                     title,
                     type,
+                    link
                 )
             } catch (e: IOException) {
                 Log.d(Constants.CATEGORY_TAG_DETAIL, "error: ${e.localizedMessage}")

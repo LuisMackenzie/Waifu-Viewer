@@ -2,6 +2,7 @@ package com.mackenzie.waifuviewer.ui.selector
 
 import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -19,6 +20,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat.getColor
 import androidx.core.os.bundleOf
 import androidx.core.view.forEach
@@ -82,7 +85,6 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
                 loadedServer?.let { loadWaifu(requirePermissions, it) }
             }
         } else if (loadedServer == null) loadInitialServer()
-
 
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
