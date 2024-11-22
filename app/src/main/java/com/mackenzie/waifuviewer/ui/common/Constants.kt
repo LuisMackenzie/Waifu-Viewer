@@ -5,6 +5,7 @@ class Constants {
         const val SERVER_MODE = "WaifuFragment:server_mode"
         const val WORK_MODE = "WaifuFragment:work_mode"
         const val IS_NSFW_WAIFU = "WaifuFragment:nsfw"
+        const val IS_FAVORITE_WAIFU = "WaifuFragment:favorite_waifu"
         const val IS_GIF_WAIFU = "WaifuFragment:gif"
         const val IS_LANDS_WAIFU = "WaifuFragment:lands"
         const val IS_WAIFU_GPT = "WaifuFragment:waifu_gpt"

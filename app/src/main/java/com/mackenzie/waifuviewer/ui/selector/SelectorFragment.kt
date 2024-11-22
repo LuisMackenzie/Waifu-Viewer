@@ -169,8 +169,9 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
                     remoteConfig.getBoolean("waifu_gpt_service"),
                     remoteConfig.getBoolean("waifu_gemini_service"),
                     remoteConfig.getBoolean("automatic_server"),
+                    false,
                     remoteConfig.getLong("server_mode").toInt(),
-                    getServerMode()
+                    getServerMode(),
                 )
                 remoteValues.apply {
                     setNsfwMode(nsfwIsActive, gptIsActive, geminiIsActive)
@@ -204,6 +205,15 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
 
     private fun navigateTo(mode: ServerType?, toFavorites: Boolean= false, toGpt: Boolean= false, toGemini: Boolean= false) {
         mode?.let { remoteValues.type = it }
+
+        /*if (toFavorites) {
+            remoteValues.isFavorite = true
+        }
+        else {
+            remoteValues.isFavorite = false
+        }*/
+
+        remoteValues.isFavorite = toFavorites
         val bun = saveBundle(mode)
         if (toFavorites) {
             //
@@ -233,9 +243,10 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
         val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
         with (sharedPref.edit()) {
             putString(Constants.SERVER_MODE, remoteValues.type?.value)
+            putBoolean(Constants.IS_FAVORITE_WAIFU, remoteValues.isFavorite)
             apply()
         }
-        Log.v("SaveMode", "SERVER_MODE=${remoteValues.type}")
+        Log.v("SaveMode", "SERVER_MODE=${remoteValues.type}, isFavorite=${remoteValues.isFavorite}")
     }
 
     private fun getServerMode(): ServerType {

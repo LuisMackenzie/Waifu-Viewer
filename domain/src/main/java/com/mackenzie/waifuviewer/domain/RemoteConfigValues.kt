@@ -7,6 +7,7 @@ data class RemoteConfigValues(
     val gptIsActive: Boolean = false,
     val geminiIsActive: Boolean = false,
     val AutoModeIsEnabled: Boolean = false,
+    var isFavorite: Boolean = false,
     val mode : Int = 0,
     var type: ServerType? = null
 )

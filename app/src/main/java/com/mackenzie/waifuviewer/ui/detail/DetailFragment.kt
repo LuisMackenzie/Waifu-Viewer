@@ -56,25 +56,29 @@ class DetailFragment : Fragment() {
         mainState = buildMainState()
         val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
         val serverMode = sharedPref.getString(Constants.SERVER_MODE, "") ?: ""
+        val isFavorite = sharedPref.getBoolean(Constants.IS_FAVORITE_WAIFU, false)
 
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 MainTheme {
-                    LaunchDefaultScreen(serverMode.getTypes())
+                    LaunchDefaultScreen(serverMode.getTypes(), isFavorite)
                 }
             }
         }
     }
 
     @Composable
-    private fun LaunchDefaultScreen(mode: ServerType) {
-        when (mode) {
-            NORMAL -> DetailImScreen()
-            ENHANCED -> DetailPicsScreen()
-            NEKOS -> DetailNekosScreen()
-            // FAVORITE -> DetailFavsScreen()
-            else -> DetailFavsScreen()
+    private fun LaunchDefaultScreen(mode: ServerType, isFav:Boolean) {
+        if (isFav) DetailFavsScreen()
+        else {
+            when (mode) {
+                NORMAL -> DetailImScreen()
+                ENHANCED -> DetailPicsScreen()
+                NEKOS -> DetailNekosScreen()
+                // FAVORITE -> DetailFavsScreen()
+                else -> {}
+            }
         }
     }
 
