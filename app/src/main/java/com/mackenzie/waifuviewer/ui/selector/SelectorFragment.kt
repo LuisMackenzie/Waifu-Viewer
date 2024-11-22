@@ -126,11 +126,6 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
                         serverState = NORMAL
                         saveServerMode()
                     }
-                    FAVORITE -> {
-                        // remoteValues.type = serverState
-                        "WTF2=$serverState".showToast(requireContext())
-                        Log.e("SelectorFragment", "server=$serverState, remmote=${remoteValues.type}")
-                    }
                     else -> {
                         "WTF=$serverState".showToast(requireContext())
                     }
@@ -205,18 +200,9 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
 
     private fun navigateTo(mode: ServerType?, toFavorites: Boolean= false, toGpt: Boolean= false, toGemini: Boolean= false) {
         mode?.let { remoteValues.type = it }
-
-        /*if (toFavorites) {
-            remoteValues.isFavorite = true
-        }
-        else {
-            remoteValues.isFavorite = false
-        }*/
-
         remoteValues.isFavorite = toFavorites
         val bun = saveBundle(mode)
         if (toFavorites) {
-            //
             mainState.onButtonFavoritesClicked(bun)
         } else if (toGpt) {
             mainState.onButtonGptClicked()
@@ -257,9 +243,6 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
             NORMAL.value -> NORMAL
             ENHANCED.value -> ENHANCED
             NEKOS.value -> NEKOS
-            FAVORITE.value -> FAVORITE
-            // ServerType.WAIFUGPT.value -> ServerType.WAIFUGPT
-            // ServerType.WAIFUGEMINI.value -> ServerType.WAIFUGEMINI
             else -> NORMAL
         }
     }
@@ -288,21 +271,12 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
             in 0..Build.VERSION_CODES.P -> {
                 // Android 9 Hacia Abajo
                 loadWaifu(requirePermissions, ENHANCED).apply { loadedServer = ENHANCED }
-                // loadedServer = ENHANCED
-                // loadedServer?.let { loadWaifu(requirePermissions, it) }
             }
-            in 36..40 -> {
+            in 35..40 -> {
                 // Android 15 Hacia Arriba
                 loadWaifu(requirePermissions, NEKOS).apply { loadedServer = NEKOS }
-                // loadedServer = NEKOS
-                // loadedServer?.let { loadWaifu(requirePermissions, it) }
             }
-            else -> {
-
-                loadWaifu(requirePermissions, NORMAL).apply { loadedServer = NORMAL }
-                // loadedServer = NORMAL
-                // loadedServer?.let { loadWaifu(requirePermissions, it) }
-            }
+            else -> { loadWaifu(requirePermissions, NORMAL).apply { loadedServer = NORMAL } }
         }
     }
 
