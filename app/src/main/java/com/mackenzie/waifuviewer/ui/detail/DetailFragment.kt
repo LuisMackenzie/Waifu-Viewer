@@ -73,8 +73,8 @@ class DetailFragment : Fragment() {
             NORMAL -> DetailImScreen()
             ENHANCED -> DetailPicsScreen()
             NEKOS -> DetailNekosScreen()
-            FAVORITE -> DetailFavsScreen()
-            else -> {}
+            // FAVORITE -> DetailFavsScreen()
+            else -> DetailFavsScreen()
         }
     }
 

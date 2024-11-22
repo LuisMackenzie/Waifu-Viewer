@@ -44,6 +44,7 @@ import com.mackenzie.waifuviewer.databinding.FragmentSelectorBinding
 import com.mackenzie.waifuviewer.domain.RemoteConfigValues
 import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.domain.ServerType.ENHANCED
+import com.mackenzie.waifuviewer.domain.ServerType.FAVORITE
 import com.mackenzie.waifuviewer.domain.ServerType.NEKOS
 import com.mackenzie.waifuviewer.domain.ServerType.NORMAL
 import com.mackenzie.waifuviewer.domain.im.WaifuImTagList
@@ -125,19 +126,24 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
                         serverState = NORMAL
                         saveServerMode()
                     }
+                    FAVORITE -> {
+                        // remoteValues.type = serverState
+                        "WTF2=$serverState".showToast(requireContext())
+                        Log.e("SelectorFragment", "server=$serverState, remmote=${remoteValues.type}")
+                    }
                     else -> {
                         "WTF=$serverState".showToast(requireContext())
                     }
                 }
             },
             onWaifuButtonClicked = {  tag -> selectedTag = tag ;navigateTo(serverState) },
-            onFavoriteClicked = { navigateTo(ServerType.FAVORITE) },
+            onFavoriteClicked = {navigateTo(null, toFavorites = true)},
             onRestartClicked = {
                 loadedServer?.let{ vm.loadErrorOrWaifu(orientation = requireContext().isLandscape(), serverType = it) }
                 Snackbar.make(requireView(), "server=$loadedServer", Snackbar.LENGTH_SHORT).show()
             },
-            onGptClicked = { navigateTo(ServerType.WAIFUGPT) },
-            onGeminiClicked = { navigateTo(ServerType.WAIFUGEMINI) },
+            onGptClicked = {navigateTo(null, toGpt = true)},
+            onGeminiClicked = {navigateTo(null, toGemini = true)},
             switchStateCallback = { stateCallback ->
                 switchState = stateCallback
                 switchValues = switchState
@@ -194,19 +200,20 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
             putBoolean(Constants.IS_WAIFU_GEMINI, hasGemini)
             apply()
         }
-        // if (remoteValues.type != NEKOS) binding.sNsfw.visible = nsfw
-        // binding.waifuGpt.visible = hasGpt
-        // binding.waifuGemini.visible = hasGemini
     }
 
-    private fun navigateTo(mode: ServerType?) {
-        remoteValues.type = mode
+    private fun navigateTo(mode: ServerType?, toFavorites: Boolean= false, toGpt: Boolean= false, toGemini: Boolean= false) {
+        mode?.let { remoteValues.type = it }
         val bun = saveBundle(mode)
-        when (mode) {
-            ServerType.FAVORITE -> mainState.onButtonFavoritesClicked(bun)
-            ServerType.WAIFUGPT -> mainState.onButtonGptClicked()
-            ServerType.WAIFUGEMINI -> mainState.onButtonGeminiClicked()
-            else -> mainState.onButtonGetWaifuClicked(bun)
+        if (toFavorites) {
+            //
+            mainState.onButtonFavoritesClicked(bun)
+        } else if (toGpt) {
+            mainState.onButtonGptClicked()
+        } else if (toGemini) {
+            mainState.onButtonGeminiClicked()
+        } else {
+            mainState.onButtonGetWaifuClicked(bun)
         }
     }
 
@@ -218,7 +225,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
         bun.putBoolean(Constants.IS_LANDS_WAIFU, switchValues.third)
         bun.putString(Constants.CATEGORY_TAG_WAIFU, tagFilter(selectedTag))
         saveServerMode()
-        Log.v("saveBundle", "SERVER_MODE=${remoteValues.type?.value}")
+        Log.v("saveBundle", "mode=${mode?.value} SERVER_MODE=${remoteValues.type?.value}")
         return bun
     }
 
@@ -228,19 +235,20 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
             putString(Constants.SERVER_MODE, remoteValues.type?.value)
             apply()
         }
+        Log.v("SaveMode", "SERVER_MODE=${remoteValues.type}")
     }
 
     private fun getServerMode(): ServerType {
         val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
         val mode = sharedPref.getString(Constants.SERVER_MODE, NORMAL.value)
-        Log.v("getServerMode", "SERVER_MODE=${mode}")
+        Log.v("GetMode", "SERVER_MODE=${mode}")
         return when (mode) {
             NORMAL.value -> NORMAL
             ENHANCED.value -> ENHANCED
             NEKOS.value -> NEKOS
-            ServerType.FAVORITE.value -> ServerType.FAVORITE
-            ServerType.WAIFUGPT.value -> ServerType.WAIFUGPT
-            ServerType.WAIFUGEMINI.value -> ServerType.WAIFUGEMINI
+            FAVORITE.value -> FAVORITE
+            // ServerType.WAIFUGPT.value -> ServerType.WAIFUGPT
+            // ServerType.WAIFUGEMINI.value -> ServerType.WAIFUGEMINI
             else -> NORMAL
         }
     }
@@ -272,7 +280,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
                 // loadedServer = ENHANCED
                 // loadedServer?.let { loadWaifu(requirePermissions, it) }
             }
-            in Build.VERSION_CODES.VANILLA_ICE_CREAM..40 -> {
+            in 36..40 -> {
                 // Android 15 Hacia Arriba
                 loadWaifu(requirePermissions, NEKOS).apply { loadedServer = NEKOS }
                 // loadedServer = NEKOS
