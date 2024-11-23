@@ -3,7 +3,7 @@ import java.util.Properties
 plugins {
     id(Plugins.application)
     id(Plugins.android)
-    id(Plugins.kapt)
+    // id(Plugins.kapt)
     id(Plugins.ksp)
     id(Plugins.parcelize)
     id(Plugins.safeArgs)
@@ -96,9 +96,8 @@ android {
 
     buildFeatures {
         buildConfig = true
-        dataBinding = true
+        viewBinding = true
         compose = true
-        // viewBinding = true
     }
 
     sourceSets {
@@ -169,8 +168,9 @@ dependencies {
     ksp(Libs.Hilt.compiler)
 
     // Glide libraries
-    implementation(Libs.Glide.glide)
-    ksp(Libs.Glide.compiler)
+    // Sustituido por compose
+    // implementation(Libs.Glide.glide)
+    // ksp(Libs.Glide.compiler)
 
     // Coil libraries
     implementation(Libs.Coil.coil)
