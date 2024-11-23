@@ -3,17 +3,12 @@ package com.mackenzie.waifuviewer.ui.common
 import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
-import android.graphics.Point
-import android.hardware.display.DisplayManager
 import android.nfc.NfcManager
 import android.os.Build
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowInsets
 import android.view.WindowManager
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.annotation.RequiresApi
@@ -23,27 +18,24 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.DiffUtil
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.mackenzie.waifuviewer.App
-import com.mackenzie.waifuviewer.R
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = true): View =
     LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
 
-fun ImageView.loadUrl(url: String) {
+/*fun ImageView.loadUrl(url: String) {
     Glide.with(context)
         .load(url)
         .diskCacheStrategy(DiskCacheStrategy.ALL)
         .transition(DrawableTransitionOptions.withCrossFade())
         .error(R.drawable.ic_error_grey)
         .into(this)
-}
+}*/
 
-fun ImageView.loadUrlCenterCrop(url: String) {
+// Unnussed
+/*fun ImageView.loadUrlCenterCrop(url: String) {
     Glide.with(context)
         .load(url)
         .centerCrop()
@@ -51,14 +43,10 @@ fun ImageView.loadUrlCenterCrop(url: String) {
         .transition(DrawableTransitionOptions.withCrossFade())
         .error(R.drawable.ic_error_grey)
         .into(this)
-}
+}*/
 
 fun String.showToast(context: Context) {
     Toast.makeText(context, this, Toast.LENGTH_SHORT).show()
-}
-
-fun Context.showToast(msg: String) {
-    Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
 }
 
 fun Activity.showFullscreenCutout() {

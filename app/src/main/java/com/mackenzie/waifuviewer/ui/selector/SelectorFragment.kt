@@ -2,37 +2,26 @@ package com.mackenzie.waifuviewer.ui.selector
 
 import android.Manifest
 import android.content.Context
-import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat.getColor
 import androidx.core.os.bundleOf
-import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -40,22 +29,22 @@ import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import com.mackenzie.waifuviewer.BuildConfig
 import com.mackenzie.waifuviewer.R
-import com.mackenzie.waifuviewer.databinding.FragmentSelectorBinding
 import com.mackenzie.waifuviewer.domain.RemoteConfigValues
 import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.domain.ServerType.ENHANCED
-import com.mackenzie.waifuviewer.domain.ServerType.FAVORITE
 import com.mackenzie.waifuviewer.domain.ServerType.NEKOS
 import com.mackenzie.waifuviewer.domain.ServerType.NORMAL
-import com.mackenzie.waifuviewer.domain.im.WaifuImTagList
-import com.mackenzie.waifuviewer.ui.common.*
+import com.mackenzie.waifuviewer.ui.common.Constants
+import com.mackenzie.waifuviewer.ui.common.PermissionRequester
+import com.mackenzie.waifuviewer.ui.common.isLandscape
+import com.mackenzie.waifuviewer.ui.common.showToast
 import com.mackenzie.waifuviewer.ui.main.MainState
 import com.mackenzie.waifuviewer.ui.main.ui.MainTheme
 import com.mackenzie.waifuviewer.ui.selector.ui.SelectorScreenContent
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SelectorFragment : Fragment(R.layout.fragment_selector) {
+class SelectorFragment : Fragment() {
 
     private val vm: SelectorViewModel by viewModels()
     private var loaded: Boolean = false
@@ -131,7 +120,7 @@ class SelectorFragment : Fragment(R.layout.fragment_selector) {
                     }
                 }
             },
-            onWaifuButtonClicked = {  tag -> selectedTag = tag ;navigateTo(serverState) },
+            onWaifuButtonClicked = {  tag -> selectedTag = tag ; navigateTo(serverState) },
             onFavoriteClicked = {navigateTo(null, toFavorites = true)},
             onRestartClicked = {
                 loadedServer?.let{ vm.loadErrorOrWaifu(orientation = requireContext().isLandscape(), serverType = it) }

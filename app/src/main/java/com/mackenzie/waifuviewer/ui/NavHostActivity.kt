@@ -38,7 +38,8 @@ class NavHostActivity : AppCompatActivity(R.layout.activity_nav_host) {
 
             NavHost(navController = navController, startDestination = "selector") {
                 composable("selector") {
-                    // SelectorScreen()
+                    // TODO crear composable que engloble el fragmento selector
+                    // SelectorFragment()
                 }
                 composable("waifu_screen") {
                     // WaifuScreen()
@@ -55,7 +56,7 @@ class NavHostActivity : AppCompatActivity(R.layout.activity_nav_host) {
                     // FavoriteScreen()
                 }
                 composable("waifu_gpt") {
-                    WaifuGptScreenContent()
+                    // WaifuGptScreenContent()
                 }
             }
         }*/
