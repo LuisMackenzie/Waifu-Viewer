@@ -13,12 +13,16 @@ import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.DiffUtil
 import com.mackenzie.waifuviewer.App
+import com.mackenzie.waifuviewer.ui.main.ui.MainTheme
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
@@ -59,6 +63,18 @@ fun Activity.showBelowCutout() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
         window.attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_NEVER
     }
+}
+
+fun Fragment.composeView(content: @Composable () -> Unit): ComposeView {
+    return ComposeView(requireContext()).apply {
+        setContent {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            MainTheme {
+                content()
+            }
+        }
+    }
+
 }
 
 @RequiresApi(Build.VERSION_CODES.R)

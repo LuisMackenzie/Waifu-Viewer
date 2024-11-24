@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mackenzie.waifuviewer.R
+import com.mackenzie.waifuviewer.ui.common.composeView
 import com.mackenzie.waifuviewer.ui.common.showToast
 import com.mackenzie.waifuviewer.ui.favs.ui.FavoriteScreenContent
 import com.mackenzie.waifuviewer.ui.main.MainState
@@ -32,13 +33,8 @@ class FavoriteFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         mainState = buildMainState()
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-            setContent {
-                MainTheme {
-                    LaunchFavoriteScreen()
-                }
-            }
+        return composeView {
+            LaunchFavoriteScreen()
         }
     }
 

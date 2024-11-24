@@ -21,6 +21,7 @@ import com.mackenzie.waifuviewer.domain.ServerType.NEKOS
 import com.mackenzie.waifuviewer.domain.ServerType.NORMAL
 import com.mackenzie.waifuviewer.domain.getTypes
 import com.mackenzie.waifuviewer.ui.common.Constants
+import com.mackenzie.waifuviewer.ui.common.composeView
 import com.mackenzie.waifuviewer.ui.common.showToast
 import com.mackenzie.waifuviewer.ui.main.ui.MainTheme
 import com.mackenzie.waifuviewer.ui.main.ui.WaifuBestScreenContent
@@ -53,13 +54,16 @@ class WaifuFragment : Fragment() {
         serverMode = safeArgs.bundleInfo.getString(Constants.SERVER_MODE) ?: ""
         bun = safeArgs.bundleInfo
         loadCustomResult(bun)
-        return ComposeView(requireContext()).apply {
+        /*return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 MainTheme {
                     LaunchWaifuScreen(serverMode.getTypes())
                 }
             }
+        }*/
+        return composeView {
+            LaunchWaifuScreen(serverMode.getTypes())
         }
     }
 

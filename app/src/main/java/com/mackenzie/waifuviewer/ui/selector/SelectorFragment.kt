@@ -36,6 +36,7 @@ import com.mackenzie.waifuviewer.domain.ServerType.NEKOS
 import com.mackenzie.waifuviewer.domain.ServerType.NORMAL
 import com.mackenzie.waifuviewer.ui.common.Constants
 import com.mackenzie.waifuviewer.ui.common.PermissionRequester
+import com.mackenzie.waifuviewer.ui.common.composeView
 import com.mackenzie.waifuviewer.ui.common.isLandscape
 import com.mackenzie.waifuviewer.ui.common.showToast
 import com.mackenzie.waifuviewer.ui.main.MainState
@@ -76,13 +77,8 @@ class SelectorFragment : Fragment() {
             }
         } else if (loadedServer == null) loadInitialServer()
 
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-            setContent {
-                MainTheme {
-                    LaunchSelectorScreen()
-                }
-            }
+        return composeView {
+            LaunchSelectorScreen()
         }
     }
 

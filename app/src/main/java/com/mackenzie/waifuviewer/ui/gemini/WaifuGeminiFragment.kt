@@ -16,6 +16,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.android.material.snackbar.Snackbar
+import com.mackenzie.waifuviewer.ui.common.composeView
 import com.mackenzie.waifuviewer.ui.gemini.chat.WaifuChatRoute
 import com.mackenzie.waifuviewer.ui.gemini.info.WaifuInfoRoute
 import com.mackenzie.waifuviewer.ui.gemini.menu.WaifuGeminiScreenMenuContent
@@ -29,13 +30,16 @@ class WaifuGeminiFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return ComposeView(requireContext()).apply {
+        /*return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 MainTheme {
                     WaifuGeminiScreen()
                 }
             }
+        }*/
+        return composeView {
+            WaifuGeminiScreen()
         }
     }
 

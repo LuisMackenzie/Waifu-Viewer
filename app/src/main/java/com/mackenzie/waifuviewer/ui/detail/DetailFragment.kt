@@ -22,6 +22,7 @@ import com.mackenzie.waifuviewer.domain.ServerType.*
 import com.mackenzie.waifuviewer.domain.getTypes
 import com.mackenzie.waifuviewer.ui.common.Constants
 import com.mackenzie.waifuviewer.ui.common.SaveImage
+import com.mackenzie.waifuviewer.ui.common.composeView
 import com.mackenzie.waifuviewer.ui.common.showToast
 import com.mackenzie.waifuviewer.ui.detail.ui.DetailBestScreenContent
 import com.mackenzie.waifuviewer.ui.detail.ui.DetailFavsScreenContent
@@ -58,13 +59,8 @@ class DetailFragment : Fragment() {
         val serverMode = sharedPref.getString(Constants.SERVER_MODE, "") ?: ""
         val isFavorite = sharedPref.getBoolean(Constants.IS_FAVORITE_WAIFU, false)
 
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-            setContent {
-                MainTheme {
-                    LaunchDefaultScreen(serverMode.getTypes(), isFavorite)
-                }
-            }
+        return composeView {
+            LaunchDefaultScreen(serverMode.getTypes(), isFavorite)
         }
     }
 
