@@ -28,6 +28,7 @@ object Dimens {
     val homeButtonFabPadding = 16.dp
     val homeSwitchesPadding = 8.dp
     val homeSwitchesPaddingEnd = 16.dp
+    val homeSwitchesPaddingStart = 50.dp
     val homeTagsItemFontSize = 18.sp
     val homeTagsItemPaddings = 4.dp
 }

@@ -1,5 +1,6 @@
 package com.mackenzie.waifuviewer.ui.selector.ui
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -31,10 +32,15 @@ fun SelectorSwitches(
     var gifSwitch by remember { mutableStateOf(false) }
     var portraitSwitch by remember { mutableStateOf(false) }
 
-    Row(modifier = modifier) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        modifier = modifier
+    ) {
 
         if (server == NORMAL || server == NEKOS) {
             Row(
+                modifier = Modifier.padding(start = Dimens.homeSwitchesPadding),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
@@ -54,7 +60,8 @@ fun SelectorSwitches(
 
         if (server == NORMAL || server == ENHANCED) {
             Row(
-                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(start = Dimens.homeSwitchesPadding),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = stringResource(id = if(nsfwSwitch) R.string.nsfw_content else R.string.sfw_content),
@@ -73,7 +80,8 @@ fun SelectorSwitches(
 
         if (server == NORMAL) {
             Row(
-                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(start = Dimens.homeSwitchesPadding),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = stringResource(id = if(portraitSwitch) R.string.landscape else R.string.portrait_default),
