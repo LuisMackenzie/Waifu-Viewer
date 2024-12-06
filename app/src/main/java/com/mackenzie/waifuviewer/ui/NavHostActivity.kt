@@ -33,33 +33,7 @@ class NavHostActivity : AppCompatActivity(R.layout.activity_nav_host) {
         firebaseAnalytics = Firebase.analytics
 
         // Navigation Compose
-        /*setContent {
-            val navController = rememberNavController()
-
-            NavHost(navController = navController, startDestination = "selector") {
-                composable("selector") {
-                    // TODO crear composable que engloble el fragmento selector
-                    // SelectorFragment()
-                }
-                composable("waifu_screen") {
-                    // WaifuScreen()
-                }
-                composable(
-                    route = "detail"
-                    // arguments = listOf(navArgument("waifuId") { type = NavType.IntType })
-                ) { backStackEntry ->
-                    // val waifuId = backStackEntry.arguments?.getInt("waifuId")
-                    // requireNotNull(waifuId)
-                    // DetailScreen(waifuId = waifuId)
-                }
-                composable("favorite") {
-                    // FavoriteScreen()
-                }
-                composable("waifu_gpt") {
-                    // WaifuGptScreenContent()
-                }
-            }
-        }*/
+        // TODO doing
 
         // val isNavbarVisible = isNavigationActive()
 
