@@ -41,6 +41,29 @@ fun SelectorMainButtons(
 
     var indiceSeleccionado by remember { mutableStateOf(0) }
 
+    var switchDefaultState by remember { mutableStateOf(Triple(false, false, false)) }
+
+    when (server) {
+        NEKOS -> {
+            if (switchState.second != switchDefaultState.second) {
+                indiceSeleccionado = 0
+            }
+            switchDefaultState = switchState
+        }
+        ENHANCED -> {
+            if (switchState.first != switchDefaultState.first) {
+                indiceSeleccionado = 0
+            }
+            switchDefaultState = switchState
+        }
+        else -> {
+            if (switchState.first != switchDefaultState.first) {
+                indiceSeleccionado = 0
+            }
+            switchDefaultState = switchState
+        }
+    }
+
     Box(modifier = Modifier.fillMaxSize()) {
 
         Column(
@@ -49,7 +72,7 @@ fun SelectorMainButtons(
             modifier = Modifier.align(Alignment.BottomCenter)
         ) {
             Button(
-                onClick = { onServerButtonClicked() },
+                onClick = { onServerButtonClicked(); indiceSeleccionado = 0 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = colorResource(id = R.color.transparent),
                     // contentColor = colorResource(id = R.color.purple_200)
