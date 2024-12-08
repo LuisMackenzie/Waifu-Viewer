@@ -2,6 +2,7 @@ package com.mackenzie.waifuviewer.ui.selector.ui
 
 import android.app.Activity
 import android.util.Log
+import android.widget.Switch
 import androidx.activity.compose.LocalActivityResultRegistryOwner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -34,6 +35,11 @@ import com.mackenzie.waifuviewer.domain.RemoteConfigValues
 import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.domain.ServerType.ENHANCED
 import com.mackenzie.waifuviewer.domain.ServerType.NORMAL
+import com.mackenzie.waifuviewer.domain.selector.ImTags
+import com.mackenzie.waifuviewer.domain.selector.NekosTags
+import com.mackenzie.waifuviewer.domain.selector.PicsTags
+import com.mackenzie.waifuviewer.domain.selector.SwitchState
+import com.mackenzie.waifuviewer.domain.selector.TagsState
 import com.mackenzie.waifuviewer.ui.common.Constants
 import com.mackenzie.waifuviewer.ui.common.GenerativeViewModelFactory
 import com.mackenzie.waifuviewer.ui.common.app
@@ -46,29 +52,32 @@ import com.mackenzie.waifuviewer.ui.main.MainState
 import com.mackenzie.waifuviewer.ui.selector.SelectorViewModel
 import com.mackenzie.waifuviewer.ui.theme.Dimens
 import com.mackenzie.waifuviewer.ui.theme.WaifuViewerTheme
+import dagger.hilt.android.lifecycle.HiltViewModel
 
 @Composable
 internal fun SelectorScreenContentRoute(
     vm: SelectorViewModel = viewModel()
 ) {
     val selectorState by vm.state.collectAsStateWithLifecycle()
-    val loaded by remember { mutableStateOf(false) }
-    var loadedServer by remember { mutableStateOf<ServerType?>(null) }
-    val requirePermissions by remember { mutableStateOf(false) }
+    // TODO Changes for navigation
+    // TODO changes for bypass fragment
+    // val loaded by remember { mutableStateOf(false) }
+    // var loadedServer by remember { mutableStateOf<ServerType?>(null) }
+    // val requirePermissions by remember { mutableStateOf(false) }
     // val mainState by remember { mutableStateOf<MainState?>(null) }
-    val selectedTag by remember { mutableStateOf("") }
-    val remoteValues by remember { mutableStateOf(RemoteConfigValues()) }
+    // val selectedTag by remember { mutableStateOf("") }
+    // val remoteValues by remember { mutableStateOf(RemoteConfigValues()) }
     // Aqui se guardan 3 valores de los Switches en este orden 1. NSFW, 2. Gifs, 3. Portrait
-    val switchValues by remember { mutableStateOf(Triple(false, false, false)) }
+    // val switchValues by remember { mutableStateOf(Triple(false, false, false)) }
 
-    if (BuildConfig.BUILD_TYPE == ENHANCED.value) {
+    /*if (BuildConfig.BUILD_TYPE == ENHANCED.value) {
         if (loadedServer == null) {
             loadedServer = ENHANCED
             loadedServer?.let {
-                // loadWaifu(requirePermissions, it)
+                loadWaifu(requirePermissions, it)
             }
         }
-    } else if (loadedServer == null) // loadInitialServer()
+    } else if (loadedServer == null) loadInitialServer()*/
 
     // remoteValues.getConfig(Activity())
 
@@ -81,8 +90,8 @@ internal fun SelectorScreenContentRoute(
         onGptClicked = {},
         onGeminiClicked = {},
         switchStateCallback = {},
-        switchState = Triple(false, false, false),
-        tags = Triple(Pair(arrayOf(), arrayOf()), Pair(arrayOf(), arrayOf()), Pair(arrayOf(), arrayOf())),
+        switchState = SwitchState(),
+        tags = TagsState(),
         backgroundState = {},
         server = NORMAL
     )
@@ -97,9 +106,9 @@ fun SelectorScreenContent(
     onRestartClicked: () -> Unit = {},
     onGptClicked: () -> Unit = {},
     onGeminiClicked: () -> Unit = {},
-    switchStateCallback: (Triple<Boolean, Boolean, Boolean>) -> Unit = {},
-    switchState: Triple<Boolean, Boolean, Boolean> = Triple(false, false, false),
-    tags: Triple<Pair<Array<String>, Array<String>>, Pair<Array<String>, Array<String>>, Pair<Array<String>, Array<String>>> = Triple(Pair(arrayOf(), arrayOf()), Pair(arrayOf(), arrayOf()), Pair(arrayOf(), arrayOf())),
+    switchStateCallback: (SwitchState) -> Unit = {},
+    switchState: SwitchState = SwitchState(),
+    tags: TagsState = TagsState(),
     backgroundState: (Boolean) -> Unit = {},
     server: ServerType = NORMAL,
 ) {
@@ -126,10 +135,10 @@ fun SelectorScreenContent(
         }
 
         state.tags?.let { imTags ->
-            tagsState = Triple(
-                Pair(imTags.versatile.toTypedArray(), imTags.nsfw.toTypedArray()),
-                Pair(tagsState.second.first, tagsState.second.second),
-                Pair(tagsState.third.first, tagsState.third.second)
+            tagsState = TagsState(
+                ImTags(imTags.versatile, imTags.nsfw),
+                PicsTags(tagsState.enhanced.sfw, tagsState.enhanced.nsfw),
+                NekosTags(tagsState.nekos.png, tagsState.nekos.gifs)
             )
         }
 

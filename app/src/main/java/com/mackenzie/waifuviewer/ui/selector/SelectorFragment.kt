@@ -34,6 +34,8 @@ import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.domain.ServerType.ENHANCED
 import com.mackenzie.waifuviewer.domain.ServerType.NEKOS
 import com.mackenzie.waifuviewer.domain.ServerType.NORMAL
+import com.mackenzie.waifuviewer.domain.selector.SwitchState
+import com.mackenzie.waifuviewer.domain.selector.TagsState
 import com.mackenzie.waifuviewer.ui.common.Constants
 import com.mackenzie.waifuviewer.ui.common.PermissionRequester
 import com.mackenzie.waifuviewer.ui.common.composeView
@@ -55,7 +57,7 @@ class SelectorFragment : Fragment() {
     private var selectedTag: String = ""
     private var remoteValues : RemoteConfigValues = RemoteConfigValues()
     // Aqui se guardan 3 valores de los Switches en este orden 1. NSFW, 2. Gifs, 3. Portrait
-    private var switchValues: Triple<Boolean, Boolean, Boolean> = Triple(false, false, false)
+    private var switchValues: SwitchState = SwitchState()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -84,13 +86,9 @@ class SelectorFragment : Fragment() {
 
     @Composable
     private fun LaunchSelectorScreen() {
-        var switchState by remember { mutableStateOf(Triple(false, false, false)) }
+        var switchState by remember { mutableStateOf(SwitchState()) }
         var serverState by remember { mutableStateOf(remoteValues.type ?: NORMAL) }
-        val tagsState by remember { mutableStateOf(Triple(
-            Pair(Constants.NORMALSFW, Constants.NORMALNSFW),
-            Pair(Constants.ENHANCEDSFW, Constants.ENHANCEDNSFW),
-            Pair(Constants.NEKOSPNG, Constants.NEKOSGIF)
-        )) }
+        val tagsState by remember { mutableStateOf(TagsState()) }
 
         SelectorScreenContent(
             state = vm.state.collectAsStateWithLifecycle().value,
@@ -201,9 +199,9 @@ class SelectorFragment : Fragment() {
     private fun saveBundle(mode: ServerType?): Bundle {
         val bun = bundleOf()
         bun.putString(Constants.SERVER_MODE, mode?.value)
-        bun.putBoolean(Constants.IS_NSFW_WAIFU, switchValues.first)
-        bun.putBoolean(Constants.IS_GIF_WAIFU, switchValues.second)
-        bun.putBoolean(Constants.IS_LANDS_WAIFU, switchValues.third)
+        bun.putBoolean(Constants.IS_NSFW_WAIFU, switchValues.nsfw)
+        bun.putBoolean(Constants.IS_GIF_WAIFU, switchValues.gifs)
+        bun.putBoolean(Constants.IS_LANDS_WAIFU, switchValues.portrait)
         bun.putString(Constants.CATEGORY_TAG_WAIFU, tagFilter(selectedTag))
         saveServerMode()
         Log.v("saveBundle", "mode=${mode?.value} SERVER_MODE=${remoteValues.type?.value}")
@@ -240,7 +238,7 @@ class SelectorFragment : Fragment() {
                     updatedTag = getString(R.string.tag_waifu)
                 }
                 else -> {
-                    if (!switchValues.second) {
+                    if (!switchValues.gifs) {
                         updatedTag = getString(R.string.tag_neko)
                     } else {
                         updatedTag = getString(R.string.tag_pat)

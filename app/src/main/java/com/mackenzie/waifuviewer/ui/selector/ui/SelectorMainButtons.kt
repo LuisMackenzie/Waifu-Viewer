@@ -26,14 +26,16 @@ import androidx.compose.ui.text.style.TextAlign
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.domain.ServerType.*
+import com.mackenzie.waifuviewer.domain.selector.SwitchState
+import com.mackenzie.waifuviewer.domain.selector.TagsState
 import com.mackenzie.waifuviewer.ui.theme.Dimens
 
 @Composable
 fun SelectorMainButtons(
-    tags: Triple<Pair<Array<String>, Array<String>>, Pair<Array<String>, Array<String>>, Pair<Array<String>, Array<String>>> = Triple(Pair(arrayOf(), arrayOf()), Pair(arrayOf(), arrayOf()), Pair(arrayOf(), arrayOf())),
+    tags: TagsState = TagsState(),
     onServerButtonClicked: () -> Unit = {},
     onWaifuButtonClicked: (String) -> Unit = {},
-    switchState: Triple<Boolean, Boolean, Boolean> = Triple(false, false, false),
+    switchState: SwitchState = SwitchState(),
     server: ServerType = NORMAL,
 ) {
 
@@ -41,23 +43,23 @@ fun SelectorMainButtons(
 
     var indiceSeleccionado by remember { mutableStateOf(0) }
 
-    var switchDefaultState by remember { mutableStateOf(Triple(false, false, false)) }
+    var switchDefaultState by remember { mutableStateOf(SwitchState()) }
 
     when (server) {
         NEKOS -> {
-            if (switchState.second != switchDefaultState.second) {
+            if (switchState.gifs != switchDefaultState.gifs) {
                 indiceSeleccionado = 0
             }
             switchDefaultState = switchState
         }
         ENHANCED -> {
-            if (switchState.first != switchDefaultState.first) {
+            if (switchState.nsfw != switchDefaultState.nsfw) {
                 indiceSeleccionado = 0
             }
             switchDefaultState = switchState
         }
         else -> {
-            if (switchState.first != switchDefaultState.first) {
+            if (switchState.nsfw != switchDefaultState.nsfw) {
                 indiceSeleccionado = 0
             }
             switchDefaultState = switchState
@@ -73,10 +75,7 @@ fun SelectorMainButtons(
         ) {
             Button(
                 onClick = { onServerButtonClicked(); indiceSeleccionado = 0 },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = colorResource(id = R.color.transparent),
-                    // contentColor = colorResource(id = R.color.purple_200)
-                ),
+                colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.transparent)),
             ) {
                 Text(
                     text = stringResource(
@@ -93,7 +92,6 @@ fun SelectorMainButtons(
 
             Button(
                 modifier = Modifier
-                    // .align(Alignment.BottomCenter)
                     .padding(Dimens.homeButtonFabPadding),
                 onClick = { expandido = true },
                 colors =  ButtonDefaults.buttonColors(
@@ -107,16 +105,16 @@ fun SelectorMainButtons(
                     else {
                         when (server) {
                             NEKOS -> {
-                                if (switchState.second) tags.third.second[indiceSeleccionado]
-                                else tags.third.first[indiceSeleccionado]
+                                if (switchState.gifs) tags.nekos.gifs[indiceSeleccionado]
+                                else tags.nekos.png[indiceSeleccionado]
                             }
                             ENHANCED -> {
-                                if (switchState.first) tags.second.second[indiceSeleccionado]
-                                else tags.second.first[indiceSeleccionado]
+                                if (switchState.nsfw) tags.enhanced.nsfw[indiceSeleccionado]
+                                else tags.enhanced.sfw[indiceSeleccionado]
                             }
                             else -> {
-                                if (switchState.first) tags.first.second[indiceSeleccionado]
-                                else tags.first.first[indiceSeleccionado]
+                                if (switchState.nsfw) tags.normal.nsfw[indiceSeleccionado]
+                                else tags.normal.sfw[indiceSeleccionado]
                             }
                         }
                     }
@@ -128,8 +126,8 @@ fun SelectorMainButtons(
             ) {
                 when (server) {
                     NEKOS -> {
-                        if (switchState.second) {
-                            tags.third.second.forEachIndexed { indice, categoria ->
+                        if (switchState.gifs) {
+                            tags.nekos.gifs.forEachIndexed { indice, categoria ->
                                 DropdownMenuItem(
                                     text = {
                                         Text(
@@ -147,7 +145,7 @@ fun SelectorMainButtons(
                                 )
                             }
                         } else {
-                            tags.third.first.forEachIndexed { indice, categoria ->
+                            tags.nekos.png.forEachIndexed { indice, categoria ->
                                 DropdownMenuItem(
                                     text = {
                                         Text(
@@ -167,8 +165,8 @@ fun SelectorMainButtons(
                         }
                     }
                     ENHANCED -> {
-                        if (switchState.first) {
-                            tags.second.second.forEachIndexed { indice, categoria ->
+                        if (switchState.nsfw) {
+                            tags.enhanced.nsfw.forEachIndexed { indice, categoria ->
                                 DropdownMenuItem(
                                     text = {
                                         Text(
@@ -186,7 +184,7 @@ fun SelectorMainButtons(
                                 )
                             }
                         } else {
-                            tags.second.first.forEachIndexed { indice, categoria ->
+                            tags.enhanced.sfw.forEachIndexed { indice, categoria ->
                                 DropdownMenuItem(
                                     text = {
                                         Text(
@@ -206,8 +204,8 @@ fun SelectorMainButtons(
                         }
                     }
                     else -> {
-                        if (switchState.first) {
-                            tags.first.second.forEachIndexed { indice, categoria ->
+                        if (switchState.nsfw) {
+                            tags.normal.nsfw.forEachIndexed { indice, categoria ->
                                 DropdownMenuItem(
                                     text = {
                                         Text(
@@ -226,7 +224,7 @@ fun SelectorMainButtons(
                                 )
                             }
                         } else {
-                            tags.first.first.forEachIndexed { indice, categoria ->
+                            tags.normal.sfw.forEachIndexed { indice, categoria ->
                                 DropdownMenuItem(
                                     text = {
                                         Text(
@@ -253,16 +251,16 @@ fun SelectorMainButtons(
                 onClick = {
                     when (server) {
                         NEKOS -> {
-                            if(switchState.second) onWaifuButtonClicked( tags.third.second[indiceSeleccionado] )
-                            else onWaifuButtonClicked( tags.third.first[indiceSeleccionado] )
+                            if(switchState.gifs) onWaifuButtonClicked( tags.nekos.gifs[indiceSeleccionado] )
+                            else onWaifuButtonClicked( tags.nekos.png[indiceSeleccionado] )
                         }
                         ENHANCED -> {
-                            if (switchState.first) onWaifuButtonClicked(tags.second.second[indiceSeleccionado])
-                            else onWaifuButtonClicked(tags.second.first[indiceSeleccionado])
+                            if (switchState.nsfw) onWaifuButtonClicked(tags.enhanced.nsfw[indiceSeleccionado])
+                            else onWaifuButtonClicked(tags.enhanced.sfw[indiceSeleccionado])
                         }
                         else -> {
-                            if(switchState.first) onWaifuButtonClicked( tags.first.second[indiceSeleccionado] )
-                            else onWaifuButtonClicked( tags.first.first[indiceSeleccionado] )
+                            if(switchState.nsfw) onWaifuButtonClicked( tags.normal.nsfw[indiceSeleccionado] )
+                            else onWaifuButtonClicked( tags.normal.sfw[indiceSeleccionado] )
                         }
                     }
                 },

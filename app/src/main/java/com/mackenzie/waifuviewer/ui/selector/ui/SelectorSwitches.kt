@@ -19,12 +19,13 @@ import androidx.compose.ui.res.stringResource
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.domain.ServerType.*
+import com.mackenzie.waifuviewer.domain.selector.SwitchState
 import com.mackenzie.waifuviewer.ui.theme.Dimens
 
 @Composable
 fun SelectorSwitches(
     modifier: Modifier = Modifier,
-    switchStateCallback: (Triple<Boolean, Boolean, Boolean>) -> Unit = {},
+    switchStateCallback: (SwitchState) -> Unit = {},
     server: ServerType = NORMAL,
 ) {
 
@@ -49,7 +50,7 @@ fun SelectorSwitches(
                 )
                 Switch(
                     checked = gifSwitch,
-                    onCheckedChange = { gifSwitch = !gifSwitch; switchStateCallback(Triple(nsfwSwitch, gifSwitch, portraitSwitch)) },
+                    onCheckedChange = { gifSwitch = !gifSwitch; switchStateCallback(SwitchState(nsfwSwitch, gifSwitch, portraitSwitch)) },
                     colors = SwitchDefaults.colors(
                         checkedThumbColor = Color.White,
                         checkedTrackColor = MaterialTheme.colorScheme.primaryContainer
@@ -69,7 +70,7 @@ fun SelectorSwitches(
                 )
                 Switch(
                     checked = nsfwSwitch,
-                    onCheckedChange = { nsfwSwitch = !nsfwSwitch; switchStateCallback(Triple(nsfwSwitch, gifSwitch, portraitSwitch)) },
+                    onCheckedChange = { nsfwSwitch = !nsfwSwitch; switchStateCallback(SwitchState(nsfwSwitch, gifSwitch, portraitSwitch)) },
                     colors = SwitchDefaults.colors(
                         checkedThumbColor = Color.Black,
                         checkedTrackColor = MaterialTheme.colorScheme.primaryContainer
@@ -89,7 +90,7 @@ fun SelectorSwitches(
                 )
                 Switch(
                     checked = portraitSwitch,
-                    onCheckedChange = { portraitSwitch = !portraitSwitch; switchStateCallback(Triple(nsfwSwitch, gifSwitch, portraitSwitch)) },
+                    onCheckedChange = { portraitSwitch = !portraitSwitch; switchStateCallback(SwitchState(nsfwSwitch, gifSwitch, portraitSwitch)) },
                     colors = SwitchDefaults.colors(
                         checkedThumbColor = Color.White,
                         checkedTrackColor = MaterialTheme.colorScheme.primaryContainer
