@@ -1,5 +1,6 @@
 package com.mackenzie.waifuviewer.ui.selector.ui
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -16,11 +17,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.domain.ServerType.*
 import com.mackenzie.waifuviewer.domain.selector.SwitchState
 import com.mackenzie.waifuviewer.ui.theme.Dimens
+import com.mackenzie.waifuviewer.ui.theme.WaifuViewerTheme
 
 @Composable
 fun SelectorSwitches(
@@ -98,5 +101,13 @@ fun SelectorSwitches(
                 )
             }
         }
+    }
+}
+
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun PreviewSwitches() {
+    WaifuViewerTheme(darkTheme = false) {
+        SelectorSwitches()
     }
 }

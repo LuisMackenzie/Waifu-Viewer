@@ -1,5 +1,6 @@
 package com.mackenzie.waifuviewer.ui.selector.ui
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,12 +24,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.domain.ServerType.*
 import com.mackenzie.waifuviewer.domain.selector.SwitchState
 import com.mackenzie.waifuviewer.domain.selector.TagsState
 import com.mackenzie.waifuviewer.ui.theme.Dimens
+import com.mackenzie.waifuviewer.ui.theme.WaifuViewerTheme
 
 @Composable
 fun SelectorMainButtons(
@@ -275,5 +279,13 @@ fun SelectorMainButtons(
             }
         }
 
+    }
+}
+
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun PreviewButtons() {
+    WaifuViewerTheme(darkTheme = false) {
+        SelectorMainButtons()
     }
 }

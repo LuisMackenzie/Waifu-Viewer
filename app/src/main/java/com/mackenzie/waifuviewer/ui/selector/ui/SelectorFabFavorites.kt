@@ -1,5 +1,6 @@
 package com.mackenzie.waifuviewer.ui.selector.ui
 
+import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -75,10 +76,10 @@ fun SelectorFabFavorites(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-fun Preview() {
-    WaifuViewerTheme(darkTheme = true) {
+fun PreviewFab() {
+    WaifuViewerTheme(darkTheme = false) {
         SelectorFabFavorites()
     }
 }
