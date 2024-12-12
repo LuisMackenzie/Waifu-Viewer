@@ -248,7 +248,7 @@ class SelectorFragment : Fragment() {
 
     private fun loadInitialServer() {
         when (Build.VERSION.SDK_INT) {
-            in 0..Build.VERSION_CODES.P -> {
+            in 0..Build.VERSION_CODES.LOLLIPOP_MR1 -> {
                 // Android 9 Hacia Abajo
                 loadWaifu(requirePermissions, ENHANCED).apply { loadedServer = ENHANCED }
             }
