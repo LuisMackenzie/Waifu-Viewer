@@ -68,7 +68,7 @@
     <string name="menu_reason_description">App de ejemplo para subir imagenes y preguntar sobre ellas.</string>
     <string name="menu_chat_title">Conversaciones Multiturno (chat)</string>
     <string name="menu_chat_description">App de ejemplo que muestra una UI conversacional</string>
-    <string name="action_try">Probar Waifu</string>
+    <string name="action_try">Hablar con Waifu</string>
     <string name="action_go">Ir</string>
     <!-- Summarize sample strings -->
     <string name="summarize_label">Texto</string>
