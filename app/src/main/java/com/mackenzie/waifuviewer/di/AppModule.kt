@@ -1,6 +1,7 @@
 package com.mackenzie.waifuviewer.di
 
 import android.app.Application
+import android.os.Build
 import androidx.room.Room
 import com.mackenzie.waifuviewer.data.*
 import com.mackenzie.waifuviewer.data.datasource.*
@@ -67,16 +68,28 @@ object AppModule {
     @Singleton
     fun provideOkHttpClient():OkHttpClient = HttpLoggingInterceptor().run {
         level = HttpLoggingInterceptor.Level.BODY
-        OkHttpClient.Builder()
-            .connectTimeout(60, TimeUnit.SECONDS)
-            .readTimeout(60, TimeUnit.SECONDS)
-            .writeTimeout(15, TimeUnit.SECONDS)
-            .sslSocketFactory(
-                networkModule().sslContext().socketFactory,
-                networkModule().x509TrustManager()
-            )
-            .addInterceptor(this)
-            .build()
+        when (Build.VERSION.SDK_INT) {
+            Build.VERSION_CODES.M, Build.VERSION_CODES.N -> {
+                OkHttpClient.Builder()
+                    .connectTimeout(60, TimeUnit.SECONDS)
+                    .readTimeout(60, TimeUnit.SECONDS)
+                    .writeTimeout(15, TimeUnit.SECONDS)
+                    .sslSocketFactory(
+                        networkModule().sslContext().socketFactory,
+                        networkModule().x509TrustManager()
+                    )
+                    .addInterceptor(this)
+                    .build()
+            }
+            else -> {
+                OkHttpClient.Builder()
+                    .connectTimeout(60, TimeUnit.SECONDS)
+                    .readTimeout(60, TimeUnit.SECONDS)
+                    .writeTimeout(15, TimeUnit.SECONDS)
+                    .addInterceptor(this)
+                    .build()
+            }
+        }
     }
 
     @Provides

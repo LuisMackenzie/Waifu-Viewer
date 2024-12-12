@@ -34,9 +34,9 @@ class NetworkModule: ICryptographyComponent by CryptographyModule() {
             }
         )
         // val sslContext = SSLContext.getInstance(TlsVersion.SSL_3_0.javaName)
-        val tlsContext = SSLContext.getInstance(TlsVersion.TLS_1_2.javaName)
-        tlsContext.init(null, trustAllCerts, SecureRandom())
-        return tlsContext
+        val sslContext = SSLContext.getInstance(TlsVersion.TLS_1_2.javaName)
+        sslContext.init(null, trustAllCerts, SecureRandom())
+        return sslContext
     }
 
     fun x509TrustManager(): X509TrustManager {
