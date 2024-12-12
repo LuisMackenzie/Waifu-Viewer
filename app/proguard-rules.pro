@@ -98,9 +98,9 @@
 # }
 
  #Glide
- -keep public class * implements com.bumptech.glide.module.GlideModule
- -keep public class * extends com.bumptech.glide.GeneratedAppGlideModule
- -keep public class * extends com.bumptech.glide.module.LibraryGlideModule
+# -keep public class * implements com.bumptech.glide.module.GlideModule
+# -keep public class * extends com.bumptech.glide.GeneratedAppGlideModule
+# -keep public class * extends com.bumptech.glide.module.LibraryGlideModule
 
  # Room
  -keep class androidx.room.** { *; }
