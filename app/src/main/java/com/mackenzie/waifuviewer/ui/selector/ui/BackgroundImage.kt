@@ -36,6 +36,7 @@ fun BackgroundImageError(
             .data(image)
             .crossfade(true)
             .build(),
+        placeholder = painterResource(R.drawable.ic_baseline_download),
         error = painterResource(R.drawable.ic_error_grey),
         contentDescription = null,
         contentScale = ContentScale.Crop,
