@@ -61,12 +61,20 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun networkModule() = NetworkModule()
+
+    @Provides
+    @Singleton
     fun provideOkHttpClient():OkHttpClient = HttpLoggingInterceptor().run {
         level = HttpLoggingInterceptor.Level.BODY
         OkHttpClient.Builder()
             .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(15, TimeUnit.SECONDS)
+            .sslSocketFactory(
+                networkModule().sslContext().socketFactory,
+                networkModule().x509TrustManager()
+            )
             .addInterceptor(this)
             .build()
     }
