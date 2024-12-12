@@ -4,7 +4,7 @@ object AppConfig {
     const val versionCode = 1
     const val versionName = "0.7.65"
     const val compileSdk = 35
-    const val minSdk = 26
+    const val minSdk = 23
     const val targetSdk = 35
     const val testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     const val testInstrumentationRunnerHilt = "com.mackenzie.waifuviewer.di.HiltTestRunner"
