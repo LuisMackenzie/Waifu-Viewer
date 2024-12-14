@@ -1,10 +1,13 @@
 package com.mackenzie.waifuviewer.ui.gemini.menu
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,6 +21,7 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.domain.GeminiMenuItem
+import com.mackenzie.waifuviewer.ui.common.ui.isNavigationBarVisible
 import com.mackenzie.waifuviewer.ui.common.ui.menuGenerator
 import com.mackenzie.waifuviewer.ui.main.ui.MainThemeForPreview
 
@@ -27,7 +31,18 @@ fun WaifuGeminiScreenMenuContent(
     onItemClicked: (String) -> Unit = { }
 ) {
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = if (isNavigationBarVisible()) {
+            Modifier
+                .fillMaxSize()
+                .navigationBarsPadding()
+                .background(MaterialTheme.colorScheme.background)
+        } else {
+            Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+        }
+    ) {
 
         AsyncImage(
             model= ImageRequest.Builder(LocalContext.current)
