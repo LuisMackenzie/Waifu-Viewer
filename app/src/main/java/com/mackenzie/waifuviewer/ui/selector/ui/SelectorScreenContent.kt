@@ -1,18 +1,15 @@
 package com.mackenzie.waifuviewer.ui.selector.ui
 
-import android.app.Activity
 import android.util.Log
-import android.widget.Switch
-import androidx.activity.compose.LocalActivityResultRegistryOwner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,34 +22,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig
-import com.google.firebase.remoteconfig.ktx.remoteConfig
-import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
-import com.mackenzie.waifuviewer.BuildConfig
 import com.mackenzie.waifuviewer.R
-import com.mackenzie.waifuviewer.domain.RemoteConfigValues
 import com.mackenzie.waifuviewer.domain.ServerType
-import com.mackenzie.waifuviewer.domain.ServerType.ENHANCED
 import com.mackenzie.waifuviewer.domain.ServerType.NORMAL
 import com.mackenzie.waifuviewer.domain.selector.ImTags
 import com.mackenzie.waifuviewer.domain.selector.NekosTags
 import com.mackenzie.waifuviewer.domain.selector.PicsTags
 import com.mackenzie.waifuviewer.domain.selector.SwitchState
 import com.mackenzie.waifuviewer.domain.selector.TagsState
-import com.mackenzie.waifuviewer.ui.common.Constants
-import com.mackenzie.waifuviewer.ui.common.GenerativeViewModelFactory
-import com.mackenzie.waifuviewer.ui.common.app
-import com.mackenzie.waifuviewer.ui.common.getConfig
 import com.mackenzie.waifuviewer.ui.common.isLandscape
 import com.mackenzie.waifuviewer.ui.common.ui.previewSelectorState
-import com.mackenzie.waifuviewer.ui.gemini.resume.SummarizeWaifuScreen
-import com.mackenzie.waifuviewer.ui.gemini.resume.SummarizeWaifuViewModel
-import com.mackenzie.waifuviewer.ui.main.MainState
 import com.mackenzie.waifuviewer.ui.selector.SelectorViewModel
 import com.mackenzie.waifuviewer.ui.theme.Dimens
 import com.mackenzie.waifuviewer.ui.theme.WaifuViewerTheme
-import dagger.hilt.android.lifecycle.HiltViewModel
 
 @Composable
 internal fun SelectorScreenContentRoute(
@@ -115,9 +97,15 @@ fun SelectorScreenContent(
 
     var tagsState by remember { mutableStateOf(tags) }
 
+    val navBarHeight = LocalContext.current.resources
+
+
+    // val navigationBarHeight = insets.getInsets(WindowInsetsSides.Bottom).bottom
+
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .navigationBarsPadding()
             .background(MaterialTheme.colorScheme.background)
     ) {
 

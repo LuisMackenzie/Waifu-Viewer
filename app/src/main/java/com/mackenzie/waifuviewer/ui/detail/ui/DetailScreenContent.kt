@@ -2,6 +2,7 @@ package com.mackenzie.waifuviewer.ui.detail.ui
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -38,7 +39,7 @@ fun DetailImScreenContent(
         )
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize().navigationBarsPadding()) {
         state.waifuIm?.let { waifu ->
             waifuUrl = waifu.url
             ZoomableImage(waifu.url)
@@ -81,7 +82,7 @@ fun DetailPicsScreenContent(
         )
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize().navigationBarsPadding()) {
         state.waifuPic?.let { waifu ->
             waifuUrl = waifu.url
             val title = waifu.url.substringAfterLast('/').substringBeforeLast('.')
@@ -125,7 +126,7 @@ fun DetailBestScreenContent(
         )
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize().navigationBarsPadding()) {
         state.waifu?.let { waifu ->
             waifuUrl = waifu.url
             val title = waifu.url.substringAfterLast('/').substringBeforeLast('.')
@@ -169,7 +170,7 @@ fun DetailFavsScreenContent(
         )
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize().navigationBarsPadding()) {
         state.waifu?.let { waifu ->
             waifuUrl = waifu.url
             ZoomableImage(waifu.url)

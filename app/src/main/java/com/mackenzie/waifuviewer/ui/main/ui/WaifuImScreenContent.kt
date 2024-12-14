@@ -2,6 +2,7 @@ package com.mackenzie.waifuviewer.ui.main.ui
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -54,7 +55,7 @@ fun WaifuImScreenContent(
             "${stringResource(id = R.string.waifus_size)} $count".showToast(LocalContext.current)
             hideInfoCount()
         }*/
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(modifier = Modifier.fillMaxSize().navigationBarsPadding()) {
             if (waifus.isEmpty()) LoadingAnimation(modifier = Modifier.fillMaxSize())
             WaifuImList(
                 items = waifus,
