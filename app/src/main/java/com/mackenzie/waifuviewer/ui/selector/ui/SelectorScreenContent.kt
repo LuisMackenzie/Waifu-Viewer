@@ -31,6 +31,7 @@ import com.mackenzie.waifuviewer.domain.selector.PicsTags
 import com.mackenzie.waifuviewer.domain.selector.SwitchState
 import com.mackenzie.waifuviewer.domain.selector.TagsState
 import com.mackenzie.waifuviewer.ui.common.isLandscape
+import com.mackenzie.waifuviewer.ui.common.ui.isNavigationBarVisible
 import com.mackenzie.waifuviewer.ui.common.ui.previewSelectorState
 import com.mackenzie.waifuviewer.ui.selector.SelectorViewModel
 import com.mackenzie.waifuviewer.ui.theme.Dimens
@@ -97,16 +98,17 @@ fun SelectorScreenContent(
 
     var tagsState by remember { mutableStateOf(tags) }
 
-    val navBarHeight = LocalContext.current.resources
-
-
-    // val navigationBarHeight = insets.getInsets(WindowInsetsSides.Bottom).bottom
-
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .navigationBarsPadding()
-            .background(MaterialTheme.colorScheme.background)
+        modifier = if (isNavigationBarVisible()) {
+            Modifier
+                .fillMaxSize()
+                .navigationBarsPadding()
+                .background(MaterialTheme.colorScheme.background)
+        } else {
+            Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+        }
     ) {
 
         state.waifuIm?.let { waifu ->
