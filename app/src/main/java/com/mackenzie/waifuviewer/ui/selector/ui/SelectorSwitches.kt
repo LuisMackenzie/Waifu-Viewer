@@ -56,7 +56,8 @@ fun SelectorSwitches(
                     onCheckedChange = { gifSwitch = !gifSwitch; switchStateCallback(SwitchState(nsfwSwitch, gifSwitch, portraitSwitch)) },
                     colors = SwitchDefaults.colors(
                         checkedThumbColor = Color.White,
-                        checkedTrackColor = MaterialTheme.colorScheme.primaryContainer
+                        checkedTrackColor = MaterialTheme.colorScheme.primaryContainer,
+                        uncheckedTrackColor = Color.Transparent
                     )
                 )
             }
@@ -76,7 +77,8 @@ fun SelectorSwitches(
                     onCheckedChange = { nsfwSwitch = !nsfwSwitch; switchStateCallback(SwitchState(nsfwSwitch, gifSwitch, portraitSwitch)) },
                     colors = SwitchDefaults.colors(
                         checkedThumbColor = Color.Black,
-                        checkedTrackColor = MaterialTheme.colorScheme.primaryContainer
+                        checkedTrackColor = MaterialTheme.colorScheme.primaryContainer,
+                        uncheckedTrackColor = Color.Transparent
                     )
                 )
             }
@@ -96,7 +98,8 @@ fun SelectorSwitches(
                     onCheckedChange = { portraitSwitch = !portraitSwitch; switchStateCallback(SwitchState(nsfwSwitch, gifSwitch, portraitSwitch)) },
                     colors = SwitchDefaults.colors(
                         checkedThumbColor = Color.White,
-                        checkedTrackColor = MaterialTheme.colorScheme.primaryContainer
+                        checkedTrackColor = MaterialTheme.colorScheme.primaryContainer,
+                        uncheckedTrackColor = Color.Transparent
                     )
                 )
             }
