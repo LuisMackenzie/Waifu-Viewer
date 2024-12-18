@@ -29,12 +29,13 @@ import com.mackenzie.waifuviewer.ui.theme.WaifuViewerTheme
 fun SelectorSwitches(
     modifier: Modifier = Modifier,
     switchStateCallback: (SwitchState) -> Unit = {},
+    switchState: SwitchState = SwitchState(),
     server: ServerType = NORMAL,
 ) {
 
-    var nsfwSwitch by remember { mutableStateOf(false) }
-    var gifSwitch by remember { mutableStateOf(false) }
-    var portraitSwitch by remember { mutableStateOf(false) }
+    var nsfwSwitch by remember { mutableStateOf(switchState.nsfw) }
+    var gifSwitch by remember { mutableStateOf(switchState.gifs) }
+    var portraitSwitch by remember { mutableStateOf(switchState.portrait) }
 
     Row(
         verticalAlignment = Alignment.CenterVertically,

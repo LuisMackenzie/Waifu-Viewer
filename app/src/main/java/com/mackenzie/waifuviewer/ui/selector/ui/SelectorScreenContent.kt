@@ -175,6 +175,7 @@ fun SelectorScreenContent(
                     .padding(end = Dimens.homeSwitchesPaddingEnd)
             },
             switchStateCallback = switchStateCallback,
+            switchState = switchState,
             server = server
         )
     }

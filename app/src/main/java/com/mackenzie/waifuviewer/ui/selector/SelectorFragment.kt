@@ -83,13 +83,15 @@ class SelectorFragment : Fragment() {
 
     @Composable
     private fun LaunchSelectorScreen() {
-        var switchState by remember { mutableStateOf(SwitchState()) }
+        var switchState by remember { mutableStateOf(switchValues) }
         var serverState by remember { mutableStateOf(remoteValues.type ?: NORMAL) }
         val tagsState by remember { mutableStateOf(TagsState()) }
 
         SelectorScreenContent(
             state = vm.state.collectAsStateWithLifecycle().value,
             onServerButtonClicked = {
+                // switchState = SwitchState(false, false, false)
+                // switchValues = switchState
                 when (serverState) {
                     NORMAL -> {
                         remoteValues.type = ENHANCED
