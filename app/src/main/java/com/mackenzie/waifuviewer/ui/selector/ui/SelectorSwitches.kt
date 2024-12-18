@@ -33,10 +33,6 @@ fun SelectorSwitches(
     server: ServerType = NORMAL,
 ) {
 
-    var nsfwSwitch by remember { mutableStateOf(switchState.nsfw) }
-    var gifSwitch by remember { mutableStateOf(switchState.gifs) }
-    var portraitSwitch by remember { mutableStateOf(switchState.portrait) }
-
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceEvenly,
@@ -53,8 +49,8 @@ fun SelectorSwitches(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Switch(
-                    checked = gifSwitch,
-                    onCheckedChange = { gifSwitch = !gifSwitch; switchStateCallback(SwitchState(nsfwSwitch, gifSwitch, portraitSwitch)) },
+                    checked = switchState.gifs,
+                    onCheckedChange = { switchStateCallback(SwitchState(switchState.nsfw, switchState.gifs.not(), switchState.portrait)) },
                     colors = SwitchDefaults.colors(
                         checkedThumbColor = Color.White,
                         checkedTrackColor = MaterialTheme.colorScheme.primaryContainer,
@@ -70,12 +66,12 @@ fun SelectorSwitches(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = stringResource(id = if(nsfwSwitch) R.string.nsfw_content else R.string.sfw_content),
+                    text = stringResource(id = if(switchState.nsfw) R.string.nsfw_content else R.string.sfw_content),
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Switch(
-                    checked = nsfwSwitch,
-                    onCheckedChange = { nsfwSwitch = !nsfwSwitch; switchStateCallback(SwitchState(nsfwSwitch, gifSwitch, portraitSwitch)) },
+                    checked = switchState.nsfw,
+                    onCheckedChange = { switchStateCallback(SwitchState(switchState.nsfw.not(), switchState.gifs, switchState.portrait)) },
                     colors = SwitchDefaults.colors(
                         checkedThumbColor = Color.Black,
                         checkedTrackColor = MaterialTheme.colorScheme.primaryContainer,
@@ -91,12 +87,12 @@ fun SelectorSwitches(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = stringResource(id = if(portraitSwitch) R.string.landscape else R.string.portrait_default),
+                    text = stringResource(id = if(switchState.portrait) R.string.landscape else R.string.portrait_default),
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Switch(
-                    checked = portraitSwitch,
-                    onCheckedChange = { portraitSwitch = !portraitSwitch; switchStateCallback(SwitchState(nsfwSwitch, gifSwitch, portraitSwitch)) },
+                    checked = switchState.portrait,
+                    onCheckedChange = { switchStateCallback(SwitchState(switchState.nsfw, switchState.gifs, switchState.portrait.not())) },
                     colors = SwitchDefaults.colors(
                         checkedThumbColor = Color.White,
                         checkedTrackColor = MaterialTheme.colorScheme.primaryContainer,

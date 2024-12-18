@@ -90,8 +90,8 @@ class SelectorFragment : Fragment() {
         SelectorScreenContent(
             state = vm.state.collectAsStateWithLifecycle().value,
             onServerButtonClicked = {
-                // switchState = SwitchState(false, false, false)
-                // switchValues = switchState
+                switchState = SwitchState()
+                switchValues = switchState
                 when (serverState) {
                     NORMAL -> {
                         remoteValues.type = ENHANCED
