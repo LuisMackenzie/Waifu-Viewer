@@ -49,25 +49,11 @@ fun SelectorMainButtons(
     var switchDefaultState by remember { mutableStateOf(SwitchState()) }
 
     when (server) {
-        NEKOS -> {
-            if (switchState.gifs != switchDefaultState.gifs) {
-                indiceSeleccionado = 0
-            }
-            switchDefaultState = switchState
-        }
-        ENHANCED -> {
-            if (switchState.nsfw != switchDefaultState.nsfw) {
-                indiceSeleccionado = 0
-            }
-            switchDefaultState = switchState
-        }
-        else -> {
-            if (switchState.nsfw != switchDefaultState.nsfw) {
-                indiceSeleccionado = 0
-            }
-            switchDefaultState = switchState
-        }
+        NEKOS -> { if (switchState.gifs != switchDefaultState.gifs) { indiceSeleccionado = 0 } }
+        ENHANCED -> { if (switchState.nsfw != switchDefaultState.nsfw) { indiceSeleccionado = 0 } }
+        else -> { if (switchState.nsfw != switchDefaultState.nsfw) { indiceSeleccionado = 0 } }
     }
+    switchDefaultState = switchState
 
     Box(modifier = Modifier.fillMaxSize()) {
 
