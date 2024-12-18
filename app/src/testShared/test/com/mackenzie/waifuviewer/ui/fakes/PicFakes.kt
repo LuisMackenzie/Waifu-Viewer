@@ -2,10 +2,10 @@ package com.mackenzie.waifuviewer.ui.fakes
 
 import com.mackenzie.waifuviewer.data.db.WaifuPicDao
 import com.mackenzie.waifuviewer.data.db.WaifuPicDbItem
-import com.mackenzie.waifuviewer.data.server.WaifuPic
+import com.mackenzie.waifuviewer.data.server.models.WaifuPic
 import com.mackenzie.waifuviewer.data.server.WaifuPicService
-import com.mackenzie.waifuviewer.data.server.WaifuPicsRequest
-import com.mackenzie.waifuviewer.data.server.WaifuPicsResult
+import com.mackenzie.waifuviewer.data.server.models.WaifuPicsRequest
+import com.mackenzie.waifuviewer.data.server.models.WaifuPicsResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -54,7 +54,7 @@ class FakeWaifuPicDao(waifusPic: List<WaifuPicDbItem> = emptyList()) : WaifuPicD
 
 }
 
-class FakeRemotePicsService(private val waifus: List<String>) : WaifuPicService {
+class FakeRemotePicsService(private val waifus: List<String> = emptyList()) : WaifuPicService {
 
     override suspend fun getRandomWaifuPics(
         many: String,

@@ -1,5 +1,6 @@
 package com.mackenzie.waifuviewer.data.server
 
+import com.mackenzie.waifuviewer.data.server.models.TraceMoeResult
 import retrofit2.http.GET
 import retrofit2.http.Query
 

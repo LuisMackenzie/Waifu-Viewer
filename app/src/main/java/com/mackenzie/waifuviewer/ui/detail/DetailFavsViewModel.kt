@@ -3,10 +3,12 @@ package com.mackenzie.waifuviewer.ui.detail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mackenzie.waifuviewer.di.WaifuId
+import com.mackenzie.waifuviewer.domain.AnimeSearchItem
 import com.mackenzie.waifuviewer.domain.Error
 import com.mackenzie.waifuviewer.domain.FavoriteItem
 import com.mackenzie.waifuviewer.usecases.FindFavoriteUseCase
 import com.mackenzie.waifuviewer.usecases.SwitchFavoriteUseCase
+import com.mackenzie.waifuviewer.usecases.moe.GetSearchMoeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,7 +21,8 @@ import javax.inject.Inject
 class DetailFavsViewModel @Inject constructor(
     @WaifuId private val waifuId: Int,
     findFavoriteUseCase: FindFavoriteUseCase,
-    private val switchFavoriteUseCase : SwitchFavoriteUseCase
+    private val switchFavoriteUseCase : SwitchFavoriteUseCase,
+    private val getSearchMoeUseCase : GetSearchMoeUseCase
     ): ViewModel() {
 
     private val _state = MutableStateFlow(UiState())
@@ -42,8 +45,19 @@ class DetailFavsViewModel @Inject constructor(
         }
     }
 
+    fun onSearchClicked(url: String) {
+        viewModelScope.launch {
+            val search = getSearchMoeUseCase(url)
+            search.fold(
+                ifLeft = { error -> _state.update { it.copy(error = error) } },
+                ifRight = { search -> _state.update { it.copy(search = search) } }
+            )
+        }
+    }
+
     data class UiState(
         val waifu: FavoriteItem? = null,
+        val search: List<AnimeSearchItem>? = null,
         val error: Error? = null
     )
 }

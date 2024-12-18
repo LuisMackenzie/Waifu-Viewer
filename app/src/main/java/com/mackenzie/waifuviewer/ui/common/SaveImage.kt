@@ -7,8 +7,15 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import android.widget.Toast
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.withContext
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -21,7 +28,8 @@ class SaveImage {
         context: Context,
         bitmapObject: Bitmap,
         imageTitle: String,
-        mimeType: String
+        mimeType: String,
+        url: String
     ) {
         val imageOutStream: OutputStream?
 
@@ -43,46 +51,52 @@ class SaveImage {
                 directory.mkdirs()
 
             val image = File(directory, imageTitle)
-            imageOutStream = FileOutputStream(image)
-
-            /*val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
-                addCategory(Intent.CATEGORY_OPENABLE)
-                setDataAndType(Uri.fromFile(directory), mimeType)
-                // putExtra(Intent.EXTRA_TITLE, "Waifu.jpg")
-                putExtra("mimeType", mimeType)
-                // putExtra(DocumentsContract.EXTRA_INITIAL_URI, uri)
-            }*/
-            // context.startActivity(Intent.createChooser(intent, "Set as:"))
+            imageOutStream = withContext(Dispatchers.IO) {
+                FileOutputStream(image)
+            }
         }
 
         try {
             if (mimeType == "image/png") {
                 bitmapObject.compress(Bitmap.CompressFormat.PNG, 100, imageOutStream!!)
             } else if (mimeType == "image/gif") {
-                // var imageGif: Bitmap = bitmapObject.copy(Bitmap.Config.ARGB_8888, true)
-                // imageGif = Glide.with(context).asGif().load(dirImagen).into(image)
-                bitmapObject.compress(Bitmap.CompressFormat.JPEG, 100, imageOutStream!!)
+
+                val gifImage = retrieveGifFromUrl(url)
+                withContext(Dispatchers.IO) {
+                    imageOutStream?.write(gifImage)
+                }
             } else {
                 bitmapObject.compress(Bitmap.CompressFormat.JPEG, 100, imageOutStream!!)
             }
 
 
+        } catch (e: IOException) {
+            e.printStackTrace()
         } finally {
-            // imageOutStream?.flush()
             imageOutStream?.close()
             withContext(Main) {
                 Toast.makeText(context, "Imagen Guardada", Toast.LENGTH_SHORT).show()
             }
         }
+    }
 
-        /*private boolean isGif(String imagen) {
-            String extension = "";
-            int i = imagen.lastIndexOf('.');
-            int p = Math.max(imagen.lastIndexOf('/'), imagen.lastIndexOf('\\'));
-            if (i > p) {
-                extension = imagen.substring(i+1);
+    suspend private fun retrieveGifFromUrl(url: String):ByteArray {
+        val client = OkHttpClient()
+        val request = Request.Builder().url(url).build()
+        val deferred =  CompletableDeferred<ByteArray>()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
             }
-            return extension.trim().equalsIgnoreCase("gif");
-        }*/
+
+            override fun onResponse(call: Call, response: Response) {
+                response.body?.let { body ->
+                    val bytes = body.bytes()
+                    deferred.complete(bytes)
+                }
+            }
+        })
+        return deferred.await()
     }
 }

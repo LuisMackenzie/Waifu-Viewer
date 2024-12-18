@@ -2,6 +2,8 @@ package com.mackenzie.waifuviewer.data.server
 
 import arrow.core.Either
 import com.mackenzie.waifuviewer.data.datasource.WaifusMoeRemoteDataSource
+import com.mackenzie.waifuviewer.data.server.models.AnimeResult
+import com.mackenzie.waifuviewer.data.server.models.RemoteConnect
 import com.mackenzie.waifuviewer.data.tryCall
 import com.mackenzie.waifuviewer.domain.AnimeSearchItem
 import com.mackenzie.waifuviewer.domain.Error
@@ -24,8 +26,8 @@ private fun AnimeResult.toDomainModel(): AnimeSearchItem =
         0,
         anilist,
         filename,
-        episode,
-        from,
+        episode ?: 0,
+        from ?: 0f,
         to,
         similarity,
         video,

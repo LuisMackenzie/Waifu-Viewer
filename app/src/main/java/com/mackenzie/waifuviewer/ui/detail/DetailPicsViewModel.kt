@@ -3,8 +3,10 @@ package com.mackenzie.waifuviewer.ui.detail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mackenzie.waifuviewer.di.WaifuId
+import com.mackenzie.waifuviewer.domain.AnimeSearchItem
 import com.mackenzie.waifuviewer.domain.WaifuPicItem
 import com.mackenzie.waifuviewer.domain.Error
+import com.mackenzie.waifuviewer.usecases.moe.GetSearchMoeUseCase
 import com.mackenzie.waifuviewer.usecases.pics.FindWaifuPicUseCase
 import com.mackenzie.waifuviewer.usecases.pics.SwitchPicFavoriteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +21,8 @@ import javax.inject.Inject
 class DetailPicsViewModel @Inject constructor(
     @WaifuId private val waifuId: Int,
     findWaifuPicUseCase: FindWaifuPicUseCase,
-    private val switchPicFavoriteUseCase: SwitchPicFavoriteUseCase
+    private val switchPicFavoriteUseCase: SwitchPicFavoriteUseCase,
+    private val getSearchMoeUseCase : GetSearchMoeUseCase
     ): ViewModel() {
 
     private val _state = MutableStateFlow(UiState())
@@ -42,8 +45,19 @@ class DetailPicsViewModel @Inject constructor(
         }
     }
 
+    fun onSearchClicked(url: String) {
+        viewModelScope.launch {
+            val search = getSearchMoeUseCase(url)
+            search.fold(
+                ifLeft = { error -> _state.update { it.copy(error = error) } },
+                ifRight = { search -> _state.update { it.copy(search = search) } }
+            )
+        }
+    }
+
     data class UiState(
         val waifuPic: WaifuPicItem? = null,
+        val search: List<AnimeSearchItem>? = null,
         val error: Error? = null
     )
 }

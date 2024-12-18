@@ -22,6 +22,7 @@ import com.mackenzie.waifuviewer.domain.ServerType.*
 import com.mackenzie.waifuviewer.domain.getTypes
 import com.mackenzie.waifuviewer.ui.common.Constants
 import com.mackenzie.waifuviewer.ui.common.SaveImage
+import com.mackenzie.waifuviewer.ui.common.composeView
 import com.mackenzie.waifuviewer.ui.common.showToast
 import com.mackenzie.waifuviewer.ui.detail.ui.DetailBestScreenContent
 import com.mackenzie.waifuviewer.ui.detail.ui.DetailFavsScreenContent
@@ -56,25 +57,23 @@ class DetailFragment : Fragment() {
         mainState = buildMainState()
         val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
         val serverMode = sharedPref.getString(Constants.SERVER_MODE, "") ?: ""
+        val isFavorite = sharedPref.getBoolean(Constants.IS_FAVORITE_WAIFU, false)
 
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-            setContent {
-                MainTheme {
-                    LaunchDefaultScreen(serverMode.getTypes())
-                }
-            }
+        return composeView {
+            LaunchDefaultScreen(serverMode.getTypes(), isFavorite)
         }
     }
 
     @Composable
-    private fun LaunchDefaultScreen(mode: ServerType) {
-        when (mode) {
-            NORMAL -> DetailImScreen()
-            ENHANCED -> DetailPicsScreen()
-            NEKOS -> DetailNekosScreen()
-            FAVORITE -> DetailFavsScreen()
-            WAIFUGPT -> {}
+    private fun LaunchDefaultScreen(mode: ServerType, isFav:Boolean) {
+        if (isFav) DetailFavsScreen()
+        else {
+            when (mode) {
+                NORMAL -> DetailImScreen()
+                ENHANCED -> DetailPicsScreen()
+                NEKOS -> DetailNekosScreen()
+                else -> {}
+            }
         }
     }
 
@@ -87,7 +86,7 @@ class DetailFragment : Fragment() {
             prepareDownload = { title, link, imageExt -> prepareDownload(title, link, imageExt) },
             onFavoriteClicked = { imViewModel.onFavoriteClicked() },
             onDownloadClick = { onDownloadClick() },
-            onSearchClick = {notReady()} // { imViewModel.onSearchClick(it) }
+            onSearchClick = { imViewModel.onSearchClicked(it) }
         )
     }
 
@@ -98,7 +97,7 @@ class DetailFragment : Fragment() {
             prepareDownload = { title, link, imageExt -> prepareDownload(title, link, imageExt) },
             onFavoriteClicked = { picsViewModel.onFavoriteClicked() },
             onDownloadClick = { onDownloadClick() },
-            onSearchClick = {notReady()} // { picsViewModel.onSearchClick(it) }
+            onSearchClick = { picsViewModel.onSearchClicked(it) }
         )
     }
 
@@ -109,7 +108,8 @@ class DetailFragment : Fragment() {
             prepareDownload = { title, link, imageExt -> prepareDownload(title, link, imageExt) },
             onFavoriteClicked = { bestViewModel.onFavoriteClicked() },
             onDownloadClick = { onDownloadClick() },
-            onSearchClick = {notReady()} // { bestViewModel.onSearchClick(it) }
+            // El servicio no permite enviar imagenes de este server
+            onSearchClick = { notReady() } //  { bestViewModel.onSearchClicked(it) }
         )
     }
 
@@ -120,7 +120,7 @@ class DetailFragment : Fragment() {
             prepareDownload = { title, link, imageExt -> prepareDownload(title, link, imageExt) },
             onFavoriteClicked = { favsViewModel.onFavoriteClicked() },
             onDownloadClick = { onDownloadClick() },
-            onSearchClick = {notReady()} // { favsViewModel.onSearchClick(it) }
+            onSearchClick = { favsViewModel.onSearchClicked(it) }
         )
     }
 
@@ -160,6 +160,7 @@ class DetailFragment : Fragment() {
                     image,
                     title,
                     type,
+                    link
                 )
             } catch (e: IOException) {
                 Log.d(Constants.CATEGORY_TAG_DETAIL, "error: ${e.localizedMessage}")

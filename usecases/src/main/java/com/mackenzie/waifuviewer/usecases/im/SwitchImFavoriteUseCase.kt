@@ -1,7 +1,7 @@
 package com.mackenzie.waifuviewer.usecases.im
 
 import com.mackenzie.waifuviewer.data.WaifusImRepository
-import com.mackenzie.waifuviewer.domain.WaifuImItem
+import com.mackenzie.waifuviewer.domain.im.WaifuImItem
 import com.mackenzie.waifuviewer.domain.Error
 import javax.inject.Inject
 

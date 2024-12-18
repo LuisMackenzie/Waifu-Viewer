@@ -1,5 +1,6 @@
 package com.mackenzie.waifuviewer.ui.detail.ui
 
+import android.os.Build.VERSION.SDK_INT
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -14,6 +15,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import coil3.ImageLoader
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
@@ -38,11 +40,23 @@ fun ZoomableImage(imageUrl: String = "https://nekos.best/api/v2/neko/f09f1d72-4d
             }
         }
 
+    // Loader para los gifs se detecta solo y añadirlo al AsyncImage es opcional
+    /*val loader = ImageLoader.Builder(LocalContext.current)
+        .components {
+            if (SDK_INT >= 28) {
+                add(AnimatedImageDecoder.Factory())
+            } else {
+                add(GifDecoder.Factory())
+            }
+        }
+        .build()*/
+
     AsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
             .data(imageUrl)
             .crossfade(true)
             .build(),
+        // imageLoader = loader,
         placeholder = painterResource(R.drawable.ic_baseline_download),
         error = if (BuildConfig.DEBUG) painterResource(R.drawable.ic_offline_background) else painterResource(R.drawable.ic_failed),
         contentDescription = null,

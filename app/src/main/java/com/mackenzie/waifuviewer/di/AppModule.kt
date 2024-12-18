@@ -1,12 +1,14 @@
 package com.mackenzie.waifuviewer.di
 
 import android.app.Application
+import android.os.Build
 import androidx.room.Room
 import com.mackenzie.waifuviewer.data.*
 import com.mackenzie.waifuviewer.data.datasource.*
 import com.mackenzie.waifuviewer.data.db.WaifuDataBase
 import com.mackenzie.waifuviewer.data.db.datasources.*
 import com.mackenzie.waifuviewer.data.server.*
+import com.mackenzie.waifuviewer.data.server.models.RemoteConnect
 import com.mackenzie.waifuviewer.domain.ApiUrl
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -19,6 +21,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
@@ -51,13 +54,42 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideTagsDao(db: WaifuDataBase) = db.waifuImTagsDao()
+
+    @Provides
+    @Singleton
     fun provideApiUrl(): ApiUrl = ApiUrl()
+
+    @Provides
+    @Singleton
+    fun networkModule() = NetworkModule()
 
     @Provides
     @Singleton
     fun provideOkHttpClient():OkHttpClient = HttpLoggingInterceptor().run {
         level = HttpLoggingInterceptor.Level.BODY
-        OkHttpClient.Builder().addInterceptor(this).build()
+        when (Build.VERSION.SDK_INT) {
+            Build.VERSION_CODES.M, Build.VERSION_CODES.N -> {
+                OkHttpClient.Builder()
+                    .connectTimeout(60, TimeUnit.SECONDS)
+                    .readTimeout(60, TimeUnit.SECONDS)
+                    .writeTimeout(15, TimeUnit.SECONDS)
+                    .sslSocketFactory(
+                        networkModule().sslContext().socketFactory,
+                        networkModule().x509TrustManager()
+                    )
+                    .addInterceptor(this)
+                    .build()
+            }
+            else -> {
+                OkHttpClient.Builder()
+                    .connectTimeout(60, TimeUnit.SECONDS)
+                    .readTimeout(60, TimeUnit.SECONDS)
+                    .writeTimeout(15, TimeUnit.SECONDS)
+                    .addInterceptor(this)
+                    .build()
+            }
+        }
     }
 
     @Provides
@@ -94,12 +126,19 @@ object AppModule {
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
 
+        val builderOpenAi = Retrofit.Builder()
+            .baseUrl(apiUrl.openAiBaseUrl)
+            .client(client)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .build()
+
         val serviceIm = builderIm.create(WaifuImService::class.java)
         val servicePics = builderPics.create(WaifuPicService::class.java)
         val serviceBest = builderBest.create(WaifuBestService::class.java)
         val serviceMoe = builderMoe.create(WaifuTraceMoeService::class.java)
+        val serviceOpenAi = builderOpenAi.create(OpenAIService::class.java)
 
-        val connection = RemoteConnect(serviceIm, servicePics, serviceBest, serviceMoe)
+        val connection = RemoteConnect(serviceIm, servicePics, serviceBest, serviceMoe, serviceOpenAi)
 
         return connection
     }
@@ -130,6 +169,12 @@ abstract class AppDataModule {
 
     @Binds
     abstract fun bindRemotePicDataSource(remotePicDataSource: ServerPicDataSource): WaifusPicRemoteDataSource
+
+    @Binds
+    abstract fun bindRemoteMoeDataSource(remoteMoeDataSource: ServerMoeDataSource): WaifusMoeRemoteDataSource
+
+    @Binds
+    abstract fun bindRemoteOpenAiDataSource(remoteOpenAiDataSource: OpenAiDataSource): OpenAiRemoteDataSource
 
     @Binds
     abstract fun bindLocationDataSource(locationDataSource: PlayServicesLocationDataSource): LocationDataSource

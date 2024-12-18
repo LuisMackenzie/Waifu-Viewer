@@ -1,5 +1,8 @@
 package com.mackenzie.waifuviewer.data.server
 
+import com.mackenzie.waifuviewer.data.server.models.WaifuPic
+import com.mackenzie.waifuviewer.data.server.models.WaifuPicsRequest
+import com.mackenzie.waifuviewer.data.server.models.WaifuPicsResult
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET

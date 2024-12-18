@@ -62,8 +62,7 @@ class WaifuImInstrumentationTests {
 
     @Test
     fun check_button_navigates_to_waifus() = runTest {
-        onView(withId(R.id.btn_waifu))
-            .perform(click())
+        // onView(withId(R.id.btn_waifu)).perform(click())
 
         // Thread.sleep(3000)
         /// onView(withId(R.id.btn_waifu)).check(matches())

@@ -1,19 +1,29 @@
 package com.mackenzie.waifuviewer.ui.detail
 
 import app.cash.turbine.test
+import com.mackenzie.waifuviewer.data.TraceMoeRepository
 import com.mackenzie.waifuviewer.data.db.WaifuImDbItem
-import com.mackenzie.waifuviewer.data.server.WaifuIm
+import com.mackenzie.waifuviewer.data.server.models.RemoteConnect
+import com.mackenzie.waifuviewer.data.server.ServerMoeDataSource
+import com.mackenzie.waifuviewer.data.server.models.WaifuIm
 import com.mackenzie.waifuviewer.testrules.CoroutinesTestRule
 import com.mackenzie.waifuviewer.ui.buildImDatabaseWaifus
 import com.mackenzie.waifuviewer.ui.buildImRepositoryWith
 import com.mackenzie.waifuviewer.ui.detail.DetailImViewModel.UiState
+import com.mackenzie.waifuviewer.ui.fakes.FakeRemoteBestService
+import com.mackenzie.waifuviewer.ui.fakes.FakeRemoteImService
+import com.mackenzie.waifuviewer.ui.FakeRemoteMoeService
+import com.mackenzie.waifuviewer.ui.FakeRemoteOpenAiService
+import com.mackenzie.waifuviewer.ui.fakes.FakeRemotePicsService
 import com.mackenzie.waifuviewer.usecases.im.FindWaifuImUseCase
 import com.mackenzie.waifuviewer.usecases.im.SwitchImFavoriteUseCase
+import com.mackenzie.waifuviewer.usecases.moe.GetSearchMoeUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.kotlin.any
 
 @ExperimentalCoroutinesApi
 class DetailImIntegrationTests {
@@ -61,7 +71,18 @@ class DetailImIntegrationTests {
 
         val findWaifuImUseCase = FindWaifuImUseCase(repo)
         val switchImFavoriteUseCase = SwitchImFavoriteUseCase(repo)
-        val vm = DetailImViewModel(id , findWaifuImUseCase, switchImFavoriteUseCase)
+        val getSearchMoeUseCase = GetSearchMoeUseCase(repo = TraceMoeRepository(
+            ServerMoeDataSource(
+                RemoteConnect(
+                    FakeRemoteImService(),
+                    FakeRemotePicsService(),
+                    FakeRemoteBestService(),
+                    FakeRemoteMoeService(),
+                    FakeRemoteOpenAiService()
+                )            )
+        )
+        )
+        val vm = DetailImViewModel(id , findWaifuImUseCase, switchImFavoriteUseCase, getSearchMoeUseCase)
         return vm
     }
 

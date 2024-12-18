@@ -3,47 +3,54 @@ package com.mackenzie.waifuviewer.ui.common
 import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
-import android.graphics.Point
-import android.hardware.display.DisplayManager
 import android.nfc.NfcManager
 import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowInsets
 import android.view.WindowManager
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.DiffUtil
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.ktx.remoteConfig
+import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import com.mackenzie.waifuviewer.App
-import com.mackenzie.waifuviewer.R
+import com.mackenzie.waifuviewer.domain.RemoteConfigValues
+import com.mackenzie.waifuviewer.domain.ServerType
+import com.mackenzie.waifuviewer.domain.ServerType.ENHANCED
+import com.mackenzie.waifuviewer.domain.ServerType.NEKOS
+import com.mackenzie.waifuviewer.domain.ServerType.NORMAL
+import com.mackenzie.waifuviewer.ui.main.ui.MainTheme
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = true): View =
     LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
 
-fun ImageView.loadUrl(url: String) {
+/*fun ImageView.loadUrl(url: String) {
     Glide.with(context)
         .load(url)
         .diskCacheStrategy(DiskCacheStrategy.ALL)
         .transition(DrawableTransitionOptions.withCrossFade())
         .error(R.drawable.ic_error_grey)
         .into(this)
-}
+}*/
 
-fun ImageView.loadUrlCenterCrop(url: String) {
+// Unnussed
+/*fun ImageView.loadUrlCenterCrop(url: String) {
     Glide.with(context)
         .load(url)
         .centerCrop()
@@ -51,14 +58,53 @@ fun ImageView.loadUrlCenterCrop(url: String) {
         .transition(DrawableTransitionOptions.withCrossFade())
         .error(R.drawable.ic_error_grey)
         .into(this)
+}*/
+
+fun RemoteConfigValues.getConfig(app: Activity): RemoteConfigValues {
+    val temp = CompletableDeferred<RemoteConfigValues>()
+    var configValues = this
+    val remoteConfig: FirebaseRemoteConfig = Firebase.remoteConfig
+    val configSettings = remoteConfigSettings {
+        minimumFetchIntervalInSeconds = Constants.RELEASEINTERVALINSECONDS
+        // minimumFetchIntervalInSeconds = Constants.DEBUGINTERVALINSECONDS
+    }
+    remoteConfig.setConfigSettingsAsync(configSettings)
+    remoteConfig.fetchAndActivate().addOnCompleteListener { task ->
+        if (task.isSuccessful) {
+            configValues = RemoteConfigValues(
+                remoteConfig.getBoolean("nsfw_mode"),
+                remoteConfig.getBoolean("waifu_gpt_service"),
+                remoteConfig.getBoolean("waifu_gemini_service"),
+                remoteConfig.getBoolean("automatic_server"),
+                false,
+                remoteConfig.getLong("server_mode").toInt(),
+                getServerMode(app),
+            )
+            apply {
+                // setNsfwMode(nsfwIsActive, gptIsActive, geminiIsActive)
+                // setAutoMode(AutoModeIsEnabled)
+            }
+        } else {
+            Log.e("getRemoteConfig", "Hubo un Error al recuperar de remote config: ${task.exception}")
+        }
+    }
+    return configValues
+}
+
+fun getServerMode(app: Activity): ServerType {
+    val sharedPref = app.getPreferences(Context.MODE_PRIVATE)
+    val mode = sharedPref.getString(Constants.SERVER_MODE, NORMAL.value)
+    Log.v("GetMode", "SERVER_MODE=${mode}")
+    return when (mode) {
+        NORMAL.value -> NORMAL
+        ENHANCED.value -> ENHANCED
+        NEKOS.value -> NEKOS
+        else -> NORMAL
+    }
 }
 
 fun String.showToast(context: Context) {
-    Toast.makeText(context, this, Toast.LENGTH_LONG).show()
-}
-
-fun Context.showToast(msg: String) {
-    Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
+    Toast.makeText(context, this, Toast.LENGTH_SHORT).show()
 }
 
 fun Activity.showFullscreenCutout() {
@@ -71,6 +117,18 @@ fun Activity.showBelowCutout() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
         window.attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_NEVER
     }
+}
+
+fun Fragment.composeView(content: @Composable () -> Unit): ComposeView {
+    return ComposeView(requireContext()).apply {
+        setContent {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            MainTheme {
+                content()
+            }
+        }
+    }
+
 }
 
 @RequiresApi(Build.VERSION_CODES.R)

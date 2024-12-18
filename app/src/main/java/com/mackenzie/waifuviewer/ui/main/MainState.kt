@@ -9,7 +9,8 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.domain.*
-import com.mackenzie.waifuviewer.ui.SelectorFragmentDirections
+import com.mackenzie.waifuviewer.domain.im.WaifuImItem
+import com.mackenzie.waifuviewer.ui.selector.SelectorFragmentDirections
 import com.mackenzie.waifuviewer.ui.common.PermissionRequester
 import com.mackenzie.waifuviewer.ui.favs.FavoriteFragmentDirections
 import kotlinx.coroutines.CoroutineScope
@@ -57,6 +58,11 @@ class MainState(
 
     fun onButtonGptClicked() {
         val action = SelectorFragmentDirections.actionSelectorToGpt()
+        navController.navigate(action)
+    }
+
+    fun onButtonGeminiClicked() {
+        val action = SelectorFragmentDirections.actionSelectorToGemini()
         navController.navigate(action)
     }
 

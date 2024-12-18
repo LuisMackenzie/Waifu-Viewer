@@ -5,6 +5,7 @@ import com.mackenzie.waifuviewer.data.db.FavoriteDao
 import com.mackenzie.waifuviewer.data.db.FavoriteDbItem
 import com.mackenzie.waifuviewer.data.tryCall
 import com.mackenzie.waifuviewer.domain.*
+import com.mackenzie.waifuviewer.domain.im.WaifuImItem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

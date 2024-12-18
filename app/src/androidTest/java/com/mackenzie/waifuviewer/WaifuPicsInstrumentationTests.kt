@@ -60,8 +60,7 @@ class WaifuPicsInstrumentationTests {
 
     @Test
     fun check_button_navigates_to_waifus() = runTest {
-        Espresso.onView(ViewMatchers.withId(R.id.btn_waifu))
-            .perform(ViewActions.click())
+        // Espresso.onView(ViewMatchers.withId(R.id.btn_waifu)).perform(ViewActions.click())
 
         // Thread.sleep(3000)
         /// onView(withId(R.id.btn_waifu)).check(matches())

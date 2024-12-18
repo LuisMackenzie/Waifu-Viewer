@@ -8,7 +8,7 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="com.mackenzie.waifuviewer" />
+                  <option name="appId" value="com.mackenzie.waifuviewer.debug" />
                   <option name="mobileSdkAppId" value="1:935658848849:android:008c1f70ed0cf27b516e70" />
                   <option name="projectId" value="waifu-viewer" />
                   <option name="projectNumber" value="935658848849" />

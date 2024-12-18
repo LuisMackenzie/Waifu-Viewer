@@ -1,20 +1,30 @@
 package com.mackenzie.waifuviewer.ui.detail
 
 import app.cash.turbine.test
+import com.mackenzie.waifuviewer.data.TraceMoeRepository
 import com.mackenzie.waifuviewer.data.db.WaifuBestDbItem
-import com.mackenzie.waifuviewer.data.server.WaifuBestGif
-import com.mackenzie.waifuviewer.data.server.WaifuBestPng
+import com.mackenzie.waifuviewer.data.server.models.RemoteConnect
+import com.mackenzie.waifuviewer.data.server.ServerMoeDataSource
+import com.mackenzie.waifuviewer.data.server.models.WaifuBestGif
+import com.mackenzie.waifuviewer.data.server.models.WaifuBestPng
 import com.mackenzie.waifuviewer.testrules.CoroutinesTestRule
+import com.mackenzie.waifuviewer.ui.FakeRemoteMoeService
+import com.mackenzie.waifuviewer.ui.FakeRemoteOpenAiService
 import com.mackenzie.waifuviewer.ui.helpers.buildBestDatabaseWaifus
 import com.mackenzie.waifuviewer.ui.helpers.buildBestRepositoryWith
 import com.mackenzie.waifuviewer.ui.detail.DetailBestViewModel.UiState
+import com.mackenzie.waifuviewer.ui.fakes.FakeRemoteBestService
+import com.mackenzie.waifuviewer.ui.fakes.FakeRemoteImService
+import com.mackenzie.waifuviewer.ui.fakes.FakeRemotePicsService
 import com.mackenzie.waifuviewer.usecases.best.FindWaifuBestUseCase
 import com.mackenzie.waifuviewer.usecases.best.SwitchBestFavoriteUseCase
+import com.mackenzie.waifuviewer.usecases.moe.GetSearchMoeUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.kotlin.any
 
 @ExperimentalCoroutinesApi
 class DetailBestIntegrationTests {
@@ -63,7 +73,18 @@ class DetailBestIntegrationTests {
 
         val findWaifuUseCase = FindWaifuBestUseCase(repo)
         val switchFavoriteUseCase = SwitchBestFavoriteUseCase(repo)
-        val vm = DetailBestViewModel(id , findWaifuUseCase, switchFavoriteUseCase)
+        val getSearchMoeUseCase = GetSearchMoeUseCase(repo = TraceMoeRepository(ServerMoeDataSource(
+            RemoteConnect(
+                FakeRemoteImService(),
+                FakeRemotePicsService(),
+                FakeRemoteBestService(),
+                FakeRemoteMoeService(),
+                FakeRemoteOpenAiService()
+            )
+        )
+        )
+        )
+        val vm = DetailBestViewModel(id , findWaifuUseCase, switchFavoriteUseCase, getSearchMoeUseCase)
         return vm
     }
 

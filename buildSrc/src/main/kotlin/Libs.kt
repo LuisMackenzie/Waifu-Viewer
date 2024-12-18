@@ -100,6 +100,7 @@ object Libs {
 
     object Coil {
         const val coil = "io.coil-kt.coil3:coil-compose:_"
+        const val coilGif = "io.coil-kt.coil3:coil-gif:_"
         const val coilNetwork = "io.coil-kt.coil3:coil-network-okhttp:_"
     }
 

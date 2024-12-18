@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mackenzie.waifuviewer.data.toError
 import com.mackenzie.waifuviewer.domain.Error
-import com.mackenzie.waifuviewer.domain.WaifuImItem
+import com.mackenzie.waifuviewer.domain.im.WaifuImItem
 import com.mackenzie.waifuviewer.usecases.im.ClearWaifuImUseCase
 import com.mackenzie.waifuviewer.usecases.im.GetWaifuImUseCase
 import com.mackenzie.waifuviewer.usecases.im.RequestMoreWaifuImUseCase

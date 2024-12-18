@@ -1,8 +1,6 @@
 package com.mackenzie.waifuviewer.ui.main
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,12 +17,11 @@ import com.mackenzie.waifuviewer.WaifuPicsViewModel
 import com.mackenzie.waifuviewer.domain.LoadingState
 import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.domain.ServerType.ENHANCED
-import com.mackenzie.waifuviewer.domain.ServerType.FAVORITE
 import com.mackenzie.waifuviewer.domain.ServerType.NEKOS
 import com.mackenzie.waifuviewer.domain.ServerType.NORMAL
-import com.mackenzie.waifuviewer.domain.ServerType.WAIFUGPT
 import com.mackenzie.waifuviewer.domain.getTypes
 import com.mackenzie.waifuviewer.ui.common.Constants
+import com.mackenzie.waifuviewer.ui.common.composeView
 import com.mackenzie.waifuviewer.ui.common.showToast
 import com.mackenzie.waifuviewer.ui.main.ui.MainTheme
 import com.mackenzie.waifuviewer.ui.main.ui.WaifuBestScreenContent
@@ -48,25 +45,6 @@ class WaifuFragment : Fragment() {
     private var serverMode: String = ""
     private var lmState: LoadingState = LoadingState()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        
-        when (serverMode) {
-            getString(R.string.server_enhanced_string) -> {
-                // binding.recycler.adapter = waifuPicsAdapter
-                // viewLifecycleOwner.launchAndCollect(picsViewModel.state) { binding withPicsUpdateUI it }
-            }
-            getString(R.string.server_normal_string) -> {
-                // binding.recycler.adapter = waifuImAdapter
-                // viewLifecycleOwner.launchAndCollect(imViewModel.state) { binding withImUpdateUI it }
-            }
-            getString(R.string.server_nekos_string) -> {
-                // binding.recycler.adapter = waifuBestAdapter
-                // viewLifecycleOwner.launchAndCollect(bestViewModel.state) { binding withBestUpdateUI it }
-            }
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -76,13 +54,16 @@ class WaifuFragment : Fragment() {
         serverMode = safeArgs.bundleInfo.getString(Constants.SERVER_MODE) ?: ""
         bun = safeArgs.bundleInfo
         loadCustomResult(bun)
-        return ComposeView(requireContext()).apply {
+        /*return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 MainTheme {
                     LaunchWaifuScreen(serverMode.getTypes())
                 }
             }
+        }*/
+        return composeView {
+            LaunchWaifuScreen(serverMode.getTypes())
         }
     }
 
@@ -92,8 +73,7 @@ class WaifuFragment : Fragment() {
             NORMAL -> WaifuImScreen()
             ENHANCED -> WaifuPicsScreen()
             NEKOS -> WaifuNekosScreen()
-            FAVORITE -> {}
-            WAIFUGPT -> {}
+            else -> {}
         }
     }
 

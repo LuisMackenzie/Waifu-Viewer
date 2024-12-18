@@ -3,6 +3,10 @@ package com.mackenzie.waifuviewer.ui.fakes
 import com.mackenzie.waifuviewer.data.db.WaifuBestDao
 import com.mackenzie.waifuviewer.data.db.WaifuBestDbItem
 import com.mackenzie.waifuviewer.data.server.*
+import com.mackenzie.waifuviewer.data.server.models.WaifuBestGif
+import com.mackenzie.waifuviewer.data.server.models.WaifuBestGifResult
+import com.mackenzie.waifuviewer.data.server.models.WaifuBestPng
+import com.mackenzie.waifuviewer.data.server.models.WaifuBestPngResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update

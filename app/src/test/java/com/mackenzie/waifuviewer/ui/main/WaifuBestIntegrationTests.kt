@@ -2,8 +2,8 @@ package com.mackenzie.waifuviewer.ui.main
 
 import app.cash.turbine.test
 import com.mackenzie.waifuviewer.data.db.WaifuBestDbItem
-import com.mackenzie.waifuviewer.data.server.WaifuBestGif
-import com.mackenzie.waifuviewer.data.server.WaifuBestPng
+import com.mackenzie.waifuviewer.data.server.models.WaifuBestGif
+import com.mackenzie.waifuviewer.data.server.models.WaifuBestPng
 import com.mackenzie.waifuviewer.testrules.CoroutinesTestRule
 import com.mackenzie.waifuviewer.ui.helpers.buildBestDatabaseWaifus
 import com.mackenzie.waifuviewer.ui.helpers.buildBestRemoteWaifus

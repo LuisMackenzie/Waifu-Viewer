@@ -3,7 +3,7 @@ import java.util.Properties
 plugins {
     id(Plugins.application)
     id(Plugins.android)
-    id(Plugins.kapt)
+    // id(Plugins.kapt)
     id(Plugins.ksp)
     id(Plugins.parcelize)
     id(Plugins.safeArgs)
@@ -25,9 +25,7 @@ android {
         versionCode = AppConfig.versionCode
         versionName = AppConfig.versionName
         testInstrumentationRunner = AppConfig.testInstrumentationRunnerHilt
-        /*vectorDrawables {
-            useSupportLibrary = true
-        }*/
+        vectorDrawables.useSupportLibrary = true
 
     }
 
@@ -98,9 +96,8 @@ android {
 
     buildFeatures {
         buildConfig = true
-        dataBinding = true
+        viewBinding = true
         compose = true
-        // viewBinding = true
     }
 
     sourceSets {
@@ -171,11 +168,13 @@ dependencies {
     ksp(Libs.Hilt.compiler)
 
     // Glide libraries
-    implementation(Libs.Glide.glide)
-    ksp(Libs.Glide.compiler)
+    // Sustituido por compose
+    // implementation(Libs.Glide.glide)
+    // ksp(Libs.Glide.compiler)
 
     // Coil libraries
     implementation(Libs.Coil.coil)
+    implementation(Libs.Coil.coilGif)
     implementation(Libs.Coil.coilNetwork)
 
     // Retrofit Libraries
@@ -235,6 +234,7 @@ dependencies {
 
     // For instrumentation tests
     androidTestImplementation(Libs.AndroidX.Test.Ext.junit)
+    androidTestImplementation(Libs.AndroidX.Test.Espresso.core)
     androidTestImplementation(Libs.AndroidX.Test.Espresso.contrib)
     androidTestImplementation(Libs.AndroidX.Test.Runner.runner)
     androidTestImplementation(Libs.AndroidX.Test.Runner.rules)

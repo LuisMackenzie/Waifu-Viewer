@@ -1,10 +1,13 @@
 package com.mackenzie.waifuviewer.ui.main.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,8 +20,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.mackenzie.waifuviewer.R
-import com.mackenzie.waifuviewer.domain.WaifuImItem
+import com.mackenzie.waifuviewer.domain.im.WaifuImItem
 import com.mackenzie.waifuviewer.ui.common.showToast
+import com.mackenzie.waifuviewer.ui.common.ui.isNavigationBarVisible
 import com.mackenzie.waifuviewer.ui.common.ui.previewMainState
 import com.mackenzie.waifuviewer.ui.detail.ui.LoadingAnimation
 import com.mackenzie.waifuviewer.ui.favs.ui.WaifuDialog
@@ -54,7 +58,18 @@ fun WaifuImScreenContent(
             "${stringResource(id = R.string.waifus_size)} $count".showToast(LocalContext.current)
             hideInfoCount()
         }*/
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(
+            modifier = if (isNavigationBarVisible()) {
+                Modifier
+                    .fillMaxSize()
+                    .navigationBarsPadding()
+                    .background(MaterialTheme.colorScheme.background)
+            } else {
+                Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
+            }
+        ) {
             if (waifus.isEmpty()) LoadingAnimation(modifier = Modifier.fillMaxSize())
             WaifuImList(
                 items = waifus,

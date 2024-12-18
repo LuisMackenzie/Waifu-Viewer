@@ -5,6 +5,7 @@ import com.mackenzie.waifuviewer.data.db.*
 import com.mackenzie.waifuviewer.data.db.datasources.FavoriteDataSource
 import com.mackenzie.waifuviewer.data.db.datasources.RoomPicDataSource
 import com.mackenzie.waifuviewer.data.server.*
+import com.mackenzie.waifuviewer.data.server.models.RemoteConnect
 import com.mackenzie.waifuviewer.ui.fakes.*
 
 fun buildPicRepositoryWith(
@@ -16,7 +17,11 @@ fun buildPicRepositoryWith(
     val remotePicDataSource = ServerPicDataSource( RemoteConnect(
         FakeRemoteImService(listOf()),
         FakeRemotePicsService(remoteData),
-        FakeRemoteBestService(listOf())))
+        FakeRemoteBestService(listOf()),
+        FakeRemoteMoeService(listOf()),
+        FakeRemoteOpenAiService()
+    )
+    )
     return WaifusPicRepository(localPicDataSource, favoriteDataSource , remotePicDataSource)
 }
 
