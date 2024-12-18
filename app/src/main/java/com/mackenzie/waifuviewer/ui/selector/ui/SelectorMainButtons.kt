@@ -89,8 +89,7 @@ fun SelectorMainButtons(
                 )
             ) {
                 Text(
-                    if (indiceSeleccionado == 0)
-                        "Selecciona una categoría"
+                    if (indiceSeleccionado == 0) stringResource(id = R.string.categories_items_empty)
                     else {
                         when (server) {
                             NEKOS -> {
