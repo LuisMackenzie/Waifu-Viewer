@@ -171,7 +171,8 @@ class SelectorFragment : Fragment() {
     }
 
     private fun setNsfwMode(nsfw: Boolean, hasGpt: Boolean, hasGemini: Boolean) {
-        val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
+        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
+        requireNotNull(sharedPref)
         with (sharedPref.edit()) {
             putBoolean(Constants.WORK_MODE, nsfw)
             putBoolean(Constants.IS_WAIFU_GPT, hasGpt)
@@ -208,7 +209,8 @@ class SelectorFragment : Fragment() {
     }
 
     private fun saveServerMode() {
-        val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
+        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
+        requireNotNull(sharedPref)
         with (sharedPref.edit()) {
             putString(Constants.SERVER_MODE, remoteValues.type?.value)
             putBoolean(Constants.IS_FAVORITE_WAIFU, remoteValues.isFavorite)
@@ -218,8 +220,8 @@ class SelectorFragment : Fragment() {
     }
 
     private fun getServerMode(): ServerType {
-        val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
-        val mode = sharedPref.getString(Constants.SERVER_MODE, NORMAL.value)
+        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
+        val mode = sharedPref?.getString(Constants.SERVER_MODE, NORMAL.value)
         Log.v("GetMode", "SERVER_MODE=${mode}")
         return when (mode) {
             NORMAL.value -> NORMAL

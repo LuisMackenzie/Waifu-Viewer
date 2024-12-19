@@ -55,7 +55,8 @@ class DetailFragment : Fragment() {
     ): View {
 
         mainState = buildMainState()
-        val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
+        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
+        requireNotNull(sharedPref)
         val serverMode = sharedPref.getString(Constants.SERVER_MODE, "") ?: ""
         val isFavorite = sharedPref.getBoolean(Constants.IS_FAVORITE_WAIFU, false)
 

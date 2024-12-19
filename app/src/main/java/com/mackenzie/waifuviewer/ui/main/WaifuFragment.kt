@@ -85,7 +85,7 @@ class WaifuFragment : Fragment() {
             onRequestMore = { onLoadMoreWaifusIm() },
             onFabClick = {
                 imViewModel.onClearImDatabase()
-                requireActivity().onBackPressedDispatcher.onBackPressed()
+                activity?.onBackPressedDispatcher?.onBackPressed()
                 Toast.makeText(requireContext(), getString(R.string.waifus_gone), Toast.LENGTH_SHORT).show()
             }
         )
@@ -100,7 +100,7 @@ class WaifuFragment : Fragment() {
             onRequestMore = { onLoadMoreWaifusPics() },
             onFabClick = {
                 picsViewModel.onClearPicsDatabase()
-                requireActivity().onBackPressedDispatcher.onBackPressed()
+                activity?.onBackPressedDispatcher?.onBackPressed()
                 Toast.makeText(requireContext(), getString(R.string.waifus_gone), Toast.LENGTH_SHORT).show()
             }
         )
@@ -114,7 +114,7 @@ class WaifuFragment : Fragment() {
             onRequestMore = { onLoadMoreWaifusBest() },
             onFabClick = {
                 bestViewModel.onClearDatabase()
-                requireActivity().onBackPressedDispatcher.onBackPressed()
+                activity?.onBackPressedDispatcher?.onBackPressed()
                 Toast.makeText(requireContext(), getString(R.string.waifus_gone), Toast.LENGTH_SHORT).show()
             }
         )
