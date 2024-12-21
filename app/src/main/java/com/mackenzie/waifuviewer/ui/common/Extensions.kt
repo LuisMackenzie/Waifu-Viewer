@@ -39,8 +39,10 @@ import com.mackenzie.waifuviewer.ui.main.ui.MainTheme
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.IOException
 import java.net.URL
 
@@ -161,6 +163,16 @@ private fun downloadImage(scope: CoroutineScope, title: String, link: String, fi
         try {
             val url = URL(link)
             val image: Bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream())
+            Log.e("DownloadImage", "Image downloading.....")
+            val image2 = SaveImage().retrieveImageFromUrl(link)
+            withContext(IO) {
+                imageOutStream?.write(image)
+            }
+            /*SaveUtils().downloadAndSaveImage(
+                // requireContext(),
+                link,
+                title
+            )*/
             /*SaveImage().saveImageToStorage(
                 // requireContext(),
                 image,

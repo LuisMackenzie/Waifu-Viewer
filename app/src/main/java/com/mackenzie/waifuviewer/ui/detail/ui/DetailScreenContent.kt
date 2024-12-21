@@ -17,6 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mackenzie.waifuviewer.domain.DownloadModel
+import com.mackenzie.waifuviewer.ui.common.SaveUtils
 import com.mackenzie.waifuviewer.ui.common.onDownloadClick
 import com.mackenzie.waifuviewer.ui.common.ui.isNavigationBarVisible
 import com.mackenzie.waifuviewer.ui.common.ui.previewDetailState
@@ -39,7 +40,7 @@ internal fun DetailImScreenContentRoute(
         state = state,
         prepareDownload = { title, link, imageExt -> download = DownloadModel(title, link, imageExt) },
         onFavoriteClicked = { vm.onFavoriteClicked() },
-        onDownloadClick = { onDownloadClick(isWritePermissionGranted, download, coroutineScope) },
+        // onDownloadClick = { onDownloadClick(isWritePermissionGranted, download, coroutineScope) },
         onSearchClick = { vm.onSearchClicked(it) }
     )
 }
@@ -50,13 +51,23 @@ fun DetailImScreenContent(
     state: DetailImViewModel.UiState = previewDetailState(),
     prepareDownload: (String, String, String) -> Unit = { _, _, _ -> },
     onFavoriteClicked: () -> Unit = {},
-    onDownloadClick: () -> Unit = {},
+    // onDownloadClick: () -> Unit = {},
     onSearchClick: (String) -> Unit = {}
 ) {
 
     var showBottomSheet by remember { mutableStateOf(false) }
     var openAlertDialog by remember { mutableStateOf(false) }
     var waifuUrl by remember { mutableStateOf("") }
+    val coroutineScope = rememberCoroutineScope()
+    var download: DownloadModel by remember { mutableStateOf(DownloadModel("","","")) }
+    val isWritePermissionGranted by remember { mutableStateOf(false) }
+
+  /*  val wasSaved = SaveUtils().downloadAndSaveImage(
+        context = LocalContext.current,
+        imageUrl = waifuUrl,
+        // folderName = "MisImagenes",
+        fileName = "imagen_descargada.png"
+    )*/
 
 
     if (openAlertDialog) {
@@ -80,11 +91,15 @@ fun DetailImScreenContent(
     ) {
         state.waifuIm?.let { waifu ->
             waifuUrl = waifu.url
+            download = DownloadModel(waifu.imageId.toString(), waifu.url, waifu.url.substringAfterLast('.'))
             ZoomableImage(waifu.url)
             DetailFabFavorites(isFavorite = waifu.isFavorite, onFavoriteClicked = onFavoriteClicked)
             DetailTitle(title = waifu.imageId.toString())
-            DetailFabDownload(onDownloadClick = onDownloadClick, onSearchClick = { openAlertDialog = true })
-            prepareDownload(waifu.imageId.toString(), waifu.url, waifu.url.substringAfterLast('.'))
+            // DetailFabDownload(onDownloadClick = onDownloadClick, onSearchClick = { openAlertDialog = true })
+            DetailFabDownload(onDownloadClick = {
+                onDownloadClick(isWritePermissionGranted, download, coroutineScope)
+            }, onSearchClick = { openAlertDialog = true })
+            // prepareDownload(waifu.imageId.toString(), waifu.url, waifu.url.substringAfterLast('.'))
         }
         state.search?.let { search ->
             showBottomSheet = true

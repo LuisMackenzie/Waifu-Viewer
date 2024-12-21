@@ -86,7 +86,7 @@ class DetailFragment : Fragment() {
             state = imViewModel.state.collectAsStateWithLifecycle().value,
             prepareDownload = { title, link, imageExt -> prepareDownload(title, link, imageExt) },
             onFavoriteClicked = { imViewModel.onFavoriteClicked() },
-            onDownloadClick = { onDownloadClick() },
+            // onDownloadClick = { onDownloadClick() },
             onSearchClick = { imViewModel.onSearchClicked(it) }
         )
     }

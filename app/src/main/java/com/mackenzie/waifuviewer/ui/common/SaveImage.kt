@@ -231,4 +231,24 @@ class SaveImage {
         })
         return deferred.await()
     }
+
+    suspend fun retrieveImageFromUrl2(url: String):Bit {
+        val client = OkHttpClient()
+        val request = Request.Builder().url(url).build()
+        val deferred =  CompletableDeferred<ByteArray>()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                response.body?.let { body ->
+                    val bytes = body.bytes()
+                    deferred.complete(bytes)
+                }
+            }
+        })
+        return deferred.await()
+    }
 }
