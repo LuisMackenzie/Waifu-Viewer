@@ -3,6 +3,8 @@ package com.mackenzie.waifuviewer.ui.common
 import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.nfc.NfcManager
 import android.os.Build
 import android.util.Log
@@ -27,6 +29,7 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import com.mackenzie.waifuviewer.App
+import com.mackenzie.waifuviewer.domain.DownloadModel
 import com.mackenzie.waifuviewer.domain.RemoteConfigValues
 import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.domain.ServerType.ENHANCED
@@ -34,8 +37,12 @@ import com.mackenzie.waifuviewer.domain.ServerType.NEKOS
 import com.mackenzie.waifuviewer.domain.ServerType.NORMAL
 import com.mackenzie.waifuviewer.ui.main.ui.MainTheme
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import java.io.IOException
+import java.net.URL
 
 fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = true): View =
     LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
@@ -130,6 +137,56 @@ fun Fragment.composeView(content: @Composable () -> Unit): ComposeView {
     }
 
 }
+
+fun onDownloadClick(isGranted:Boolean, download: DownloadModel, scope: CoroutineScope) {
+    if (!isGranted) {
+        RequestPermision(scope)
+    }
+    requestDownload(scope, download)
+}
+
+private fun RequestPermision(scope: CoroutineScope) {
+    scope.launch {
+
+    }
+}
+
+private fun requestDownload(scope: CoroutineScope, download: DownloadModel) {
+    downloadImage(scope, download.title, download.link, download.imageExt)
+}
+
+private fun downloadImage(scope: CoroutineScope, title: String, link: String, fileType: String) {
+    val type: String = selectMimeType(fileType)
+    scope.launch(Dispatchers.IO) {
+        try {
+            val url = URL(link)
+            val image: Bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream())
+            /*SaveImage().saveImageToStorage(
+                // requireContext(),
+                image,
+                title,
+                type,
+                link
+            )*/
+        } catch (e: IOException) {
+            Log.d(Constants.CATEGORY_TAG_DETAIL, "error: ${e.localizedMessage}")
+        }
+    }
+}
+
+private fun selectMimeType(fileType: String): String {
+    when (fileType) {
+        "jpg" -> return "image/jpeg"
+        "jpeg" -> return "image/jpeg"
+        "png" -> return "image/png"
+        "gif" -> return "image/gif"
+        else -> {
+            return "image/jpeg"
+        }
+    }
+}
+
+
 
 @RequiresApi(Build.VERSION_CODES.R)
 fun Context.isNightModeActive(): Boolean {

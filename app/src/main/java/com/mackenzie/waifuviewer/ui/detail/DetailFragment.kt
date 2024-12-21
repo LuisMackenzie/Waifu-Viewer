@@ -134,7 +134,7 @@ class DetailFragment : Fragment() {
     }
 
     private fun onDownloadClick() {
-        if (isWritePermissionGranted != true) {
+        if (!isWritePermissionGranted) {
             RequestPermision()
         }
         requestDownload()

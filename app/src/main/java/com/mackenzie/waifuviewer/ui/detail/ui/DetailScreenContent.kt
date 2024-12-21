@@ -9,9 +9,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.mackenzie.waifuviewer.domain.DownloadModel
+import com.mackenzie.waifuviewer.ui.common.onDownloadClick
 import com.mackenzie.waifuviewer.ui.common.ui.isNavigationBarVisible
 import com.mackenzie.waifuviewer.ui.common.ui.previewDetailState
 import com.mackenzie.waifuviewer.ui.detail.DetailBestViewModel
@@ -19,6 +25,24 @@ import com.mackenzie.waifuviewer.ui.detail.DetailFavsViewModel
 import com.mackenzie.waifuviewer.ui.detail.DetailImViewModel
 import com.mackenzie.waifuviewer.ui.detail.DetailPicsViewModel
 import com.mackenzie.waifuviewer.ui.favs.ui.WaifuSearchDialog
+
+@Composable
+internal fun DetailImScreenContentRoute(
+    vm: DetailImViewModel = viewModel()
+) {
+    val state by vm.state.collectAsStateWithLifecycle()
+    val coroutineScope = rememberCoroutineScope()
+    var download: DownloadModel by remember { mutableStateOf(DownloadModel("","","")) }
+    val isWritePermissionGranted by remember { mutableStateOf(false) }
+
+    DetailImScreenContent(
+        state = state,
+        prepareDownload = { title, link, imageExt -> download = DownloadModel(title, link, imageExt) },
+        onFavoriteClicked = { vm.onFavoriteClicked() },
+        onDownloadClick = { onDownloadClick(isWritePermissionGranted, download, coroutineScope) },
+        onSearchClick = { vm.onSearchClicked(it) }
+    )
+}
 
 @Preview(showBackground = true)
 @Composable

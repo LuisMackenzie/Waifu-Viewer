@@ -28,7 +28,7 @@ fun Navigation() {
             // WaifuScreenRoute()
 
 
-            //
+            // Esto es lo que se le passa a la pantalla para que pueda navegar
             // navController.navigate(NavItem.WaifuDetail.createRoute(waifu.id))
         }
         composable(
