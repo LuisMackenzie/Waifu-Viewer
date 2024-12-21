@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.lazy.LazyRow
@@ -52,6 +53,7 @@ import coil3.size.Precision
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.ui.common.GenerativeViewModelFactory
 import com.mackenzie.waifuviewer.ui.common.UriSaver
+import com.mackenzie.waifuviewer.ui.common.ui.isNavigationBarVisible
 import com.mackenzie.waifuviewer.ui.theme.WaifuViewerTheme
 import kotlinx.coroutines.launch
 
@@ -110,9 +112,8 @@ fun WaifuInfoScreen(
     }
 
     Column(
-        modifier = Modifier
-            .padding(all = 16.dp)
-            .verticalScroll(rememberScrollState())
+        modifier = if (isNavigationBarVisible()) Modifier.navigationBarsPadding().padding(all = 16.dp).verticalScroll(rememberScrollState())
+                else Modifier.padding(all = 16.dp).verticalScroll(rememberScrollState()) ,
     ) {
         Card(
             modifier = Modifier.fillMaxWidth()

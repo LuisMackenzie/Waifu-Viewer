@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.rememberScrollState
@@ -35,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.ui.common.GenerativeViewModelFactory
+import com.mackenzie.waifuviewer.ui.common.ui.isNavigationBarVisible
 import com.mackenzie.waifuviewer.ui.main.ui.MainThemeForPreview
 
 @Composable
@@ -56,8 +58,8 @@ fun SummarizeWaifuScreen(
     var textToSummarize by rememberSaveable { mutableStateOf("") }
 
     Column(
-        modifier = Modifier
-            .verticalScroll(rememberScrollState())
+        modifier =  if (isNavigationBarVisible()) Modifier.navigationBarsPadding().verticalScroll(rememberScrollState())
+                else Modifier.verticalScroll(rememberScrollState()),
     ) {
         ElevatedCard(
             modifier = Modifier

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
@@ -41,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.ui.common.GenerativeViewModelFactory
+import com.mackenzie.waifuviewer.ui.common.ui.isNavigationBarVisible
 import kotlinx.coroutines.launch
 
 @Composable
@@ -52,6 +54,7 @@ internal fun WaifuChatRoute(
     val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
+        modifier = if (isNavigationBarVisible()) { Modifier.navigationBarsPadding() } else { Modifier },
         bottomBar = {
             MessageInput(
                 onSendMessage = { inputText ->
