@@ -1,6 +1,8 @@
 package com.mackenzie.waifuviewer.ui.detail.ui
 
 import android.Manifest
+import android.app.Activity
+import androidx.activity.compose.LocalActivityResultRegistryOwner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,16 +17,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
-import androidx.navigation.fragment.findNavController
 import com.mackenzie.waifuviewer.domain.DownloadModel
-import com.mackenzie.waifuviewer.ui.common.PermissionRequester
-import com.mackenzie.waifuviewer.ui.common.SaveUtils
+import com.mackenzie.waifuviewer.ui.NavHostActivity
 import com.mackenzie.waifuviewer.ui.common.app
 import com.mackenzie.waifuviewer.ui.common.onDownloadClick
+import com.mackenzie.waifuviewer.ui.common.showToast
 import com.mackenzie.waifuviewer.ui.common.ui.isNavigationBarVisible
 import com.mackenzie.waifuviewer.ui.common.ui.previewDetailState
 import com.mackenzie.waifuviewer.ui.detail.DetailBestViewModel
@@ -32,22 +32,17 @@ import com.mackenzie.waifuviewer.ui.detail.DetailFavsViewModel
 import com.mackenzie.waifuviewer.ui.detail.DetailImViewModel
 import com.mackenzie.waifuviewer.ui.detail.DetailPicsViewModel
 import com.mackenzie.waifuviewer.ui.favs.ui.WaifuSearchDialog
-import com.mackenzie.waifuviewer.ui.main.MainState
 
 @Composable
 internal fun DetailImScreenContentRoute(
     vm: DetailImViewModel = viewModel()
 ) {
     val state by vm.state.collectAsStateWithLifecycle()
-    val coroutineScope = rememberCoroutineScope()
-    var download: DownloadModel by remember { mutableStateOf(DownloadModel("","","")) }
-    val isWritePermissionGranted by remember { mutableStateOf(false) }
 
     DetailImScreenContent(
         state = state,
-        prepareDownload = { title, link, imageExt -> download = DownloadModel(title, link, imageExt) },
         onFavoriteClicked = { vm.onFavoriteClicked() },
-        // onDownloadClick = { onDownloadClick(isWritePermissionGranted, download, coroutineScope) },
+        // onDownloadClick = { vm.onRequestPermissions(Activity()) },
         onSearchClick = { vm.onSearchClicked(it) }
     )
 }
@@ -56,7 +51,7 @@ internal fun DetailImScreenContentRoute(
 @Composable
 fun DetailImScreenContent(
     state: DetailImViewModel.UiState = previewDetailState(),
-    prepareDownload: (String, String, String) -> Unit = { _, _, _ -> },
+    // prepareDownload: (String, String, String) -> Unit = { _, _, _ -> },
     onFavoriteClicked: () -> Unit = {},
     // onDownloadClick: () -> Unit = {},
     onSearchClick: (String) -> Unit = {}
@@ -68,14 +63,6 @@ fun DetailImScreenContent(
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     var download: DownloadModel by remember { mutableStateOf(DownloadModel("","","")) }
-    val isWritePermissionGranted by remember { mutableStateOf(false) }
-
-    val mainState = MainState(
-        context = context,
-        scope = coroutineScope,
-        navController = findNavController(),
-        permissionRequester = PermissionRequester(context , Manifest.permission.ACCESS_COARSE_LOCATION)
-    )
 
 
     if (openAlertDialog) {
@@ -104,10 +91,8 @@ fun DetailImScreenContent(
             ZoomableImage(waifu.url)
             DetailFabFavorites(isFavorite = waifu.isFavorite, onFavoriteClicked = onFavoriteClicked)
             DetailTitle(title = waifu.imageId.toString())
-            // DetailFabDownload(onDownloadClick = onDownloadClick, onSearchClick = { openAlertDialog = true })
             DetailFabDownload(onDownloadClick = {
                 onDownloadClick(
-                    isGranted = isWritePermissionGranted,
                     download = download,
                     scope = coroutineScope,
                     context = context

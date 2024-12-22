@@ -5,8 +5,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.nfc.NfcManager
 import android.os.Build
 import android.util.Log
@@ -15,13 +13,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.LayoutRes
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityCompat.requestPermissions
+import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -40,18 +40,13 @@ import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.domain.ServerType.ENHANCED
 import com.mackenzie.waifuviewer.domain.ServerType.NEKOS
 import com.mackenzie.waifuviewer.domain.ServerType.NORMAL
-import com.mackenzie.waifuviewer.ui.common.PermissionRequesterTest.Companion.register
-import com.mackenzie.waifuviewer.ui.main.buildMainState
+import com.mackenzie.waifuviewer.ui.NavHostActivity
 import com.mackenzie.waifuviewer.ui.main.ui.MainTheme
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.io.IOException
-import java.net.URL
 
 fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = true): View =
     LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
@@ -147,78 +142,80 @@ fun Fragment.composeView(content: @Composable () -> Unit): ComposeView {
 
 }
 
-fun onDownloadClick(isGranted:Boolean, download: DownloadModel, scope: CoroutineScope, context: Context) {
-    if (!isGranted) {
-        RequestPermision(scope)
-        // RequestPermision(context, scope)
-    } else {
+fun onDownloadClick(download: DownloadModel, scope: CoroutineScope, context: Context) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
         downloadImage(scope, context, download.title, download.link, download.imageExt)
+    } else {
+        Log.e( "onDownloadClick", "isGranted=${context.hasWriteExternalStoragePermission()}")
+        if (!context.hasWriteExternalStoragePermission()) {
+            RequestPermision(context, scope)
+        } else {
+            downloadImage(scope, context, download.title, download.link, download.imageExt)
+        }
     }
 }
 
-private fun RequestPermision(scope: CoroutineScope) {
+private fun RequestPermision(ctx: Context, scope: CoroutineScope) {
+
+
+    val activity = ctx as NavHostActivity
+
+    activity.requestWriteExternalStoragePermission()
+
     scope.launch {
 
+
+
+        /*when {
+            ContextCompat.checkSelfPermission(
+                ctx,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                "Permiso concedido".showToast(ctx)
+                // You can use the API that requires the permission.
+            }
+            *//*shouldShowRequestPermissionRationale(
+                activity,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) -> {
+                "Permiso Denegado una Vez, Se Vuelve a solicitar".showToast(ctx)
+            }*//*
+            else -> {
+                // "Permiso Denegado pa' siempre".showToast(this)
+                // You can directly ask for the permission.
+                // The registered ActivityResultCallback gets the result of this request.
+                scope.launch {
+                    // val isGranted = permissionRequesterTest.request()
+                    activity.requestPermisions2()
+                    *//*requestPermissions(
+                        activity,
+                        arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                        1
+                    )*//*
+                    "Permiso no concedido ".showToast(ctx)
+                }
+            }
+        }*/
     }
 }
 
-private fun RequestPermision2(ctx: Context, scope: CoroutineScope) {
-
-    when {
-        ContextCompat.checkSelfPermission(
-            ctx,
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED -> {
-            // You can use the API that requires the permission.
-        }
-        ActivityCompat.shouldShowRequestPermissionRationale(
-            this, Manifest.permission.READ_EXTERNAL_STORAGE) -> {
-            // In an educational UI, explain to the user why your app requires this
-            // permission for a specific feature to behave as expected, and what
-            // features are disabled if it's declined. In this UI, include a
-            // "cancel" or "no thanks" button that lets the user continue
-            // using your app without granting the permission.
-
-            // showInContextUI(...)
-        }
-        else -> {
-            // You can directly ask for the permission.
-            // The registered ActivityResultCallback gets the result of this request.
-
-            // requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-        }
-    }
-
-    scope.launch {
-
-    }
+fun Context.hasWriteExternalStoragePermission(): Boolean {
+    return ContextCompat.checkSelfPermission(
+        this,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE
+    ) == PackageManager.PERMISSION_GRANTED
 }
 
 private fun downloadImage(scope: CoroutineScope, ctx: Context, title: String, link: String, fileType: String) {
     val type: String = selectMimeType(fileType)
 
     scope.launch(IO) {
-        Log.e("DownloadImage", "Image downloading.....")
         SaveImage().saveImageToStorage(
             ctx,
-            // image,
             title,
             type,
             link
         )
-        /*try {
-            // val url = URL(link)
-            // val image: Bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream())
-            SaveImage().saveImageToStorage(
-                ctx,
-                // image,
-                title,
-                type,
-                link
-            )
-        } catch (e: IOException) {
-            Log.d(Constants.CATEGORY_TAG_DETAIL, "error: ${e.localizedMessage}")
-        }*/
     }
 }
 
@@ -231,6 +228,16 @@ private fun selectMimeType(fileType: String): String {
         else -> {
             return "image/jpeg"
         }
+    }
+}
+
+fun String.decodeMimeTypeForTitle(title: String): String {
+    when (this) {
+        "image/jpeg" -> return "$title.jpg"
+        "image/jpg" -> return "$title.jpg"
+        "image/png" -> return "$title.png"
+        "image/gif" -> return "$title.gif"
+        else -> return ".jpg"
     }
 }
 

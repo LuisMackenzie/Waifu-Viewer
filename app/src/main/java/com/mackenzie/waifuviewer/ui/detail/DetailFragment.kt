@@ -84,7 +84,7 @@ class DetailFragment : Fragment() {
     private fun DetailImScreen() {
         DetailImScreenContent(
             state = imViewModel.state.collectAsStateWithLifecycle().value,
-            prepareDownload = { title, link, imageExt -> prepareDownload(title, link, imageExt) },
+            // prepareDownload = { title, link, imageExt -> prepareDownload(title, link, imageExt) },
             onFavoriteClicked = { imViewModel.onFavoriteClicked() },
             // onDownloadClick = { onDownloadClick() },
             onSearchClick = { imViewModel.onSearchClicked(it) }

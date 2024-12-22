@@ -1,5 +1,9 @@
 package com.mackenzie.waifuviewer.ui.detail
 
+import android.Manifest
+import android.app.Activity
+import android.content.Context
+import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mackenzie.waifuviewer.di.WaifuId
