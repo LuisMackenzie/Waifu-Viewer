@@ -140,11 +140,12 @@ fun Fragment.composeView(content: @Composable () -> Unit): ComposeView {
 
 }
 
-fun onDownloadClick(isGranted:Boolean, download: DownloadModel, scope: CoroutineScope) {
+fun onDownloadClick(isGranted:Boolean, download: DownloadModel, scope: CoroutineScope, context: Context) {
     if (!isGranted) {
         RequestPermision(scope)
     }
-    requestDownload(scope, download)
+    // requestDownload(scope, download)
+    downloadImage(scope, context, download.title, download.link, download.imageExt)
 }
 
 private fun RequestPermision(scope: CoroutineScope) {
@@ -153,36 +154,31 @@ private fun RequestPermision(scope: CoroutineScope) {
     }
 }
 
-private fun requestDownload(scope: CoroutineScope, download: DownloadModel) {
-    downloadImage(scope, download.title, download.link, download.imageExt)
-}
-
-private fun downloadImage(scope: CoroutineScope, title: String, link: String, fileType: String) {
+private fun downloadImage(scope: CoroutineScope, ctx: Context, title: String, link: String, fileType: String) {
     val type: String = selectMimeType(fileType)
-    scope.launch(Dispatchers.IO) {
-        try {
-            val url = URL(link)
-            val image: Bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream())
-            Log.e("DownloadImage", "Image downloading.....")
-            val image2 = SaveImage().retrieveImageFromUrl(link)
-            withContext(IO) {
-                imageOutStream?.write(image)
-            }
-            /*SaveUtils().downloadAndSaveImage(
-                // requireContext(),
-                link,
-                title
-            )*/
-            /*SaveImage().saveImageToStorage(
-                // requireContext(),
-                image,
+
+    scope.launch(IO) {
+        Log.e("DownloadImage", "Image downloading.....")
+        SaveImage().saveImageToStorage(
+            ctx,
+            // image,
+            title,
+            type,
+            link
+        )
+        /*try {
+            // val url = URL(link)
+            // val image: Bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream())
+            SaveImage().saveImageToStorage(
+                ctx,
+                // image,
                 title,
                 type,
                 link
-            )*/
+            )
         } catch (e: IOException) {
             Log.d(Constants.CATEGORY_TAG_DETAIL, "error: ${e.localizedMessage}")
-        }
+        }*/
     }
 }
 

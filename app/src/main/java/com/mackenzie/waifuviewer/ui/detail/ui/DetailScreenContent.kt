@@ -58,6 +58,7 @@ fun DetailImScreenContent(
     var showBottomSheet by remember { mutableStateOf(false) }
     var openAlertDialog by remember { mutableStateOf(false) }
     var waifuUrl by remember { mutableStateOf("") }
+    val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     var download: DownloadModel by remember { mutableStateOf(DownloadModel("","","")) }
     val isWritePermissionGranted by remember { mutableStateOf(false) }
@@ -97,7 +98,7 @@ fun DetailImScreenContent(
             DetailTitle(title = waifu.imageId.toString())
             // DetailFabDownload(onDownloadClick = onDownloadClick, onSearchClick = { openAlertDialog = true })
             DetailFabDownload(onDownloadClick = {
-                onDownloadClick(isWritePermissionGranted, download, coroutineScope)
+                onDownloadClick(isWritePermissionGranted, download, coroutineScope, context)
             }, onSearchClick = { openAlertDialog = true })
             // prepareDownload(waifu.imageId.toString(), waifu.url, waifu.url.substringAfterLast('.'))
         }

@@ -29,7 +29,7 @@ class SaveImage {
     @Throws(IOException::class)
     suspend fun saveImageToStorage(
         context: Context,
-        bitmapObject: Bitmap,
+        // bitmapObject: Bitmap,
         imageTitle: String,
         mimeType: String,
         url: String
@@ -44,15 +44,7 @@ class SaveImage {
             values.put(MediaStore.Images.Media.MIME_TYPE, mimeType)
             values.put(MediaStore.Images.Media.RELATIVE_PATH, directory)
             val uri : Uri? = context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
-            val uri2: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI.normalizeScheme()
-
-
-            Log.e("SaveImage", "URI: $uri, uri2: $uri2")
-            Log.e("SaveImage", "values: $values")
             imageOutStream = context.contentResolver.openOutputStream(uri!!)
-
-            // imageOutStream = context.contentResolver.openOutputStream(uri2)
-
         } else {
             // Este codigo no funciona
             val directory =
@@ -232,7 +224,7 @@ class SaveImage {
         return deferred.await()
     }
 
-    suspend fun retrieveImageFromUrl2(url: String):Bit {
+    suspend fun retrieveImageFromUrl2(url: String):ByteArray {
         val client = OkHttpClient()
         val request = Request.Builder().url(url).build()
         val deferred =  CompletableDeferred<ByteArray>()
