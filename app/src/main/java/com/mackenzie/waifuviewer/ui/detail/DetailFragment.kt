@@ -44,9 +44,9 @@ class DetailFragment : Fragment() {
     private val imViewModel: DetailImViewModel by viewModels()
     private val bestViewModel: DetailBestViewModel by viewModels()
     private val favsViewModel: DetailFavsViewModel by viewModels()
-    private lateinit var mainState: MainState
-    private lateinit var download: DownloadModel
-    private var isWritePermissionGranted: Boolean = false
+    // private lateinit var mainState: MainState
+    // private lateinit var download: DownloadModel
+    // private var isWritePermissionGranted: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,7 +54,7 @@ class DetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        mainState = buildMainState()
+        // mainState = buildMainState()
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
         requireNotNull(sharedPref)
         val serverMode = sharedPref.getString(Constants.SERVER_MODE, "") ?: ""
@@ -84,9 +84,7 @@ class DetailFragment : Fragment() {
     private fun DetailImScreen() {
         DetailImScreenContent(
             state = imViewModel.state.collectAsStateWithLifecycle().value,
-            // prepareDownload = { title, link, imageExt -> prepareDownload(title, link, imageExt) },
             onFavoriteClicked = { imViewModel.onFavoriteClicked() },
-            // onDownloadClick = { onDownloadClick() },
             onSearchClick = { imViewModel.onSearchClicked(it) }
         )
     }
@@ -95,9 +93,7 @@ class DetailFragment : Fragment() {
     private fun DetailPicsScreen() {
         DetailPicsScreenContent(
             state = picsViewModel.state.collectAsStateWithLifecycle().value,
-            prepareDownload = { title, link, imageExt -> prepareDownload(title, link, imageExt) },
             onFavoriteClicked = { picsViewModel.onFavoriteClicked() },
-            onDownloadClick = {}, // { onDownloadClick() },
             onSearchClick = { picsViewModel.onSearchClicked(it) }
         )
     }
@@ -106,9 +102,7 @@ class DetailFragment : Fragment() {
     private fun DetailNekosScreen() {
         DetailBestScreenContent(
             state = bestViewModel.state.collectAsStateWithLifecycle().value,
-            prepareDownload = { title, link, imageExt -> prepareDownload(title, link, imageExt) },
             onFavoriteClicked = { bestViewModel.onFavoriteClicked() },
-            onDownloadClick = {}, // { onDownloadClick() },
             // El servicio no permite enviar imagenes de este server
             onSearchClick = { notReady() } //  { bestViewModel.onSearchClicked(it) }
         )
@@ -118,9 +112,7 @@ class DetailFragment : Fragment() {
     private fun DetailFavsScreen() {
         DetailFavsScreenContent(
             state = favsViewModel.state.collectAsStateWithLifecycle().value,
-            prepareDownload = { title, link, imageExt -> prepareDownload(title, link, imageExt) },
             onFavoriteClicked = { favsViewModel.onFavoriteClicked() },
-            onDownloadClick = {}, // { onDownloadClick() },
             onSearchClick = { favsViewModel.onSearchClicked(it) }
         )
     }
@@ -128,52 +120,4 @@ class DetailFragment : Fragment() {
     private fun notReady() {
         getString(R.string.function_not_implemented).showToast(requireContext())
     }
-
-    private fun prepareDownload(title: String, link: String, imageExt: String) {
-        download = DownloadModel(title, link, imageExt)
-    }
-
-    /*private fun onDownloadClick() {
-        if (!isWritePermissionGranted) {
-            RequestPermision()
-        }
-        downloadImage(download.title, download.link, download.imageExt)
-    }*/
-
-    /*private fun RequestPermision() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            mainState.requestPermissionLauncher { isWritePermissionGranted = it }
-        }
-    }*/
-
-    /*private fun downloadImage(title: String, link: String, fileType: String) {
-        val type: String = selectMimeType(fileType)
-        lifecycleScope.launch(Dispatchers.IO) {
-            try {
-                val url = URL(link)
-                val image: Bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream())
-                SaveImage().saveImageToStorage(
-                    requireContext(),
-                    // image,
-                    title,
-                    type,
-                    link
-                )
-            } catch (e: IOException) {
-                Log.d(Constants.CATEGORY_TAG_DETAIL, "error: ${e.localizedMessage}")
-            }
-        }
-    }*/
-
-    /*private fun selectMimeType(fileType: String): String {
-        when (fileType) {
-            "jpg" -> return "image/jpeg"
-            "jpeg" -> return "image/jpeg"
-            "png" -> return "image/png"
-            "gif" -> return "image/gif"
-            else -> {
-                return "image/jpeg"
-            }
-        }
-    }*/
 }

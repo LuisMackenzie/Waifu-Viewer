@@ -21,6 +21,7 @@
     <string name="server_best_toast">NEKOS</string>
     <string name="server_unknown_toast">Unknown</string>
     <string name="no_waifu_found">No waifu found :( Try again later</string>
+    <string name="waifu_image_saved">Imagen Guardada</string>
     <string name="waifu_error">Waifu Request Error</string>
     <string name="connectivity_error">Connection Error</string>
     <string name="unknown_error">Unknown Error</string>

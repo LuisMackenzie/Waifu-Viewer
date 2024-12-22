@@ -8,6 +8,8 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
+import androidx.core.content.ContextCompat.getString
+import com.mackenzie.waifuviewer.R
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
@@ -46,8 +48,7 @@ class SaveImage {
             val directory =
                 File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).absolutePath + File.separator + "Waifus")
 
-            if (!directory.exists())
-                directory.mkdirs()
+            if (!directory.exists()) directory.mkdirs()
 
             val image = File(directory, mimeType.decodeMimeTypeForTitle(imageTitle))
             imageOutStream = withContext(IO) {
@@ -56,76 +57,14 @@ class SaveImage {
         }
 
         try {
-            if (mimeType == "image/png") {
-                val image = retrieveImageFromUrl(url)
-                withContext(IO) {
-                    imageOutStream?.write(image)
-                }
-                /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    val image = retrieveImageFromUrl(url)
-                    withContext(IO) {
-                        imageOutStream?.write(image)
-                    }
-                } else {
-                    withContext(IO) {
-                        val bitmapObject: Bitmap = BitmapFactory.decodeStream(urlLink.openConnection().getInputStream())
-                        bitmapObject.compress(Bitmap.CompressFormat.PNG, 100, imageOutStream!!)
-                    }
-                }*/
-            } else if (mimeType == "image/gif") {
-                val gifImage = retrieveGifFromUrl(url)
-                withContext(IO) {
-                    imageOutStream?.write(gifImage)
-                }
-            } else {
-                val image = retrieveImageFromUrl(url)
-                withContext(IO) {
-                    imageOutStream?.write(image)
-                }
-                /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    val image = retrieveImageFromUrl(url)
-                    withContext(IO) {
-                        imageOutStream?.write(image)
-                    }
-                } else {
-                    withContext(IO) {
-                        val bitmapObject: Bitmap = BitmapFactory.decodeStream(urlLink.openConnection().getInputStream())
-                        bitmapObject.compress(Bitmap.CompressFormat.JPEG, 100, imageOutStream!!)
-                    }
-                }*/
-            }
-
-
+            val image = retrieveImageFromUrl(url)
+            withContext(IO) { imageOutStream?.write(image) }
         } catch (e: IOException) {
             e.printStackTrace()
         } finally {
-            withContext(IO) {
-                imageOutStream?.close()
-            }
-            withContext(Main) {
-                Toast.makeText(context, "Imagen Guardada", Toast.LENGTH_SHORT).show()
-            }
+            withContext(IO) { imageOutStream?.close() }
+            withContext(Main) { getString(context, R.string.waifu_image_saved).showToast(context) }
         }
-    }
-
-    suspend private fun retrieveGifFromUrl(url: String):ByteArray {
-        val client = OkHttpClient()
-        val request = Request.Builder().url(url).build()
-        val deferred =  CompletableDeferred<ByteArray>()
-
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                e.printStackTrace()
-            }
-
-            override fun onResponse(call: Call, response: Response) {
-                response.body?.let { body ->
-                    val bytes = body.bytes()
-                    deferred.complete(bytes)
-                }
-            }
-        })
-        return deferred.await()
     }
 
     suspend fun retrieveImageFromUrl(url: String):ByteArray {
