@@ -3,6 +3,7 @@ package com.mackenzie.waifuviewer.ui.common
 import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -23,6 +24,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStream
+import java.net.URL
 
 class SaveImage {
 
@@ -35,6 +37,8 @@ class SaveImage {
         url: String
     ) {
         val imageOutStream: OutputStream?
+        val urlLink = URL(url)
+        // val image: Bitmap = BitmapFactory.decodeStream(urlLink.openConnection().getInputStream())
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             val directory = Environment.DIRECTORY_PICTURES + File.separator + "Waifus"
@@ -61,11 +65,19 @@ class SaveImage {
 
         try {
             if (mimeType == "image/png") {
-                // bitmapObject.compress(Bitmap.CompressFormat.PNG, 100, imageOutStream!!)
-                val image = retrieveImageFromUrl(url)
-                withContext(IO) {
-                    imageOutStream?.write(image)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    val image = retrieveImageFromUrl(url)
+                    withContext(IO) {
+                        imageOutStream?.write(image)
+                    }
+                } else {
+                    withContext(IO) {
+                        val bitmapObject: Bitmap = BitmapFactory.decodeStream(urlLink.openConnection().getInputStream())
+                        bitmapObject.compress(Bitmap.CompressFormat.PNG, 100, imageOutStream!!)
+                    }
                 }
+                // bitmapObject.compress(Bitmap.CompressFormat.PNG, 100, imageOutStream!!)
+
             } else if (mimeType == "image/gif") {
 
                 val gifImage = retrieveGifFromUrl(url)
@@ -73,10 +85,16 @@ class SaveImage {
                     imageOutStream?.write(gifImage)
                 }
             } else {
-                // bitmapObject.compress(Bitmap.CompressFormat.JPEG, 100, imageOutStream!!)
-                val image = retrieveImageFromUrl(url)
-                withContext(IO) {
-                    imageOutStream?.write(image)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    val image = retrieveImageFromUrl(url)
+                    withContext(IO) {
+                        imageOutStream?.write(image)
+                    }
+                } else {
+                    withContext(IO) {
+                        val bitmapObject: Bitmap = BitmapFactory.decodeStream(urlLink.openConnection().getInputStream())
+                        bitmapObject.compress(Bitmap.CompressFormat.JPEG, 100, imageOutStream!!)
+                    }
                 }
             }
 

@@ -97,7 +97,7 @@ class DetailFragment : Fragment() {
             state = picsViewModel.state.collectAsStateWithLifecycle().value,
             prepareDownload = { title, link, imageExt -> prepareDownload(title, link, imageExt) },
             onFavoriteClicked = { picsViewModel.onFavoriteClicked() },
-            onDownloadClick = { onDownloadClick() },
+            onDownloadClick = {}, // { onDownloadClick() },
             onSearchClick = { picsViewModel.onSearchClicked(it) }
         )
     }
@@ -108,7 +108,7 @@ class DetailFragment : Fragment() {
             state = bestViewModel.state.collectAsStateWithLifecycle().value,
             prepareDownload = { title, link, imageExt -> prepareDownload(title, link, imageExt) },
             onFavoriteClicked = { bestViewModel.onFavoriteClicked() },
-            onDownloadClick = { onDownloadClick() },
+            onDownloadClick = {}, // { onDownloadClick() },
             // El servicio no permite enviar imagenes de este server
             onSearchClick = { notReady() } //  { bestViewModel.onSearchClicked(it) }
         )
@@ -120,7 +120,7 @@ class DetailFragment : Fragment() {
             state = favsViewModel.state.collectAsStateWithLifecycle().value,
             prepareDownload = { title, link, imageExt -> prepareDownload(title, link, imageExt) },
             onFavoriteClicked = { favsViewModel.onFavoriteClicked() },
-            onDownloadClick = { onDownloadClick() },
+            onDownloadClick = {}, // { onDownloadClick() },
             onSearchClick = { favsViewModel.onSearchClicked(it) }
         )
     }
@@ -133,24 +133,20 @@ class DetailFragment : Fragment() {
         download = DownloadModel(title, link, imageExt)
     }
 
-    private fun onDownloadClick() {
+    /*private fun onDownloadClick() {
         if (!isWritePermissionGranted) {
             RequestPermision()
         }
-        requestDownload()
-    }
+        downloadImage(download.title, download.link, download.imageExt)
+    }*/
 
-    private fun RequestPermision() {
+    /*private fun RequestPermision() {
         viewLifecycleOwner.lifecycleScope.launch {
             mainState.requestPermissionLauncher { isWritePermissionGranted = it }
         }
-    }
+    }*/
 
-    private fun requestDownload() {
-        downloadImage(download.title, download.link, download.imageExt)
-    }
-
-    private fun downloadImage(title: String, link: String, fileType: String) {
+    /*private fun downloadImage(title: String, link: String, fileType: String) {
         val type: String = selectMimeType(fileType)
         lifecycleScope.launch(Dispatchers.IO) {
             try {
@@ -158,7 +154,7 @@ class DetailFragment : Fragment() {
                 val image: Bitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream())
                 SaveImage().saveImageToStorage(
                     requireContext(),
-                    image,
+                    // image,
                     title,
                     type,
                     link
@@ -167,9 +163,9 @@ class DetailFragment : Fragment() {
                 Log.d(Constants.CATEGORY_TAG_DETAIL, "error: ${e.localizedMessage}")
             }
         }
-    }
+    }*/
 
-    private fun selectMimeType(fileType: String): String {
+    /*private fun selectMimeType(fileType: String): String {
         when (fileType) {
             "jpg" -> return "image/jpeg"
             "jpeg" -> return "image/jpeg"
@@ -179,5 +175,5 @@ class DetailFragment : Fragment() {
                 return "image/jpeg"
             }
         }
-    }
+    }*/
 }

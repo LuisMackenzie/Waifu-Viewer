@@ -1,7 +1,9 @@
 package com.mackenzie.waifuviewer.ui.common
 
+import android.Manifest
 import android.app.Activity
 import android.content.Context
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -13,11 +15,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.LayoutRes
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -35,6 +40,8 @@ import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.domain.ServerType.ENHANCED
 import com.mackenzie.waifuviewer.domain.ServerType.NEKOS
 import com.mackenzie.waifuviewer.domain.ServerType.NORMAL
+import com.mackenzie.waifuviewer.ui.common.PermissionRequesterTest.Companion.register
+import com.mackenzie.waifuviewer.ui.main.buildMainState
 import com.mackenzie.waifuviewer.ui.main.ui.MainTheme
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
@@ -143,12 +150,45 @@ fun Fragment.composeView(content: @Composable () -> Unit): ComposeView {
 fun onDownloadClick(isGranted:Boolean, download: DownloadModel, scope: CoroutineScope, context: Context) {
     if (!isGranted) {
         RequestPermision(scope)
+        // RequestPermision(context, scope)
+    } else {
+        downloadImage(scope, context, download.title, download.link, download.imageExt)
     }
-    // requestDownload(scope, download)
-    downloadImage(scope, context, download.title, download.link, download.imageExt)
 }
 
 private fun RequestPermision(scope: CoroutineScope) {
+    scope.launch {
+
+    }
+}
+
+private fun RequestPermision2(ctx: Context, scope: CoroutineScope) {
+
+    when {
+        ContextCompat.checkSelfPermission(
+            ctx,
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED -> {
+            // You can use the API that requires the permission.
+        }
+        ActivityCompat.shouldShowRequestPermissionRationale(
+            this, Manifest.permission.READ_EXTERNAL_STORAGE) -> {
+            // In an educational UI, explain to the user why your app requires this
+            // permission for a specific feature to behave as expected, and what
+            // features are disabled if it's declined. In this UI, include a
+            // "cancel" or "no thanks" button that lets the user continue
+            // using your app without granting the permission.
+
+            // showInContextUI(...)
+        }
+        else -> {
+            // You can directly ask for the permission.
+            // The registered ActivityResultCallback gets the result of this request.
+
+            // requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+        }
+    }
+
     scope.launch {
 
     }

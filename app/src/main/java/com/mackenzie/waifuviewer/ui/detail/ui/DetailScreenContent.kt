@@ -1,5 +1,6 @@
 package com.mackenzie.waifuviewer.ui.detail.ui
 
+import android.Manifest
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,9 +16,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
+import androidx.navigation.fragment.findNavController
 import com.mackenzie.waifuviewer.domain.DownloadModel
+import com.mackenzie.waifuviewer.ui.common.PermissionRequester
 import com.mackenzie.waifuviewer.ui.common.SaveUtils
+import com.mackenzie.waifuviewer.ui.common.app
 import com.mackenzie.waifuviewer.ui.common.onDownloadClick
 import com.mackenzie.waifuviewer.ui.common.ui.isNavigationBarVisible
 import com.mackenzie.waifuviewer.ui.common.ui.previewDetailState
@@ -26,6 +32,7 @@ import com.mackenzie.waifuviewer.ui.detail.DetailFavsViewModel
 import com.mackenzie.waifuviewer.ui.detail.DetailImViewModel
 import com.mackenzie.waifuviewer.ui.detail.DetailPicsViewModel
 import com.mackenzie.waifuviewer.ui.favs.ui.WaifuSearchDialog
+import com.mackenzie.waifuviewer.ui.main.MainState
 
 @Composable
 internal fun DetailImScreenContentRoute(
@@ -63,12 +70,12 @@ fun DetailImScreenContent(
     var download: DownloadModel by remember { mutableStateOf(DownloadModel("","","")) }
     val isWritePermissionGranted by remember { mutableStateOf(false) }
 
-  /*  val wasSaved = SaveUtils().downloadAndSaveImage(
-        context = LocalContext.current,
-        imageUrl = waifuUrl,
-        // folderName = "MisImagenes",
-        fileName = "imagen_descargada.png"
-    )*/
+    val mainState = MainState(
+        context = context,
+        scope = coroutineScope,
+        navController = findNavController(),
+        permissionRequester = PermissionRequester(context , Manifest.permission.ACCESS_COARSE_LOCATION)
+    )
 
 
     if (openAlertDialog) {
@@ -92,15 +99,20 @@ fun DetailImScreenContent(
     ) {
         state.waifuIm?.let { waifu ->
             waifuUrl = waifu.url
+            // prepareDownload(waifu.imageId.toString(), waifu.url, waifu.url.substringAfterLast('.'))
             download = DownloadModel(waifu.imageId.toString(), waifu.url, waifu.url.substringAfterLast('.'))
             ZoomableImage(waifu.url)
             DetailFabFavorites(isFavorite = waifu.isFavorite, onFavoriteClicked = onFavoriteClicked)
             DetailTitle(title = waifu.imageId.toString())
             // DetailFabDownload(onDownloadClick = onDownloadClick, onSearchClick = { openAlertDialog = true })
             DetailFabDownload(onDownloadClick = {
-                onDownloadClick(isWritePermissionGranted, download, coroutineScope, context)
+                onDownloadClick(
+                    isGranted = isWritePermissionGranted,
+                    download = download,
+                    scope = coroutineScope,
+                    context = context
+                )
             }, onSearchClick = { openAlertDialog = true })
-            // prepareDownload(waifu.imageId.toString(), waifu.url, waifu.url.substringAfterLast('.'))
         }
         state.search?.let { search ->
             showBottomSheet = true
