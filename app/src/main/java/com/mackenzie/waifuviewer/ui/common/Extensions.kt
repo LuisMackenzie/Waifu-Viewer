@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.annotation.LayoutRes
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -47,6 +48,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = true): View =
     LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
@@ -142,60 +144,44 @@ fun Fragment.composeView(content: @Composable () -> Unit): ComposeView {
 
 }
 
-fun onDownloadClick(download: DownloadModel, scope: CoroutineScope, context: Context) {
+fun onDownloadClick(download: DownloadModel, scope: CoroutineScope, context: Context, launcher: ManagedActivityResultLauncher<String, Boolean>) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
         downloadImage(scope, context, download.title, download.link, download.imageExt)
     } else {
-        Log.e( "onDownloadClick", "isGranted=${context.hasWriteExternalStoragePermission()}")
         if (!context.hasWriteExternalStoragePermission()) {
-            RequestPermision(context, scope)
+            RequestPermision(context, scope, launcher)
         } else {
             downloadImage(scope, context, download.title, download.link, download.imageExt)
         }
     }
 }
 
-private fun RequestPermision(ctx: Context, scope: CoroutineScope) {
-
-
-    val activity = ctx as NavHostActivity
-
-    activity.requestWriteExternalStoragePermission()
+private fun RequestPermision(ctx: Context, scope: CoroutineScope, launcher : ManagedActivityResultLauncher<String, Boolean>) {
 
     scope.launch {
 
-
-
-        /*when {
+        when {
             ContextCompat.checkSelfPermission(
                 ctx,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
             ) == PackageManager.PERMISSION_GRANTED -> {
-                "Permiso concedido".showToast(ctx)
+                // "Permiso concedido".showToast(ctx)
                 // You can use the API that requires the permission.
             }
-            *//*shouldShowRequestPermissionRationale(
+            /*shouldShowRequestPermissionRationale(
                 activity,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
             ) -> {
                 "Permiso Denegado una Vez, Se Vuelve a solicitar".showToast(ctx)
-            }*//*
+            }*/
             else -> {
                 // "Permiso Denegado pa' siempre".showToast(this)
-                // You can directly ask for the permission.
-                // The registered ActivityResultCallback gets the result of this request.
                 scope.launch {
-                    // val isGranted = permissionRequesterTest.request()
-                    activity.requestPermisions2()
-                    *//*requestPermissions(
-                        activity,
-                        arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                        1
-                    )*//*
-                    "Permiso no concedido ".showToast(ctx)
+                    launcher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    // "Permiso no concedido ".showToast(ctx)
                 }
             }
-        }*/
+        }
     }
 }
 

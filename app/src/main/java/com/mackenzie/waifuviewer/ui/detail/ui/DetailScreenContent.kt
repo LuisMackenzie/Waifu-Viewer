@@ -3,6 +3,9 @@ package com.mackenzie.waifuviewer.ui.detail.ui
 import android.Manifest
 import android.app.Activity
 import androidx.activity.compose.LocalActivityResultRegistryOwner
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,8 +19,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat.requestPermissions
+import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mackenzie.waifuviewer.domain.DownloadModel
@@ -32,6 +37,7 @@ import com.mackenzie.waifuviewer.ui.detail.DetailFavsViewModel
 import com.mackenzie.waifuviewer.ui.detail.DetailImViewModel
 import com.mackenzie.waifuviewer.ui.detail.DetailPicsViewModel
 import com.mackenzie.waifuviewer.ui.favs.ui.WaifuSearchDialog
+import dagger.hilt.android.qualifiers.ActivityContext
 
 @Composable
 internal fun DetailImScreenContentRoute(
@@ -64,6 +70,25 @@ fun DetailImScreenContent(
     val coroutineScope = rememberCoroutineScope()
     var download: DownloadModel by remember { mutableStateOf(DownloadModel("","","")) }
 
+    val permissionLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            // Aquí se gestiona el resultado de pedir el permiso
+            if (granted) {
+                // Permiso concedido
+                "Permiso concedido".showToast(context)
+            } /*else if (shouldShowRequestPermissionRationale(context as? Activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                // Permiso denegado
+                "Rationale Case".showToast(context)
+            } else {
+                // Permiso denegado
+                "Permiso denegado".showToast(context)
+            }*/
+            else {
+                // Permiso denegado
+                "Permiso denegado".showToast(context)
+            }
+        }
+
 
     if (openAlertDialog) {
         WaifuSearchDialog(
@@ -95,7 +120,8 @@ fun DetailImScreenContent(
                 onDownloadClick(
                     download = download,
                     scope = coroutineScope,
-                    context = context
+                    context = context,
+                    launcher = permissionLauncher
                 )
             }, onSearchClick = { openAlertDialog = true })
         }
