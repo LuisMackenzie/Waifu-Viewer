@@ -149,38 +149,11 @@ fun onDownloadClick(download: DownloadModel, scope: CoroutineScope, context: Con
         downloadImage(scope, context, download.title, download.link, download.imageExt)
     } else {
         if (!context.hasWriteExternalStoragePermission()) {
-            RequestPermision(context, scope, launcher)
+            scope.launch {
+                launcher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            }
         } else {
             downloadImage(scope, context, download.title, download.link, download.imageExt)
-        }
-    }
-}
-
-private fun RequestPermision(ctx: Context, scope: CoroutineScope, launcher : ManagedActivityResultLauncher<String, Boolean>) {
-
-    scope.launch {
-
-        when {
-            ContextCompat.checkSelfPermission(
-                ctx,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ) == PackageManager.PERMISSION_GRANTED -> {
-                // "Permiso concedido".showToast(ctx)
-                // You can use the API that requires the permission.
-            }
-            /*shouldShowRequestPermissionRationale(
-                activity,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ) -> {
-                "Permiso Denegado una Vez, Se Vuelve a solicitar".showToast(ctx)
-            }*/
-            else -> {
-                // "Permiso Denegado pa' siempre".showToast(this)
-                scope.launch {
-                    launcher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    // "Permiso no concedido ".showToast(ctx)
-                }
-            }
         }
     }
 }
@@ -194,7 +167,6 @@ fun Context.hasWriteExternalStoragePermission(): Boolean {
 
 private fun downloadImage(scope: CoroutineScope, ctx: Context, title: String, link: String, fileType: String) {
     val type: String = selectMimeType(fileType)
-
     scope.launch(IO) {
         SaveImage().saveImageToStorage(
             ctx,
