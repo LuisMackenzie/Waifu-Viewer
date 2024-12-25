@@ -43,6 +43,7 @@
     <string name="waifu_deleted">Waifu Deleted!</string>
     <string name="waifu_favorite_delete">Delete All Favorites no implemented yet. Try Long Press on a waifu</string>
     <string name="waifus_coming">More Waifus are coming</string>
+    <string name="waifus_loading">Loading Waifus</string>
     <string name="waifus_size">Total Waifus = </string>
     <string name="waifus_content">Here is shown some waifus</string>
     <string name="waifus_permissions_content">Debes aceptar el permiso para usar esta funcion</string>

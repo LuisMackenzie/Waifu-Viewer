@@ -39,8 +39,9 @@ fun Navigation() {
             // navController.navigate(NavItem.WaifuDetail.createRoute(waifu.id))
         }
         composable(
-            route = NavItem.WaifuDetail.route,
-            arguments = listOf(navArgument("waifuId") { type = NavType.IntType })
+            // route = NavItem.WaifuDetail.route,
+            route = NavItem.WaifuDetail.baseRoute,
+            // arguments = listOf(navArgument("waifuId") { type = NavType.IntType })
         ) { backStackEntry ->
             // val waifuId = backStackEntry.arguments?.getInt("waifuId")
             // requireNotNull(waifuId)
