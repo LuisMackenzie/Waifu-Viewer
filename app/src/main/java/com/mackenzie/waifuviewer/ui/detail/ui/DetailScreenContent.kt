@@ -38,11 +38,6 @@ internal fun DetailImScreenContentRoute(
     val state by vm.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
-    val permissionLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-            if (!granted) { getString(context, R.string.waifus_permissions_content).showToast(context) }
-        }
-
     DetailImScreenContent(
         state = state,
         onFavoriteClicked = { vm.onFavoriteClicked() },
