@@ -4,6 +4,7 @@ package com.mackenzie.waifuviewer.ui.splash
 import android.view.animation.OvershootInterpolator
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -41,18 +43,21 @@ import androidx.core.content.ContextCompat.getString
 import androidx.navigation.NavController
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.ui.common.nav.NavItem
+import com.mackenzie.waifuviewer.ui.common.nav.Navigation
 import com.mackenzie.waifuviewer.ui.common.ui.isNavigationBarVisible
 import kotlinx.coroutines.delay
 
 
 @Composable
-fun SplashScreenRoute(navController: NavController) {
+fun SplashScreenRoute(
+    onNavigate: () -> Unit = {}
+) {
 
     val scaleAnimation: Animatable<Float, AnimationVector1D> = remember { Animatable(initialValue = 0f) }
 
     AnimationSplashContent(
         scaleAnimation = scaleAnimation,
-        navController = navController,
+        onNavigate = onNavigate,
         durationMillisAnimation = 3000,
         delayScreen = 10000L
     )
@@ -76,16 +81,11 @@ fun SplashScreenContent(
             Color(143, 244, 235, 255),
             Color(246, 248, 250, 255),
             Color(223, 116, 241, 255),
-        ),
-        // start = Offset(0.0f, 50.0f),
-        // end = Offset(1000f, 1000f)
+        )
     )
 
-    // val shapePainter: Painter = painterResource(id = R.drawable.ic_splash_fondo)
-
     Box(
-        modifier = if (isNavigationBarVisible()) { modifier.fillMaxSize().navigationBarsPadding().background(gradientBrush) }
-                    else { modifier.fillMaxSize().background(gradientBrush) },
+        modifier = modifier.fillMaxSize().navigationBarsPadding().background(gradientBrush),
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -118,34 +118,15 @@ fun SplashScreenContent(
                     CircularProgressIndicator(
                         color = Color.White,
                         strokeWidth = 5.dp,
-                        modifier = modifier.size(50.dp)
+                        modifier = modifier.size(50.dp),
+                        // strokeCap = ProgressIndicatorDefaults.LinearStrokeCap
                     )
                     Spacer(modifier = modifier.size(25.dp))
                     Text(text = loadingText(), color = Color.White, fontSize = 20.sp)
                 }
-                // Text(text = loadingText(), color = Color.White, fontSize = 20.sp)
             }
-
-            /*Row (
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                CircularProgressIndicator(
-                    color = Color.White,
-                    strokeWidth = 5.dp,
-                    modifier = modifier.size(50.dp)
-                )
-                Spacer(modifier = modifier.size(25.dp))
-                Text(text = loadingText(), color = Color.White, fontSize = 20.sp)
-            }*/
-
-            // Text(text = loadingText(), color = Color.White, fontSize = 20.sp)
         }
     }
-
-    /*Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
-        Text(text = loadingText(), color = Color.White, fontSize = 20.sp)
-    }*/
-
 }
 
 @Composable
@@ -165,7 +146,7 @@ fun loadingText(): String {
 @Composable
 fun AnimationSplashContent(
     scaleAnimation: Animatable<Float, AnimationVector1D>,
-    navController: NavController,
+    onNavigate: () -> Unit = {},
     durationMillisAnimation: Int,
     delayScreen: Long
 ) {
@@ -183,11 +164,6 @@ fun AnimationSplashContent(
 
         delay(timeMillis = delayScreen)
 
-        navController.navigate(route = NavItem.SelectorScreen.baseRoute) {
-            popUpTo(route =
-            NavItem.SplashScreen.baseRoute) {
-                inclusive = true
-            }
-        }
+        onNavigate()
     }
 }

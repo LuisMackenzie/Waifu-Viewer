@@ -4,6 +4,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -17,12 +18,22 @@ fun Navigation() {
 
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = NavItem.SplashScreen.baseRoute) {
-        composable(NavItem.SplashScreen.baseRoute) {
-            // SplashScreenRoute(navController)
-            Text("SplashScreen")
+    NavHost(
+        navController = navController,
+        startDestination = NavItem.SplashScreen.route
+    ) {
+        composable(NavItem.SplashScreen.route) {
+            SplashScreenRoute {
+                navController.navigate(route = NavItem.SelectorScreen.route) {
+                    popUpTo(route =
+                    NavItem.SplashScreen.route) {
+                        inclusive = true
+                    }
+                }
+            }
+            // Text("SplashScreen")
         }
-        composable(NavItem.SelectorScreen.baseRoute) {
+        composable(NavItem.SelectorScreen.route) {
             // TODO
             // SelectorScreenContentRoute(navController)
             Text("SelectorScreen")
@@ -31,19 +42,27 @@ fun Navigation() {
             // navController.navigate(NavItem.WaifuScreen.baseRoute)
 
         }
-        composable(NavItem.WaifuScreen.baseRoute) {
-            // WaifuScreenRoute()
+        composable(NavItem.WaifuScreen.route) {
+            /*WaifuScreenRoute() {
+                navController.navigate(route = NavItem.WaifuDetail.createRoute(it.id)) {
+                    popUpTo(route =
+                    NavItem.WaifuScreen.route) {
+                        inclusive = true
+                    }
+                }
+            }*/
 
 
             // Esto es lo que se le passa a la pantalla para que pueda navegar
             // navController.navigate(NavItem.WaifuDetail.createRoute(waifu.id))
         }
         composable(
-            // route = NavItem.WaifuDetail.route,
-            route = NavItem.WaifuDetail.baseRoute,
+            route = NavItem.WaifuDetail.route,
+            arguments = NavItem.WaifuDetail.args
+            // route = NavItem.WaifuDetail.baseRoute,
             // arguments = listOf(navArgument("waifuId") { type = NavType.IntType })
         ) { backStackEntry ->
-            // val waifuId = backStackEntry.arguments?.getInt("waifuId")
+            val waifuId = backStackEntry.arguments?.getInt(NavArg.ItemId.key)
             // requireNotNull(waifuId)
             // DetailScreenRoute(waifuId = waifuId)
         }

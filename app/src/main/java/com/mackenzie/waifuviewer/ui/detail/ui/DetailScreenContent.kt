@@ -36,7 +36,6 @@ internal fun DetailImScreenContentRoute(
     vm: DetailImViewModel = viewModel()
 ) {
     val state by vm.state.collectAsStateWithLifecycle()
-    val context = LocalContext.current
 
     DetailImScreenContent(
         state = state,

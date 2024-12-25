@@ -2,6 +2,7 @@ package com.mackenzie.waifuviewer.ui.common.nav
 
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import java.io.File
 
 sealed class NavItem(
     internal val baseRoute: String,

@@ -22,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.domain.ServerType.NORMAL
@@ -39,6 +40,7 @@ import com.mackenzie.waifuviewer.ui.theme.WaifuViewerTheme
 
 @Composable
 internal fun SelectorScreenContentRoute(
+    navController: NavController,
     vm: SelectorViewModel = viewModel()
 ) {
     val selectorState by vm.state.collectAsStateWithLifecycle()
