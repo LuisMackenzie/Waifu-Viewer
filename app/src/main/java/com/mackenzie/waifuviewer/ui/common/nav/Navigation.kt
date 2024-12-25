@@ -9,15 +9,22 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.mackenzie.waifuviewer.ui.selector.ui.SelectorScreenContentRoute
+import com.mackenzie.waifuviewer.ui.splash.SplashScreenRoute
 
 @Composable
 fun Navigation() {
 
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = NavItem.SelectorScreen.baseRoute) {
+    NavHost(navController = navController, startDestination = NavItem.SplashScreen.baseRoute) {
+        composable(NavItem.SplashScreen.baseRoute) {
+            // SplashScreenRoute(navController)
+            Text("SplashScreen")
+        }
         composable(NavItem.SelectorScreen.baseRoute) {
             // TODO
+            // SelectorScreenContentRoute(navController)
             Text("SelectorScreen")
 
             // TODO navegar a WaifuScreen

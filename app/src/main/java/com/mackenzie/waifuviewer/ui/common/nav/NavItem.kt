@@ -8,6 +8,8 @@ sealed class NavItem(
     private val navArgs: List<NavArg> = emptyList()
 ) {
 
+    object SplashScreen : NavItem("splash_screen")
+
     object SelectorScreen : NavItem("selector_screen")
 
     object WaifuScreen : NavItem("waifu_screen")

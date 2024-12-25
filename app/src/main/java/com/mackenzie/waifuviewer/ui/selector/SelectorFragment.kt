@@ -41,6 +41,7 @@ import com.mackenzie.waifuviewer.ui.common.isLandscape
 import com.mackenzie.waifuviewer.ui.common.showToast
 import com.mackenzie.waifuviewer.ui.main.MainState
 import com.mackenzie.waifuviewer.ui.selector.ui.SelectorScreenContent
+import com.mackenzie.waifuviewer.ui.splash.SplashScreenRoute
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -77,7 +78,8 @@ class SelectorFragment : Fragment() {
         } else if (loadedServer == null) loadInitialServer()
 
         return composeView {
-            LaunchSelectorScreen()
+            // LaunchSelectorScreen()
+            // SplashScreenRoute()
         }
     }
 
