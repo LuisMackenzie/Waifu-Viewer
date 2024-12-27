@@ -2,6 +2,7 @@ package com.mackenzie.waifuviewer.ui.selector.ui
 
 import android.app.Activity
 import android.content.Context
+import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -48,6 +49,7 @@ import com.mackenzie.waifuviewer.ui.common.getConfig
 import com.mackenzie.waifuviewer.ui.common.getSimpleText
 import com.mackenzie.waifuviewer.ui.common.isLandscape
 import com.mackenzie.waifuviewer.ui.common.loadInitialServer
+import com.mackenzie.waifuviewer.ui.common.saveBundle
 import com.mackenzie.waifuviewer.ui.common.saveServerMode
 import com.mackenzie.waifuviewer.ui.common.showToast
 import com.mackenzie.waifuviewer.ui.common.tagFilter
@@ -61,7 +63,7 @@ import com.mackenzie.waifuviewer.ui.theme.WaifuViewerTheme
 internal fun SelectorScreenContentRoute(
     vm: SelectorViewModel = hiltViewModel(),
     // onSaveServerMode: (RemoteConfigValues) -> Unit = {},
-    onWaifuButtonClicked: (String) -> Unit = {},
+    onWaifuButtonClicked: (String, Bundle) -> Unit = { tag, bundle -> },
 ) {
     val selectorState by vm.state.collectAsStateWithLifecycle()
     var loaded by remember { mutableStateOf(false) }
@@ -124,7 +126,7 @@ internal fun SelectorScreenContentRoute(
         },
         onWaifuButtonClicked = { tag ->
             selectedTag = tag.tagFilter(context, serverState, switchState)
-            onWaifuButtonClicked(selectedTag)
+            onWaifuButtonClicked(selectedTag, saveBundle(context, serverState, switchState, selectedTag))
         },
         onFavoriteClicked = {}, // {navigateTo(null, toFavorites = true)},
         onRestartClicked = {
