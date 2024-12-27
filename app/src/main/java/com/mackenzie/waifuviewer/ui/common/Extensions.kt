@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.nfc.NfcManager
 import android.os.Build
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +26,7 @@ import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getString
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -43,6 +45,7 @@ import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.domain.ServerType.ENHANCED
 import com.mackenzie.waifuviewer.domain.ServerType.NEKOS
 import com.mackenzie.waifuviewer.domain.ServerType.NORMAL
+import com.mackenzie.waifuviewer.domain.selector.SwitchState
 import com.mackenzie.waifuviewer.ui.NavHostActivity
 import com.mackenzie.waifuviewer.ui.main.ui.MainTheme
 import kotlinx.coroutines.CompletableDeferred
@@ -117,6 +120,17 @@ fun RemoteConfigValues.saveServerMode(app: Activity) {
     Log.v("SaveMode", "SERVER_MODE=${type}, isFavorite=${isFavorite}")
 }
 
+fun ServerType.saveServerMode(app: Activity) {
+    val sharedPref = app.getPreferences(Context.MODE_PRIVATE)
+    requireNotNull(sharedPref)
+    with (sharedPref.edit()) {
+        putString(Constants.SERVER_MODE, this@saveServerMode.value)
+        // putBoolean(Constants.IS_FAVORITE_WAIFU, isFavorite)
+        apply()
+    }
+    Log.v("SaveMode", "SERVER_MODE=${this.value}")
+}
+
 private fun getServerMode(app: Activity): ServerType {
     val sharedPref = app.getPreferences(Context.MODE_PRIVATE)
     val mode = sharedPref.getString(Constants.SERVER_MODE, NORMAL.value)
@@ -127,6 +141,57 @@ private fun getServerMode(app: Activity): ServerType {
         NEKOS.value -> NEKOS
         else -> NORMAL
     }
+}
+
+fun saveBundle(ctx: Context, mode: ServerType?, switchValues: SwitchState, tag: String): Bundle {
+    val bun = bundleOf()
+    bun.putString(Constants.SERVER_MODE, mode?.value)
+    bun.putBoolean(Constants.IS_NSFW_WAIFU, switchValues.nsfw)
+    bun.putBoolean(Constants.IS_GIF_WAIFU, switchValues.gifs)
+    bun.putBoolean(Constants.IS_LANDS_WAIFU, switchValues.portrait)
+    bun.putString(Constants.CATEGORY_TAG_WAIFU, tagFilter(ctx, mode, switchValues, tag))
+    // saveServerMode()
+    mode?.saveServerMode(ctx as Activity)
+    Log.v("saveBundle", "SERVER_MODE=${mode?.value}")
+    return bun
+}
+
+fun tagFilter(ctx: Context, mode: ServerType?, switchValues: SwitchState, tag: String): String {
+    var updatedTag: String = tag
+    if (tag == getString(ctx, R.string.categories) || tag == getString(ctx, R.string.categories_items)) {
+        when (mode) {
+            NORMAL, ENHANCED -> {
+                updatedTag = getString(ctx, R.string.tag_waifu)
+            }
+            else -> {
+                if (!switchValues.gifs) {
+                    updatedTag = getString(ctx, R.string.tag_neko)
+                } else {
+                    updatedTag = getString(ctx, R.string.tag_pat)
+                }
+            }
+        }
+    }
+    return updatedTag
+}
+
+fun String.tagFilter(ctx: Context, mode: ServerType?, switchValues: SwitchState): String {
+    var updatedTag: String = this
+    if (this == getString(ctx, R.string.categories) || this == getString(ctx, R.string.categories_items)) {
+        when (mode) {
+            NORMAL, ENHANCED -> {
+                updatedTag = getString(ctx, R.string.tag_waifu)
+            }
+            else -> {
+                if (!switchValues.gifs) {
+                    updatedTag = getString(ctx, R.string.tag_neko)
+                } else {
+                    updatedTag = getString(ctx, R.string.tag_pat)
+                }
+            }
+        }
+    }
+    return updatedTag
 }
 
 private fun setAutoMode(isAutomatic: Boolean) {
@@ -151,7 +216,7 @@ private fun setNsfwMode(app: Activity, nsfw: Boolean, hasGpt: Boolean, hasGemini
 }
 
 fun String.showToast(context: Context) {
-    Toast.makeText(context, this, Toast.LENGTH_SHORT).show()
+    Toast.makeText(context, this, Toast.LENGTH_LONG).show()
 }
 
 fun Activity.showFullscreenCutout() {
@@ -175,7 +240,6 @@ fun Fragment.composeView(content: @Composable () -> Unit): ComposeView {
             }
         }
     }
-
 }
 
 fun onDownloadClick(download: DownloadModel, scope: CoroutineScope, context: Context, launcher: ManagedActivityResultLauncher<String, Boolean>) {

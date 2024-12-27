@@ -3,25 +3,24 @@ package com.mackenzie.waifuviewer.ui.common.nav
 import android.util.Log
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.mackenzie.waifuviewer.domain.RemoteConfigValues
-import com.mackenzie.waifuviewer.ui.common.showToast
+import com.mackenzie.waifuviewer.ui.common.tagFilter
+import com.mackenzie.waifuviewer.ui.main.ui.WaifuScreenContentRoute
 import com.mackenzie.waifuviewer.ui.selector.ui.SelectorScreenContentRoute
 import com.mackenzie.waifuviewer.ui.splash.SplashScreenRoute
 
 @Composable
-fun Navigation(
-    // onSaveServerMode: (RemoteConfigValues) -> Unit = {},
-) {
+fun Navigation() {
 
     val navController = rememberNavController()
+    val context = LocalContext.current
 
     NavHost(
         navController = navController,
@@ -40,8 +39,9 @@ fun Navigation(
         composable(NavItem.SelectorScreen.route) {
             // TODO
             SelectorScreenContentRoute(
-                onWaifuButtonClicked = {
-                    navController.navigate(route = NavItem.WaifuScreen.route) {
+                onWaifuButtonClicked = { waifuTag ->
+                    Log.e("Navigation", "waifuTag=$waifuTag")
+                    navController.navigate(route = NavItem.WaifuScreen.createRoute(waifuTag)) {
                         popUpTo(route =
                         NavItem.SelectorScreen.route) {
                             inclusive = true
@@ -50,16 +50,23 @@ fun Navigation(
                 }
             )
         }
-        composable(NavItem.WaifuScreen.route) {
-            /*WaifuScreenRoute() {
-                navController.navigate(route = NavItem.WaifuDetail.createRoute(it.id)) {
+        composable(
+            route = NavItem.WaifuScreen.route,
+            arguments = NavItem.WaifuScreen.args
+            // route = "waifu_screen/{waifuTag}",
+            // arguments = listOf(navArgument("waifuTag") { type = NavType.StringType })
+        ) { backsStackEntry ->
+            val tag = backsStackEntry.arguments?.getString(NavArg.WaifuTag.key)
+            /*WaifuScreenContentRoute() {
+                navController.navigate(route = NavItem.WaifuDetail.createRoute()) {
                     popUpTo(route =
                     NavItem.WaifuScreen.route) {
                         inclusive = true
                     }
                 }
             }*/
-            Text("WaifuScreen")
+
+            Text("WaifuScreen $tag")
 
             // Esto es lo que se le passa a la pantalla para que pueda navegar
             // navController.navigate(NavItem.WaifuDetail.createRoute(waifu.id))

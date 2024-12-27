@@ -51,7 +51,7 @@ class SelectorFragment : Fragment() {
     private var loaded: Boolean = false
     private var loadedServer: ServerType? = null
     private var requirePermissions: Boolean = false
-    private lateinit var mainState: MainState
+    // private lateinit var mainState: MainState
     private var selectedTag: String = ""
     // private var remoteValues : RemoteConfigValues = RemoteConfigValues()
     // Aqui se guardan 3 valores de los Switches en este orden 1. NSFW, 2. Gifs, 3. Portrait
@@ -62,12 +62,12 @@ class SelectorFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        mainState = MainState(
+        /*mainState = MainState(
             requireContext(),
             viewLifecycleOwner.lifecycleScope,
             findNavController(),
             PermissionRequester(this , Manifest.permission.ACCESS_COARSE_LOCATION)
-        )
+        )*/
         /// getRemoteConfig()
 
         /*if (BuildConfig.BUILD_TYPE == ENHANCED.value) {
@@ -135,33 +135,33 @@ class SelectorFragment : Fragment() {
     }
 
     private fun navigateTo(mode: ServerType?, toFavorites: Boolean= false, toGpt: Boolean= false, toGemini: Boolean= false) {
-        mode?.let { remoteValues.type = it }
-        remoteValues.isFavorite = toFavorites
-        val bun = saveBundle(mode)
+        // mode?.let { remoteValues.type = it }
+        // remoteValues.isFavorite = toFavorites
+        // val bun = saveBundle(mode)
         if (toFavorites) {
-            mainState.onButtonFavoritesClicked(bun)
+            // mainState.onButtonFavoritesClicked(bun)
         } else if (toGpt) {
-            mainState.onButtonGptClicked()
+            // mainState.onButtonGptClicked()
         } else if (toGemini) {
-            mainState.onButtonGeminiClicked()
+            // mainState.onButtonGeminiClicked()
         } else {
-            mainState.onButtonGetWaifuClicked(bun)
+            // mainState.onButtonGetWaifuClicked(bun)
         }
     }
 
-    private fun saveBundle(mode: ServerType?): Bundle {
+    /*private fun saveBundle(mode: ServerType?): Bundle {
         val bun = bundleOf()
         bun.putString(Constants.SERVER_MODE, mode?.value)
         bun.putBoolean(Constants.IS_NSFW_WAIFU, switchValues.nsfw)
         bun.putBoolean(Constants.IS_GIF_WAIFU, switchValues.gifs)
         bun.putBoolean(Constants.IS_LANDS_WAIFU, switchValues.portrait)
         bun.putString(Constants.CATEGORY_TAG_WAIFU, tagFilter(selectedTag))
-        // saveServerMode()
+        saveServerMode()
         Log.v("saveBundle", "mode=${mode?.value} SERVER_MODE=${remoteValues.type?.value}")
         return bun
-    }
+    }*/
 
-    private fun tagFilter(tag: String): String {
+    /*private fun tagFilter(tag: String): String {
         var updatedTag: String = tag
         if (tag == getString(R.string.categories) || tag == getString(R.string.categories_items)) {
             when (remoteValues.type) {
@@ -178,7 +178,7 @@ class SelectorFragment : Fragment() {
             }
         }
         return updatedTag
-    }
+    }*/
 
     /*private fun loadInitialServer() {
         when (Build.VERSION.SDK_INT) {

@@ -14,13 +14,13 @@ sealed class NavItem(
     object SelectorScreen : NavItem("selector_screen")
 
     object WaifuScreen : NavItem("waifu_screen", listOf(NavArg.WaifuTag)) {
-        fun createRoute(waifuTag: String) = "$baseRoute/$waifuTag"
+        fun createRoute(waifuTag: String) = baseRoute + File.separator + waifuTag
     }
 
     object FavoriteScreen : NavItem("favorite_screen")
 
     object WaifuDetail : NavItem("detail_screen", listOf(NavArg.ItemId)) {
-        fun createRoute(itemId: Int) = "$baseRoute/$itemId"
+        fun createRoute(itemId: Int) = baseRoute + File.separator + itemId
     }
 
     object WaifuGptScreen : NavItem("gpt_screen")
@@ -31,7 +31,7 @@ sealed class NavItem(
         val argValues = navArgs.map { "{${it.key}}" }
         listOf(baseRoute)
             .plus(argValues)
-            .joinToString("/")
+            .joinToString(File.separator)
     }
 
     val args = navArgs.map {

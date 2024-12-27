@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.ContextCompat.getString
@@ -49,6 +50,7 @@ import com.mackenzie.waifuviewer.ui.common.isLandscape
 import com.mackenzie.waifuviewer.ui.common.loadInitialServer
 import com.mackenzie.waifuviewer.ui.common.saveServerMode
 import com.mackenzie.waifuviewer.ui.common.showToast
+import com.mackenzie.waifuviewer.ui.common.tagFilter
 import com.mackenzie.waifuviewer.ui.common.ui.isNavigationBarVisible
 import com.mackenzie.waifuviewer.ui.common.ui.previewSelectorState
 import com.mackenzie.waifuviewer.ui.selector.SelectorViewModel
@@ -59,7 +61,7 @@ import com.mackenzie.waifuviewer.ui.theme.WaifuViewerTheme
 internal fun SelectorScreenContentRoute(
     vm: SelectorViewModel = hiltViewModel(),
     // onSaveServerMode: (RemoteConfigValues) -> Unit = {},
-    onWaifuButtonClicked: (String) -> Unit = {}
+    onWaifuButtonClicked: (String) -> Unit = {},
 ) {
     val selectorState by vm.state.collectAsStateWithLifecycle()
     var loaded by remember { mutableStateOf(false) }
@@ -78,11 +80,6 @@ internal fun SelectorScreenContentRoute(
     var switchState by remember { mutableStateOf(SwitchState()) }
     var serverState by remember { mutableStateOf(remoteValues?.type ?: NORMAL) }
     val tagsState by remember { mutableStateOf(TagsState()) }
-
-
-
-
-
 
 
 
@@ -125,7 +122,10 @@ internal fun SelectorScreenContentRoute(
             }
             remoteValues?.saveServerMode(context as Activity)
         },
-        onWaifuButtonClicked = { tag -> selectedTag = tag ; onWaifuButtonClicked(tag) },
+        onWaifuButtonClicked = { tag ->
+            selectedTag = tag.tagFilter(context, serverState, switchState)
+            onWaifuButtonClicked(selectedTag)
+        },
         onFavoriteClicked = {}, // {navigateTo(null, toFavorites = true)},
         onRestartClicked = {
             loadedServer?.let{ vm.loadErrorOrWaifu(orientation = context.isLandscape(), serverType = it) }
