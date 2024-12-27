@@ -15,7 +15,7 @@
     <string name="server_normal">Normal Mode</string>
     <string name="server_enhanced">Enhanced Mode</string>
     <string name="server_best">Nekos Mode</string>
-    <string name="server_toast_holder">%s Mode Server</string>
+    <string name="server_toast_holder">Mode Server</string>
     <string name="server_normal_toast">IM</string>
     <string name="server_enhanced_toast">PICS</string>
     <string name="server_best_toast">NEKOS</string>

@@ -35,8 +35,15 @@ fun Navigation() {
         }
         composable(NavItem.SelectorScreen.route) {
             // TODO
-            // SelectorScreenContentRoute(navController)
-            Text("SelectorScreen")
+            SelectorScreenContentRoute(
+                onSaveServerMode = {
+
+                },
+                onWaifuButtonClicked = {
+                    navController.navigate(route = NavItem.WaifuScreen.route)
+                }
+            )
+            // Text("SelectorScreen")
 
             // TODO navegar a WaifuScreen
             // navController.navigate(NavItem.WaifuScreen.baseRoute)
@@ -51,7 +58,7 @@ fun Navigation() {
                     }
                 }
             }*/
-
+            Text("WaifuScreen")
 
             // Esto es lo que se le passa a la pantalla para que pueda navegar
             // navController.navigate(NavItem.WaifuDetail.createRoute(waifu.id))

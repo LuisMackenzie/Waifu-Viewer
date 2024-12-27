@@ -24,6 +24,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getString
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -35,6 +36,7 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import com.mackenzie.waifuviewer.App
+import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.domain.DownloadModel
 import com.mackenzie.waifuviewer.domain.RemoteConfigValues
 import com.mackenzie.waifuviewer.domain.ServerType
@@ -196,6 +198,57 @@ fun String.decodeMimeTypeForTitle(title: String): String {
         "image/png" -> return "$title.png"
         "image/gif" -> return "$title.gif"
         else -> return ".jpg"
+    }
+}
+
+fun RemoteConfigValues.saveServerMode(app: Activity) {
+    val sharedPref = app.getPreferences(Context.MODE_PRIVATE)
+    requireNotNull(sharedPref)
+    with (sharedPref.edit()) {
+        putString(Constants.SERVER_MODE, type?.value)
+        putBoolean(Constants.IS_FAVORITE_WAIFU, isFavorite)
+        apply()
+    }
+    Log.v("SaveMode", "SERVER_MODE=${type}, isFavorite=${isFavorite}")
+}
+
+fun loadInitialServer(): ServerType {
+    when (Build.VERSION.SDK_INT) {
+        in 0..Build.VERSION_CODES.LOLLIPOP_MR1 -> {
+            // Android 9 Hacia Abajo
+            // ENHANCED.loadWaifuServer(reqPermisions, loaded)
+            return ENHANCED
+            // loadWaifu(requirePermissions, ENHANCED).apply { loadedServer = ENHANCED }
+        }
+        in 35..40 -> {
+            // Android 15 Hacia Arriba
+            // NEKOS.loadWaifuServer(reqPermisions, loaded)
+            return NEKOS
+            // loadWaifu(requirePermissions, NEKOS).apply { loadedServer = NEKOS }
+        }
+        else -> {
+            // NORMAL.loadWaifuServer(reqPermisions, loaded)
+            return NORMAL
+            // loadWaifu(requirePermissions, NORMAL).apply { loadedServer = NORMAL }
+        }
+    }
+}
+
+fun String.getSimpleText(ctx: Context): String {
+    return when (this) {
+        NORMAL.value -> getString(ctx, R.string.server_normal_toast)
+        ENHANCED.value -> getString(ctx, R.string.server_enhanced_toast)
+        NEKOS.value -> getString(ctx, R.string.server_best_toast)
+        else -> getString(ctx, R.string.server_unknown_toast)
+    }
+}
+
+fun getSimpleText(ctx: Context, type: String): String {
+    return when (type) {
+        NORMAL.value -> getString(ctx, R.string.server_normal_toast)
+        ENHANCED.value -> getString(ctx, R.string.server_enhanced_toast)
+        NEKOS.value -> getString(ctx, R.string.server_best_toast)
+        else -> getString(ctx, R.string.server_unknown_toast)
     }
 }
 

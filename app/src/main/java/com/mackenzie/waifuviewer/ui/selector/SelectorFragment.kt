@@ -98,17 +98,17 @@ class SelectorFragment : Fragment() {
                     NORMAL -> {
                         remoteValues.type = ENHANCED
                         serverState = ENHANCED
-                        saveServerMode()
+                        // saveServerMode()
                     }
                     ENHANCED -> {
                         remoteValues.type = NEKOS
                         serverState = NEKOS
-                        saveServerMode()
+                        // saveServerMode()
                     }
                     NEKOS -> {
                         remoteValues.type = NORMAL
                         serverState = NORMAL
-                        saveServerMode()
+                        // saveServerMode()
                     }
                     else -> {
                         "WTF=$serverState".showToast(requireContext())
@@ -129,7 +129,7 @@ class SelectorFragment : Fragment() {
             },
             switchState = switchState,
             tags = tagsState,
-            backgroundState = { backgroundLoaded() },
+            backgroundState = {}, // { backgroundLoaded() },
             server = serverState
         )
     }
@@ -205,12 +205,12 @@ class SelectorFragment : Fragment() {
         bun.putBoolean(Constants.IS_GIF_WAIFU, switchValues.gifs)
         bun.putBoolean(Constants.IS_LANDS_WAIFU, switchValues.portrait)
         bun.putString(Constants.CATEGORY_TAG_WAIFU, tagFilter(selectedTag))
-        saveServerMode()
+        // saveServerMode()
         Log.v("saveBundle", "mode=${mode?.value} SERVER_MODE=${remoteValues.type?.value}")
         return bun
     }
 
-    private fun saveServerMode() {
+    /*private fun saveServerMode() {
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
         requireNotNull(sharedPref)
         with (sharedPref.edit()) {
@@ -219,7 +219,7 @@ class SelectorFragment : Fragment() {
             apply()
         }
         Log.v("SaveMode", "SERVER_MODE=${remoteValues.type}, isFavorite=${remoteValues.isFavorite}")
-    }
+    }*/
 
     private fun getServerMode(): ServerType {
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
@@ -291,9 +291,9 @@ class SelectorFragment : Fragment() {
         }
     }
 
-    private fun backgroundLoaded() {
+    /*private fun backgroundLoaded() {
         loaded = true
-    }
+    }*/
 
     private fun getSimpleText(type: String): String {
         return when (type) {
