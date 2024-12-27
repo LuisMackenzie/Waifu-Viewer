@@ -1,5 +1,6 @@
 package com.mackenzie.waifuviewer.ui.common.nav
 
+import android.util.Log
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavBackStackEntry
@@ -10,11 +11,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.mackenzie.waifuviewer.domain.RemoteConfigValues
+import com.mackenzie.waifuviewer.ui.common.showToast
 import com.mackenzie.waifuviewer.ui.selector.ui.SelectorScreenContentRoute
 import com.mackenzie.waifuviewer.ui.splash.SplashScreenRoute
 
 @Composable
-fun Navigation() {
+fun Navigation(
+    // onSaveServerMode: (RemoteConfigValues) -> Unit = {},
+) {
 
     val navController = rememberNavController()
 
@@ -31,23 +36,19 @@ fun Navigation() {
                     }
                 }
             }
-            // Text("SplashScreen")
         }
         composable(NavItem.SelectorScreen.route) {
             // TODO
             SelectorScreenContentRoute(
-                onSaveServerMode = {
-
-                },
                 onWaifuButtonClicked = {
-                    navController.navigate(route = NavItem.WaifuScreen.route)
+                    navController.navigate(route = NavItem.WaifuScreen.route) {
+                        popUpTo(route =
+                        NavItem.SelectorScreen.route) {
+                            inclusive = true
+                        }
+                    }
                 }
             )
-            // Text("SelectorScreen")
-
-            // TODO navegar a WaifuScreen
-            // navController.navigate(NavItem.WaifuScreen.baseRoute)
-
         }
         composable(NavItem.WaifuScreen.route) {
             /*WaifuScreenRoute() {

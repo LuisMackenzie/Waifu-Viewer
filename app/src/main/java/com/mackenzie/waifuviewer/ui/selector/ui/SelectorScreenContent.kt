@@ -47,6 +47,7 @@ import com.mackenzie.waifuviewer.ui.common.getConfig
 import com.mackenzie.waifuviewer.ui.common.getSimpleText
 import com.mackenzie.waifuviewer.ui.common.isLandscape
 import com.mackenzie.waifuviewer.ui.common.loadInitialServer
+import com.mackenzie.waifuviewer.ui.common.saveServerMode
 import com.mackenzie.waifuviewer.ui.common.showToast
 import com.mackenzie.waifuviewer.ui.common.ui.isNavigationBarVisible
 import com.mackenzie.waifuviewer.ui.common.ui.previewSelectorState
@@ -57,10 +58,9 @@ import com.mackenzie.waifuviewer.ui.theme.WaifuViewerTheme
 @Composable
 internal fun SelectorScreenContentRoute(
     vm: SelectorViewModel = hiltViewModel(),
-    onSaveServerMode: (RemoteConfigValues) -> Unit = {},
+    // onSaveServerMode: (RemoteConfigValues) -> Unit = {},
     onWaifuButtonClicked: (String) -> Unit = {}
 ) {
-    // val vm2: SelectorViewModel = hiltViewModel()
     val selectorState by vm.state.collectAsStateWithLifecycle()
     var loaded by remember { mutableStateOf(false) }
     val reqPermisions by remember { mutableStateOf(false) }
@@ -69,12 +69,14 @@ internal fun SelectorScreenContentRoute(
     val context = LocalContext.current
     val view = LocalView.current
     val activity = LocalContext.current as Activity
-    val remoteValues by remember { mutableStateOf(RemoteConfigValues()) }
+    var remoteValues by remember { mutableStateOf<RemoteConfigValues?>( null) }
     // Aqui se guardan 3 valores de los Switches en este orden 1. NSFW, 2. Gifs, 3. Portrait
     // val switchValues by remember { mutableStateOf(Triple(false, false, false)) }
 
+    remoteValues = RemoteConfigValues().getConfig(activity)
+
     var switchState by remember { mutableStateOf(SwitchState()) }
-    var serverState by remember { mutableStateOf(remoteValues.type ?: NORMAL) }
+    var serverState by remember { mutableStateOf(remoteValues?.type ?: NORMAL) }
     val tagsState by remember { mutableStateOf(TagsState()) }
 
 
@@ -106,26 +108,23 @@ internal fun SelectorScreenContentRoute(
             switchState = SwitchState()
             when (serverState) {
                 NORMAL -> {
-                    remoteValues.type = ENHANCED
+                    remoteValues?.type = ENHANCED
                     serverState = ENHANCED
-                    onSaveServerMode(remoteValues)
                 }
                 ENHANCED -> {
-                    remoteValues.type = NEKOS
+                    remoteValues?.type = NEKOS
                     serverState = NEKOS
-                    onSaveServerMode(remoteValues)
                 }
                 NEKOS -> {
-                    remoteValues.type = NORMAL
+                    remoteValues?.type = NORMAL
                     serverState = NORMAL
-                    onSaveServerMode(remoteValues)
                 }
                 else -> {
                     "WTF=$serverState".showToast(context)
                 }
             }
+            remoteValues?.saveServerMode(context as Activity)
         },
-        // onWaifuButtonClicked = onWaifuButtonClicked,
         onWaifuButtonClicked = { tag -> selectedTag = tag ; onWaifuButtonClicked(tag) },
         onFavoriteClicked = {}, // {navigateTo(null, toFavorites = true)},
         onRestartClicked = {

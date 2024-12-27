@@ -37,10 +37,10 @@ import kotlinx.coroutines.launch
 class WaifuFragment : Fragment() {
 
     private val safeArgs: WaifuFragmentArgs by navArgs()
-    private val picsViewModel: WaifuPicsViewModel by viewModels()
-    private val imViewModel: WaifuImViewModel by viewModels()
-    private val bestViewModel: WaifuBestViewModel by viewModels()
-    private lateinit var mainState: MainState
+    private val picsViewModel: WaifuPicsViewModel by viewModels() // hiltViewModel()
+    private val imViewModel: WaifuImViewModel by viewModels() // hiltViewModel()
+    private val bestViewModel: WaifuBestViewModel by viewModels() // hiltViewModel()
+    // private lateinit var mainState: MainState
     private lateinit var bun: Bundle
     private var serverMode: String = ""
     private var lmState: LoadingState = LoadingState()
@@ -50,7 +50,7 @@ class WaifuFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        mainState = buildMainState()
+        // mainState = buildMainState()
         serverMode = safeArgs.bundleInfo.getString(Constants.SERVER_MODE) ?: ""
         bun = safeArgs.bundleInfo
         loadCustomResult(bun)
@@ -81,7 +81,7 @@ class WaifuFragment : Fragment() {
     private fun WaifuImScreen() {
         WaifuImScreenContent(
             state = imViewModel.state.collectAsStateWithLifecycle().value,
-            onWaifuClicked = { mainState.onWaifuImClicked(it) },
+            onWaifuClicked = {}, // { mainState.onWaifuImClicked(it) },
             onRequestMore = { onLoadMoreWaifusIm() },
             onFabClick = {
                 imViewModel.onClearImDatabase()
@@ -96,7 +96,7 @@ class WaifuFragment : Fragment() {
         WaifuPicsScreenContent(
             state = picsViewModel.state.collectAsStateWithLifecycle().value,
             // bun = bun,
-            onWaifuClicked = { mainState.onWaifuPicsClicked(it) },
+            onWaifuClicked = {}, // { mainState.onWaifuPicsClicked(it) },
             onRequestMore = { onLoadMoreWaifusPics() },
             onFabClick = {
                 picsViewModel.onClearPicsDatabase()
@@ -110,7 +110,7 @@ class WaifuFragment : Fragment() {
     private fun WaifuNekosScreen() {
         WaifuBestScreenContent(
             state = bestViewModel.state.collectAsStateWithLifecycle().value,
-            onWaifuClicked = { mainState.onWaifuBestClicked(it) },
+            onWaifuClicked = {}, // { mainState.onWaifuBestClicked(it) },
             onRequestMore = { onLoadMoreWaifusBest() },
             onFabClick = {
                 bestViewModel.onClearDatabase()

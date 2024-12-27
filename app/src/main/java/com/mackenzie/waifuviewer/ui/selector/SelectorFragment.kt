@@ -53,7 +53,7 @@ class SelectorFragment : Fragment() {
     private var requirePermissions: Boolean = false
     private lateinit var mainState: MainState
     private var selectedTag: String = ""
-    private var remoteValues : RemoteConfigValues = RemoteConfigValues()
+    // private var remoteValues : RemoteConfigValues = RemoteConfigValues()
     // Aqui se guardan 3 valores de los Switches en este orden 1. NSFW, 2. Gifs, 3. Portrait
     private var switchValues: SwitchState = SwitchState()
 
@@ -68,14 +68,14 @@ class SelectorFragment : Fragment() {
             findNavController(),
             PermissionRequester(this , Manifest.permission.ACCESS_COARSE_LOCATION)
         )
-        getRemoteConfig()
+        /// getRemoteConfig()
 
-        if (BuildConfig.BUILD_TYPE == ENHANCED.value) {
+        /*if (BuildConfig.BUILD_TYPE == ENHANCED.value) {
             if (loadedServer == null) {
                 loadedServer = ENHANCED
                 loadedServer?.let { loadWaifu(requirePermissions, it) }
             }
-        } else if (loadedServer == null) loadInitialServer()
+        } else if (loadedServer == null) loadInitialServer()*/
 
         return composeView {
             // LaunchSelectorScreen()
@@ -85,11 +85,11 @@ class SelectorFragment : Fragment() {
 
     @Composable
     private fun LaunchSelectorScreen() {
-        var switchState by remember { mutableStateOf(switchValues) }
-        var serverState by remember { mutableStateOf(remoteValues.type ?: NORMAL) }
-        val tagsState by remember { mutableStateOf(TagsState()) }
+        // var switchState by remember { mutableStateOf(switchValues) }
+        // var serverState by remember { mutableStateOf(remoteValues.type ?: NORMAL) }
+        // val tagsState by remember { mutableStateOf(TagsState()) }
 
-        SelectorScreenContent(
+        /*SelectorScreenContent(
             state = vm.state.collectAsStateWithLifecycle().value,
             onServerButtonClicked = {
                 switchState = SwitchState()
@@ -131,56 +131,7 @@ class SelectorFragment : Fragment() {
             tags = tagsState,
             backgroundState = {}, // { backgroundLoaded() },
             server = serverState
-        )
-    }
-
-    private fun getRemoteConfig() {
-        val remoteConfig: FirebaseRemoteConfig = Firebase.remoteConfig
-        val configSettings = remoteConfigSettings {
-            minimumFetchIntervalInSeconds = Constants.RELEASEINTERVALINSECONDS
-            // minimumFetchIntervalInSeconds = Constants.DEBUGINTERVALINSECONDS
-        }
-        remoteConfig.setConfigSettingsAsync(configSettings)
-        remoteConfig.fetchAndActivate().addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                remoteValues = RemoteConfigValues(
-                    remoteConfig.getBoolean("nsfw_mode"),
-                    remoteConfig.getBoolean("waifu_gpt_service"),
-                    remoteConfig.getBoolean("waifu_gemini_service"),
-                    remoteConfig.getBoolean("automatic_server"),
-                    false,
-                    remoteConfig.getLong("server_mode").toInt(),
-                    getServerMode(),
-                )
-                remoteValues.apply {
-                    setNsfwMode(nsfwIsActive, gptIsActive, geminiIsActive)
-                    setAutoMode(AutoModeIsEnabled)
-                }
-            } else {
-                Log.e("getRemoteConfig", "Hubo un Error al recuperar de remote config: ${task.exception}")
-            }
-        }
-    }
-
-    private fun setAutoMode(isAutomatic: Boolean) {
-        if (isAutomatic) {
-            // TODO
-            // Toast.makeText(requireContext(), "Automatic Mode Selected", Toast.LENGTH_SHORT).show()
-        } else {
-            // TODO
-            // Toast.makeText(requireContext(), "Manual Mode Selected", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun setNsfwMode(nsfw: Boolean, hasGpt: Boolean, hasGemini: Boolean) {
-        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
-        requireNotNull(sharedPref)
-        with (sharedPref.edit()) {
-            putBoolean(Constants.WORK_MODE, nsfw)
-            putBoolean(Constants.IS_WAIFU_GPT, hasGpt)
-            putBoolean(Constants.IS_WAIFU_GEMINI, hasGemini)
-            apply()
-        }
+        )*/
     }
 
     private fun navigateTo(mode: ServerType?, toFavorites: Boolean= false, toGpt: Boolean= false, toGemini: Boolean= false) {
@@ -210,29 +161,6 @@ class SelectorFragment : Fragment() {
         return bun
     }
 
-    /*private fun saveServerMode() {
-        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
-        requireNotNull(sharedPref)
-        with (sharedPref.edit()) {
-            putString(Constants.SERVER_MODE, remoteValues.type?.value)
-            putBoolean(Constants.IS_FAVORITE_WAIFU, remoteValues.isFavorite)
-            apply()
-        }
-        Log.v("SaveMode", "SERVER_MODE=${remoteValues.type}, isFavorite=${remoteValues.isFavorite}")
-    }*/
-
-    private fun getServerMode(): ServerType {
-        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
-        val mode = sharedPref?.getString(Constants.SERVER_MODE, NORMAL.value)
-        Log.v("GetMode", "SERVER_MODE=${mode}")
-        return when (mode) {
-            NORMAL.value -> NORMAL
-            ENHANCED.value -> ENHANCED
-            NEKOS.value -> NEKOS
-            else -> NORMAL
-        }
-    }
-
     private fun tagFilter(tag: String): String {
         var updatedTag: String = tag
         if (tag == getString(R.string.categories) || tag == getString(R.string.categories_items)) {
@@ -252,7 +180,7 @@ class SelectorFragment : Fragment() {
         return updatedTag
     }
 
-    private fun loadInitialServer() {
+    /*private fun loadInitialServer() {
         when (Build.VERSION.SDK_INT) {
             in 0..Build.VERSION_CODES.LOLLIPOP_MR1 -> {
                 // Android 9 Hacia Abajo
@@ -264,9 +192,9 @@ class SelectorFragment : Fragment() {
             }
             else -> { loadWaifu(requirePermissions, NORMAL).apply { loadedServer = NORMAL } }
         }
-    }
+    }*/
 
-    private fun loadWaifu(reqPermisions: Boolean, serverType: ServerType) {
+    /*private fun loadWaifu(reqPermisions: Boolean, serverType: ServerType) {
         remoteValues.type = serverType
         if (reqPermisions) {
             mainState.requestPermissionLauncher {
@@ -289,18 +217,18 @@ class SelectorFragment : Fragment() {
                 Toast.makeText(requireContext(), getString(R.string.server_toast_holder, getSimpleText(serverType.value)), Toast.LENGTH_SHORT).show()
             }
         }
-    }
+    }*/
 
     /*private fun backgroundLoaded() {
         loaded = true
     }*/
 
-    private fun getSimpleText(type: String): String {
+    /*private fun getSimpleText(type: String): String {
         return when (type) {
             NORMAL.value -> getString(R.string.server_normal_toast)
             ENHANCED.value -> getString(R.string.server_enhanced_toast)
             NEKOS.value -> getString(R.string.server_best_toast)
             else -> getString(R.string.server_unknown_toast)
         }
-    }
+    }*/
 }

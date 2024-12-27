@@ -96,8 +96,8 @@ fun RemoteConfigValues.getConfig(app: Activity): RemoteConfigValues {
                 getServerMode(app),
             )
             apply {
-                // setNsfwMode(nsfwIsActive, gptIsActive, geminiIsActive)
-                // setAutoMode(AutoModeIsEnabled)
+                setNsfwMode(app, nsfwIsActive, gptIsActive, geminiIsActive)
+                setAutoMode(AutoModeIsEnabled)
             }
         } else {
             Log.e("getRemoteConfig", "Hubo un Error al recuperar de remote config: ${task.exception}")
@@ -106,7 +106,18 @@ fun RemoteConfigValues.getConfig(app: Activity): RemoteConfigValues {
     return configValues
 }
 
-fun getServerMode(app: Activity): ServerType {
+fun RemoteConfigValues.saveServerMode(app: Activity) {
+    val sharedPref = app.getPreferences(Context.MODE_PRIVATE)
+    requireNotNull(sharedPref)
+    with (sharedPref.edit()) {
+        putString(Constants.SERVER_MODE, type?.value)
+        putBoolean(Constants.IS_FAVORITE_WAIFU, isFavorite)
+        apply()
+    }
+    Log.v("SaveMode", "SERVER_MODE=${type}, isFavorite=${isFavorite}")
+}
+
+private fun getServerMode(app: Activity): ServerType {
     val sharedPref = app.getPreferences(Context.MODE_PRIVATE)
     val mode = sharedPref.getString(Constants.SERVER_MODE, NORMAL.value)
     Log.v("GetMode", "SERVER_MODE=${mode}")
@@ -115,6 +126,27 @@ fun getServerMode(app: Activity): ServerType {
         ENHANCED.value -> ENHANCED
         NEKOS.value -> NEKOS
         else -> NORMAL
+    }
+}
+
+private fun setAutoMode(isAutomatic: Boolean) {
+    if (isAutomatic) {
+        // TODO
+        // Toast.makeText(requireContext(), "Automatic Mode Selected", Toast.LENGTH_SHORT).show()
+    } else {
+        // TODO
+        // Toast.makeText(requireContext(), "Manual Mode Selected", Toast.LENGTH_SHORT).show()
+    }
+}
+
+private fun setNsfwMode(app: Activity, nsfw: Boolean, hasGpt: Boolean, hasGemini: Boolean) {
+    val sharedPref = app.getPreferences(Context.MODE_PRIVATE)
+    requireNotNull(sharedPref)
+    with (sharedPref.edit()) {
+        putBoolean(Constants.WORK_MODE, nsfw)
+        putBoolean(Constants.IS_WAIFU_GPT, hasGpt)
+        putBoolean(Constants.IS_WAIFU_GEMINI, hasGemini)
+        apply()
     }
 }
 
@@ -201,17 +233,6 @@ fun String.decodeMimeTypeForTitle(title: String): String {
     }
 }
 
-fun RemoteConfigValues.saveServerMode(app: Activity) {
-    val sharedPref = app.getPreferences(Context.MODE_PRIVATE)
-    requireNotNull(sharedPref)
-    with (sharedPref.edit()) {
-        putString(Constants.SERVER_MODE, type?.value)
-        putBoolean(Constants.IS_FAVORITE_WAIFU, isFavorite)
-        apply()
-    }
-    Log.v("SaveMode", "SERVER_MODE=${type}, isFavorite=${isFavorite}")
-}
-
 fun loadInitialServer(): ServerType {
     when (Build.VERSION.SDK_INT) {
         in 0..Build.VERSION_CODES.LOLLIPOP_MR1 -> {
@@ -236,15 +257,6 @@ fun loadInitialServer(): ServerType {
 
 fun String.getSimpleText(ctx: Context): String {
     return when (this) {
-        NORMAL.value -> getString(ctx, R.string.server_normal_toast)
-        ENHANCED.value -> getString(ctx, R.string.server_enhanced_toast)
-        NEKOS.value -> getString(ctx, R.string.server_best_toast)
-        else -> getString(ctx, R.string.server_unknown_toast)
-    }
-}
-
-fun getSimpleText(ctx: Context, type: String): String {
-    return when (type) {
         NORMAL.value -> getString(ctx, R.string.server_normal_toast)
         ENHANCED.value -> getString(ctx, R.string.server_enhanced_toast)
         NEKOS.value -> getString(ctx, R.string.server_best_toast)

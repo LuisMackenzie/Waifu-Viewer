@@ -13,7 +13,9 @@ sealed class NavItem(
 
     object SelectorScreen : NavItem("selector_screen")
 
-    object WaifuScreen : NavItem("waifu_screen")
+    object WaifuScreen : NavItem("waifu_screen", listOf(NavArg.WaifuTag)) {
+        fun createRoute(waifuTag: String) = "$baseRoute/$waifuTag"
+    }
 
     object FavoriteScreen : NavItem("favorite_screen")
 
@@ -35,12 +37,9 @@ sealed class NavItem(
     val args = navArgs.map {
         navArgument(it.key) { type = it.navType }
     }
-
-
-
-
 }
 
 enum class NavArg(val key: String, val navType: NavType<*>) {
-    ItemId("itemId", NavType.IntType)
+    ItemId("itemId", NavType.IntType),
+    WaifuTag("waifuTag", NavType.StringType)
 }
