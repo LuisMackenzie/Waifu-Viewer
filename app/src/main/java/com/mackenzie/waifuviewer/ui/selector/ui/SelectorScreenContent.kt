@@ -60,7 +60,8 @@ import com.mackenzie.waifuviewer.ui.theme.WaifuViewerTheme
 @Composable
 internal fun SelectorScreenContentRoute(
     vm: SelectorViewModel = hiltViewModel(),
-    onWaifuButtonClicked: (String, Bundle) -> Unit = { tag, bundle -> },
+    // onWaifuButtonClicked: (String, Bundle) -> Unit = { tag, bundle -> },
+    onWaifuButtonClicked: (String, String, Boolean, Boolean, Boolean) -> Unit = { _, _, _, _, _-> },
 ) {
     val selectorState by vm.state.collectAsStateWithLifecycle()
     var loaded by rememberSaveable { mutableStateOf(false) }
@@ -126,7 +127,8 @@ internal fun SelectorScreenContentRoute(
         },
         onWaifuButtonClicked = { tag ->
             selectedTag = tag.tagFilter(context, serverState, switchState)
-            onWaifuButtonClicked(selectedTag, saveBundle(context, serverState, switchState, selectedTag))
+            // onWaifuButtonClicked(selectedTag, saveBundle(context, serverState, switchState, selectedTag))
+            onWaifuButtonClicked(serverState.value, selectedTag, switchState.nsfw, switchState.gifs, switchState.portrait)
         },
         onFavoriteClicked = {}, // {navigateTo(null, toFavorites = true)},
         onRestartClicked = {

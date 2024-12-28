@@ -13,12 +13,12 @@ sealed class NavItem(
 
     object SelectorScreen : NavItem("selector_screen")
 
-    object WaifuScreen : NavItem("waifu_screen", listOf(NavArg.WaifuTag)) {
+    /*object WaifuScreen : NavItem("waifu_screen", listOf(NavArg.WaifuTag)) {
         fun createRoute(waifuTag: String) = baseRoute + File.separator + waifuTag
-    }
+    }*/
 
-    object WaifuScreen2 : NavItem("waifu_screen", listOf(NavArg.WaifuTag, NavArg.WaifuBundle)) {
-        fun createRoute(waifuTag: String, waifuBundle: String) = baseRoute + File.separator + waifuTag + File.separator + waifuBundle
+    object WaifuScreen : NavItem("waifu_screen", listOf(NavArg.WaifuServer, NavArg.WaifuTag, NavArg.NsfwState, NavArg.GifState, NavArg.LandsState)) {
+        fun createRoute(server: String, waifuTag: String, nsfw: Boolean, gif: Boolean, lands: Boolean) = baseRoute + File.separator + server + File.separator + waifuTag + File.separator + nsfw + File.separator + gif + File.separator + lands
     }
 
     object FavoriteScreen : NavItem("favorite_screen")
@@ -45,6 +45,9 @@ sealed class NavItem(
 
 enum class NavArg(val key: String, val navType: NavType<*>) {
     ItemId("itemId", NavType.IntType),
-    WaifuBundle("waifuBundle", NavType.StringType),
-    WaifuTag("waifuTag", NavType.StringType)
+    WaifuServer("waifuServer", NavType.StringType),
+    WaifuTag("waifuTag", NavType.StringType),
+    NsfwState("nsfwState", NavType.BoolType),
+    GifState("gifState", NavType.BoolType),
+    LandsState("landsState", NavType.BoolType),
 }

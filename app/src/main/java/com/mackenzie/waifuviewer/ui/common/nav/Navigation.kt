@@ -44,19 +44,26 @@ fun Navigation() {
         composable(NavItem.SelectorScreen) {
             // TODO
             SelectorScreenContentRoute(
-                onWaifuButtonClicked = { waifuTag, bundle ->
-                    bun = bundle
-                    navController.navigate(route = NavItem.WaifuScreen.createRoute(waifuTag))
-                    Log.e("WaifuTag", "waifuTag= $waifuTag")
-                    Log.e("WaifuTag", "bundle Sended= $bundle")
+                onWaifuButtonClicked = { server, tag, nsfw, gif, lands ->
+                    // bun = bundle
+                    // navController.navigate(route = NavItem.WaifuScreen.createRoute(waifuTag))
+                    navController.navigate(route = NavItem.WaifuScreen.createRoute(server, tag, nsfw, gif, lands))
+                    Log.e("WaifuTag", "DATA SENDED server= $server, waifuTag= $tag, nsfw= $nsfw, gif= $gif, lands= $lands")
+                    Log.e("WaifuTag", "route to Waifu= ${NavItem.WaifuScreen.createRoute(server, tag, nsfw, gif, lands)}")
+                    Log.e("WaifuTag", "route to Waifu 2= ${NavItem.WaifuScreen.route}")
                 }
             )
         }
         composable(NavItem.WaifuScreen) { backsStackEntry ->
+            val server: String = backsStackEntry.findArg(NavArg.WaifuServer)
             val tag: String = backsStackEntry.findArg(NavArg.WaifuTag)
-            // val bun: String = backsStackEntry.findArg(NavArg.WaifuBundle)
+            val nsfw: Boolean = backsStackEntry.findArg(NavArg.NsfwState)
+            val gif: Boolean = backsStackEntry.findArg(NavArg.GifState)
+            val lands: Boolean = backsStackEntry.findArg(NavArg.LandsState)
+            // val bun2: String = backsStackEntry.findArg(NavArg.WaifuBundle)
             Log.e("WaifuTag", "waifuTag= $tag")
-            Log.e("WaifuTag", "bundle received= $bun")
+            Log.e("WaifuTag", "DATA RECEIVED server= $server, waifuTag= $tag, nsfw= $nsfw, gif= $gif, lands= $lands")
+            // Log.e("WaifuTag", "bundle received= $bun2")
             WaifuScreenContentRoute(bundle = bun) {
                 /*navController.navigate(route = NavItem.WaifuDetail.createRoute()) {
                     popUpTo(route =
