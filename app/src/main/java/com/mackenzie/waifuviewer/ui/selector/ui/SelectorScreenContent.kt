@@ -1,10 +1,8 @@
 package com.mackenzie.waifuviewer.ui.selector.ui
 
 import android.app.Activity
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,15 +22,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.ContextCompat.getString
-import androidx.core.content.res.TypedArrayUtils.getText
-import androidx.fragment.app.viewModels
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.material.snackbar.Snackbar
 import com.mackenzie.waifuviewer.BuildConfig
 import com.mackenzie.waifuviewer.R
@@ -47,11 +41,14 @@ import com.mackenzie.waifuviewer.domain.selector.PicsTags
 import com.mackenzie.waifuviewer.domain.selector.SwitchState
 import com.mackenzie.waifuviewer.domain.selector.TagsState
 import com.mackenzie.waifuviewer.ui.common.getConfig
+import com.mackenzie.waifuviewer.ui.common.getServerModeOnly
+import com.mackenzie.waifuviewer.ui.common.getServerType
+import com.mackenzie.waifuviewer.ui.common.getServerTypeByMode
 import com.mackenzie.waifuviewer.ui.common.getSimpleText
 import com.mackenzie.waifuviewer.ui.common.isLandscape
 import com.mackenzie.waifuviewer.ui.common.loadInitialServer
 import com.mackenzie.waifuviewer.ui.common.saveBundle
-import com.mackenzie.waifuviewer.ui.common.saveServerMode
+import com.mackenzie.waifuviewer.ui.common.saveServerType
 import com.mackenzie.waifuviewer.ui.common.showToast
 import com.mackenzie.waifuviewer.ui.common.tagFilter
 import com.mackenzie.waifuviewer.ui.common.ui.isNavigationBarVisible
@@ -67,40 +64,42 @@ internal fun SelectorScreenContentRoute(
 ) {
     val selectorState by vm.state.collectAsStateWithLifecycle()
     var loaded by rememberSaveable { mutableStateOf(false) }
-    // var loaded2: Boolean = false
-    val reqPermisions by remember { mutableStateOf(false) }
-    var loadedServer by remember { mutableStateOf<ServerType?>(null) }
+    // val reqPermisions by remember { mutableStateOf(false) }
     var selectedTag by remember { mutableStateOf("") }
     val context = LocalContext.current
     val view = LocalView.current
-    val activity = LocalContext.current as Activity
-    var remoteValues by remember { mutableStateOf<RemoteConfigValues?>( null) }
-    // Aqui se guardan 3 valores de los Switches en este orden 1. NSFW, 2. Gifs, 3. Portrait
-    // val switchValues by remember { mutableStateOf(Triple(false, false, false)) }
-
-    remoteValues = RemoteConfigValues().getConfig(activity)
+    // val activity = LocalContext.current as Activity
+    val remoteValues by remember { mutableStateOf( RemoteConfigValues().getConfig(context as Activity)) }
+    remoteValues.type = getServerType(context as Activity)
+    remoteValues.mode = getServerModeOnly(context as Activity)
 
     var switchState by remember { mutableStateOf(SwitchState()) }
-    var serverState by remember { mutableStateOf(NORMAL) }
+    var loadedServer by remember { mutableStateOf(getServerTypeByMode(remoteValues.mode)) }
+    var serverState by remember { mutableStateOf(remoteValues.type ?: NORMAL) }
     val tagsState by remember { mutableStateOf(TagsState()) }
 
     if (BuildConfig.BUILD_TYPE == ENHANCED.value) {
-        if (loadedServer == null && !loaded) {
+        if (!loaded) {
             loadedServer = ENHANCED
-            loadedServer?.let {
-                serverState = it
-                LoadWaifuServer(it, vm, loaded) { loaded = !loaded}
-            }
+            serverState = loadedServer
+            remoteValues.type = loadedServer
+            remoteValues.mode = 1
+            LoadWaifuServer(loadedServer, vm, loaded) { loaded = !loaded}
         }
-        Log.e("Selectorroute", "loaded=$loaded, server=$loadedServer")
-    } else if (loadedServer == null && !loaded) {
+    } else if (!loaded) {
         loadedServer = loadInitialServer()
-        loadedServer?.let {
-            serverState = it
-            LoadWaifuServer(it, vm, loaded) { loaded = !loaded}
+        serverState = loadedServer
+        remoteValues.type = loadedServer
+        when (loadedServer) {
+            NORMAL -> remoteValues.mode = 0
+            ENHANCED -> remoteValues.mode = 1
+            NEKOS -> remoteValues.mode = 2
+            else -> remoteValues.mode = 0
         }
-        Log.e("Selectorroute", "loaded=$loaded, server=$loadedServer")
+        LoadWaifuServer(loadedServer, vm, loaded) { loaded = !loaded}
     }
+
+    remoteValues.saveServerType(context as Activity)
 
     SelectorScreenContent(
         state = selectorState,
@@ -108,22 +107,22 @@ internal fun SelectorScreenContentRoute(
             switchState = SwitchState()
             when (serverState) {
                 NORMAL -> {
-                    remoteValues?.type = ENHANCED
+                    remoteValues.type = ENHANCED
                     serverState = ENHANCED
                 }
                 ENHANCED -> {
-                    remoteValues?.type = NEKOS
+                    remoteValues.type = NEKOS
                     serverState = NEKOS
                 }
                 NEKOS -> {
-                    remoteValues?.type = NORMAL
+                    remoteValues.type = NORMAL
                     serverState = NORMAL
                 }
                 else -> {
                     "WTF=$serverState".showToast(context)
                 }
             }
-            remoteValues?.saveServerMode(context as Activity)
+            remoteValues.saveServerType(context as Activity)
         },
         onWaifuButtonClicked = { tag ->
             selectedTag = tag.tagFilter(context, serverState, switchState)
@@ -131,7 +130,7 @@ internal fun SelectorScreenContentRoute(
         },
         onFavoriteClicked = {}, // {navigateTo(null, toFavorites = true)},
         onRestartClicked = {
-            loadedServer?.let{ vm.loadErrorOrWaifu(orientation = context.isLandscape(), serverType = it) }
+            vm.loadErrorOrWaifu(orientation = context.isLandscape(), serverType = loadedServer)
             Snackbar.make(view, "server=$loadedServer", Snackbar.LENGTH_SHORT).show()
         },
         onGptClicked = {}, //  {navigateTo(null, toGpt = true)},
@@ -142,7 +141,7 @@ internal fun SelectorScreenContentRoute(
         },
         switchState = switchState,
         tags = tagsState,
-        backgroundState = { loaded = true },
+        // backgroundState = { loaded = !loaded },
         server = serverState
     )
 }
@@ -159,7 +158,7 @@ fun SelectorScreenContent(
     switchStateCallback: (SwitchState) -> Unit = {},
     switchState: SwitchState = SwitchState(),
     tags: TagsState = TagsState(),
-    backgroundState: (Boolean) -> Unit = {},
+    // backgroundState: (Boolean) -> Unit = {},
     server: ServerType = NORMAL,
 ) {
 
@@ -180,15 +179,15 @@ fun SelectorScreenContent(
 
         state.waifuIm?.let { waifu ->
             BackgroundImage(waifu.url)
-            backgroundState(true)
+            // backgroundState(true)
         }
         state.waifuPic?.let { waifu ->
             BackgroundImage(waifu.url)
-            backgroundState(true)
+            // backgroundState(true)
         }
         state.waifuNeko?.let { waifu ->
             BackgroundImage(waifu.url)
-            backgroundState(true)
+            // backgroundState(true)
         }
 
         state.tags?.let { imTags ->

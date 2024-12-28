@@ -96,7 +96,7 @@ fun RemoteConfigValues.getConfig(app: Activity): RemoteConfigValues {
                 remoteConfig.getBoolean("automatic_server"),
                 false,
                 remoteConfig.getLong("server_mode").toInt(),
-                getServerMode(app),
+                getServerType(app),
             )
             apply {
                 setNsfwMode(app, nsfwIsActive, gptIsActive, geminiIsActive)
@@ -109,38 +109,55 @@ fun RemoteConfigValues.getConfig(app: Activity): RemoteConfigValues {
     return configValues
 }
 
-fun RemoteConfigValues.saveServerMode(app: Activity) {
+fun RemoteConfigValues.saveServerType(app: Activity) {
     val sharedPref = app.getPreferences(Context.MODE_PRIVATE)
     requireNotNull(sharedPref)
     with (sharedPref.edit()) {
         putString(Constants.SERVER_MODE, type?.value)
+        putInt(Constants.LOADED_SELECTOR, mode)
         putBoolean(Constants.IS_FAVORITE_WAIFU, isFavorite)
         apply()
     }
     Log.v("SaveMode", "SERVER_MODE=${type}, isFavorite=${isFavorite}")
 }
 
-fun ServerType.saveServerMode(app: Activity) {
+fun ServerType.saveServerType(app: Activity) {
     val sharedPref = app.getPreferences(Context.MODE_PRIVATE)
     requireNotNull(sharedPref)
     with (sharedPref.edit()) {
-        putString(Constants.SERVER_MODE, this@saveServerMode.value)
+        putString(Constants.SERVER_MODE, this@saveServerType.value)
         // putBoolean(Constants.IS_FAVORITE_WAIFU, isFavorite)
         apply()
     }
     Log.v("SaveMode", "SERVER_MODE=${this.value}")
 }
 
-private fun getServerMode(app: Activity): ServerType {
+fun getServerType(app: Activity): ServerType {
     val sharedPref = app.getPreferences(Context.MODE_PRIVATE)
     val mode = sharedPref.getString(Constants.SERVER_MODE, NORMAL.value)
-    Log.v("GetMode", "SERVER_MODE=${mode}")
+    Log.v("Get Type", "SERVER_MODE=${mode}")
     return when (mode) {
         NORMAL.value -> NORMAL
         ENHANCED.value -> ENHANCED
         NEKOS.value -> NEKOS
         else -> NORMAL
     }
+}
+
+fun getServerTypeByMode(mode: Int): ServerType {
+    return when (mode) {
+        0 -> NORMAL
+        1 ->ENHANCED
+        2 -> NEKOS
+        else -> NORMAL
+    }
+}
+
+fun getServerModeOnly(app: Activity): Int {
+    val sharedPref = app.getPreferences(Context.MODE_PRIVATE)
+    val mode = sharedPref.getInt(Constants.LOADED_SELECTOR, 0)
+    Log.v("GetMode", "LOADED_SELECTOR=${mode}")
+    return mode
 }
 
 fun saveBundle(ctx: Context, mode: ServerType?, switchValues: SwitchState, tag: String): Bundle {
@@ -150,8 +167,7 @@ fun saveBundle(ctx: Context, mode: ServerType?, switchValues: SwitchState, tag: 
     bun.putBoolean(Constants.IS_GIF_WAIFU, switchValues.gifs)
     bun.putBoolean(Constants.IS_LANDS_WAIFU, switchValues.portrait)
     bun.putString(Constants.CATEGORY_TAG_WAIFU, tagFilter(ctx, mode, switchValues, tag))
-    // saveServerMode()
-    mode?.saveServerMode(ctx as Activity)
+    mode?.saveServerType(ctx as Activity)
     Log.v("saveBundle", "SERVER_MODE=${mode?.value}")
     return bun
 }
@@ -265,14 +281,7 @@ fun Context.hasWriteExternalStoragePermission(): Boolean {
 
 private fun downloadImage(scope: CoroutineScope, ctx: Context, title: String, link: String, fileType: String) {
     val type: String = selectMimeType(fileType)
-    scope.launch(IO) {
-        SaveImage().saveImageToStorage(
-            ctx,
-            title,
-            type,
-            link
-        )
-    }
+    scope.launch(IO) { SaveImage().saveImageToStorage(ctx, title, type, link) }
 }
 
 private fun selectMimeType(fileType: String): String {
@@ -299,23 +308,9 @@ fun String.decodeMimeTypeForTitle(title: String): String {
 
 fun loadInitialServer(): ServerType {
     when (Build.VERSION.SDK_INT) {
-        in 0..Build.VERSION_CODES.LOLLIPOP_MR1 -> {
-            // Android 9 Hacia Abajo
-            // ENHANCED.loadWaifuServer(reqPermisions, loaded)
-            return ENHANCED
-            // loadWaifu(requirePermissions, ENHANCED).apply { loadedServer = ENHANCED }
-        }
-        in 35..40 -> {
-            // Android 15 Hacia Arriba
-            // NEKOS.loadWaifuServer(reqPermisions, loaded)
-            return NEKOS
-            // loadWaifu(requirePermissions, NEKOS).apply { loadedServer = NEKOS }
-        }
-        else -> {
-            // NORMAL.loadWaifuServer(reqPermisions, loaded)
-            return NORMAL
-            // loadWaifu(requirePermissions, NORMAL).apply { loadedServer = NORMAL }
-        }
+        in 0..Build.VERSION_CODES.N -> { return ENHANCED } // Android 7 API 24 Hacia Abajo
+        in 35..40 -> { return NEKOS } // Android 15 Hacia Arriba
+        else -> { return NORMAL }
     }
 }
 

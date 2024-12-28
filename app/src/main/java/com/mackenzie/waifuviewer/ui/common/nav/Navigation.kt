@@ -1,5 +1,6 @@
 package com.mackenzie.waifuviewer.ui.common.nav
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -46,11 +47,16 @@ fun Navigation() {
                 onWaifuButtonClicked = { waifuTag, bundle ->
                     bun = bundle
                     navController.navigate(route = NavItem.WaifuScreen.createRoute(waifuTag))
+                    Log.e("WaifuTag", "waifuTag= $waifuTag")
+                    Log.e("WaifuTag", "bundle Sended= $bundle")
                 }
             )
         }
         composable(NavItem.WaifuScreen) { backsStackEntry ->
             val tag: String = backsStackEntry.findArg(NavArg.WaifuTag)
+            // val bun: String = backsStackEntry.findArg(NavArg.WaifuBundle)
+            Log.e("WaifuTag", "waifuTag= $tag")
+            Log.e("WaifuTag", "bundle received= $bun")
             WaifuScreenContentRoute(bundle = bun) {
                 /*navController.navigate(route = NavItem.WaifuDetail.createRoute()) {
                     popUpTo(route =
@@ -91,8 +97,13 @@ private fun NavGraphBuilder.composable(
 }
 
 private inline fun <reified T> NavBackStackEntry.findArg(arg: NavArg): T {
-
     val value = arguments?.get(arg.key)
     requireNotNull(value) { "Argument ${arg.key} not found" }
+    return value as T
+}
+
+private inline fun <reified T> NavBackStackEntry.findArgByKey(key: String): T {
+    val value = arguments?.get(key)
+    requireNotNull(value) { "Argument ${key} not found" }
     return value as T
 }

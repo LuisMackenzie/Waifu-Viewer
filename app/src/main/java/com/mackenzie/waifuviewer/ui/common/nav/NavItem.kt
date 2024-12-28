@@ -17,6 +17,10 @@ sealed class NavItem(
         fun createRoute(waifuTag: String) = baseRoute + File.separator + waifuTag
     }
 
+    object WaifuScreen2 : NavItem("waifu_screen", listOf(NavArg.WaifuTag, NavArg.WaifuBundle)) {
+        fun createRoute(waifuTag: String, waifuBundle: String) = baseRoute + File.separator + waifuTag + File.separator + waifuBundle
+    }
+
     object FavoriteScreen : NavItem("favorite_screen")
 
     object WaifuDetail : NavItem("detail_screen", listOf(NavArg.ItemId)) {
@@ -41,5 +45,6 @@ sealed class NavItem(
 
 enum class NavArg(val key: String, val navType: NavType<*>) {
     ItemId("itemId", NavType.IntType),
+    WaifuBundle("waifuBundle", NavType.StringType),
     WaifuTag("waifuTag", NavType.StringType)
 }
