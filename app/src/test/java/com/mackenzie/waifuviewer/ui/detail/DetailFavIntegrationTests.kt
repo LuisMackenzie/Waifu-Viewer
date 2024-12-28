@@ -82,7 +82,7 @@ class DetailFavIntegrationTests {
             )
         )
         )
-        val vm = DetailFavsViewModel(id ,findFavoriteUseCase, switchFavoriteUseCase, getSearchMoeUseCase)
+        val vm = DetailFavsViewModel(findFavoriteUseCase, switchFavoriteUseCase, getSearchMoeUseCase)
         return vm
     }
 

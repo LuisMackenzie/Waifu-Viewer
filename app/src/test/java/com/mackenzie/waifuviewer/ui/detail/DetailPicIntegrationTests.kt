@@ -78,7 +78,7 @@ class DetailPicIntegrationTests {
                 )            )
         )
         )
-        val vm = DetailPicsViewModel(id , findWaifuPicUseCase, switchPicFavoriteUseCase, getSearchMoeUseCase)
+        val vm = DetailPicsViewModel(findWaifuPicUseCase, switchPicFavoriteUseCase, getSearchMoeUseCase)
         return vm
     }
 
