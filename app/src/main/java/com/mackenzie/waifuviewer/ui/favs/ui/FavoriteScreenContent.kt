@@ -15,10 +15,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.content.ContextCompat.getString
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.domain.FavoriteItem
+import com.mackenzie.waifuviewer.ui.common.showToast
 import com.mackenzie.waifuviewer.ui.common.ui.isNavigationBarVisible
 import com.mackenzie.waifuviewer.ui.common.ui.previewFavoriteState
 import com.mackenzie.waifuviewer.ui.detail.ui.LoadingAnimation
@@ -26,6 +31,27 @@ import com.mackenzie.waifuviewer.ui.detail.ui.LoadingAnimationError
 import com.mackenzie.waifuviewer.ui.favs.FavoriteViewModel
 import com.mackenzie.waifuviewer.ui.main.ui.LoadingErrorView
 import com.mackenzie.waifuviewer.ui.theme.Dimens
+
+@Composable
+fun FavoriteScreenContentRoute(vm: FavoriteViewModel = hiltViewModel()) {
+
+    val context = LocalContext.current
+
+    FavoriteScreenContent(
+        state = vm.state.collectAsStateWithLifecycle().value,
+        onItemClick = {}, // { mainState.onWaifuFavoriteClicked(it) },
+        onItemLongClick = {
+            vm.onDeleteFavorite(it)
+            getString(context, R.string.waifu_deleted).showToast(context)
+        },
+        onFabClick = {
+            vm.onDeleteAllFavorites()
+            getString(context,R.string.waifus_favorites_gone).showToast(context)
+        },
+        hideInfoCount = { vm.hideInfoCount() }
+    )
+
+}
 
 @Preview(showBackground = true)
 @Composable

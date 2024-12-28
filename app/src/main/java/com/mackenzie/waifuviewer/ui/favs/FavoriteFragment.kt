@@ -32,9 +32,10 @@ class FavoriteFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        mainState = buildMainState()
+        // mainState = buildMainState()
         return composeView {
-            LaunchFavoriteScreen()
+            // TODO DELEte fragment
+            // LaunchFavoriteScreen()
         }
     }
 

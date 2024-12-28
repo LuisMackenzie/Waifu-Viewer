@@ -9,13 +9,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.core.os.bundleOf
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.google.android.material.snackbar.Snackbar
+import com.mackenzie.waifuviewer.domain.selector.SwitchState
 import com.mackenzie.waifuviewer.ui.common.Constants
+import com.mackenzie.waifuviewer.ui.favs.ui.FavoriteScreenContentRoute
+import com.mackenzie.waifuviewer.ui.gemini.menu.WaifuGeminiScreenMenuRoute
+import com.mackenzie.waifuviewer.ui.gpt.ui.WaifuGptScreenContent
 import com.mackenzie.waifuviewer.ui.main.ui.WaifuScreenContentRoute
 import com.mackenzie.waifuviewer.ui.selector.ui.SelectorScreenContentRoute
 import com.mackenzie.waifuviewer.ui.splash.SplashScreenRoute
@@ -25,6 +31,7 @@ fun Navigation() {
 
     val navController = rememberNavController()
     val context = LocalContext.current
+    val view = LocalView.current
     var bun by remember { mutableStateOf(bundleOf()) }
 
     NavHost(
@@ -45,26 +52,29 @@ fun Navigation() {
             // TODO
             SelectorScreenContentRoute(
                 onWaifuButtonClicked = { server, tag, nsfw, gif, lands ->
-                    // bun = bundle
-                    // navController.navigate(route = NavItem.WaifuScreen.createRoute(waifuTag))
                     navController.navigate(route = NavItem.WaifuScreen.createRoute(server, tag, nsfw, gif, lands))
-                    Log.e("WaifuTag", "DATA SENDED server= $server, waifuTag= $tag, nsfw= $nsfw, gif= $gif, lands= $lands")
-                    Log.e("WaifuTag", "route to Waifu= ${NavItem.WaifuScreen.createRoute(server, tag, nsfw, gif, lands)}")
-                    Log.e("WaifuTag", "route to Waifu 2= ${NavItem.WaifuScreen.route}")
+                },
+                onGptButtonClicked = { gptType ->
+                    if (gptType) {
+                        navController.navigate(route = NavItem.WaifuGptScreen.route)
+                    } else {
+                        navController.navigate(route = NavItem.WaifuGeminiScreen.route)
+                    }
+                },
+                onFavoriteButtonClicked = {
+                    navController.navigate(route = NavItem.FavoriteScreen.route)
                 }
             )
         }
         composable(NavItem.WaifuScreen) { backsStackEntry ->
-            val server: String = backsStackEntry.findArg(NavArg.WaifuServer)
-            val tag: String = backsStackEntry.findArg(NavArg.WaifuTag)
-            val nsfw: Boolean = backsStackEntry.findArg(NavArg.NsfwState)
-            val gif: Boolean = backsStackEntry.findArg(NavArg.GifState)
-            val lands: Boolean = backsStackEntry.findArg(NavArg.LandsState)
-            // val bun2: String = backsStackEntry.findArg(NavArg.WaifuBundle)
-            Log.e("WaifuTag", "waifuTag= $tag")
-            Log.e("WaifuTag", "DATA RECEIVED server= $server, waifuTag= $tag, nsfw= $nsfw, gif= $gif, lands= $lands")
-            // Log.e("WaifuTag", "bundle received= $bun2")
-            WaifuScreenContentRoute(bundle = bun) {
+            WaifuScreenContentRoute(
+                server = backsStackEntry.findArg(NavArg.WaifuServer),
+                tag = backsStackEntry.findArg(NavArg.WaifuTag),
+                switchState = SwitchState(
+                    backsStackEntry.findArg(NavArg.NsfwState),
+                    backsStackEntry.findArg(NavArg.GifState),
+                    backsStackEntry.findArg(NavArg.LandsState))
+            ) {
                 /*navController.navigate(route = NavItem.WaifuDetail.createRoute()) {
                     popUpTo(route =
                     NavItem.WaifuScreen.route) {
@@ -81,13 +91,13 @@ fun Navigation() {
             // DetailScreenRoute(waifuId = waifuId)
         }
         composable(NavItem.FavoriteScreen) {
-            // FavoriteScreenRoute()
+            FavoriteScreenContentRoute()
         }
         composable(NavItem.WaifuGptScreen) {
-            // WaifuGptScreenContent()
+            WaifuGptScreenContent()
         }
         composable(NavItem.WaifuGeminiScreen) {
-            // WaifuGptScreenContent()
+            WaifuGeminiScreenMenuRoute()
         }
     }
 

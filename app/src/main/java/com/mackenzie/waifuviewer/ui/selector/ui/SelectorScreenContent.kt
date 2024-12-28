@@ -60,8 +60,9 @@ import com.mackenzie.waifuviewer.ui.theme.WaifuViewerTheme
 @Composable
 internal fun SelectorScreenContentRoute(
     vm: SelectorViewModel = hiltViewModel(),
-    // onWaifuButtonClicked: (String, Bundle) -> Unit = { tag, bundle -> },
     onWaifuButtonClicked: (String, String, Boolean, Boolean, Boolean) -> Unit = { _, _, _, _, _-> },
+    onGptButtonClicked: (Boolean) -> Unit = {},
+    onFavoriteButtonClicked: () -> Unit = {}
 ) {
     val selectorState by vm.state.collectAsStateWithLifecycle()
     var loaded by rememberSaveable { mutableStateOf(false) }
@@ -130,13 +131,13 @@ internal fun SelectorScreenContentRoute(
             // onWaifuButtonClicked(selectedTag, saveBundle(context, serverState, switchState, selectedTag))
             onWaifuButtonClicked(serverState.value, selectedTag, switchState.nsfw, switchState.gifs, switchState.portrait)
         },
-        onFavoriteClicked = {}, // {navigateTo(null, toFavorites = true)},
+        onFavoriteClicked = onFavoriteButtonClicked, // {navigateTo(null, toFavorites = true)},
         onRestartClicked = {
             vm.loadErrorOrWaifu(orientation = context.isLandscape(), serverType = loadedServer)
             Snackbar.make(view, "server=$loadedServer", Snackbar.LENGTH_SHORT).show()
         },
-        onGptClicked = {}, //  {navigateTo(null, toGpt = true)},
-        onGeminiClicked = {}, // {navigateTo(null, toGemini = true)},
+        onGptClicked = { onGptButtonClicked(true) }, //  {navigateTo(null, toGpt = true)},
+        onGeminiClicked = { onGptButtonClicked(false) }, // {navigateTo(null, toGemini = true)},
         switchStateCallback = { stateCallback ->
             switchState = stateCallback
             // switchValues = switchState

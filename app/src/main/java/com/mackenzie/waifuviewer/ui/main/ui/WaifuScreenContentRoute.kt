@@ -25,6 +25,7 @@ import com.mackenzie.waifuviewer.domain.ServerType.ENHANCED
 import com.mackenzie.waifuviewer.domain.ServerType.NEKOS
 import com.mackenzie.waifuviewer.domain.ServerType.NORMAL
 import com.mackenzie.waifuviewer.domain.getTypes
+import com.mackenzie.waifuviewer.domain.selector.SwitchState
 import com.mackenzie.waifuviewer.ui.common.Constants
 import com.mackenzie.waifuviewer.ui.common.showToast
 import com.mackenzie.waifuviewer.ui.main.WaifuBestViewModel
@@ -36,27 +37,29 @@ import kotlinx.coroutines.launch
 
 @Composable
 internal fun WaifuScreenContentRoute(
-    bundle: Bundle = bundleOf(),
+    server: String,
+    tag: String,
+    switchState: SwitchState,
     imViewModel: WaifuImViewModel = hiltViewModel(),
     picsViewModel : WaifuPicsViewModel = hiltViewModel(),
     bestViewModel: WaifuBestViewModel = hiltViewModel(),
     onNavigate: () -> Unit = {}
 ) {
 
-    val serverMode by remember { mutableStateOf(bundle.getString(Constants.SERVER_MODE) ?: "") }
+    // val serverMode by remember { mutableStateOf(bundle.getString(Constants.SERVER_MODE) ?: "") }
     var lmState by remember { mutableStateOf(LoadingState()) }
     val context = LocalContext.current
     val activity = LocalContext.current as Activity
 
-    LoadCustomResult(bundle, serverMode, imViewModel, picsViewModel, bestViewModel)
+    LoadCustomResult(server, tag, switchState, imViewModel, picsViewModel, bestViewModel)
 
-    when (serverMode.getTypes()) {
+    when (server.getTypes()) {
         NORMAL -> {
             WaifuImScreenContent(
                 state = imViewModel.state.collectAsStateWithLifecycle().value,
                 onWaifuClicked = {}, // { mainState.onWaifuImClicked(it) },
                 onRequestMore = {
-                    onLoadMoreWaifusIm(bundle, context, lmState, imViewModel) { serverId ->
+                    onLoadMoreWaifusIm(tag, switchState, context, lmState, imViewModel) { serverId ->
                         CoroutineScope(Dispatchers.Main).launch {
                             delay(6000)
                             when (serverId) {
@@ -81,7 +84,7 @@ internal fun WaifuScreenContentRoute(
                 state = picsViewModel.state.collectAsStateWithLifecycle().value,
                 onWaifuClicked = {}, // { mainState.onWaifuPicsClicked(it) },
                 onRequestMore = {
-                    onLoadMoreWaifusPics(bundle, context, lmState, picsViewModel) { serverId ->
+                    onLoadMoreWaifusPics(tag, switchState, context, lmState, picsViewModel) { serverId ->
                         CoroutineScope(Dispatchers.Main).launch {
                             delay(6000)
                             when (serverId) {
@@ -106,7 +109,7 @@ internal fun WaifuScreenContentRoute(
                 state = bestViewModel.state.collectAsStateWithLifecycle().value,
                 onWaifuClicked = {}, // { mainState.onWaifuBestClicked(it) },
                 onRequestMore = {
-                    onLoadMoreWaifusBest(bundle, context, lmState, bestViewModel) { serverId ->
+                    onLoadMoreWaifusBest(tag, context, lmState, bestViewModel) { serverId ->
                         CoroutineScope(Dispatchers.Main).launch {
                             delay(6000)
                             when (serverId) {
@@ -132,49 +135,43 @@ internal fun WaifuScreenContentRoute(
 
 @Composable
 private fun LoadCustomResult(
-    bun: Bundle,
     serverMode: String,
+    tag: String,
+    switchState: SwitchState,
     imViewModel: WaifuImViewModel,
     picsViewModel: WaifuPicsViewModel,
     bestViewModel: WaifuBestViewModel
 ) {
-    val isNsfw = bun.getBoolean(Constants.IS_NSFW_WAIFU)
-    val isGif = bun.getBoolean(Constants.IS_GIF_WAIFU)
-    val orientation = bun.getBoolean(Constants.IS_LANDS_WAIFU)
-    val categoryTag = bun.getString(Constants.CATEGORY_TAG_WAIFU) ?: ""
 
     if (serverMode == stringResource(R.string.server_normal_string)) {
-        when (categoryTag) {
+        when (tag) {
             "uniform", "maid", "marin-kitagawa", "oppai" -> {
-                imViewModel.onImReady(isNsfw, isGif = false, categoryTag, orientation)
+                imViewModel.onImReady(switchState.nsfw, isGif = false, tag, switchState.portrait)
             }
             "mori-calliope", "raiden-shogun" -> {
-                imViewModel.onImReady(isNsfw, isGif = false, categoryTag, false)
+                imViewModel.onImReady(switchState.nsfw, isGif = false, tag, false)
             }
             else -> {
-                imViewModel.onImReady(isNsfw, isGif, categoryTag, orientation)
+                imViewModel.onImReady(switchState.nsfw, switchState.gifs, tag, switchState.portrait)
             }
         }
     } else if (serverMode == stringResource(R.string.server_enhanced_string)) {
-        picsViewModel.onPicsReady(isNsfw, categoryTag)
+        picsViewModel.onPicsReady(switchState.nsfw, tag)
     } else {
-        bestViewModel.onBestReady(categoryTag)
+        bestViewModel.onBestReady(tag)
     }
 }
 
 private fun onLoadMoreWaifusIm(
-    bun: Bundle,
+    tag: String,
+    switchState: SwitchState,
     ctx: Context,
     lmState: LoadingState,
     imViewModel: WaifuImViewModel,
     onResetLoadingMore: (Int) -> Unit
 ) {
-    val isNsfw = bun.getBoolean(Constants.IS_NSFW_WAIFU)
-    val isGif = bun.getBoolean(Constants.IS_GIF_WAIFU)
-    val orientation = bun.getBoolean(Constants.IS_LANDS_WAIFU)
-    val categoryTag = bun.getString(Constants.CATEGORY_TAG_WAIFU) ?: ""
     if (!lmState.loadMoreIm) {
-        imViewModel.onRequestMore(isNsfw, isGif, categoryTag , orientation)
+        imViewModel.onRequestMore(switchState.nsfw, switchState.gifs, tag , switchState.portrait)
         lmState.loadMoreIm = true
         getString(ctx, R.string.waifus_coming).showToast(ctx)
         onResetLoadingMore(0)
@@ -182,16 +179,15 @@ private fun onLoadMoreWaifusIm(
 }
 
 private fun onLoadMoreWaifusPics(
-    bun: Bundle,
+    tag: String,
+    switchState: SwitchState,
     ctx: Context,
     lmState: LoadingState,
     picsViewModel: WaifuPicsViewModel,
     onResetLoadingMore: (Int) -> Unit
 ) {
-    val isNsfw = bun.getBoolean(Constants.IS_NSFW_WAIFU)
-    val categoryTag = bun.getString(Constants.CATEGORY_TAG_WAIFU) ?: ""
     if (!lmState.loadMorePics ) {
-        picsViewModel.onRequestMore(isNsfw, categoryTag)
+        picsViewModel.onRequestMore(switchState.nsfw, tag)
         lmState.loadMorePics = true
         getString(ctx, R.string.waifus_coming).showToast(ctx)
         onResetLoadingMore(1)
@@ -199,15 +195,14 @@ private fun onLoadMoreWaifusPics(
 }
 
 private fun onLoadMoreWaifusBest(
-    bun: Bundle,
+    tag: String,
     ctx: Context,
     lmState: LoadingState,
     bestViewModel: WaifuBestViewModel,
     onResetLoadingMore: (Int) -> Unit
 ) {
-    val categoryTag = bun.getString(Constants.CATEGORY_TAG_WAIFU) ?: ""
     if (!lmState.loadMoreBest ) {
-        bestViewModel.onRequestMore(categoryTag)
+        bestViewModel.onRequestMore(tag)
         lmState.loadMoreBest = true
         getString(ctx, R.string.waifus_coming).showToast(ctx)
         onResetLoadingMore(2)

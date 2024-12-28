@@ -13,10 +13,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
+import com.google.android.material.snackbar.Snackbar
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.ui.common.ui.isNavigationBarVisible
 
@@ -55,4 +57,7 @@ fun WaifuGptScreenContent() {
             onValueChange = { chatState = it }
         )
     }
+
+    Snackbar.make(LocalView.current, "Under Development!", Snackbar.LENGTH_SHORT).show()
+
 }
