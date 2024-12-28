@@ -43,7 +43,7 @@ class DetailFavsViewModelTest {
     @Before
     fun setUp() {
         whenever(findFavoriteUseCase(8)).thenReturn(flowOf(favSample))
-        vm = DetailFavsViewModel(8, findFavoriteUseCase, switchFavoriteUseCase, getSearchMoeUseCase)
+        vm = DetailFavsViewModel(findFavoriteUseCase, switchFavoriteUseCase, getSearchMoeUseCase)
     }
 
     @Test

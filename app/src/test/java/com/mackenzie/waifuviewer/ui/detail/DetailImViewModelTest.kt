@@ -44,7 +44,7 @@ class DetailImViewModelTest {
     @Before
     fun setUp() {
         whenever(findWaifuImUseCase(7)).thenReturn(flowOf(imSample))
-        vm = DetailImViewModel(7, findWaifuImUseCase, switchImFavoriteUseCase, getSearchMoeUseCase)
+        vm = DetailImViewModel(findWaifuImUseCase, switchImFavoriteUseCase, getSearchMoeUseCase)
     }
 
     @Test
