@@ -3,16 +3,11 @@ package com.mackenzie.waifuviewer.ui.detail
 import android.app.Activity
 import android.content.Context
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat.getString
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mackenzie.waifuviewer.R
-import com.mackenzie.waifuviewer.WaifuPicsViewModel
 import com.mackenzie.waifuviewer.domain.ServerType.ENHANCED
 import com.mackenzie.waifuviewer.domain.ServerType.NEKOS
 import com.mackenzie.waifuviewer.domain.ServerType.NORMAL
@@ -23,9 +18,6 @@ import com.mackenzie.waifuviewer.ui.detail.ui.DetailBestScreenContent
 import com.mackenzie.waifuviewer.ui.detail.ui.DetailFavsScreenContent
 import com.mackenzie.waifuviewer.ui.detail.ui.DetailImScreenContent
 import com.mackenzie.waifuviewer.ui.detail.ui.DetailPicsScreenContent
-import com.mackenzie.waifuviewer.ui.favs.FavoriteViewModel
-import com.mackenzie.waifuviewer.ui.main.WaifuBestViewModel
-import com.mackenzie.waifuviewer.ui.main.WaifuImViewModel
 
 @Composable
 internal fun DetailScreenContentRoute(
