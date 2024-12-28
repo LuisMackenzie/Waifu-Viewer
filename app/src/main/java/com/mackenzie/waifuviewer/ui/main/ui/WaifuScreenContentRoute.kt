@@ -35,7 +35,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun WaifuScreenContentRoute(
+internal fun WaifuScreenContentRoute(
     bundle: Bundle = bundleOf(),
     imViewModel: WaifuImViewModel = hiltViewModel(),
     picsViewModel : WaifuPicsViewModel = hiltViewModel(),

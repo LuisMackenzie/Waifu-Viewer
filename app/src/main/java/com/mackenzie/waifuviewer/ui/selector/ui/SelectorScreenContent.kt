@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -62,11 +63,11 @@ import com.mackenzie.waifuviewer.ui.theme.WaifuViewerTheme
 @Composable
 internal fun SelectorScreenContentRoute(
     vm: SelectorViewModel = hiltViewModel(),
-    // onSaveServerMode: (RemoteConfigValues) -> Unit = {},
     onWaifuButtonClicked: (String, Bundle) -> Unit = { tag, bundle -> },
 ) {
     val selectorState by vm.state.collectAsStateWithLifecycle()
-    var loaded by remember { mutableStateOf(false) }
+    var loaded by rememberSaveable { mutableStateOf(false) }
+    // var loaded2: Boolean = false
     val reqPermisions by remember { mutableStateOf(false) }
     var loadedServer by remember { mutableStateOf<ServerType?>(null) }
     var selectedTag by remember { mutableStateOf("") }
@@ -80,25 +81,25 @@ internal fun SelectorScreenContentRoute(
     remoteValues = RemoteConfigValues().getConfig(activity)
 
     var switchState by remember { mutableStateOf(SwitchState()) }
-    var serverState by remember { mutableStateOf(remoteValues?.type ?: NORMAL) }
+    var serverState by remember { mutableStateOf(NORMAL) }
     val tagsState by remember { mutableStateOf(TagsState()) }
 
-
-
     if (BuildConfig.BUILD_TYPE == ENHANCED.value) {
-        if (loadedServer == null) {
+        if (loadedServer == null && !loaded) {
             loadedServer = ENHANCED
             loadedServer?.let {
-                LoadWaifuServer(it, vm, context, loaded)
+                serverState = it
+                LoadWaifuServer(it, vm, loaded) { loaded = !loaded}
             }
-            loaded = true
         }
-    } else if (loadedServer == null) {
+        Log.e("Selectorroute", "loaded=$loaded, server=$loadedServer")
+    } else if (loadedServer == null && !loaded) {
         loadedServer = loadInitialServer()
         loadedServer?.let {
-            LoadWaifuServer(it, vm, context, loaded)
+            serverState = it
+            LoadWaifuServer(it, vm, loaded) { loaded = !loaded}
         }
-        loaded = true
+        Log.e("Selectorroute", "loaded=$loaded, server=$loadedServer")
     }
 
     SelectorScreenContent(
@@ -248,7 +249,15 @@ fun SelectorScreenContent(
 }
 
 @Composable
-fun LoadWaifuServer(mode: ServerType, vm: SelectorViewModel, ctx: Context, loaded: Boolean) {
+fun LoadWaifuServer(
+    mode: ServerType,
+    vm: SelectorViewModel,
+    loaded: Boolean,
+    onLoaded: () -> Unit = {}
+) {
+
+    val ctx = LocalContext.current
+
     if (!loaded) {
         vm.loadErrorOrWaifu(
             orientation = ctx.isLandscape(),
@@ -258,6 +267,7 @@ fun LoadWaifuServer(mode: ServerType, vm: SelectorViewModel, ctx: Context, loade
         val msg = getString(ctx, R.string.server_toast_holder)
         val newMsg = mode.value.getSimpleText(ctx).plus(" $msg")
         newMsg.showToast(ctx)
+        onLoaded()
     } else {
         "Server already loaded".showToast(ctx)
         Log.e("LoadWaifuServer", "Server already loaded")

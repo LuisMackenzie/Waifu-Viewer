@@ -62,23 +62,18 @@ fun Navigation() {
             // Esto es lo que se le passa a la pantalla para que pueda navegar
             // navController.navigate(NavItem.WaifuDetail.createRoute(waifu.id))
         }
-        composable(
-            route = NavItem.WaifuDetail.route,
-            arguments = NavItem.WaifuDetail.args
-            // route = NavItem.WaifuDetail.baseRoute,
-            // arguments = listOf(navArgument("waifuId") { type = NavType.IntType })
-        ) { backStackEntry ->
+        composable(NavItem.WaifuDetail) { backStackEntry ->
             val waifuId = backStackEntry.arguments?.getInt(NavArg.ItemId.key)
             // requireNotNull(waifuId)
             // DetailScreenRoute(waifuId = waifuId)
         }
-        composable(NavItem.FavoriteScreen.baseRoute) {
+        composable(NavItem.FavoriteScreen) {
             // FavoriteScreenRoute()
         }
-        composable(NavItem.WaifuGptScreen.baseRoute) {
+        composable(NavItem.WaifuGptScreen) {
             // WaifuGptScreenContent()
         }
-        composable(NavItem.WaifuGeminiScreen.baseRoute) {
+        composable(NavItem.WaifuGeminiScreen) {
             // WaifuGptScreenContent()
         }
     }
