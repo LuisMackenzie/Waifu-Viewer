@@ -13,21 +13,13 @@ sealed class NavItem(
 
     object SelectorScreen : NavItem("selector_screen")
 
-    /*object WaifuScreen : NavItem("waifu_screen", listOf(NavArg.WaifuTag)) {
-        fun createRoute(waifuTag: String) = baseRoute + File.separator + waifuTag
-    }*/
-
     object WaifuScreen : NavItem("waifu_screen", listOf(NavArg.WaifuServer, NavArg.WaifuTag, NavArg.NsfwState, NavArg.GifState, NavArg.LandsState)) {
         fun createRoute(server: String, waifuTag: String, nsfw: Boolean, gif: Boolean, lands: Boolean) = baseRoute + File.separator + server + File.separator + waifuTag + File.separator + nsfw + File.separator + gif + File.separator + lands
     }
 
     object FavoriteScreen : NavItem("favorite_screen")
 
-    object WaifuDetail : NavItem("detail_screen", listOf(NavArg.WaifuId)) {
-        fun createRoute(itemId: Int) = baseRoute + File.separator + itemId
-    }
-
-    object WaifuDetail2 : NavItem("detail_screen", listOf(NavArg.WaifuId, NavArg.WaifuFavorite)) {
+    object WaifuDetail : NavItem("detail_screen", listOf(NavArg.WaifuId, NavArg.WaifuFavorite)) {
         fun createRoute(itemId: Int, isFavorite: Boolean) = baseRoute + File.separator + itemId + File.separator + isFavorite
     }
 

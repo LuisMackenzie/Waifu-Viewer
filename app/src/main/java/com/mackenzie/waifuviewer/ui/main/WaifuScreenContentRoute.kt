@@ -1,4 +1,4 @@
-package com.mackenzie.waifuviewer.ui.main.ui
+package com.mackenzie.waifuviewer.ui.main
 
 import android.app.Activity
 import android.content.Context
@@ -21,8 +21,9 @@ import com.mackenzie.waifuviewer.domain.ServerType.NORMAL
 import com.mackenzie.waifuviewer.domain.getTypes
 import com.mackenzie.waifuviewer.domain.selector.SwitchState
 import com.mackenzie.waifuviewer.ui.common.showToast
-import com.mackenzie.waifuviewer.ui.main.WaifuBestViewModel
-import com.mackenzie.waifuviewer.ui.main.WaifuImViewModel
+import com.mackenzie.waifuviewer.ui.main.ui.WaifuBestScreenContent
+import com.mackenzie.waifuviewer.ui.main.ui.WaifuImScreenContent
+import com.mackenzie.waifuviewer.ui.main.ui.WaifuPicsScreenContent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
