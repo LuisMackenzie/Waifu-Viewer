@@ -2,31 +2,24 @@ package com.mackenzie.waifuviewer.ui.main.ui
 
 import android.app.Activity
 import android.content.Context
-import android.os.Bundle
-import android.widget.Toast
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat.getString
-import androidx.core.os.bundleOf
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.WaifuPicsViewModel
 import com.mackenzie.waifuviewer.domain.LoadingState
-import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.domain.ServerType.ENHANCED
 import com.mackenzie.waifuviewer.domain.ServerType.NEKOS
 import com.mackenzie.waifuviewer.domain.ServerType.NORMAL
 import com.mackenzie.waifuviewer.domain.getTypes
 import com.mackenzie.waifuviewer.domain.selector.SwitchState
-import com.mackenzie.waifuviewer.ui.common.Constants
 import com.mackenzie.waifuviewer.ui.common.showToast
 import com.mackenzie.waifuviewer.ui.main.WaifuBestViewModel
 import com.mackenzie.waifuviewer.ui.main.WaifuImViewModel
@@ -43,7 +36,7 @@ internal fun WaifuScreenContentRoute(
     imViewModel: WaifuImViewModel = hiltViewModel(),
     picsViewModel : WaifuPicsViewModel = hiltViewModel(),
     bestViewModel: WaifuBestViewModel = hiltViewModel(),
-    onNavigate: () -> Unit = {}
+    onNavigate: (Int) -> Unit = {}
 ) {
 
     // val serverMode by remember { mutableStateOf(bundle.getString(Constants.SERVER_MODE) ?: "") }
@@ -57,7 +50,8 @@ internal fun WaifuScreenContentRoute(
         NORMAL -> {
             WaifuImScreenContent(
                 state = imViewModel.state.collectAsStateWithLifecycle().value,
-                onWaifuClicked = {}, // { mainState.onWaifuImClicked(it) },
+                // onWaifuClicked = onNavigate, // { mainState.onWaifuImClicked(it) },
+                onWaifuClicked = { onNavigate(it.id) },
                 onRequestMore = {
                     onLoadMoreWaifusIm(tag, switchState, context, lmState, imViewModel) { serverId ->
                         CoroutineScope(Dispatchers.Main).launch {
@@ -82,7 +76,7 @@ internal fun WaifuScreenContentRoute(
         ENHANCED -> {
             WaifuPicsScreenContent(
                 state = picsViewModel.state.collectAsStateWithLifecycle().value,
-                onWaifuClicked = {}, // { mainState.onWaifuPicsClicked(it) },
+                onWaifuClicked = { onNavigate(it.id) }, // { mainState.onWaifuPicsClicked(it) },
                 onRequestMore = {
                     onLoadMoreWaifusPics(tag, switchState, context, lmState, picsViewModel) { serverId ->
                         CoroutineScope(Dispatchers.Main).launch {
@@ -107,7 +101,7 @@ internal fun WaifuScreenContentRoute(
         NEKOS -> {
             WaifuBestScreenContent(
                 state = bestViewModel.state.collectAsStateWithLifecycle().value,
-                onWaifuClicked = {}, // { mainState.onWaifuBestClicked(it) },
+                onWaifuClicked = { onNavigate(it.id) }, // { mainState.onWaifuBestClicked(it) },
                 onRequestMore = {
                     onLoadMoreWaifusBest(tag, context, lmState, bestViewModel) { serverId ->
                         CoroutineScope(Dispatchers.Main).launch {

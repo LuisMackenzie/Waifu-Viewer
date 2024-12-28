@@ -21,6 +21,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.domain.DownloadModel
+import com.mackenzie.waifuviewer.ui.common.loadInitialServer
 import com.mackenzie.waifuviewer.ui.common.onDownloadClick
 import com.mackenzie.waifuviewer.ui.common.showToast
 import com.mackenzie.waifuviewer.ui.common.ui.isNavigationBarVisible
@@ -31,26 +32,16 @@ import com.mackenzie.waifuviewer.ui.detail.DetailImViewModel
 import com.mackenzie.waifuviewer.ui.detail.DetailPicsViewModel
 import com.mackenzie.waifuviewer.ui.favs.ui.WaifuSearchDialog
 
-@Composable
-internal fun DetailImScreenContentRoute(
-    vm: DetailImViewModel = viewModel()
-) {
-    val state by vm.state.collectAsStateWithLifecycle()
-
-    DetailImScreenContent(
-        state = state,
-        onFavoriteClicked = { vm.onFavoriteClicked() },
-        onSearchClick = { vm.onSearchClicked(it) }
-    )
-}
-
 @Preview(showBackground = true)
 @Composable
 fun DetailImScreenContent(
     state: DetailImViewModel.UiState = previewDetailState(),
+    // vm: DetailImViewModel = viewModel(),
     onFavoriteClicked: () -> Unit = {},
     onSearchClick: (String) -> Unit = {}
 ) {
+
+
 
     var showBottomSheet by remember { mutableStateOf(false) }
     var openAlertDialog by remember { mutableStateOf(false) }
@@ -109,6 +100,7 @@ fun DetailImScreenContent(
 @Composable
 fun DetailPicsScreenContent(
     state: DetailPicsViewModel.UiState,
+    // vm: DetailPicsViewModel,
     onFavoriteClicked: () -> Unit,
     onSearchClick: (String) -> Unit = {}
 ) {
@@ -170,6 +162,7 @@ fun DetailPicsScreenContent(
 @Composable
 fun DetailBestScreenContent(
     state: DetailBestViewModel.UiState,
+    // vm: DetailBestViewModel,
     onFavoriteClicked: () -> Unit,
     onSearchClick: (String) -> Unit = {}
 ) {
@@ -231,6 +224,7 @@ fun DetailBestScreenContent(
 @Composable
 fun DetailFavsScreenContent(
     state: DetailFavsViewModel.UiState,
+    // vm: DetailFavsViewModel,
     onFavoriteClicked: () -> Unit,
     onSearchClick: (String) -> Unit = {}
 ) {

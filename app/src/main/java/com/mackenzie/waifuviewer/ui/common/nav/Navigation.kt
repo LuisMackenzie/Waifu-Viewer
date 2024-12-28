@@ -19,6 +19,7 @@ import androidx.navigation.compose.rememberNavController
 import com.google.android.material.snackbar.Snackbar
 import com.mackenzie.waifuviewer.domain.selector.SwitchState
 import com.mackenzie.waifuviewer.ui.common.Constants
+import com.mackenzie.waifuviewer.ui.detail.DetailScreenContentRoute
 import com.mackenzie.waifuviewer.ui.favs.ui.FavoriteScreenContentRoute
 import com.mackenzie.waifuviewer.ui.gemini.menu.WaifuGeminiScreenMenuRoute
 import com.mackenzie.waifuviewer.ui.gpt.ui.WaifuGptScreenContent
@@ -30,9 +31,9 @@ import com.mackenzie.waifuviewer.ui.splash.SplashScreenRoute
 fun Navigation() {
 
     val navController = rememberNavController()
-    val context = LocalContext.current
-    val view = LocalView.current
-    var bun by remember { mutableStateOf(bundleOf()) }
+    // val context = LocalContext.current
+    // val view = LocalView.current
+    // var bun by remember { mutableStateOf(bundleOf()) }
 
     NavHost(
         navController = navController,
@@ -74,7 +75,8 @@ fun Navigation() {
                     backsStackEntry.findArg(NavArg.NsfwState),
                     backsStackEntry.findArg(NavArg.GifState),
                     backsStackEntry.findArg(NavArg.LandsState))
-            ) {
+            ) { waifu ->
+                navController.navigate(route = NavItem.WaifuDetail2.createRoute(waifu, false))
                 /*navController.navigate(route = NavItem.WaifuDetail.createRoute()) {
                     popUpTo(route =
                     NavItem.WaifuScreen.route) {
@@ -85,13 +87,17 @@ fun Navigation() {
             // Esto es lo que se le passa a la pantalla para que pueda navegar
             // navController.navigate(NavItem.WaifuDetail.createRoute(waifu.id))
         }
-        composable(NavItem.WaifuDetail) { backStackEntry ->
-            val waifuId = backStackEntry.arguments?.getInt(NavArg.ItemId.key)
+        composable(NavItem.WaifuDetail2) { backStackEntry ->
+            val waifuId: Int = backStackEntry.findArg(NavArg.WaifuId)
+            val isFavorite: Boolean = backStackEntry.findArg(NavArg.WaifuFavorite)
             // requireNotNull(waifuId)
-            // DetailScreenRoute(waifuId = waifuId)
+            DetailScreenContentRoute(waifuId, isFavorite)
+            // Text("detailScreen waifuId = $waifuId")
         }
         composable(NavItem.FavoriteScreen) {
-            FavoriteScreenContentRoute()
+            FavoriteScreenContentRoute() { waifu ->
+                navController.navigate(route = NavItem.WaifuDetail2.createRoute(waifu, true))
+            }
         }
         composable(NavItem.WaifuGptScreen) {
             WaifuGptScreenContent()

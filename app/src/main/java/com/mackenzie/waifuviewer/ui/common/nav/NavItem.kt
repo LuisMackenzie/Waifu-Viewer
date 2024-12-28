@@ -23,8 +23,12 @@ sealed class NavItem(
 
     object FavoriteScreen : NavItem("favorite_screen")
 
-    object WaifuDetail : NavItem("detail_screen", listOf(NavArg.ItemId)) {
+    object WaifuDetail : NavItem("detail_screen", listOf(NavArg.WaifuId)) {
         fun createRoute(itemId: Int) = baseRoute + File.separator + itemId
+    }
+
+    object WaifuDetail2 : NavItem("detail_screen", listOf(NavArg.WaifuId, NavArg.WaifuFavorite)) {
+        fun createRoute(itemId: Int, isFavorite: Boolean) = baseRoute + File.separator + itemId + File.separator + isFavorite
     }
 
     object WaifuGptScreen : NavItem("gpt_screen")
@@ -44,9 +48,10 @@ sealed class NavItem(
 }
 
 enum class NavArg(val key: String, val navType: NavType<*>) {
-    ItemId("itemId", NavType.IntType),
+    WaifuId("itemId", NavType.IntType),
     WaifuServer("waifuServer", NavType.StringType),
     WaifuTag("waifuTag", NavType.StringType),
+    WaifuFavorite("waifuFavorite", NavType.BoolType),
     NsfwState("nsfwState", NavType.BoolType),
     GifState("gifState", NavType.BoolType),
     LandsState("landsState", NavType.BoolType),

@@ -23,17 +23,24 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailImViewModel @Inject constructor (
-    @WaifuId private val waifuId: Int,
-    findWaifuImUseCase: FindWaifuImUseCase,
+    // @WaifuId private val waifuId: Int,
+    private val findWaifuImUseCase: FindWaifuImUseCase,
     private val switchImFavoriteUseCase : SwitchImFavoriteUseCase,
-    private val getSearchMoeUseCase : GetSearchMoeUseCase,
-    // private val getSearchMoeUseCase2 : GetSearchMoeUseCase2
+    private val getSearchMoeUseCase : GetSearchMoeUseCase
     ): ViewModel() {
 
     private val _state = MutableStateFlow(UiState())
     val state: StateFlow<UiState> = _state.asStateFlow()
 
-    init {
+    /*init {
+        viewModelScope.launch {
+            findWaifuImUseCase(waifuId).collect {
+                _state.value = UiState(waifuIm = it)
+            }
+        }
+    }*/
+
+    fun getWaifuResultNavigate(waifuId: Int) {
         viewModelScope.launch {
             findWaifuImUseCase(waifuId).collect {
                 _state.value = UiState(waifuIm = it)

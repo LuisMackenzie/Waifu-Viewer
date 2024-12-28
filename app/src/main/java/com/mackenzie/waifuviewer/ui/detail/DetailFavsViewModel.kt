@@ -19,8 +19,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailFavsViewModel @Inject constructor(
-    @WaifuId private val waifuId: Int,
-    findFavoriteUseCase: FindFavoriteUseCase,
+    // @WaifuId private val waifuId: Int,
+    private val findFavoriteUseCase: FindFavoriteUseCase,
     private val switchFavoriteUseCase : SwitchFavoriteUseCase,
     private val getSearchMoeUseCase : GetSearchMoeUseCase
     ): ViewModel() {
@@ -28,7 +28,15 @@ class DetailFavsViewModel @Inject constructor(
     private val _state = MutableStateFlow(UiState())
     val state: StateFlow<UiState> = _state.asStateFlow()
 
-    init {
+    /*init {
+        viewModelScope.launch {
+            findFavoriteUseCase(waifuId).collect {
+                _state.value = UiState(waifu = it)
+            }
+        }
+    }*/
+
+    fun getWaifuResultNavigate(waifuId: Int) {
         viewModelScope.launch {
             findFavoriteUseCase(waifuId).collect {
                 _state.value = UiState(waifu = it)

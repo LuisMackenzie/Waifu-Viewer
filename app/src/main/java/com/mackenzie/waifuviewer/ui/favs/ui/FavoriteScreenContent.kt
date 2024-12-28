@@ -33,13 +33,16 @@ import com.mackenzie.waifuviewer.ui.main.ui.LoadingErrorView
 import com.mackenzie.waifuviewer.ui.theme.Dimens
 
 @Composable
-fun FavoriteScreenContentRoute(vm: FavoriteViewModel = hiltViewModel()) {
+fun FavoriteScreenContentRoute(
+    vm: FavoriteViewModel = hiltViewModel(),
+    onNavigate: (Int) -> Unit
+) {
 
     val context = LocalContext.current
 
     FavoriteScreenContent(
         state = vm.state.collectAsStateWithLifecycle().value,
-        onItemClick = {}, // { mainState.onWaifuFavoriteClicked(it) },
+        onItemClick = { onNavigate(it.id) }, // { mainState.onWaifuFavoriteClicked(it) },
         onItemLongClick = {
             vm.onDeleteFavorite(it)
             getString(context, R.string.waifu_deleted).showToast(context)
