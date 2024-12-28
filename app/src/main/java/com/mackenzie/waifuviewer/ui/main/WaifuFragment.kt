@@ -51,9 +51,9 @@ class WaifuFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // mainState = buildMainState()
-        serverMode = safeArgs.bundleInfo.getString(Constants.SERVER_MODE) ?: ""
-        bun = safeArgs.bundleInfo
-        loadCustomResult(bun)
+        // serverMode = safeArgs.bundleInfo.getString(Constants.SERVER_MODE) ?: ""
+        // bun = safeArgs.bundleInfo
+        // loadCustomResult(bun)
         /*return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
@@ -63,11 +63,11 @@ class WaifuFragment : Fragment() {
             }
         }*/
         return composeView {
-            LaunchWaifuScreen(serverMode.getTypes())
+            // LaunchWaifuScreen(serverMode.getTypes())
         }
     }
 
-    @Composable
+    /*@Composable
     private fun LaunchWaifuScreen(mode: ServerType) {
         when (mode) {
             NORMAL -> WaifuImScreen()
@@ -75,9 +75,9 @@ class WaifuFragment : Fragment() {
             NEKOS -> WaifuNekosScreen()
             else -> {}
         }
-    }
+    }*/
 
-    @Composable
+    /*@Composable
     private fun WaifuImScreen() {
         WaifuImScreenContent(
             state = imViewModel.state.collectAsStateWithLifecycle().value,
@@ -89,9 +89,9 @@ class WaifuFragment : Fragment() {
                 Toast.makeText(requireContext(), getString(R.string.waifus_gone), Toast.LENGTH_SHORT).show()
             }
         )
-    }
+    }*/
 
-    @Composable
+    /*@Composable
     private fun WaifuPicsScreen() {
         WaifuPicsScreenContent(
             state = picsViewModel.state.collectAsStateWithLifecycle().value,
@@ -104,9 +104,9 @@ class WaifuFragment : Fragment() {
                 Toast.makeText(requireContext(), getString(R.string.waifus_gone), Toast.LENGTH_SHORT).show()
             }
         )
-    }
+    }*/
 
-    @Composable
+    /*@Composable
     private fun WaifuNekosScreen() {
         WaifuBestScreenContent(
             state = bestViewModel.state.collectAsStateWithLifecycle().value,
@@ -118,9 +118,9 @@ class WaifuFragment : Fragment() {
                 Toast.makeText(requireContext(), getString(R.string.waifus_gone), Toast.LENGTH_SHORT).show()
             }
         )
-    }
+    }*/
 
-    private fun loadCustomResult(bun: Bundle) {
+    /*private fun loadCustomResult(bun: Bundle) {
         val isNsfw = bun.getBoolean(Constants.IS_NSFW_WAIFU)
         val isGif = bun.getBoolean(Constants.IS_GIF_WAIFU)
         val orientation = bun.getBoolean(Constants.IS_LANDS_WAIFU)
@@ -143,9 +143,9 @@ class WaifuFragment : Fragment() {
         } else {
             bestViewModel.onBestReady(categoryTag)
         }
-    }
+    }*/
 
-    private fun onLoadMoreWaifusIm() {
+    /*private fun onLoadMoreWaifusIm() {
         val isNsfw = bun.getBoolean(Constants.IS_NSFW_WAIFU)
         val isGif = bun.getBoolean(Constants.IS_GIF_WAIFU)
         val orientation = bun.getBoolean(Constants.IS_LANDS_WAIFU)
@@ -156,9 +156,9 @@ class WaifuFragment : Fragment() {
             getString(R.string.waifus_coming).showToast(requireContext())
             resetLoadingMore(0)
         }
-    }
+    }*/
 
-    private fun onLoadMoreWaifusPics() {
+    /*private fun onLoadMoreWaifusPics() {
         val isNsfw = bun.getBoolean(Constants.IS_NSFW_WAIFU)
         val categoryTag = bun.getString(Constants.CATEGORY_TAG_WAIFU) ?: ""
         if (!lmState.loadMorePics ) {
@@ -167,9 +167,9 @@ class WaifuFragment : Fragment() {
             getString(R.string.waifus_coming).showToast(requireContext())
             resetLoadingMore(1)
         }
-    }
+    }*/
 
-    private fun onLoadMoreWaifusBest() {
+    /*private fun onLoadMoreWaifusBest() {
         val categoryTag = bun.getString(Constants.CATEGORY_TAG_WAIFU) ?: ""
         if (!lmState.loadMoreBest ) {
             bestViewModel.onRequestMore(categoryTag)
@@ -177,9 +177,9 @@ class WaifuFragment : Fragment() {
             getString(R.string.waifus_coming).showToast(requireContext())
             resetLoadingMore(2)
         }
-    }
+    }*/
 
-    private fun resetLoadingMore(id :Int) {
+    /*private fun resetLoadingMore(id :Int) {
         CoroutineScope(Dispatchers.Main).launch {
             delay(6000)
             when (id) {
@@ -189,6 +189,6 @@ class WaifuFragment : Fragment() {
                 else -> {lmState = LoadingState()}
             }
         }
-    }
+    }*/
 }
 

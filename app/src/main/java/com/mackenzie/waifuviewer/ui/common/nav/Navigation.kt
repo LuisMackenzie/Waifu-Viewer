@@ -30,7 +30,7 @@ fun Navigation() {
         navController = navController,
         startDestination = NavItem.SplashScreen.route
     ) {
-        composable(NavItem.SplashScreen.route) {
+        composable(NavItem.SplashScreen) {
             SplashScreenRoute {
                 navController.navigate(route = NavItem.SelectorScreen.route) {
                     popUpTo(route =
@@ -40,7 +40,7 @@ fun Navigation() {
                 }
             }
         }
-        composable(NavItem.SelectorScreen.route) {
+        composable(NavItem.SelectorScreen) {
             // TODO
             SelectorScreenContentRoute(
                 onWaifuButtonClicked = { waifuTag, bundle ->
@@ -49,11 +49,8 @@ fun Navigation() {
                 }
             )
         }
-        composable(
-            route = NavItem.WaifuScreen.route,
-            arguments = NavItem.WaifuScreen.args
-        ) { backsStackEntry ->
-            val tag = backsStackEntry.arguments?.getString(NavArg.WaifuTag.key)
+        composable(NavItem.WaifuScreen) { backsStackEntry ->
+            val tag: String = backsStackEntry.findArg(NavArg.WaifuTag)
             WaifuScreenContentRoute(bundle = bun) {
                 /*navController.navigate(route = NavItem.WaifuDetail.createRoute()) {
                     popUpTo(route =
