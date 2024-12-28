@@ -40,10 +40,8 @@ internal fun WaifuScreenContentRoute(
     onNavigate: (Int) -> Unit = {}
 ) {
 
-    // val serverMode by remember { mutableStateOf(bundle.getString(Constants.SERVER_MODE) ?: "") }
     var lmState by remember { mutableStateOf(LoadingState()) }
     val context = LocalContext.current
-    val activity = LocalContext.current as Activity
 
     LoadCustomResult(server, tag, switchState, imViewModel, picsViewModel, bestViewModel)
 
@@ -51,7 +49,6 @@ internal fun WaifuScreenContentRoute(
         NORMAL -> {
             WaifuImScreenContent(
                 state = imViewModel.state.collectAsStateWithLifecycle().value,
-                // onWaifuClicked = onNavigate, // { mainState.onWaifuImClicked(it) },
                 onWaifuClicked = { onNavigate(it.id) },
                 onRequestMore = {
                     onLoadMoreWaifusIm(tag, switchState, context, lmState, imViewModel) { serverId ->
@@ -67,10 +64,9 @@ internal fun WaifuScreenContentRoute(
                     }
                 },
                 onFabClick = {
-                    "Eliminando la database.. .".showToast(context)
-                    // imViewModel.onClearImDatabase()
-                    // onBackPressedDispatcher?.onBackPressed()
-                    // Toast.makeText(requireContext(), getString(R.string.waifus_gone), Toast.LENGTH_SHORT).show()
+                    imViewModel.onClearImDatabase()
+                    (context as Activity).onBackPressed()
+                    getString(context, R.string.waifus_gone).showToast(context)
                 }
             )
         }
@@ -92,10 +88,9 @@ internal fun WaifuScreenContentRoute(
                     }
                 },
                 onFabClick = {
-                    "Eliminando la database.. .".showToast(context)
-                    // picsViewModel.onClearPicsDatabase()
-                    // activity?.onBackPressedDispatcher?.onBackPressed()
-                    // Toast.makeText(requireContext(), getString(R.string.waifus_gone), Toast.LENGTH_SHORT).show()
+                    picsViewModel.onClearPicsDatabase()
+                    (context as Activity).onBackPressed()
+                    getString(context, R.string.waifus_gone).showToast(context)
                 }
             )
         }
@@ -117,10 +112,9 @@ internal fun WaifuScreenContentRoute(
                     }
                 },
                 onFabClick = {
-                    "Eliminando la database.. .".showToast(context)
-                    // bestViewModel.onClearDatabase()
-                    // activity?.onBackPressedDispatcher?.onBackPressed()
-                    // Toast.makeText(requireContext(), getString(R.string.waifus_gone), Toast.LENGTH_SHORT).show()
+                    bestViewModel.onClearDatabase()
+                    (context as Activity).onBackPressed()
+                    getString(context, R.string.waifus_gone).showToast(context)
                 }
             )
         }
@@ -166,7 +160,7 @@ private fun onLoadMoreWaifusIm(
     onResetLoadingMore: (Int) -> Unit
 ) {
     if (!lmState.loadMoreIm) {
-        imViewModel.onRequestMore(switchState.nsfw, switchState.gifs, tag , switchState.portrait)
+        // imViewModel.onRequestMore(switchState.nsfw, switchState.gifs, tag , switchState.portrait)
         lmState.loadMoreIm = true
         getString(ctx, R.string.waifus_coming).showToast(ctx)
         onResetLoadingMore(0)
@@ -182,7 +176,7 @@ private fun onLoadMoreWaifusPics(
     onResetLoadingMore: (Int) -> Unit
 ) {
     if (!lmState.loadMorePics ) {
-        picsViewModel.onRequestMore(switchState.nsfw, tag)
+        // picsViewModel.onRequestMore(switchState.nsfw, tag)
         lmState.loadMorePics = true
         getString(ctx, R.string.waifus_coming).showToast(ctx)
         onResetLoadingMore(1)
@@ -197,7 +191,7 @@ private fun onLoadMoreWaifusBest(
     onResetLoadingMore: (Int) -> Unit
 ) {
     if (!lmState.loadMoreBest ) {
-        bestViewModel.onRequestMore(tag)
+        // bestViewModel.onRequestMore(tag)
         lmState.loadMoreBest = true
         getString(ctx, R.string.waifus_coming).showToast(ctx)
         onResetLoadingMore(2)

@@ -12,7 +12,7 @@ import com.mackenzie.waifuviewer.ui.favs.ui.FavoriteScreenContentRoute
 import com.mackenzie.waifuviewer.ui.gemini.menu.WaifuGeminiScreenMenuRoute
 import com.mackenzie.waifuviewer.ui.gpt.ui.WaifuGptScreenContent
 import com.mackenzie.waifuviewer.ui.main.WaifuScreenContentRoute
-import com.mackenzie.waifuviewer.ui.selector.ui.SelectorScreenContentRoute
+import com.mackenzie.waifuviewer.ui.selector.SelectorScreenContentRoute
 import com.mackenzie.waifuviewer.ui.splash.SplashScreenRoute
 
 @Composable
