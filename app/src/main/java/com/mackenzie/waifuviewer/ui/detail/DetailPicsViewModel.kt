@@ -2,7 +2,6 @@ package com.mackenzie.waifuviewer.ui.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mackenzie.waifuviewer.di.WaifuId
 import com.mackenzie.waifuviewer.domain.AnimeSearchItem
 import com.mackenzie.waifuviewer.domain.WaifuPicItem
 import com.mackenzie.waifuviewer.domain.Error

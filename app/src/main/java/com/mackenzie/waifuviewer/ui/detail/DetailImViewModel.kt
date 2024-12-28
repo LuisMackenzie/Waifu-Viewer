@@ -6,7 +6,6 @@ import android.content.Context
 import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mackenzie.waifuviewer.di.WaifuId
 import com.mackenzie.waifuviewer.domain.AnimeSearchItem
 import com.mackenzie.waifuviewer.usecases.im.FindWaifuImUseCase
 import com.mackenzie.waifuviewer.usecases.im.SwitchImFavoriteUseCase

@@ -52,9 +52,11 @@ fun DetailImScreenContent(
 
     val permissionLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-            if (!granted) { getString(context, R.string.waifus_permissions_content).showToast(context) }
-        }
+            if (!granted) { getString(context, R.string.waifus_permissions_content).showToast(context) } else {
 
+                // onDownloadClick(download, coroutineScope, context, permissionLauncher)
+            }
+        }
 
     if (openAlertDialog) {
         WaifuSearchDialog(
