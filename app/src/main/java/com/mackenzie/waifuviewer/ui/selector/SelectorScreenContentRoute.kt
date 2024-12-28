@@ -48,7 +48,6 @@ internal fun SelectorScreenContentRoute(
     var selectedTag by remember { mutableStateOf("") }
     val context = LocalContext.current
     val view = LocalView.current
-    // val activity = LocalContext.current as Activity
     val remoteValues by remember { mutableStateOf( RemoteConfigValues().getConfig(context as Activity)) }
     remoteValues.type = getServerType(context as Activity)
     remoteValues.mode = getServerModeOnly(context as Activity)
@@ -106,7 +105,6 @@ internal fun SelectorScreenContentRoute(
         },
         onWaifuButtonClicked = { tag ->
             selectedTag = tag.tagFilter(context, serverState, switchState)
-            // onWaifuButtonClicked(selectedTag, saveBundle(context, serverState, switchState, selectedTag))
             onWaifuButtonClicked(serverState.value, selectedTag, switchState.nsfw, switchState.gifs, switchState.portrait)
         },
         onFavoriteClicked = onFavoriteButtonClicked, // {navigateTo(null, toFavorites = true)},
