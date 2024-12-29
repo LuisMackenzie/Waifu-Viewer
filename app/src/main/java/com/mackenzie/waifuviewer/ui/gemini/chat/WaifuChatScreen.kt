@@ -1,5 +1,7 @@
 package com.mackenzie.waifuviewer.ui.gemini.chat
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -36,10 +38,17 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.ui.common.GenerativeViewModelFactory
 import com.mackenzie.waifuviewer.ui.common.ui.isNavigationBarVisible
@@ -54,7 +63,6 @@ internal fun WaifuChatRoute(
     val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
-        modifier = if (isNavigationBarVisible()) { Modifier.navigationBarsPadding() } else { Modifier },
         bottomBar = {
             MessageInput(
                 onSendMessage = { inputText ->
@@ -68,13 +76,39 @@ internal fun WaifuChatRoute(
             )
         }
     ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .padding(paddingValues)
-                .fillMaxSize()
+
+        Box(
+            modifier = if (isNavigationBarVisible()) {
+                Modifier
+                    .fillMaxSize()
+                    .navigationBarsPadding()
+                    .background(MaterialTheme.colorScheme.background)
+            } else {
+                Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
+            }
         ) {
-            // Messages List
-            WaifuChatList(chatUiState.messages, listState)
+
+            AsyncImage(
+                model= ImageRequest.Builder(LocalContext.current)
+                    .data("https://nekos.best/api/v2/neko/9c378ab8-7685-4572-9ee0-d47bbac0b713.png")
+                    .crossfade(true)
+                    .build(),
+                error = painterResource(R.drawable.ic_error_grey),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize(),
+            )
+
+            Column(
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .fillMaxSize()
+            ) {
+                // Messages List
+                WaifuChatList(chatUiState.messages, listState)
+            }
         }
     }
 }
@@ -163,7 +197,8 @@ fun MessageInput(
 
     ElevatedCard(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxWidth(),
+        colors = CardDefaults.cardColors(Color.Transparent)
     ) {
         Row(
             modifier = Modifier
