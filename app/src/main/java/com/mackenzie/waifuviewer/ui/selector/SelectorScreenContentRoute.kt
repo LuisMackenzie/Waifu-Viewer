@@ -47,7 +47,7 @@ internal fun SelectorScreenContentRoute(
     val selectorState by vm.state.collectAsStateWithLifecycle()
     var loaded by rememberSaveable { mutableStateOf(false) }
     var selectedTag by remember { mutableStateOf("") }
-    val reqPermisions by remember { mutableStateOf(true) }
+    val reqPermisions by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val view = LocalView.current
     val remoteValues by remember { mutableStateOf( RemoteConfigValues().getConfig(context as Activity)) }
