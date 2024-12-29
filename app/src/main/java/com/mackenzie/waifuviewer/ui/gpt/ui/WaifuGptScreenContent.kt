@@ -56,8 +56,7 @@ fun WaifuGptScreenContent() {
             value = chatState,
             onValueChange = { chatState = it }
         )
+
+        Snackbar.make(LocalView.current, "Under Development!", Snackbar.LENGTH_SHORT).show()
     }
-
-    Snackbar.make(LocalView.current, "Under Development!", Snackbar.LENGTH_SHORT).show()
-
 }

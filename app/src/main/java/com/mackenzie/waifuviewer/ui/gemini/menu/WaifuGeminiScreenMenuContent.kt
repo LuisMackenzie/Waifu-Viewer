@@ -61,8 +61,6 @@ internal fun WaifuGeminiScreenMenuRoute() {
             }
         }
     }
-    Snackbar.make(LocalView.current, "Under Development!", Snackbar.LENGTH_SHORT).show()
-    
 }
 
 @Composable
@@ -83,6 +81,8 @@ fun WaifuGeminiScreenMenuContent(
                 .background(MaterialTheme.colorScheme.background)
         }
     ) {
+
+        Snackbar.make(LocalView.current, "Under Development!", Snackbar.LENGTH_SHORT).show()
 
         AsyncImage(
             model= ImageRequest.Builder(LocalContext.current)
