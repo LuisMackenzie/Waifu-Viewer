@@ -46,6 +46,7 @@
     <string name="waifus_loading">Loading Waifus</string>
     <string name="waifus_size">Total Waifus = </string>
     <string name="waifus_content">Here is shown some waifus</string>
+    <string name="waifus_detail_downloading">Descargando…</string>
     <string name="waifus_permissions_content">Debes aceptar el permiso para usar esta funcion</string>
 
     <string name="server_normal_string">normal</string>

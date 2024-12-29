@@ -17,13 +17,9 @@ import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.annotation.LayoutRes
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityCompat.requestPermissions
-import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getString
 import androidx.core.os.bundleOf
@@ -46,14 +42,12 @@ import com.mackenzie.waifuviewer.domain.ServerType.ENHANCED
 import com.mackenzie.waifuviewer.domain.ServerType.NEKOS
 import com.mackenzie.waifuviewer.domain.ServerType.NORMAL
 import com.mackenzie.waifuviewer.domain.selector.SwitchState
-import com.mackenzie.waifuviewer.ui.NavHostActivity
 import com.mackenzie.waifuviewer.ui.main.ui.MainTheme
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = true): View =
     LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
@@ -235,6 +229,10 @@ fun String.showToast(context: Context) {
     Toast.makeText(context, this, Toast.LENGTH_LONG).show()
 }
 
+fun String.showShortToast(context: Context) {
+    Toast.makeText(context, this, Toast.LENGTH_SHORT).show()
+}
+
 fun Activity.showFullscreenCutout() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
         window.attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
@@ -286,7 +284,7 @@ fun Context.hasWriteExternalStoragePermission(): Boolean {
     ) == PackageManager.PERMISSION_GRANTED
 }
 
-private fun downloadImage(scope: CoroutineScope, ctx: Context, title: String, link: String, fileType: String) {
+fun downloadImage(scope: CoroutineScope, ctx: Context, title: String, link: String, fileType: String) {
     val type: String = selectMimeType(fileType)
     scope.launch(IO) { SaveImage().saveImageToStorage(ctx, title, type, link) }
 }

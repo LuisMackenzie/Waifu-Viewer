@@ -1,7 +1,5 @@
 package com.mackenzie.waifuviewer.ui.detail.ui
 
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,13 +15,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.ContextCompat.getString
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.domain.DownloadModel
-import com.mackenzie.waifuviewer.ui.common.loadInitialServer
-import com.mackenzie.waifuviewer.ui.common.onDownloadClick
+import com.mackenzie.waifuviewer.ui.common.downloadImage
 import com.mackenzie.waifuviewer.ui.common.showToast
+import com.mackenzie.waifuviewer.ui.common.ui.PermissionDownloadRequestEffect
 import com.mackenzie.waifuviewer.ui.common.ui.isNavigationBarVisible
 import com.mackenzie.waifuviewer.ui.common.ui.previewDetailState
 import com.mackenzie.waifuviewer.ui.detail.DetailBestViewModel
@@ -36,38 +32,33 @@ import com.mackenzie.waifuviewer.ui.favs.ui.WaifuSearchDialog
 @Composable
 fun DetailImScreenContent(
     state: DetailImViewModel.UiState = previewDetailState(),
-    // vm: DetailImViewModel = viewModel(),
     onFavoriteClicked: () -> Unit = {},
     onSearchClick: (String) -> Unit = {}
 ) {
 
-
-
     var showBottomSheet by remember { mutableStateOf(false) }
     var openAlertDialog by remember { mutableStateOf(false) }
-    var isPermisionGranted by remember { mutableStateOf(false) }
+    var openDownloadFlow by remember { mutableStateOf(false) }
     var waifuUrl by remember { mutableStateOf("") }
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     var download: DownloadModel by remember { mutableStateOf(DownloadModel("","","")) }
-
-    val permissionLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-            if (!granted) { getString(context, R.string.waifus_permissions_content).showToast(context) } else {
-                isPermisionGranted = true
-                // onDownloadClick(download, coroutineScope, context, permissionLauncher)
-            }
-        }
-
-    /*if (isPermisionGranted) {
-        onDownloadClick(download, coroutineScope, context, permissionLauncher)
-    }*/
 
     if (openAlertDialog) {
         WaifuSearchDialog(
             onDismissRequest = { openAlertDialog = it },
             onConfirmation = { onSearchClick(waifuUrl) ; openAlertDialog = false }
         )
+    }
+
+    if(openDownloadFlow) {
+        PermissionDownloadRequestEffect(download) { granted ->
+            if (granted) {
+                getString(context, R.string.waifus_detail_downloading).showToast(context)
+                downloadImage(coroutineScope, context, download.title, download.link, download.imageExt)
+            } else { getString(context, R.string.waifus_permissions_content).showToast(context) }
+            openDownloadFlow = false
+        }
     }
 
     Box(
@@ -88,7 +79,7 @@ fun DetailImScreenContent(
             ZoomableImage(waifu.url)
             DetailFabFavorites(isFavorite = waifu.isFavorite, onFavoriteClicked = onFavoriteClicked)
             DetailTitle(title = waifu.imageId.toString())
-            DetailFabDownload(onDownloadClick = { onDownloadClick(download, coroutineScope, context, permissionLauncher) }, onSearchClick = { openAlertDialog = true })
+            DetailFabDownload(onDownloadClick = { openDownloadFlow = true }, onSearchClick = { openAlertDialog = true })
         }
         state.search?.let { search ->
             showBottomSheet = true
@@ -107,28 +98,33 @@ fun DetailImScreenContent(
 @Composable
 fun DetailPicsScreenContent(
     state: DetailPicsViewModel.UiState,
-    // vm: DetailPicsViewModel,
     onFavoriteClicked: () -> Unit,
     onSearchClick: (String) -> Unit = {}
 ) {
 
     var showBottomSheet by remember { mutableStateOf(false) }
     var openAlertDialog by remember { mutableStateOf(false) }
+    var openDownloadFlow by remember { mutableStateOf(false) }
     var waifuUrl by remember { mutableStateOf("") }
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     var download: DownloadModel by remember { mutableStateOf(DownloadModel("","","")) }
-
-    val permissionLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-            if (!granted) { getString(context, R.string.waifus_permissions_content).showToast(context) }
-        }
 
     if (openAlertDialog) {
         WaifuSearchDialog(
             onDismissRequest = { openAlertDialog = it },
             onConfirmation = { onSearchClick(waifuUrl) ; openAlertDialog = false }
         )
+    }
+
+    if(openDownloadFlow) {
+        PermissionDownloadRequestEffect(download) { granted ->
+            if (granted) {
+                getString(context, R.string.waifus_detail_downloading).showToast(context)
+                downloadImage(coroutineScope, context, download.title, download.link, download.imageExt)
+            } else { getString(context, R.string.waifus_permissions_content).showToast(context) }
+            openDownloadFlow = false
+        }
     }
 
     Box(
@@ -150,7 +146,7 @@ fun DetailPicsScreenContent(
             ZoomableImage(waifu.url)
             DetailFabFavorites(isFavorite = waifu.isFavorite, onFavoriteClicked = onFavoriteClicked)
             DetailTitle(title = title)
-            DetailFabDownload(onDownloadClick = { onDownloadClick(download, coroutineScope, context, permissionLauncher) }, onSearchClick = { openAlertDialog = true })
+            DetailFabDownload(onDownloadClick = { openDownloadFlow = true }, onSearchClick = { openAlertDialog = true })
         }
         state.search?.let { search ->
             showBottomSheet = true
@@ -169,28 +165,33 @@ fun DetailPicsScreenContent(
 @Composable
 fun DetailBestScreenContent(
     state: DetailBestViewModel.UiState,
-    // vm: DetailBestViewModel,
     onFavoriteClicked: () -> Unit,
     onSearchClick: (String) -> Unit = {}
 ) {
 
     var showBottomSheet by remember { mutableStateOf(false) }
     var openAlertDialog by remember { mutableStateOf(false) }
+    var openDownloadFlow by remember { mutableStateOf(false) }
     var waifuUrl by remember { mutableStateOf("") }
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     var download: DownloadModel by remember { mutableStateOf(DownloadModel("","","")) }
-
-    val permissionLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-            if (!granted) { getString(context, R.string.waifus_permissions_content).showToast(context) }
-        }
 
     if (openAlertDialog) {
         WaifuSearchDialog(
             onDismissRequest = { openAlertDialog = it },
             onConfirmation = { onSearchClick(waifuUrl) ; openAlertDialog = false }
         )
+    }
+
+    if(openDownloadFlow) {
+        PermissionDownloadRequestEffect(download) { granted ->
+            if (granted) {
+                getString(context, R.string.waifus_detail_downloading).showToast(context)
+                downloadImage(coroutineScope, context, download.title, download.link, download.imageExt)
+            } else { getString(context, R.string.waifus_permissions_content).showToast(context) }
+            openDownloadFlow = false
+        }
     }
 
     Box(
@@ -212,7 +213,7 @@ fun DetailBestScreenContent(
             ZoomableImage(waifu.url)
             DetailFabFavorites(isFavorite = waifu.isFavorite, onFavoriteClicked = onFavoriteClicked)
             DetailTitle(title = if (waifu.artistName.isNotEmpty()) waifu.artistName else waifu.animeName)
-            DetailFabDownload(onDownloadClick = { onDownloadClick(download, coroutineScope, context, permissionLauncher) }, onSearchClick = { openAlertDialog = true })
+            DetailFabDownload(onDownloadClick = { openDownloadFlow = true }, onSearchClick = { openAlertDialog = true })
         }
         state.search?.let { search ->
             showBottomSheet = true
@@ -231,28 +232,33 @@ fun DetailBestScreenContent(
 @Composable
 fun DetailFavsScreenContent(
     state: DetailFavsViewModel.UiState,
-    // vm: DetailFavsViewModel,
     onFavoriteClicked: () -> Unit,
     onSearchClick: (String) -> Unit = {}
 ) {
 
     var showBottomSheet by remember { mutableStateOf(false) }
     var openAlertDialog by remember { mutableStateOf(false) }
+    var openDownloadFlow by remember { mutableStateOf(false) }
     var waifuUrl by remember { mutableStateOf("") }
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     var download: DownloadModel by remember { mutableStateOf(DownloadModel("","","")) }
-
-    val permissionLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-            if (!granted) { getString(context, R.string.waifus_permissions_content).showToast(context) }
-        }
 
     if (openAlertDialog) {
         WaifuSearchDialog(
             onDismissRequest = { openAlertDialog = it },
             onConfirmation = { onSearchClick(waifuUrl) ; openAlertDialog = false }
         )
+    }
+
+    if(openDownloadFlow) {
+        PermissionDownloadRequestEffect(download) { granted ->
+            if (granted) {
+                getString(context, R.string.waifus_detail_downloading).showToast(context)
+                downloadImage(coroutineScope, context, download.title, download.link, download.imageExt)
+            } else { getString(context, R.string.waifus_permissions_content).showToast(context) }
+            openDownloadFlow = false
+        }
     }
 
     Box(
@@ -273,7 +279,7 @@ fun DetailFavsScreenContent(
             ZoomableImage(waifu.url)
             DetailFabFavorites(isFavorite = waifu.isFavorite, onFavoriteClicked = onFavoriteClicked)
             DetailTitle(title = waifu.title)
-            DetailFabDownload(onDownloadClick = { onDownloadClick(download, coroutineScope, context, permissionLauncher) }, onSearchClick = { openAlertDialog = true })
+            DetailFabDownload(onDownloadClick = { openDownloadFlow = true }, onSearchClick = { openAlertDialog = true })
         }
         state.search?.let { search ->
             showBottomSheet = true
