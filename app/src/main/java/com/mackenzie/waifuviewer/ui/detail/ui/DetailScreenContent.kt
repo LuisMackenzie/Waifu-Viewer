@@ -45,6 +45,7 @@ fun DetailImScreenContent(
 
     var showBottomSheet by remember { mutableStateOf(false) }
     var openAlertDialog by remember { mutableStateOf(false) }
+    var isPermisionGranted by remember { mutableStateOf(false) }
     var waifuUrl by remember { mutableStateOf("") }
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -53,10 +54,14 @@ fun DetailImScreenContent(
     val permissionLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
             if (!granted) { getString(context, R.string.waifus_permissions_content).showToast(context) } else {
-
+                isPermisionGranted = true
                 // onDownloadClick(download, coroutineScope, context, permissionLauncher)
             }
         }
+
+    /*if (isPermisionGranted) {
+        onDownloadClick(download, coroutineScope, context, permissionLauncher)
+    }*/
 
     if (openAlertDialog) {
         WaifuSearchDialog(

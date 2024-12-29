@@ -272,6 +272,13 @@ fun onDownloadClick(download: DownloadModel, scope: CoroutineScope, context: Con
     }
 }
 
+fun Context.hasLocationPermissionGranted(): Boolean {
+    return ContextCompat.checkSelfPermission(
+        this,
+        Manifest.permission.ACCESS_COARSE_LOCATION
+    ) == PackageManager.PERMISSION_GRANTED
+}
+
 fun Context.hasWriteExternalStoragePermission(): Boolean {
     return ContextCompat.checkSelfPermission(
         this,

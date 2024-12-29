@@ -2,7 +2,10 @@ package com.mackenzie.waifuviewer.ui.selector
 
 import android.app.Activity
 import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,6 +31,7 @@ import com.mackenzie.waifuviewer.ui.common.getServerModeOnly
 import com.mackenzie.waifuviewer.ui.common.getServerType
 import com.mackenzie.waifuviewer.ui.common.getServerTypeByMode
 import com.mackenzie.waifuviewer.ui.common.getSimpleText
+import com.mackenzie.waifuviewer.ui.common.hasLocationPermissionGranted
 import com.mackenzie.waifuviewer.ui.common.isLandscape
 import com.mackenzie.waifuviewer.ui.common.loadInitialServer
 import com.mackenzie.waifuviewer.ui.common.saveServerType
@@ -44,8 +48,8 @@ internal fun SelectorScreenContentRoute(
 ) {
     val selectorState by vm.state.collectAsStateWithLifecycle()
     var loaded by rememberSaveable { mutableStateOf(false) }
-    // val reqPermisions by remember { mutableStateOf(false) }
     var selectedTag by remember { mutableStateOf("") }
+    val reqPermisions by remember { mutableStateOf(true) }
     val context = LocalContext.current
     val view = LocalView.current
     val remoteValues by remember { mutableStateOf( RemoteConfigValues().getConfig(context as Activity)) }
@@ -56,6 +60,18 @@ internal fun SelectorScreenContentRoute(
     var loadedServer by remember { mutableStateOf(getServerTypeByMode(remoteValues.mode)) }
     var serverState by remember { mutableStateOf(remoteValues.type ?: NORMAL) }
     val tagsState by remember { mutableStateOf(TagsState()) }
+
+    val locationLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+        // isLocationGranted = isGranted
+        if (!isGranted) {
+            // Permiso denegado, maneja el caso
+            Log.e("SelectorScreenContentRoute", "FALSECASE isGranted=$isGranted")
+            getString(context, R.string.waifus_permissions_content).showToast(context)
+        } else {
+            Log.e("SelectorScreenContentRoute", "TRUECASE isGranted=$isGranted")
+            // Permiso concedido, puedes acceder a la ubicación
+        }
+    }
 
     if (BuildConfig.BUILD_TYPE == ENHANCED.value) {
         if (!loaded) {
@@ -77,6 +93,16 @@ internal fun SelectorScreenContentRoute(
         }
         LoadWaifuServer(loadedServer, vm, loaded) { loaded = !loaded}
     }
+
+
+    LaunchedEffect(Unit) {
+        if (reqPermisions) {
+            if (!context.hasLocationPermissionGranted()) {
+                locationLauncher.launch(android.Manifest.permission.ACCESS_COARSE_LOCATION)
+            }
+        }
+    }
+
 
     remoteValues.saveServerType(context as Activity)
 
