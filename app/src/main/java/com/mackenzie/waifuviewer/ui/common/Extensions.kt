@@ -20,6 +20,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getString
 import androidx.core.os.bundleOf
@@ -319,12 +320,22 @@ fun loadInitialServer(): ServerType {
     }
 }
 
-fun String.getSimpleText(ctx: Context): String {
+/*fun String.getSimpleText(ctx: Context): String {
     return when (this) {
         NORMAL.value -> getString(ctx, R.string.server_normal_toast)
         ENHANCED.value -> getString(ctx, R.string.server_enhanced_toast)
         NEKOS.value -> getString(ctx, R.string.server_best_toast)
         else -> getString(ctx, R.string.server_unknown_toast)
+    }
+}*/
+
+@Composable
+fun String.getSimpleText(): String {
+    return when (this) {
+        NORMAL.value -> stringResource(R.string.server_normal_toast)
+        ENHANCED.value -> stringResource(R.string.server_enhanced_toast)
+        NEKOS.value -> stringResource(R.string.server_best_toast)
+        else -> stringResource(R.string.server_unknown_toast)
     }
 }
 

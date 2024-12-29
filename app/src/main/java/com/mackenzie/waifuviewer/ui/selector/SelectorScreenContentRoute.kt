@@ -2,7 +2,6 @@ package com.mackenzie.waifuviewer.ui.selector
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.app.Activity
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -11,6 +10,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat.getString
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -51,8 +51,8 @@ internal fun SelectorScreenContentRoute(
     val context = LocalContext.current
     val view = LocalView.current
     val remoteValues by remember { mutableStateOf( RemoteConfigValues().getConfig(context as Activity)) }
-    remoteValues.type = getServerType(context as Activity)
-    remoteValues.mode = getServerModeOnly(context as Activity)
+    remoteValues.type = getServerType(LocalContext.current as Activity)
+    remoteValues.mode = getServerModeOnly(LocalContext.current as Activity)
 
     var switchState by remember { mutableStateOf(SwitchState()) }
     var loadedServer by remember { mutableStateOf(getServerTypeByMode(remoteValues.mode)) }
@@ -65,7 +65,7 @@ internal fun SelectorScreenContentRoute(
             serverState = loadedServer
             remoteValues.type = loadedServer
             remoteValues.mode = 1
-            LoadWaifuServer(loadedServer, vm, loaded) { loaded = !loaded}
+            LoadWaifuServer(loadedServer, vm) { loaded = true}
         }
     } else if (!loaded) {
         loadedServer = loadInitialServer()
@@ -77,16 +77,14 @@ internal fun SelectorScreenContentRoute(
             NEKOS -> remoteValues.mode = 2
             else -> remoteValues.mode = 0
         }
-        LoadWaifuServer(loadedServer, vm, loaded) { loaded = !loaded}
+        LoadWaifuServer(loadedServer, vm) { loaded = true}
     }
 
     if(reqPermisions) {
         PermissionRequestEffect(ACCESS_COARSE_LOCATION) { granted -> if (!granted) { getString(context, R.string.waifus_permissions_content).showToast(context) } }
     }
 
-
-
-    remoteValues.saveServerType(context as Activity)
+    remoteValues.saveServerType(LocalContext.current as Activity)
 
     SelectorScreenContent(
         state = selectorState,
@@ -115,20 +113,18 @@ internal fun SelectorScreenContentRoute(
             selectedTag = tag.tagFilter(context, serverState, switchState)
             onWaifuButtonClicked(serverState.value, selectedTag, switchState.nsfw, switchState.gifs, switchState.portrait)
         },
-        onFavoriteClicked = onFavoriteButtonClicked, // {navigateTo(null, toFavorites = true)},
+        onFavoriteClicked = onFavoriteButtonClicked,
         onRestartClicked = {
             vm.loadErrorOrWaifu(orientation = context.isLandscape(), serverType = loadedServer)
             Snackbar.make(view, "server=$loadedServer", Snackbar.LENGTH_SHORT).show()
         },
-        onGptClicked = { onGptButtonClicked(true) }, //  {navigateTo(null, toGpt = true)},
-        onGeminiClicked = { onGptButtonClicked(false) }, // {navigateTo(null, toGemini = true)},
+        onGptClicked = { onGptButtonClicked(true) },
+        onGeminiClicked = { onGptButtonClicked(false) },
         switchStateCallback = { stateCallback ->
             switchState = stateCallback
-            // switchValues = switchState
         },
         switchState = switchState,
         tags = tagsState,
-        // backgroundState = { loaded = !loaded },
         server = serverState
     )
 }
@@ -137,24 +133,15 @@ internal fun SelectorScreenContentRoute(
 private fun LoadWaifuServer(
     mode: ServerType,
     vm: SelectorViewModel,
-    loaded: Boolean,
     onLoaded: () -> Unit = {}
 ) {
-
-    val ctx = LocalContext.current
-
-    if (!loaded) {
-        vm.loadErrorOrWaifu(
-            orientation = ctx.isLandscape(),
-            serverType = mode
-        )
-        vm.requestTags()
-        val msg = getString(ctx, R.string.server_toast_holder)
-        val newMsg = mode.value.getSimpleText(ctx).plus(" $msg")
-        newMsg.showToast(ctx)
-        onLoaded()
-    } else {
-        "Server already loaded".showToast(ctx)
-        Log.e("LoadWaifuServer", "Server already loaded")
-    }
+    vm.loadErrorOrWaifu(
+        orientation = LocalContext.current.isLandscape(),
+        serverType = mode
+    )
+    vm.requestTags()
+    val msg = stringResource(R.string.server_toast_holder)
+    val newMsg = mode.value.getSimpleText().plus(" $msg")
+    newMsg.showToast(LocalContext.current)
+    onLoaded()
 }

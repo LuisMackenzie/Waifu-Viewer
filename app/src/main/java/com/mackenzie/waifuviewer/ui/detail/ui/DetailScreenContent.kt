@@ -27,8 +27,9 @@ import com.mackenzie.waifuviewer.ui.detail.DetailFavsViewModel
 import com.mackenzie.waifuviewer.ui.detail.DetailImViewModel
 import com.mackenzie.waifuviewer.ui.detail.DetailPicsViewModel
 import com.mackenzie.waifuviewer.ui.favs.ui.WaifuSearchDialog
+import com.mackenzie.waifuviewer.ui.selector.ui.SelectorScreenContent
+import com.mackenzie.waifuviewer.ui.theme.WaifuViewerTheme
 
-@Preview(showBackground = true)
 @Composable
 fun DetailImScreenContent(
     state: DetailImViewModel.UiState = previewDetailState(),
@@ -292,5 +293,13 @@ fun DetailFavsScreenContent(
             LoadingAnimationError(modifier = Modifier.fillMaxSize())
             DetailErrorTitle(error = it.toString())
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewDetail() {
+    WaifuViewerTheme(darkTheme = false) {
+        DetailImScreenContent()
     }
 }
