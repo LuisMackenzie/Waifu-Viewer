@@ -1,5 +1,6 @@
 package com.mackenzie.waifuviewer.ui.selector
 
+import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.app.Activity
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -37,6 +38,7 @@ import com.mackenzie.waifuviewer.ui.common.loadInitialServer
 import com.mackenzie.waifuviewer.ui.common.saveServerType
 import com.mackenzie.waifuviewer.ui.common.showToast
 import com.mackenzie.waifuviewer.ui.common.tagFilter
+import com.mackenzie.waifuviewer.ui.common.ui.PermissionRequestEffect
 import com.mackenzie.waifuviewer.ui.selector.ui.SelectorScreenContent
 
 @Composable
@@ -61,7 +63,7 @@ internal fun SelectorScreenContentRoute(
     var serverState by remember { mutableStateOf(remoteValues.type ?: NORMAL) }
     val tagsState by remember { mutableStateOf(TagsState()) }
 
-    val locationLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+    /*val locationLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
         // isLocationGranted = isGranted
         if (!isGranted) {
             // Permiso denegado, maneja el caso
@@ -71,7 +73,7 @@ internal fun SelectorScreenContentRoute(
             Log.e("SelectorScreenContentRoute", "TRUECASE isGranted=$isGranted")
             // Permiso concedido, puedes acceder a la ubicación
         }
-    }
+    }*/
 
     if (BuildConfig.BUILD_TYPE == ENHANCED.value) {
         if (!loaded) {
@@ -95,13 +97,28 @@ internal fun SelectorScreenContentRoute(
     }
 
 
-    LaunchedEffect(Unit) {
+    /*LaunchedEffect(Unit) {
         if (reqPermisions) {
             if (!context.hasLocationPermissionGranted()) {
-                locationLauncher.launch(android.Manifest.permission.ACCESS_COARSE_LOCATION)
+                locationLauncher.launch(ACCESS_COARSE_LOCATION)
+            }
+        }
+    }*/
+
+    if(reqPermisions) {
+        PermissionRequestEffect(ACCESS_COARSE_LOCATION) { granted ->
+            // Ya tenemos el permiso pedido
+            if (!granted) {
+                // Permiso denegado, maneja el caso
+                Log.e("SelectorScreenContentRoute", "FALSECASE isGranted=$granted")
+                getString(context, R.string.waifus_permissions_content).showToast(context)
+            } else {
+                Log.e("SelectorScreenContentRoute", "TRUECASE isGranted=$granted")
+                // Permiso concedido, puedes acceder a la ubicación
             }
         }
     }
+
 
 
     remoteValues.saveServerType(context as Activity)
