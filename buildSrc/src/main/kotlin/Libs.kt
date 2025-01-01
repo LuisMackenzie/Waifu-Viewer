@@ -42,7 +42,7 @@ object Libs {
             const val iconsCore = "androidx.compose.material:material-icons-core"
             const val iconsExtend = "androidx.compose.material:material-icons-extended"
             const val activity = "androidx.activity:activity-compose"
-            const val hiltNav = "androidx.hilt:hilt-navigation-compose:1.2.0"
+            const val hiltNav = "androidx.hilt:hilt-navigation-compose:_"
             const val vmLifecycle = "androidx.lifecycle:lifecycle-viewmodel-compose"
         }
 
