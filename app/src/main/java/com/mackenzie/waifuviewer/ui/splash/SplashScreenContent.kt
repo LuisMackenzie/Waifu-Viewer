@@ -52,8 +52,8 @@ fun SplashScreenRoute(
     AnimationSplashContent(
         scaleAnimation = scaleAnimation,
         onNavigate = onNavigate,
-        durationMillisAnimation = 3000,
-        delayScreen = 1500L
+        durationMillisAnimation = 1500,
+        delayScreen = 200L
     )
 
     SplashScreenContent(
@@ -91,7 +91,7 @@ fun SplashScreenContent(
                 contentDescription = "Logotipo Splash Screen",
                 modifier = modifier
                     .size(400.dp)
-                    .scale(scale = scaleAnimation.value),
+                    .scale(scale = (scaleAnimation.value * 1.2f)),
             )
 
             Text(
@@ -151,7 +151,7 @@ fun AnimationSplashContent(
             animationSpec = tween(
                 durationMillis = durationMillisAnimation,
                 easing = {
-                    OvershootInterpolator(3F).getInterpolation(it)
+                    OvershootInterpolator(10F).getInterpolation(it)
                 }
             )
         )
