@@ -29,19 +29,19 @@ fun rememberSelectorState(
     isSelectorBgLoaded: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
     selectedTag: MutableState<String> = remember { mutableStateOf("") },
     reqPermisions : MutableState<Boolean> = remember { mutableStateOf(false) },
-    // remoteValues: RemoteConfigValues = remember { RemoteConfigValues() },
-    // switchState: SwitchState = remember { SwitchState() },
+    // remoteConfigValues: MutableState<RemoteConfigValues> = remember { mutableStateOf(RemoteConfigValues()) },
+    switchState: MutableState<SwitchState> = remember { mutableStateOf(SwitchState(false, false, false)) },
     // tagsState: TagsState = remember { TagsState() },
     // serverState: ServerType = remember {  ServerType.NORMAL },
     // serverMode: Int = remember { remoteValues.mode },
-): SelectorState = remember(isSelectorBgLoaded, selectedTag) {
+): SelectorState = remember(isSelectorBgLoaded, selectedTag, switchState) {
     SelectorState(
         // scope = scope,
         isSelectorBgLoaded = isSelectorBgLoaded,
         selectedTag = selectedTag,
-        // reqPermisions = reqPermisions,
-        // remoteValues = remoteValues,
-        // switchState = switchState,
+        reqPermisions = reqPermisions.value,
+        // initRemoteValues = remoteConfigValues,
+        switchInitState = switchState,
         // tagsState = tagsState,
         // serverState = serverState,
         // serverMode = serverMode,
@@ -54,9 +54,9 @@ class SelectorState(
     // val scope: CoroutineScope,
     val isSelectorBgLoaded: MutableState<Boolean>,
     val selectedTag: MutableState<String>,
-    // val reqPermisions: Boolean,
-    // val remoteValues: RemoteConfigValues,
-    // var switchState: SwitchState,
+    val reqPermisions: Boolean,
+    // val remoteInitValues: MutableState<RemoteConfigValues>,
+    val switchInitState: MutableState<SwitchState>,
     // val tagsState: TagsState,
     // var serverState: ServerType,
     // var serverMode: Int,
@@ -66,6 +66,16 @@ class SelectorState(
 
     var isSelectorLoaded by isSelectorBgLoaded
     var tag by selectedTag
+    // var remoteValues by remoteInitValues
+    var switchState by switchInitState
+
+
+    /*val switchState : SwitchState
+        @Composable
+        get() = switchInitState.value*/
+        // set(value) { switchInitState.value = value }
+
+
 
     /*val remote: RemoteConfigValues
         @Composable

@@ -1,6 +1,10 @@
 package com.mackenzie.waifuviewer.ui.common.nav
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
@@ -22,6 +26,7 @@ fun Navigation() {
 
     val navController = rememberNavController()
     var backStackServer: ServerType? = null
+    // var backStackServer by remember { mutableStateOf<ServerType?>(null) }
 
     NavHost(
         navController = navController,
@@ -34,7 +39,7 @@ fun Navigation() {
                 }
             }
         }
-        composable(NavItem.SelectorScreen) { backsStackEntry ->
+        composable(NavItem.SelectorScreen) {
             SelectorScreenContentRoute(
                 onWaifuButtonClicked = { server, tag, nsfw, gif, lands ->
                     navController.navigate(route = NavItem.WaifuScreen.createRoute(server, tag, nsfw, gif, lands))

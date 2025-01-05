@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
@@ -38,6 +39,7 @@ import com.mackenzie.waifuviewer.ui.common.tagFilter
 import com.mackenzie.waifuviewer.ui.common.ui.PermissionRequestEffect
 import com.mackenzie.waifuviewer.ui.selector.ui.SelectorScreenContent
 import com.mackenzie.waifuviewer.ui.selector.ui.rememberSelectorState
+import kotlinx.coroutines.launch
 
 @Composable
 internal fun SelectorScreenContentRoute(
@@ -58,7 +60,7 @@ internal fun SelectorScreenContentRoute(
     // val scope = rememberCoroutineScope()
     // var loaded by rememberSaveable { mutableStateOf(false) }
     // var selectedTag by remember { mutableStateOf("") }
-    val reqPermisions by remember { mutableStateOf(false) }
+    // val reqPermisions by remember { mutableStateOf(false) }
 
     // TODO falta la funcion
     val remoteValues by remember { mutableStateOf( RemoteConfigValues().getConfig(context as Activity)) }
@@ -68,7 +70,7 @@ internal fun SelectorScreenContentRoute(
     // TODO falta la funcion. es un derivado de otra variable
     remoteValues.mode = remember { getServerModeOnly(activity) }
 
-    var switchState by remember { mutableStateOf(SwitchState()) }
+    // var switchState by remember { mutableStateOf(SwitchState()) }
     var loadedServer by remember { mutableStateOf(getServerTypeByMode(remoteValues.mode)) }
     var serverState by remember { mutableStateOf(remoteValues.type ?: NORMAL) }
     val tagsState by remember { mutableStateOf(TagsState()) }
@@ -106,14 +108,14 @@ internal fun SelectorScreenContentRoute(
         LoadWaifuServer(loadedServer, vm) { state.isSelectorLoaded = true }
     }
 
-    if(reqPermisions) {
+    if(state.reqPermisions) {
         PermissionRequestEffect(ACCESS_COARSE_LOCATION) { granted -> if (!granted) { getString(context, R.string.waifus_permissions_content).showToast(context) } }
     }
 
     SelectorScreenContent(
         state = selectorState,
         onServerButtonClicked = {
-            switchState = SwitchState()
+            // state.switchState = SwitchState()
             when (serverState) {
                 NORMAL -> {
                     remoteValues.type = ENHANCED
@@ -134,9 +136,9 @@ internal fun SelectorScreenContentRoute(
             remoteValues.saveServerType(context as Activity)
         },
         onWaifuButtonClicked = { tag ->
-            state.tag = tag.tagFilter(context, serverState, switchState)
+            state.tag = tag.tagFilter(context, serverState, state.switchState)
             // "tag=${state.tag}".showToast(context)
-            onWaifuButtonClicked(serverState.value, state.tag , switchState.nsfw, switchState.gifs, switchState.portrait)
+            onWaifuButtonClicked(serverState.value, state.tag , state.switchState.nsfw, state.switchState.gifs, state.switchState.portrait)
         },
         onFavoriteClicked = onFavoriteButtonClicked,
         onRestartClicked = {
@@ -146,9 +148,13 @@ internal fun SelectorScreenContentRoute(
         onGptClicked = { onGptButtonClicked(true) },
         onGeminiClicked = { onGptButtonClicked(false) },
         switchStateCallback = { stateCallback ->
-            switchState = stateCallback
+            state.switchInitState.value = stateCallback
+            Log.e("SelectorScreenContentRoute", "switchStateCallback: $stateCallback")
+            Log.e("SelectorScreenContentRoute", "switchStateCallback: ${state.switchInitState.value}")
+            Log.e("SelectorScreenContentRoute", "switchStateCallback: ${state.switchState}")
+            // state.switchInitState.value = stateCallback
         },
-        switchState = switchState,
+        switchState = state.switchState,
         tags = tagsState,
         server = serverState
     )
