@@ -2,8 +2,13 @@ package com.mackenzie.waifuviewer.ui.selector
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.app.Activity
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
@@ -19,6 +24,11 @@ import com.mackenzie.waifuviewer.domain.ServerType.ENHANCED
 import com.mackenzie.waifuviewer.domain.ServerType.NEKOS
 import com.mackenzie.waifuviewer.domain.ServerType.NORMAL
 import com.mackenzie.waifuviewer.domain.selector.SwitchState
+import com.mackenzie.waifuviewer.domain.selector.TagsState
+import com.mackenzie.waifuviewer.ui.common.getConfig
+import com.mackenzie.waifuviewer.ui.common.getServerModeOnly
+import com.mackenzie.waifuviewer.ui.common.getServerType
+import com.mackenzie.waifuviewer.ui.common.getServerTypeByMode
 import com.mackenzie.waifuviewer.ui.common.getSimpleText
 import com.mackenzie.waifuviewer.ui.common.isLandscape
 import com.mackenzie.waifuviewer.ui.common.loadInitialServer
@@ -45,57 +55,60 @@ internal fun SelectorScreenContentRoute(
 
     // val scope = rememberCoroutineScope()
     // var loaded by rememberSaveable { mutableStateOf(false) }
-    // var selectedTag by remember { mutableStateOf("") }
-    // val reqPermisions by remember { mutableStateOf(false) }
+    var selectedTag by remember { mutableStateOf("") }
+    val reqPermisions by remember { mutableStateOf(false) }
 
     // TODO falta la funcion
-    // val remoteValues by remember { mutableStateOf( RemoteConfigValues().getConfig(context as Activity)) }
+    val remoteValues by remember { mutableStateOf( RemoteConfigValues().getConfig(context as Activity)) }
     // val remoteValues by remember { mutableStateOf( state.remoteValues.getConfig(context as Activity)) }
     // TODO falta la funcion. es un derivado de otra variable
-    // remoteValues.type = remember { getServerType(activity) }
+    remoteValues.type = remember { getServerType(activity) }
     // TODO falta la funcion. es un derivado de otra variable
-    // remoteValues.mode = remember { getServerModeOnly(activity) }
+    remoteValues.mode = remember { getServerModeOnly(activity) }
 
-    // var switchState by remember { mutableStateOf(SwitchState()) }
-    // var loadedServer by remember { mutableStateOf(getServerTypeByMode(remoteValues.mode)) }
-    // var serverState by remember { mutableStateOf(remoteValues.type ?: NORMAL) }
-    // val tagsState by remember { mutableStateOf(TagsState()) }
+    var switchState by remember { mutableStateOf(SwitchState()) }
+    var loadedServer by remember { mutableStateOf(getServerTypeByMode(remoteValues.mode)) }
+    var serverState by remember { mutableStateOf(remoteValues.type ?: NORMAL) }
+    val tagsState by remember { mutableStateOf(TagsState()) }
 
     if (BuildConfig.BUILD_TYPE == ENHANCED.value) {
-        if (!state.isSelectorBgLoaded) {
-            state.serverState = ENHANCED
-            state.remoteValues.type = state.serverState
-
-            // remoteValues.mode = 1
-            state.serverMode = 1
-
-            LoadWaifuServer(state.loadedServer, vm) { state.isSelectorBgLoaded = true }
-        }
-    } else if (!state.isSelectorBgLoaded) {
-        state.serverState = loadInitialServer()
-        state.remoteValues.type = state.serverState
-
-        with(state) {
-            when (serverState) {
-                NORMAL -> serverMode = 0
-                ENHANCED -> serverMode = 1
-                NEKOS -> serverMode = 2
-                else -> serverMode = 0
+        if (!state.isSelectorBgLoaded.value) {
+            loadedServer = ENHANCED
+            serverState = loadedServer
+            remoteValues.type = loadedServer
+            remoteValues.mode = 1
+            remoteValues.saveServerType(LocalContext.current as Activity)
+            Log.e("ENHANCED CASE", "Loaded =${state.isSelectorBgLoaded.value}"  )
+            LoadWaifuServer(loadedServer, vm) {
+                state.isSelectorBgLoaded.value = true
+                Log.e("ENHANCED CASE", "Loaded =${state.isSelectorBgLoaded.value}"  )
             }
         }
-
-        LoadWaifuServer(state.loadedServer, vm) { state.isSelectorBgLoaded = true }
+    } else if (!state.isSelectorBgLoaded.value) {
+        loadedServer = loadInitialServer()
+        serverState = loadedServer
+        remoteValues.type = loadedServer
+        remoteValues.saveServerType(LocalContext.current as Activity)
+        when (loadedServer) {
+            NORMAL -> remoteValues.mode = 0
+            ENHANCED -> remoteValues.mode = 1
+            NEKOS -> remoteValues.mode = 2
+            else -> remoteValues.mode = 0
+        }
+        Log.e("NORMAL CASE", "Loaded =${state.isSelectorBgLoaded.value}"  )
+        LoadWaifuServer(loadedServer, vm) {
+            state.isSelectorBgLoaded.value = true
+            Log.e("NORMAL CASE", "Loaded =${state.isSelectorBgLoaded.value}"  )
+        }
+    } else {
+        Log.e("ESLE CASE", "Loaded =${state.isSelectorBgLoaded.value}"  )
     }
 
-    if(state.reqPermisions) {
+    if(reqPermisions) {
         PermissionRequestEffect(ACCESS_COARSE_LOCATION) { granted -> if (!granted) { getString(context, R.string.waifus_permissions_content).showToast(context) } }
     }
 
     // remoteValues.saveServerType(LocalContext.current as Activity)
-
-    state.remoteState.saveServerType(LocalContext.current as Activity)
-
-
 
     SelectorScreenContent(
         state = selectorState,
@@ -111,9 +124,8 @@ internal fun SelectorScreenContentRoute(
                     serverState = NEKOS
                 }
                 NEKOS -> {
-                    state.remoteValues.type = NORMAL
-                    state.serverState = NORMAL
-                    // serverState = NORMAL
+                    remoteValues.type = NORMAL
+                    serverState = NORMAL
                 }
                 else -> {
                     "WTF=$serverState".showToast(context)

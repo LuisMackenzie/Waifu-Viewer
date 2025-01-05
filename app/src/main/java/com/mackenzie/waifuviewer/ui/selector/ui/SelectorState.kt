@@ -26,7 +26,7 @@ import kotlinx.coroutines.CoroutineScope
 @Composable
 fun rememberSelectorState(
     scope: CoroutineScope = rememberCoroutineScope(),
-    isSelectorBgLoaded: Boolean = rememberSaveable { false },
+    isSelectorBgLoaded: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
     selectedTag: String = remember { "" },
     reqPermisions : Boolean = remember { false },
     remoteValues: RemoteConfigValues = remember { RemoteConfigValues() },
@@ -52,7 +52,7 @@ fun rememberSelectorState(
 
 class SelectorState(
     val scope: CoroutineScope,
-    var isSelectorBgLoaded: Boolean,
+    var isSelectorBgLoaded: MutableState<Boolean>,
     var selectedTag: String,
     val reqPermisions: Boolean,
     val remoteValues: RemoteConfigValues,
@@ -65,16 +65,16 @@ class SelectorState(
 ) {
 
 
-    val remote: RemoteConfigValues
+    /*val remote: RemoteConfigValues
         @Composable
         get() = remoteValues.getConfig(LocalContext.current as Activity).apply {
             type = getServerType(LocalContext.current as Activity)
             mode = getServerModeOnly(LocalContext.current as Activity)
-        }
+        }*/
 
-    val remoteState : RemoteConfigValues
+    /*val remoteState : RemoteConfigValues
         @Composable
-        get() = remote
+        get() = remote*/
 
     // val currentType : ServerType = this.type ?: ServerType.NORMAL
 
@@ -87,7 +87,7 @@ class SelectorState(
         // set(value) = value.saveServerType(LocalContext.current as Activity)
 
 
-    val loadedServer: ServerType
-        get() = getServerTypeByMode(remoteValues.mode)
+    /*val loadedServer: ServerType
+        get() = getServerTypeByMode(remoteValues.mode)*/
 
 }
