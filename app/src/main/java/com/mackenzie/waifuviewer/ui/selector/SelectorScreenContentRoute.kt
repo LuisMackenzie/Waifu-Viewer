@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
@@ -35,7 +36,10 @@ import com.mackenzie.waifuviewer.ui.common.saveServerType
 import com.mackenzie.waifuviewer.ui.common.showToast
 import com.mackenzie.waifuviewer.ui.common.tagFilter
 import com.mackenzie.waifuviewer.ui.common.ui.PermissionRequestEffect
+import com.mackenzie.waifuviewer.ui.selector.ui.SelectorAppState
 import com.mackenzie.waifuviewer.ui.selector.ui.SelectorScreenContent
+import com.mackenzie.waifuviewer.ui.selector.ui.rememberSelectorState
+import kotlinx.coroutines.launch
 
 @Composable
 internal fun SelectorScreenContentRoute(
@@ -45,22 +49,32 @@ internal fun SelectorScreenContentRoute(
     onFavoriteButtonClicked: () -> Unit = {}
 ) {
     val selectorState by vm.state.collectAsStateWithLifecycle()
-    var loaded by rememberSaveable { mutableStateOf(false) }
-    var selectedTag by remember { mutableStateOf("") }
-    val reqPermisions by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val view = LocalView.current
-    val remoteValues by remember { mutableStateOf( RemoteConfigValues().getConfig(context as Activity)) }
-    remoteValues.type = getServerType(LocalContext.current as Activity)
-    remoteValues.mode = getServerModeOnly(LocalContext.current as Activity)
+    val activity = LocalContext.current as Activity
 
-    var switchState by remember { mutableStateOf(SwitchState()) }
-    var loadedServer by remember { mutableStateOf(getServerTypeByMode(remoteValues.mode)) }
-    var serverState by remember { mutableStateOf(remoteValues.type ?: NORMAL) }
-    val tagsState by remember { mutableStateOf(TagsState()) }
+    val state = rememberSelectorState()
+
+    // val scope = rememberCoroutineScope()
+    // var loaded by rememberSaveable { mutableStateOf(false) }
+    // var selectedTag by remember { mutableStateOf("") }
+    // val reqPermisions by remember { mutableStateOf(false) }
+
+    // TODO falta la funcion
+    // val remoteValues by remember { mutableStateOf( RemoteConfigValues().getConfig(context as Activity)) }
+    // val remoteValues by remember { mutableStateOf( state.remoteValues.getConfig(context as Activity)) }
+    // TODO falta la funcion. es un derivado de otra variable
+    // remoteValues.type = remember { getServerType(activity) }
+    // TODO falta la funcion. es un derivado de otra variable
+    // remoteValues.mode = remember { getServerModeOnly(activity) }
+
+    // var switchState by remember { mutableStateOf(SwitchState()) }
+    // var loadedServer by remember { mutableStateOf(getServerTypeByMode(remoteValues.mode)) }
+    // var serverState by remember { mutableStateOf(remoteValues.type ?: NORMAL) }
+    // val tagsState by remember { mutableStateOf(TagsState()) }
 
     if (BuildConfig.BUILD_TYPE == ENHANCED.value) {
-        if (!loaded) {
+        if (!state.isSelectorBgLoaded) {
             loadedServer = ENHANCED
             serverState = loadedServer
             remoteValues.type = loadedServer
