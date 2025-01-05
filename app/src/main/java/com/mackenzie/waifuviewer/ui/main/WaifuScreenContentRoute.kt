@@ -15,6 +15,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.WaifuPicsViewModel
 import com.mackenzie.waifuviewer.domain.LoadingState
+import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.domain.ServerType.ENHANCED
 import com.mackenzie.waifuviewer.domain.ServerType.NEKOS
 import com.mackenzie.waifuviewer.domain.ServerType.NORMAL
@@ -37,6 +38,7 @@ internal fun WaifuScreenContentRoute(
     imViewModel: WaifuImViewModel = hiltViewModel(),
     picsViewModel : WaifuPicsViewModel = hiltViewModel(),
     bestViewModel: WaifuBestViewModel = hiltViewModel(),
+    onFabPressed: (String) -> Unit = {},
     onNavigate: (Int) -> Unit = {}
 ) {
 
@@ -63,11 +65,7 @@ internal fun WaifuScreenContentRoute(
                         }
                     }
                 },
-                onFabClick = {
-                    imViewModel.onClearImDatabase()
-                    (context as Activity).onBackPressed()
-                    getString(context, R.string.waifus_gone).showToast(context)
-                }
+                onFabClick = { onFabPressed(server) }
             )
         }
         ENHANCED -> {
@@ -87,11 +85,7 @@ internal fun WaifuScreenContentRoute(
                         }
                     }
                 },
-                onFabClick = {
-                    picsViewModel.onClearPicsDatabase()
-                    (context as Activity).onBackPressed()
-                    getString(context, R.string.waifus_gone).showToast(context)
-                }
+                onFabClick = { onFabPressed(server) }
             )
         }
         NEKOS -> {
@@ -111,11 +105,7 @@ internal fun WaifuScreenContentRoute(
                         }
                     }
                 },
-                onFabClick = {
-                    bestViewModel.onClearDatabase()
-                    (context as Activity).onBackPressed()
-                    getString(context, R.string.waifus_gone).showToast(context)
-                }
+                onFabClick = { onFabPressed(server) }
             )
         }
         else -> {}

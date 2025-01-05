@@ -25,45 +25,47 @@ import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun rememberSelectorState(
-    scope: CoroutineScope = rememberCoroutineScope(),
+    // scope: CoroutineScope = rememberCoroutineScope(),
     isSelectorBgLoaded: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
-    selectedTag: String = remember { "" },
-    reqPermisions : Boolean = remember { false },
-    remoteValues: RemoteConfigValues = remember { RemoteConfigValues() },
-    switchState: SwitchState = remember { SwitchState() },
-    tagsState: TagsState = remember { TagsState() },
-    serverState: ServerType = remember {  ServerType.NORMAL },
-    serverMode: Int = remember { remoteValues.mode },
-): SelectorState = remember(scope, isSelectorBgLoaded, selectedTag, remoteValues, switchState, tagsState, serverState, serverMode) {
+    selectedTag: MutableState<String> = remember { mutableStateOf("") },
+    reqPermisions : MutableState<Boolean> = remember { mutableStateOf(false) },
+    // remoteValues: RemoteConfigValues = remember { RemoteConfigValues() },
+    // switchState: SwitchState = remember { SwitchState() },
+    // tagsState: TagsState = remember { TagsState() },
+    // serverState: ServerType = remember {  ServerType.NORMAL },
+    // serverMode: Int = remember { remoteValues.mode },
+): SelectorState = remember(isSelectorBgLoaded, selectedTag) {
     SelectorState(
-        scope = scope,
+        // scope = scope,
         isSelectorBgLoaded = isSelectorBgLoaded,
         selectedTag = selectedTag,
-        reqPermisions = reqPermisions,
-        remoteValues = remoteValues,
-        switchState = switchState,
-        tagsState = tagsState,
-        serverState = serverState,
-        serverMode = serverMode,
+        // reqPermisions = reqPermisions,
+        // remoteValues = remoteValues,
+        // switchState = switchState,
+        // tagsState = tagsState,
+        // serverState = serverState,
+        // serverMode = serverMode,
         // type = remoteValues.type,
         // mode = remoteValues.mode,
     )
 }
 
 class SelectorState(
-    val scope: CoroutineScope,
-    var isSelectorBgLoaded: MutableState<Boolean>,
-    var selectedTag: String,
-    val reqPermisions: Boolean,
-    val remoteValues: RemoteConfigValues,
-    var switchState: SwitchState,
-    val tagsState: TagsState,
-    var serverState: ServerType,
-    var serverMode: Int,
+    // val scope: CoroutineScope,
+    val isSelectorBgLoaded: MutableState<Boolean>,
+    val selectedTag: MutableState<String>,
+    // val reqPermisions: Boolean,
+    // val remoteValues: RemoteConfigValues,
+    // var switchState: SwitchState,
+    // val tagsState: TagsState,
+    // var serverState: ServerType,
+    // var serverMode: Int,
     // val type: ServerType?,
     // val mode: Int,
 ) {
 
+    var isSelectorLoaded by isSelectorBgLoaded
+    var tag by selectedTag
 
     /*val remote: RemoteConfigValues
         @Composable

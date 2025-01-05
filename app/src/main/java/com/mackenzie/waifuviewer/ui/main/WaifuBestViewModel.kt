@@ -16,7 +16,6 @@ class WaifuBestViewModel @Inject constructor(
     getWaifuBestUseCase: GetWaifuBestUseCase,
     private val requestWaifuBestUseCase: RequestWaifuBestUseCase,
     private val requestMoreBestUseCase: RequestMoreWaifuBestUseCase,
-    private val clearWaifuBestUseCase: ClearWaifuBestUseCase
 ): ViewModel()  {
 
     private val _state = MutableStateFlow(UiState())
@@ -42,13 +41,6 @@ class WaifuBestViewModel @Inject constructor(
         viewModelScope.launch {
             val error = requestMoreBestUseCase(tag)
             _state.update { it.copy(error = error) }
-        }
-    }
-
-    fun onClearDatabase() {
-        viewModelScope.launch {
-            val error = clearWaifuBestUseCase()
-            _state.update { _state.value.copy(error = error) }
         }
     }
 
