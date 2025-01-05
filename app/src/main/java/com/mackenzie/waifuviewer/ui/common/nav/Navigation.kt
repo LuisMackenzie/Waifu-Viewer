@@ -6,6 +6,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.mackenzie.waifuviewer.domain.ServerType
+import com.mackenzie.waifuviewer.domain.getTypes
 import com.mackenzie.waifuviewer.domain.selector.SwitchState
 import com.mackenzie.waifuviewer.ui.detail.DetailScreenContentRoute
 import com.mackenzie.waifuviewer.ui.favs.ui.FavoriteScreenContentRoute
@@ -19,6 +21,7 @@ import com.mackenzie.waifuviewer.ui.splash.SplashScreenRoute
 fun Navigation() {
 
     val navController = rememberNavController()
+    var backStackServer: ServerType? = null
 
     NavHost(
         navController = navController,
@@ -31,7 +34,7 @@ fun Navigation() {
                 }
             }
         }
-        composable(NavItem.SelectorScreen) {
+        composable(NavItem.SelectorScreen) { backsStackEntry ->
             SelectorScreenContentRoute(
                 onWaifuButtonClicked = { server, tag, nsfw, gif, lands ->
                     navController.navigate(route = NavItem.WaifuScreen.createRoute(server, tag, nsfw, gif, lands))
@@ -40,15 +43,24 @@ fun Navigation() {
                     if (gptType) navController.navigate(route = NavItem.WaifuGptScreen.route)
                     else navController.navigate(route = NavItem.WaifuGeminiScreen.route)
                 },
-                onFavoriteButtonClicked = { navController.navigate(route = NavItem.FavoriteScreen.route) }
+                onFavoriteButtonClicked = { navController.navigate(route = NavItem.FavoriteScreen.route) },
+                onServerCleaned = { backStackServer = null },
+                serverToClean = backStackServer
             )
         }
         composable(NavItem.WaifuScreen) { backsStackEntry ->
             WaifuScreenContentRoute(
                 server = backsStackEntry.findArg(NavArg.WaifuServer),
                 tag = backsStackEntry.findArg(NavArg.WaifuTag),
-                switchState = SwitchState(backsStackEntry.findArg(NavArg.NsfwState), backsStackEntry.findArg(NavArg.GifState), backsStackEntry.findArg(NavArg.LandsState))
-            ) { waifu -> navController.navigate(route = NavItem.WaifuDetail.createRoute(waifu, false)) }
+                switchState = SwitchState(backsStackEntry.findArg(NavArg.NsfwState), backsStackEntry.findArg(NavArg.GifState), backsStackEntry.findArg(NavArg.LandsState)),
+                onFabPressed = { server ->
+                    backStackServer = server.getTypes()
+                    navController.popBackStack(inclusive = false, route = NavItem.SelectorScreen.route)
+                }
+
+            ) { waifu ->
+                navController.navigate(route = NavItem.WaifuDetail.createRoute(waifu, false))
+            }
         }
         composable(NavItem.WaifuDetail) { backStackEntry ->
             DetailScreenContentRoute(backStackEntry.findArg(NavArg.WaifuId), backStackEntry.findArg(NavArg.WaifuFavorite))

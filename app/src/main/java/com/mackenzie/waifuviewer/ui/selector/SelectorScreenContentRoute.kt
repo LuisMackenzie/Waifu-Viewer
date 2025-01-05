@@ -44,7 +44,9 @@ internal fun SelectorScreenContentRoute(
     vm: SelectorViewModel = hiltViewModel(),
     onWaifuButtonClicked: (String, String, Boolean, Boolean, Boolean) -> Unit = { _, _, _, _, _-> },
     onGptButtonClicked: (Boolean) -> Unit = {},
-    onFavoriteButtonClicked: () -> Unit = {}
+    onFavoriteButtonClicked: () -> Unit = {},
+    onServerCleaned: () -> Unit = {},
+    serverToClean: ServerType? = null,
 ) {
     val selectorState by vm.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -55,7 +57,7 @@ internal fun SelectorScreenContentRoute(
 
     // val scope = rememberCoroutineScope()
     // var loaded by rememberSaveable { mutableStateOf(false) }
-    var selectedTag by remember { mutableStateOf("") }
+    // var selectedTag by remember { mutableStateOf("") }
     val reqPermisions by remember { mutableStateOf(false) }
 
     // TODO falta la funcion
@@ -71,44 +73,42 @@ internal fun SelectorScreenContentRoute(
     var serverState by remember { mutableStateOf(remoteValues.type ?: NORMAL) }
     val tagsState by remember { mutableStateOf(TagsState()) }
 
+    serverToClean?.let {
+        when(it) {
+            NORMAL -> { getString(context, R.string.waifus_gone).showToast(context); vm.onClearImDatabase() }
+            ENHANCED -> { getString(context, R.string.waifus_gone).showToast(context); vm.onClearPicsDatabase() }
+            NEKOS -> { getString(context, R.string.waifus_gone).showToast(context); vm.onClearBestDatabase() }
+            else -> {}
+        }
+        onServerCleaned()
+    }
+
     if (BuildConfig.BUILD_TYPE == ENHANCED.value) {
-        if (!state.isSelectorBgLoaded.value) {
+        if (!state.isSelectorLoaded) {
             loadedServer = ENHANCED
             serverState = loadedServer
             remoteValues.type = loadedServer
             remoteValues.mode = 1
             remoteValues.saveServerType(LocalContext.current as Activity)
-            Log.e("ENHANCED CASE", "Loaded =${state.isSelectorBgLoaded.value}"  )
-            LoadWaifuServer(loadedServer, vm) {
-                state.isSelectorBgLoaded.value = true
-                Log.e("ENHANCED CASE", "Loaded =${state.isSelectorBgLoaded.value}"  )
-            }
+            LoadWaifuServer(loadedServer, vm) { state.isSelectorLoaded = true }
         }
-    } else if (!state.isSelectorBgLoaded.value) {
+    } else if (!state.isSelectorLoaded) {
         loadedServer = loadInitialServer()
         serverState = loadedServer
         remoteValues.type = loadedServer
-        remoteValues.saveServerType(LocalContext.current as Activity)
         when (loadedServer) {
             NORMAL -> remoteValues.mode = 0
             ENHANCED -> remoteValues.mode = 1
             NEKOS -> remoteValues.mode = 2
             else -> remoteValues.mode = 0
         }
-        Log.e("NORMAL CASE", "Loaded =${state.isSelectorBgLoaded.value}"  )
-        LoadWaifuServer(loadedServer, vm) {
-            state.isSelectorBgLoaded.value = true
-            Log.e("NORMAL CASE", "Loaded =${state.isSelectorBgLoaded.value}"  )
-        }
-    } else {
-        Log.e("ESLE CASE", "Loaded =${state.isSelectorBgLoaded.value}"  )
+        remoteValues.saveServerType(LocalContext.current as Activity)
+        LoadWaifuServer(loadedServer, vm) { state.isSelectorLoaded = true }
     }
 
     if(reqPermisions) {
         PermissionRequestEffect(ACCESS_COARSE_LOCATION) { granted -> if (!granted) { getString(context, R.string.waifus_permissions_content).showToast(context) } }
     }
-
-    // remoteValues.saveServerType(LocalContext.current as Activity)
 
     SelectorScreenContent(
         state = selectorState,
@@ -134,8 +134,9 @@ internal fun SelectorScreenContentRoute(
             remoteValues.saveServerType(context as Activity)
         },
         onWaifuButtonClicked = { tag ->
-            selectedTag = tag.tagFilter(context, serverState, switchState)
-            onWaifuButtonClicked(serverState.value, selectedTag, switchState.nsfw, switchState.gifs, switchState.portrait)
+            state.tag = tag.tagFilter(context, serverState, switchState)
+            // "tag=${state.tag}".showToast(context)
+            onWaifuButtonClicked(serverState.value, state.tag , switchState.nsfw, switchState.gifs, switchState.portrait)
         },
         onFavoriteClicked = onFavoriteButtonClicked,
         onRestartClicked = {
