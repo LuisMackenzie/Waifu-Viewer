@@ -25,7 +25,7 @@ fun rememberSelectorState(
     tagsState: MutableState<TagsState> = remember { mutableStateOf(TagsState()) },
     // serverState: ServerType = remember {  ServerType.NORMAL },
     // serverMode: Int = remember { remoteValues.mode },
-): SelectorState = remember(isSelectorBgLoaded, selectedTag, switchState, tagsState) {
+): SelectorState = remember(isSelectorBgLoaded, selectedTag, remoteConfigValues, switchState, tagsState) {
     SelectorState(
         // scope = scope,
         isSelectorBgLoaded = isSelectorBgLoaded,
@@ -61,7 +61,6 @@ class SelectorState(
 
     var remoteValues : RemoteConfigValues
         get() = remoteInitValues.value
-
         set(value) { remoteInitValues.value = value }
     // var switchState by switchInitState
 

@@ -55,23 +55,27 @@ internal fun SelectorScreenContentRoute(
 
     val state = rememberSelectorState(switchState = switchState)
 
-    // val scope = rememberCoroutineScope()
-    // var loaded by rememberSaveable { mutableStateOf(false) }
-    // var selectedTag by remember { mutableStateOf("") }
-    // val reqPermisions by remember { mutableStateOf(false) }
-
     // TODO falta la funcion
-    val remoteValues by remember { mutableStateOf( RemoteConfigValues().getConfig(context as Activity)) }
+    // val remoteValues by remember { mutableStateOf( RemoteConfigValues().getConfig(context as Activity)) }
     // val remoteValues by remember { mutableStateOf( state.remoteValues.getConfig(context as Activity)) }
-    // TODO falta la funcion. es un derivado de otra variable
-    remoteValues.type = remember { getServerType(activity) }
-    // TODO falta la funcion. es un derivado de otra variable
-    remoteValues.mode = remember { getServerModeOnly(activity) }
+    state.remoteValues.getConfig(context as Activity).apply {
+        state.remoteValues = this
+        state.remoteValues.type = getServerType(activity)
+        state.remoteValues.mode = getServerModeOnly(activity)
+    }
 
-    // var switchState by remember { mutableStateOf(SwitchState()) }
-    var loadedServer by remember { mutableStateOf(getServerTypeByMode(remoteValues.mode)) }
-    var serverState by remember { mutableStateOf(remoteValues.type ?: NORMAL) }
-    // val tagsState by remember { mutableStateOf(TagsState()) }
+    // TODO falta la funcion. es un derivado de otra variable
+    // state.remoteValues.type = remember { getServerType(activity) }
+    // state.remoteValues.type = getServerType(activity)
+
+
+    // TODO falta la funcion. es un derivado de otra variable
+    // state.remoteValues.mode = getServerModeOnly(activity)
+
+
+
+    var loadedServer by remember { mutableStateOf(getServerTypeByMode(state.remoteValues.mode)) }
+    var serverState by remember { mutableStateOf(state.remoteValues.type ?: NORMAL) }
 
     serverToClean?.let {
         when(it) {
@@ -87,22 +91,22 @@ internal fun SelectorScreenContentRoute(
         if (!state.isSelectorLoaded) {
             loadedServer = ENHANCED
             serverState = loadedServer
-            remoteValues.type = loadedServer
-            remoteValues.mode = 1
-            remoteValues.saveServerType(LocalContext.current as Activity)
+            state.remoteValues.type = loadedServer
+            state.remoteValues.mode = 1
+            state.remoteValues.saveServerType(LocalContext.current as Activity)
             LoadWaifuServer(loadedServer, vm) { state.isSelectorLoaded = true }
         }
     } else if (!state.isSelectorLoaded) {
         loadedServer = loadInitialServer()
         serverState = loadedServer
-        remoteValues.type = loadedServer
+        state.remoteValues.type = loadedServer
         when (loadedServer) {
-            NORMAL -> remoteValues.mode = 0
-            ENHANCED -> remoteValues.mode = 1
-            NEKOS -> remoteValues.mode = 2
-            else -> remoteValues.mode = 0
+            NORMAL -> state.remoteValues.mode = 0
+            ENHANCED -> state.remoteValues.mode = 1
+            NEKOS -> state.remoteValues.mode = 2
+            else -> state.remoteValues.mode = 0
         }
-        remoteValues.saveServerType(LocalContext.current as Activity)
+        state.remoteValues.saveServerType(LocalContext.current as Activity)
         LoadWaifuServer(loadedServer, vm) { state.isSelectorLoaded = true }
     }
 
@@ -116,22 +120,22 @@ internal fun SelectorScreenContentRoute(
             onSwitchChanged(SwitchState())
             when (serverState) {
                 NORMAL -> {
-                    remoteValues.type = ENHANCED
+                    state.remoteValues.type = ENHANCED
                     serverState = ENHANCED
                 }
                 ENHANCED -> {
-                    remoteValues.type = NEKOS
+                    state.remoteValues.type = NEKOS
                     serverState = NEKOS
                 }
                 NEKOS -> {
-                    remoteValues.type = NORMAL
+                    state.remoteValues.type = NORMAL
                     serverState = NORMAL
                 }
                 else -> {
                     "WTF=$serverState".showToast(context)
                 }
             }
-            remoteValues.saveServerType(context as Activity)
+            state.remoteValues.saveServerType(context as Activity)
         },
         onWaifuButtonClicked = { tag ->
             state.tag = tag.tagFilter(context, serverState, state.switchState)
