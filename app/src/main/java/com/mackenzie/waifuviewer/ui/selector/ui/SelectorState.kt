@@ -23,8 +23,8 @@ fun rememberSelectorState(
     switchState: SwitchState,
     tagsState: MutableState<TagsState> = remember { mutableStateOf(TagsState()) },
     // serverState: MutableState<ServerType> = remember {  mutableStateOf<ServerType>(ServerType.NORMAL) },
-    // serverMode: Int = remember { remoteValues.mode },
-): SelectorState = remember(isSelectorBgLoaded, selectedTag, switchState, tagsState) {
+    selectorMode: MutableState<Int> = remember { mutableStateOf(0) }
+): SelectorState = remember(isSelectorBgLoaded, selectedTag, switchState, tagsState, selectorMode) {
     SelectorState(
         // scope = scope,
         isSelectorBgLoaded = isSelectorBgLoaded,
@@ -33,6 +33,7 @@ fun rememberSelectorState(
         remoteInitValues = remoteConfigValues,
         switchState = switchState,
         tagsInitState = tagsState,
+        selectorMode = selectorMode
         // serverInitState = mutableStateOf(remoteConfigValues.value.type),
         // serverInitState2 = remoteConfigValues.value.type,
         // serverMode = serverMode,
@@ -49,6 +50,7 @@ class SelectorState(
     val remoteInitValues: MutableState<RemoteConfigValues>,
     val switchState: SwitchState,
     val tagsInitState: MutableState<TagsState>,
+    val selectorMode: MutableState<Int>,
     // val serverInitState: MutableState<ServerType?>,
     // var serverInitState2: ServerType?,
     // var serverMode: Int,
@@ -71,6 +73,8 @@ class SelectorState(
     // var loadedServer by remember { mutableStateOf(getServerTypeByMode(remoteValues.mode)) }
 
     val tagsState by tagsInitState
+
+    val mode by selectorMode
 
 
 

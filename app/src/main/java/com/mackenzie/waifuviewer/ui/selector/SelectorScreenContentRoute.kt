@@ -52,18 +52,17 @@ internal fun SelectorScreenContentRoute(
     val selectorState by vm.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val view = LocalView.current
-    val activity = LocalContext.current as Activity
 
     val state = rememberSelectorState(switchState = switchState)
 
-    state.remoteValues.getConfig(context as Activity).apply {
-        state.remoteValues = this
-        state.remoteValues.type = getServerType(activity)
-        state.remoteValues.mode = getServerModeOnly(activity)
-    }
+    val remote by remember { mutableStateOf(
+        state.remoteValues.getConfig(context as Activity).apply {
+            state.remoteValues.type = getServerType(context)
+            state.remoteValues.mode = getServerModeOnly(context)
+        }) }
 
-    var loadedServer by remember { mutableStateOf(getServerTypeByMode(state.remoteValues.mode)) }
-    var serverState by remember { mutableStateOf(state.remoteValues.type ?: NORMAL) }
+    var loadedServer by remember { mutableStateOf(getServerTypeByMode(remote.mode)) }
+    var serverState by remember { mutableStateOf(remote.type ?: NORMAL) }
 
     serverToClean?.let {
         when(it) {
@@ -80,25 +79,25 @@ internal fun SelectorScreenContentRoute(
             loadedServer = ENHANCED
             serverState = loadedServer
             // TODO redundante
-            // state.remoteValues.type = loadedServer
+            remote.type = loadedServer
 
-            state.remoteValues.mode = 1
-            state.remoteValues.saveServerType(LocalContext.current as Activity)
+            remote.mode = 1
+            remote.saveServerType(LocalContext.current as Activity)
             LoadWaifuServer(loadedServer, vm) { state.isSelectorLoaded = true }
         }
     } else if (!state.isSelectorLoaded) {
         loadedServer = loadInitialServer()
         serverState = loadedServer
         // TODO redundante
-        // state.remoteValues.type = loadedServer
+        remote.type = loadedServer
 
         when (loadedServer) {
-            NORMAL -> state.remoteValues.mode = 0
-            ENHANCED -> state.remoteValues.mode = 1
-            NEKOS -> state.remoteValues.mode = 2
-            else -> state.remoteValues.mode = 0
+            NORMAL -> remote.mode = 0
+            ENHANCED -> remote.mode = 1
+            NEKOS -> remote.mode = 2
+            else -> remote.mode = 0
         }
-        state.remoteValues.saveServerType(LocalContext.current as Activity)
+        remote.saveServerType(LocalContext.current as Activity)
         LoadWaifuServer(loadedServer, vm) { state.isSelectorLoaded = true }
     }
 
@@ -110,24 +109,24 @@ internal fun SelectorScreenContentRoute(
         state = selectorState,
         onServerButtonClicked = {
             onSwitchChanged(SwitchState())
-            when (serverState) {
+            when (remote.type) {
                 NORMAL -> {
-                    state.remoteValues.type = ENHANCED
+                    remote.type = ENHANCED
                     serverState = ENHANCED
                 }
                 ENHANCED -> {
-                    state.remoteValues.type = NEKOS
+                    remote.type = NEKOS
                     serverState = NEKOS
                 }
                 NEKOS -> {
-                    state.remoteValues.type = NORMAL
+                    remote.type = NORMAL
                     serverState = NORMAL
                 }
                 else -> {
-                    "WTF=${serverState}".showToast(context)
+                    "WTF=${remote.type}".showToast(context)
                 }
             }
-            state.remoteValues.saveServerType(context as Activity)
+            remote.saveServerType(context as Activity)
         },
         onWaifuButtonClicked = { tag ->
             state.tag = tag.tagFilter(context, serverState, state.switchState)
@@ -137,7 +136,7 @@ internal fun SelectorScreenContentRoute(
         onFavoriteClicked = onFavoriteButtonClicked,
         onRestartClicked = {
             vm.loadErrorOrWaifu(orientation = context.isLandscape(), serverType = loadedServer)
-            Snackbar.make(view, "server=$loadedServer", Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(view, "server=${loadedServer}", Snackbar.LENGTH_SHORT).show()
         },
         onGptClicked = { onGptButtonClicked(true) },
         onGeminiClicked = { onGptButtonClicked(false) },
