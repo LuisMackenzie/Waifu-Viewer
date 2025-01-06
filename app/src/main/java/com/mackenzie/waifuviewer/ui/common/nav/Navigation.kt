@@ -1,5 +1,6 @@
 package com.mackenzie.waifuviewer.ui.common.nav
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,7 +28,6 @@ fun Navigation() {
     val navController = rememberNavController()
     var backStackServer: ServerType? = null
     var switchState by remember { mutableStateOf(SwitchState()) }
-    // var backStackServer by remember { mutableStateOf<ServerType?>(null) }
 
     NavHost(
         navController = navController,

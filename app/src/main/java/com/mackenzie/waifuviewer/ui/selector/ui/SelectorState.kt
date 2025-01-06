@@ -10,6 +10,7 @@ import androidx.compose.runtime.setValue
 import com.mackenzie.waifuviewer.domain.RemoteConfigValues
 import com.mackenzie.waifuviewer.domain.selector.SwitchState
 import com.mackenzie.waifuviewer.domain.selector.TagsState
+import com.mackenzie.waifuviewer.ui.common.getConfig
 import com.mackenzie.waifuviewer.ui.common.getServerTypeByMode
 
 
@@ -24,13 +25,13 @@ fun rememberSelectorState(
     tagsState: MutableState<TagsState> = remember { mutableStateOf(TagsState()) },
     // serverState: ServerType = remember {  ServerType.NORMAL },
     // serverMode: Int = remember { remoteValues.mode },
-): SelectorState = remember(isSelectorBgLoaded, selectedTag, tagsState) {
+): SelectorState = remember(isSelectorBgLoaded, selectedTag, switchState, tagsState) {
     SelectorState(
         // scope = scope,
         isSelectorBgLoaded = isSelectorBgLoaded,
         selectedTag = selectedTag,
         reqPermisions = reqPermisions.value,
-        // initRemoteValues = remoteConfigValues,
+        remoteInitValues = remoteConfigValues,
         switchState = switchState,
         tagsInitState = tagsState,
         // serverState = serverState,
@@ -45,7 +46,7 @@ class SelectorState(
     val isSelectorBgLoaded: MutableState<Boolean>,
     val selectedTag: MutableState<String>,
     val reqPermisions: Boolean,
-    // val remoteInitValues: MutableState<RemoteConfigValues>,
+    val remoteInitValues: MutableState<RemoteConfigValues>,
     // val switchInitState: MutableState<SwitchState>,
     val switchState: SwitchState,
     val tagsInitState: MutableState<TagsState>,
@@ -57,7 +58,11 @@ class SelectorState(
 
     var isSelectorLoaded by isSelectorBgLoaded
     var tag by selectedTag
-    // var remoteValues by remoteInitValues
+
+    var remoteValues : RemoteConfigValues
+        get() = remoteInitValues.value
+
+        set(value) { remoteInitValues.value = value }
     // var switchState by switchInitState
 
     // var loadedServer by remember { mutableStateOf(getServerTypeByMode(remoteValues.mode)) }

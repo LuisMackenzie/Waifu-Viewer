@@ -2,6 +2,7 @@ package com.mackenzie.waifuviewer.ui.selector
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.app.Activity
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
