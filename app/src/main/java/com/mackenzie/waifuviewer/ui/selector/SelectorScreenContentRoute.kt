@@ -2,13 +2,10 @@ package com.mackenzie.waifuviewer.ui.selector
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.app.Activity
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
@@ -25,7 +22,6 @@ import com.mackenzie.waifuviewer.domain.ServerType.ENHANCED
 import com.mackenzie.waifuviewer.domain.ServerType.NEKOS
 import com.mackenzie.waifuviewer.domain.ServerType.NORMAL
 import com.mackenzie.waifuviewer.domain.selector.SwitchState
-import com.mackenzie.waifuviewer.domain.selector.TagsState
 import com.mackenzie.waifuviewer.ui.common.getConfig
 import com.mackenzie.waifuviewer.ui.common.getServerModeOnly
 import com.mackenzie.waifuviewer.ui.common.getServerType
@@ -39,7 +35,6 @@ import com.mackenzie.waifuviewer.ui.common.tagFilter
 import com.mackenzie.waifuviewer.ui.common.ui.PermissionRequestEffect
 import com.mackenzie.waifuviewer.ui.selector.ui.SelectorScreenContent
 import com.mackenzie.waifuviewer.ui.selector.ui.rememberSelectorState
-import kotlinx.coroutines.launch
 
 @Composable
 internal fun SelectorScreenContentRoute(
@@ -48,6 +43,8 @@ internal fun SelectorScreenContentRoute(
     onGptButtonClicked: (Boolean) -> Unit = {},
     onFavoriteButtonClicked: () -> Unit = {},
     onServerCleaned: () -> Unit = {},
+    onSwitchChanged: (SwitchState) -> Unit = {},
+    switchState: SwitchState = SwitchState(),
     serverToClean: ServerType? = null,
 ) {
     val selectorState by vm.state.collectAsStateWithLifecycle()
@@ -55,7 +52,7 @@ internal fun SelectorScreenContentRoute(
     val view = LocalView.current
     val activity = LocalContext.current as Activity
 
-    val state = rememberSelectorState()
+    val state = rememberSelectorState(switchState = switchState)
 
     // val scope = rememberCoroutineScope()
     // var loaded by rememberSaveable { mutableStateOf(false) }
@@ -73,7 +70,7 @@ internal fun SelectorScreenContentRoute(
     // var switchState by remember { mutableStateOf(SwitchState()) }
     var loadedServer by remember { mutableStateOf(getServerTypeByMode(remoteValues.mode)) }
     var serverState by remember { mutableStateOf(remoteValues.type ?: NORMAL) }
-    val tagsState by remember { mutableStateOf(TagsState()) }
+    // val tagsState by remember { mutableStateOf(TagsState()) }
 
     serverToClean?.let {
         when(it) {
@@ -115,7 +112,7 @@ internal fun SelectorScreenContentRoute(
     SelectorScreenContent(
         state = selectorState,
         onServerButtonClicked = {
-            // state.switchState = SwitchState()
+            onSwitchChanged(SwitchState())
             when (serverState) {
                 NORMAL -> {
                     remoteValues.type = ENHANCED
@@ -147,15 +144,9 @@ internal fun SelectorScreenContentRoute(
         },
         onGptClicked = { onGptButtonClicked(true) },
         onGeminiClicked = { onGptButtonClicked(false) },
-        switchStateCallback = { stateCallback ->
-            state.switchInitState.value = stateCallback
-            Log.e("SelectorScreenContentRoute", "switchStateCallback: $stateCallback")
-            Log.e("SelectorScreenContentRoute", "switchStateCallback: ${state.switchInitState.value}")
-            Log.e("SelectorScreenContentRoute", "switchStateCallback: ${state.switchState}")
-            // state.switchInitState.value = stateCallback
-        },
+        switchStateCallback = { stateCallback -> onSwitchChanged(stateCallback) },
         switchState = state.switchState,
-        tags = tagsState,
+        tags = state.tagsState,
         server = serverState
     )
 }

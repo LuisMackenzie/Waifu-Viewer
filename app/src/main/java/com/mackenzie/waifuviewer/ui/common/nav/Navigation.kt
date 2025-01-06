@@ -26,6 +26,7 @@ fun Navigation() {
 
     val navController = rememberNavController()
     var backStackServer: ServerType? = null
+    var switchState by remember { mutableStateOf(SwitchState()) }
     // var backStackServer by remember { mutableStateOf<ServerType?>(null) }
 
     NavHost(
@@ -50,6 +51,8 @@ fun Navigation() {
                 },
                 onFavoriteButtonClicked = { navController.navigate(route = NavItem.FavoriteScreen.route) },
                 onServerCleaned = { backStackServer = null },
+                onSwitchChanged = { switchState = it },
+                switchState = switchState,
                 serverToClean = backStackServer
             )
         }

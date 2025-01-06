@@ -1,6 +1,5 @@
 package com.mackenzie.waifuviewer.ui.main
 
-import android.app.Activity
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -15,7 +14,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.WaifuPicsViewModel
 import com.mackenzie.waifuviewer.domain.LoadingState
-import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.domain.ServerType.ENHANCED
 import com.mackenzie.waifuviewer.domain.ServerType.NEKOS
 import com.mackenzie.waifuviewer.domain.ServerType.NORMAL
@@ -91,7 +89,7 @@ internal fun WaifuScreenContentRoute(
         NEKOS -> {
             WaifuBestScreenContent(
                 state = bestViewModel.state.collectAsStateWithLifecycle().value,
-                onWaifuClicked = { onNavigate(it.id) }, // { mainState.onWaifuBestClicked(it) },
+                onWaifuClicked = { onNavigate(it.id) },
                 onRequestMore = {
                     onLoadMoreWaifusBest(tag, context, lmState, bestViewModel) { serverId ->
                         CoroutineScope(Dispatchers.Main).launch {

@@ -1,26 +1,16 @@
 package com.mackenzie.waifuviewer.ui.selector.ui
 
-import android.app.Activity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import com.mackenzie.waifuviewer.domain.RemoteConfigValues
-import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.domain.selector.SwitchState
 import com.mackenzie.waifuviewer.domain.selector.TagsState
-import com.mackenzie.waifuviewer.ui.common.getConfig
-import com.mackenzie.waifuviewer.ui.common.getServerModeOnly
-import com.mackenzie.waifuviewer.ui.common.getServerType
 import com.mackenzie.waifuviewer.ui.common.getServerTypeByMode
-import com.mackenzie.waifuviewer.ui.common.saveServerType
-import kotlinx.coroutines.CoroutineScope
 
 
 @Composable
@@ -29,20 +19,20 @@ fun rememberSelectorState(
     isSelectorBgLoaded: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
     selectedTag: MutableState<String> = remember { mutableStateOf("") },
     reqPermisions : MutableState<Boolean> = remember { mutableStateOf(false) },
-    // remoteConfigValues: MutableState<RemoteConfigValues> = remember { mutableStateOf(RemoteConfigValues()) },
-    switchState: MutableState<SwitchState> = remember { mutableStateOf(SwitchState(false, false, false)) },
-    // tagsState: TagsState = remember { TagsState() },
+    remoteConfigValues: MutableState<RemoteConfigValues> = remember { mutableStateOf(RemoteConfigValues()) },
+    switchState: SwitchState,
+    tagsState: MutableState<TagsState> = remember { mutableStateOf(TagsState()) },
     // serverState: ServerType = remember {  ServerType.NORMAL },
     // serverMode: Int = remember { remoteValues.mode },
-): SelectorState = remember(isSelectorBgLoaded, selectedTag, switchState) {
+): SelectorState = remember(isSelectorBgLoaded, selectedTag, tagsState) {
     SelectorState(
         // scope = scope,
         isSelectorBgLoaded = isSelectorBgLoaded,
         selectedTag = selectedTag,
         reqPermisions = reqPermisions.value,
         // initRemoteValues = remoteConfigValues,
-        switchInitState = switchState,
-        // tagsState = tagsState,
+        switchState = switchState,
+        tagsInitState = tagsState,
         // serverState = serverState,
         // serverMode = serverMode,
         // type = remoteValues.type,
@@ -56,8 +46,9 @@ class SelectorState(
     val selectedTag: MutableState<String>,
     val reqPermisions: Boolean,
     // val remoteInitValues: MutableState<RemoteConfigValues>,
-    val switchInitState: MutableState<SwitchState>,
-    // val tagsState: TagsState,
+    // val switchInitState: MutableState<SwitchState>,
+    val switchState: SwitchState,
+    val tagsInitState: MutableState<TagsState>,
     // var serverState: ServerType,
     // var serverMode: Int,
     // val type: ServerType?,
@@ -67,7 +58,11 @@ class SelectorState(
     var isSelectorLoaded by isSelectorBgLoaded
     var tag by selectedTag
     // var remoteValues by remoteInitValues
-    var switchState by switchInitState
+    // var switchState by switchInitState
+
+    // var loadedServer by remember { mutableStateOf(getServerTypeByMode(remoteValues.mode)) }
+
+    val tagsState by tagsInitState
 
 
     /*val switchState : SwitchState
