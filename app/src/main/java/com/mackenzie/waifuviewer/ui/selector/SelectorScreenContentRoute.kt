@@ -80,7 +80,7 @@ internal fun SelectorScreenContentRoute(
             loadedServer = ENHANCED
             serverState = loadedServer
             // TODO redundante
-            state.remoteValues.type = loadedServer
+            // state.remoteValues.type = loadedServer
 
             state.remoteValues.mode = 1
             state.remoteValues.saveServerType(LocalContext.current as Activity)
@@ -90,7 +90,7 @@ internal fun SelectorScreenContentRoute(
         loadedServer = loadInitialServer()
         serverState = loadedServer
         // TODO redundante
-        state.remoteValues.type = loadedServer
+        // state.remoteValues.type = loadedServer
 
         when (loadedServer) {
             NORMAL -> state.remoteValues.mode = 0
