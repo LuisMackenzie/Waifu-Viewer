@@ -8,10 +8,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import com.mackenzie.waifuviewer.domain.RemoteConfigValues
+import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.domain.selector.SwitchState
 import com.mackenzie.waifuviewer.domain.selector.TagsState
-import com.mackenzie.waifuviewer.ui.common.getConfig
-import com.mackenzie.waifuviewer.ui.common.getServerTypeByMode
 
 
 @Composable
@@ -23,9 +22,9 @@ fun rememberSelectorState(
     remoteConfigValues: MutableState<RemoteConfigValues> = remember { mutableStateOf(RemoteConfigValues()) },
     switchState: SwitchState,
     tagsState: MutableState<TagsState> = remember { mutableStateOf(TagsState()) },
-    // serverState: ServerType = remember {  ServerType.NORMAL },
+    // serverState: MutableState<ServerType> = remember {  mutableStateOf<ServerType>(ServerType.NORMAL) },
     // serverMode: Int = remember { remoteValues.mode },
-): SelectorState = remember(isSelectorBgLoaded, selectedTag, remoteConfigValues, switchState, tagsState) {
+): SelectorState = remember(isSelectorBgLoaded, selectedTag, switchState, tagsState) {
     SelectorState(
         // scope = scope,
         isSelectorBgLoaded = isSelectorBgLoaded,
@@ -34,7 +33,8 @@ fun rememberSelectorState(
         remoteInitValues = remoteConfigValues,
         switchState = switchState,
         tagsInitState = tagsState,
-        // serverState = serverState,
+        // serverInitState = mutableStateOf(remoteConfigValues.value.type),
+        // serverInitState2 = remoteConfigValues.value.type,
         // serverMode = serverMode,
         // type = remoteValues.type,
         // mode = remoteValues.mode,
@@ -47,10 +47,10 @@ class SelectorState(
     val selectedTag: MutableState<String>,
     val reqPermisions: Boolean,
     val remoteInitValues: MutableState<RemoteConfigValues>,
-    // val switchInitState: MutableState<SwitchState>,
     val switchState: SwitchState,
     val tagsInitState: MutableState<TagsState>,
-    // var serverState: ServerType,
+    // val serverInitState: MutableState<ServerType?>,
+    // var serverInitState2: ServerType?,
     // var serverMode: Int,
     // val type: ServerType?,
     // val mode: Int,
@@ -62,11 +62,23 @@ class SelectorState(
     var remoteValues : RemoteConfigValues
         get() = remoteInitValues.value
         set(value) { remoteInitValues.value = value }
-    // var switchState by switchInitState
+
+    /*var serverState: ServerType
+        get() = serverInitState ?: ServerType.NORMAL
+        set(value) { serverInitState = value }*/
+
 
     // var loadedServer by remember { mutableStateOf(getServerTypeByMode(remoteValues.mode)) }
 
     val tagsState by tagsInitState
+
+
+
+    // var serverState by serverInitState
+
+    /*var serverState2 : ServerType?
+        get() = serverInitState2
+        set(value) { serverInitState2 = value }*/
 
 
     /*val switchState : SwitchState

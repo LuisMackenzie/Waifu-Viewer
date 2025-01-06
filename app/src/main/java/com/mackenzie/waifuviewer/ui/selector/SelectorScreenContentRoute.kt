@@ -36,6 +36,7 @@ import com.mackenzie.waifuviewer.ui.common.tagFilter
 import com.mackenzie.waifuviewer.ui.common.ui.PermissionRequestEffect
 import com.mackenzie.waifuviewer.ui.selector.ui.SelectorScreenContent
 import com.mackenzie.waifuviewer.ui.selector.ui.rememberSelectorState
+import java.text.Normalizer
 
 @Composable
 internal fun SelectorScreenContentRoute(
@@ -55,24 +56,11 @@ internal fun SelectorScreenContentRoute(
 
     val state = rememberSelectorState(switchState = switchState)
 
-    // TODO falta la funcion
-    // val remoteValues by remember { mutableStateOf( RemoteConfigValues().getConfig(context as Activity)) }
-    // val remoteValues by remember { mutableStateOf( state.remoteValues.getConfig(context as Activity)) }
     state.remoteValues.getConfig(context as Activity).apply {
         state.remoteValues = this
         state.remoteValues.type = getServerType(activity)
         state.remoteValues.mode = getServerModeOnly(activity)
     }
-
-    // TODO falta la funcion. es un derivado de otra variable
-    // state.remoteValues.type = remember { getServerType(activity) }
-    // state.remoteValues.type = getServerType(activity)
-
-
-    // TODO falta la funcion. es un derivado de otra variable
-    // state.remoteValues.mode = getServerModeOnly(activity)
-
-
 
     var loadedServer by remember { mutableStateOf(getServerTypeByMode(state.remoteValues.mode)) }
     var serverState by remember { mutableStateOf(state.remoteValues.type ?: NORMAL) }
@@ -91,7 +79,9 @@ internal fun SelectorScreenContentRoute(
         if (!state.isSelectorLoaded) {
             loadedServer = ENHANCED
             serverState = loadedServer
+            // TODO redundante
             state.remoteValues.type = loadedServer
+
             state.remoteValues.mode = 1
             state.remoteValues.saveServerType(LocalContext.current as Activity)
             LoadWaifuServer(loadedServer, vm) { state.isSelectorLoaded = true }
@@ -99,7 +89,9 @@ internal fun SelectorScreenContentRoute(
     } else if (!state.isSelectorLoaded) {
         loadedServer = loadInitialServer()
         serverState = loadedServer
+        // TODO redundante
         state.remoteValues.type = loadedServer
+
         when (loadedServer) {
             NORMAL -> state.remoteValues.mode = 0
             ENHANCED -> state.remoteValues.mode = 1
@@ -132,7 +124,7 @@ internal fun SelectorScreenContentRoute(
                     serverState = NORMAL
                 }
                 else -> {
-                    "WTF=$serverState".showToast(context)
+                    "WTF=${serverState}".showToast(context)
                 }
             }
             state.remoteValues.saveServerType(context as Activity)
