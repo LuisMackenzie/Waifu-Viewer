@@ -2,7 +2,6 @@ package com.mackenzie.waifuviewer.ui.selector
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.app.Activity
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,7 +16,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.material.snackbar.Snackbar
 import com.mackenzie.waifuviewer.BuildConfig
 import com.mackenzie.waifuviewer.R
-import com.mackenzie.waifuviewer.domain.RemoteConfigValues
 import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.domain.ServerType.ENHANCED
 import com.mackenzie.waifuviewer.domain.ServerType.NEKOS
@@ -36,7 +34,6 @@ import com.mackenzie.waifuviewer.ui.common.tagFilter
 import com.mackenzie.waifuviewer.ui.common.ui.PermissionRequestEffect
 import com.mackenzie.waifuviewer.ui.selector.ui.SelectorScreenContent
 import com.mackenzie.waifuviewer.ui.selector.ui.rememberSelectorState
-import java.text.Normalizer
 
 @Composable
 internal fun SelectorScreenContentRoute(
