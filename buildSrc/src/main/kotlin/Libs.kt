@@ -125,6 +125,7 @@ object Libs {
         const val analitycsKtx = "com.google.firebase:firebase-analytics-ktx"
         const val crashlitycsKtx = "com.google.firebase:firebase-crashlytics-ktx"
         const val remoteconfigKtx = "com.google.firebase:firebase-config-ktx"
+        const val playIntegrity = "com.google.firebase:firebase-appcheck-playintegrity"
     }
 
     object Serialization {

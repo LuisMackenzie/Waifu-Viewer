@@ -204,6 +204,7 @@ dependencies {
     implementation(Libs.Firebase.analitycsKtx)
     implementation(Libs.Firebase.remoteconfigKtx)
     implementation(Libs.Firebase.crashlitycsKtx)
+    implementation(Libs.Firebase.playIntegrity)
 
     // Serialization
     // implementation(JakeWharton.retrofit2.converter.kotlinxSerialization)
