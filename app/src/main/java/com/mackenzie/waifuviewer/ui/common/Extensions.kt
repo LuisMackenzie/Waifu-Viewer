@@ -30,6 +30,8 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.DiffUtil
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfig
@@ -217,6 +219,10 @@ fun Context.errorToString(error: Error) = when (error) {
     Error.Connectivity -> getString(R.string.connectivity_error)
     is Error.Server -> getString(R.string.no_waifu_found) + error.code
     is Error.Unknown -> getString(R.string.unknown_error) + error.message
+}
+
+fun getFirebaseInstance(): FirebaseAnalytics {
+    return Firebase.analytics
 }
 
 /*fun Fragment.composeView(content: @Composable () -> Unit): ComposeView {
