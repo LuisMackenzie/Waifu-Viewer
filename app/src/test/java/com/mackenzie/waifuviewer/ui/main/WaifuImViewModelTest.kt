@@ -40,8 +40,7 @@ class WaifuImViewModelTest {
     @Mock
     private lateinit var requestMoreWaifuImUseCase: RequestMoreWaifuImUseCase
 
-    @Mock
-    private lateinit var clearWaifuImUseCase: ClearWaifuImUseCase
+
 
 
     private lateinit var  vm: WaifuImViewModel
@@ -51,7 +50,7 @@ class WaifuImViewModelTest {
     @Before
     fun setUp() {
         whenever(getWaifuImUseCase()).thenReturn(flowOf(imSample))
-        vm = WaifuImViewModel(getWaifuImUseCase, requestWaifuImUseCase, requestMoreWaifuImUseCase, clearWaifuImUseCase)
+        vm = WaifuImViewModel(getWaifuImUseCase, requestWaifuImUseCase, requestMoreWaifuImUseCase)
     }
 
     @After
@@ -137,15 +136,4 @@ class WaifuImViewModelTest {
 
         verify(requestMoreWaifuImUseCase).invoke(any(), any(), any(), any())
     }
-
-    @Test
-    fun `Clear Waifus when press Button`() = runTest {
-        vm.onClearImDatabase()
-
-        runCurrent()
-
-        verify(clearWaifuImUseCase).invoke()
-    }
-
-
 }

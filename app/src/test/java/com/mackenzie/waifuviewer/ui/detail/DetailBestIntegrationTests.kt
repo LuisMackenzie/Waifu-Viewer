@@ -84,7 +84,7 @@ class DetailBestIntegrationTests {
         )
         )
         )
-        val vm = DetailBestViewModel(id , findWaifuUseCase, switchFavoriteUseCase, getSearchMoeUseCase)
+        val vm = DetailBestViewModel( findWaifuUseCase, switchFavoriteUseCase, getSearchMoeUseCase)
         return vm
     }
 

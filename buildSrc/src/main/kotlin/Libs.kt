@@ -42,6 +42,7 @@ object Libs {
             const val iconsCore = "androidx.compose.material:material-icons-core"
             const val iconsExtend = "androidx.compose.material:material-icons-extended"
             const val activity = "androidx.activity:activity-compose"
+            const val hiltNav = "androidx.hilt:hilt-navigation-compose:_"
             const val vmLifecycle = "androidx.lifecycle:lifecycle-viewmodel-compose"
         }
 
@@ -159,6 +160,7 @@ object Libs {
 
     object Hilt {
         const val android = "com.google.dagger:hilt-android:_"
+        const val hiltNavCompose = "com.google.dagger:hilt-android:_"
         const val compiler = "com.google.dagger:hilt-android-compiler:_"
         const val gradlePlugin = "com.google.dagger:hilt-android-gradle-plugin:_"
         const val test = "com.google.dagger:hilt-android-testing:_"

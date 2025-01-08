@@ -84,8 +84,8 @@ class WaifuBestIntegrationTests {
         val getWaifuUseCase = GetWaifuBestUseCase(repo)
         val requestWaifuUseCase = RequestWaifuBestUseCase(repo)
         val requestMoreWaifuUseCase = RequestMoreWaifuBestUseCase(repo)
-        val clearWaifuUseCase = ClearWaifuBestUseCase(repo)
-        val vm = WaifuBestViewModel(getWaifuUseCase, requestWaifuUseCase, requestMoreWaifuUseCase, clearWaifuUseCase)
+
+        val vm = WaifuBestViewModel(getWaifuUseCase, requestWaifuUseCase, requestMoreWaifuUseCase)
         return vm
     }
 

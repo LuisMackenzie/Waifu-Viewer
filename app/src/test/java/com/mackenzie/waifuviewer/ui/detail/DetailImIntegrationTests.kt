@@ -82,7 +82,7 @@ class DetailImIntegrationTests {
                 )            )
         )
         )
-        val vm = DetailImViewModel(id , findWaifuImUseCase, switchImFavoriteUseCase, getSearchMoeUseCase)
+        val vm = DetailImViewModel(findWaifuImUseCase, switchImFavoriteUseCase, getSearchMoeUseCase)
         return vm
     }
 

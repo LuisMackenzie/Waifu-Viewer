@@ -44,7 +44,7 @@ class DetailBestViewModelTest {
     @Before
     fun setUp() {
         whenever(findWaifuUseCase(9)).thenReturn(flowOf(bestSample))
-        vm = DetailBestViewModel(9, findWaifuUseCase, switchFavoriteUseCase, getSearchMoeUseCase)
+        vm = DetailBestViewModel(findWaifuUseCase, switchFavoriteUseCase, getSearchMoeUseCase)
     }
 
     @Test

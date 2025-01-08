@@ -13,7 +13,6 @@ fun isNavigationBarVisible(): Boolean {
     val insets = LocalView.current.rootWindowInsets
     val navBarHeightPx = insets.stableInsetBottom
     val navBarHeightDp = with(LocalDensity.current) { navBarHeightPx.toDp() }
-    Log.e("isNavigationBarVisible", "navBarHeightDp: $navBarHeightDp")
     // Para tabletas la barra de navegacion puede ser mayor
     if (LocalContext.current.isLandscape()) {
         return navBarHeightDp > 32.dp

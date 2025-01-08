@@ -19,7 +19,6 @@ class WaifuImViewModel @Inject constructor(
     getWaifuImUseCase: GetWaifuImUseCase,
     private val requestWaifuImUseCase: RequestWaifuImUseCase,
     private val requestMoreImUseCase: RequestMoreWaifuImUseCase,
-    private val clearWaifuImUseCase: ClearWaifuImUseCase
     ): ViewModel() {
 
     private val _state = MutableStateFlow(UiState())
@@ -45,13 +44,6 @@ class WaifuImViewModel @Inject constructor(
     fun onRequestMore(isNsfw: Boolean, isGif: Boolean, tag: String, orientation: Boolean) {
         viewModelScope.launch {
             val error = requestMoreImUseCase(isNsfw, tag, isGif,  orientation)
-            _state.update { it.copy(error = error) }
-        }
-    }
-
-    fun onClearImDatabase() {
-        viewModelScope.launch {
-            val error = clearWaifuImUseCase()
             _state.update { it.copy(error = error) }
         }
     }
