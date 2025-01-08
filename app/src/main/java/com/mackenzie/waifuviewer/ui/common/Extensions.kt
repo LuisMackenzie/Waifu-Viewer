@@ -237,8 +237,14 @@ fun String.showShortToast(context: Context) {
 
 fun Error.errorToString(ctx: Context) = when (this) {
     Error.Connectivity -> ctx.getString(R.string.connectivity_error)
-    is Error.Server -> ctx.getString(R.string.no_waifu_found) + this.code
-    is Error.Unknown -> ctx.getString(R.string.unknown_error) + this.message
+    is Error.Server -> ctx.getString(R.string.no_waifu_found) + code
+    is Error.Unknown -> ctx.getString(R.string.unknown_error) + message
+}
+
+fun Context.errorToString(error: Error) = when (error) {
+    Error.Connectivity -> getString(R.string.connectivity_error)
+    is Error.Server -> getString(R.string.no_waifu_found) + error.code
+    is Error.Unknown -> getString(R.string.unknown_error) + error.message
 }
 
 fun Activity.showFullscreenCutout() {
