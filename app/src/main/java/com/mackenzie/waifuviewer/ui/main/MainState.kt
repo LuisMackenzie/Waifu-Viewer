@@ -73,11 +73,11 @@ class MainState(
         }
     }
 
-    /*fun errorToString(error: Error) = when (error) {
+    fun errorToString(error: Error) = when (error) {
         Error.Connectivity -> context.getString(R.string.connectivity_error)
         is Error.Server -> context.getString(R.string.no_waifu_found) + error.code
         is Error.Unknown -> context.getString(R.string.unknown_error) + error.message
-    }*/
+    }
 
 }
 

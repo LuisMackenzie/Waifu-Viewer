@@ -37,6 +37,7 @@ import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import com.mackenzie.waifuviewer.App
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.domain.DownloadModel
+import com.mackenzie.waifuviewer.domain.Error
 import com.mackenzie.waifuviewer.domain.RemoteConfigValues
 import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.domain.ServerType.ENHANCED
@@ -232,6 +233,12 @@ fun String.showToast(context: Context) {
 
 fun String.showShortToast(context: Context) {
     Toast.makeText(context, this, Toast.LENGTH_SHORT).show()
+}
+
+fun Error.errorToString(ctx: Context) = when (this) {
+    Error.Connectivity -> ctx.getString(R.string.connectivity_error)
+    is Error.Server -> ctx.getString(R.string.no_waifu_found) + this.code
+    is Error.Unknown -> ctx.getString(R.string.unknown_error) + this.message
 }
 
 fun Activity.showFullscreenCutout() {
