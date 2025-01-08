@@ -82,8 +82,7 @@ class WaifuImIntegrationTests  {
         val getWaifuImUseCase = GetWaifuImUseCase(repo)
         val requestWaifuImUseCase = RequestWaifuImUseCase(repo)
         val requestMoreWaifuImUseCase = RequestMoreWaifuImUseCase(repo)
-        val clearWaifuImUseCase = ClearWaifuImUseCase(repo)
-        val vm = WaifuImViewModel(getWaifuImUseCase, requestWaifuImUseCase, requestMoreWaifuImUseCase, clearWaifuImUseCase)
+        val vm = WaifuImViewModel(getWaifuImUseCase, requestWaifuImUseCase, requestMoreWaifuImUseCase)
         return vm
     }
 
