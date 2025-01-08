@@ -35,9 +35,6 @@ class WaifuBestViewModelTest {
     @Mock
     private lateinit var requestMoreWaifuUseCase: RequestMoreWaifuBestUseCase
 
-    @Mock
-    private lateinit var clearWaifuUseCase: ClearWaifuBestUseCase
-
 
     private lateinit var  vm: WaifuBestViewModel
 
@@ -46,7 +43,7 @@ class WaifuBestViewModelTest {
     @Before
     fun setUp() {
         whenever(getWaifuUseCase()).thenReturn(flowOf(bestSample))
-        vm = WaifuBestViewModel(getWaifuUseCase, requestWaifuUseCase, requestMoreWaifuUseCase, clearWaifuUseCase)
+        vm = WaifuBestViewModel(getWaifuUseCase, requestWaifuUseCase, requestMoreWaifuUseCase)
     }
 
     @After
@@ -95,14 +92,4 @@ class WaifuBestViewModelTest {
 
         verify(requestMoreWaifuUseCase).invoke(any())
     }
-
-    @Test
-    fun `Clear Waifus when press Button`() = runTest {
-        vm.onClearDatabase()
-
-        runCurrent()
-
-        verify(clearWaifuUseCase).invoke()
-    }
-
 }

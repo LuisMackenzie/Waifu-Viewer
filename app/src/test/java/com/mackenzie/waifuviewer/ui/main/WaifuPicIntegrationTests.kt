@@ -81,8 +81,8 @@ class WaifuPicIntegrationTests {
         val getWaifuPicUseCase = GetWaifuPicUseCase(repo)
         val requestWaifuPicUseCase = RequestWaifuPicUseCase(repo)
         val requestMoreWaifuPicUseCase = RequestMoreWaifuPicUseCase(repo)
-        val clearWaifuPicUseCase = ClearWaifuPicUseCase(repo)
-        val vm = WaifuPicsViewModel(getWaifuPicUseCase, requestWaifuPicUseCase, requestMoreWaifuPicUseCase, clearWaifuPicUseCase)
+
+        val vm = WaifuPicsViewModel(getWaifuPicUseCase, requestWaifuPicUseCase, requestMoreWaifuPicUseCase)
         return vm
     }
 

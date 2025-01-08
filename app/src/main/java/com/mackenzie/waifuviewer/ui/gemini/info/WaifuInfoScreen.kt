@@ -4,10 +4,13 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.lazy.LazyRow
@@ -38,7 +41,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -48,10 +53,12 @@ import coil3.ImageLoader
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.SuccessResult
+import coil3.request.crossfade
 import coil3.size.Precision
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.ui.common.GenerativeViewModelFactory
 import com.mackenzie.waifuviewer.ui.common.UriSaver
+import com.mackenzie.waifuviewer.ui.common.ui.isNavigationBarVisible
 import com.mackenzie.waifuviewer.ui.theme.WaifuViewerTheme
 import kotlinx.coroutines.launch
 
@@ -109,137 +116,159 @@ fun WaifuInfoScreen(
         }
     }
 
-    Column(
-        modifier = Modifier
-            .padding(all = 16.dp)
-            .verticalScroll(rememberScrollState())
-    ) {
-        Card(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Row(
-                modifier = Modifier.padding(top = 16.dp)
-            ) {
-                IconButton(
-                    onClick = {
-                        pickMedia.launch(
-                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-                        )
-                    },
-                    modifier = Modifier
-                        .padding(all = 4.dp)
-                        .align(Alignment.CenterVertically)
-                ) {
-                    Icon(
-                        Icons.Rounded.Add,
-                        contentDescription = stringResource(R.string.add_image),
-                    )
-                }
-                OutlinedTextField(
-                    value = userQuestion,
-                    label = { Text(stringResource(R.string.reason_label)) },
-                    placeholder = { Text(stringResource(R.string.reason_hint)) },
-                    onValueChange = { userQuestion = it },
-                    modifier = Modifier
-                        .fillMaxWidth(0.8f)
-                )
-                TextButton(
-                    onClick = {
-                        if (userQuestion.isNotBlank()) {
-                            onReasonClicked(userQuestion, imageUris.toList())
-                        }
-                    },
-                    modifier = Modifier
-                        .padding(all = 4.dp)
-                        .align(Alignment.CenterVertically)
-                ) {
-                    Text(stringResource(R.string.action_go))
-                }
-            }
-            LazyRow(
-                modifier = Modifier.padding(all = 8.dp)
-            ) {
-                items(imageUris) { imageUri ->
-                    AsyncImage(
-                        model = imageUri,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .padding(4.dp)
-                            .requiredSize(72.dp)
-                    )
-                }
-            }
+    Box(
+        modifier = if (isNavigationBarVisible()) {
+            Modifier
+                .fillMaxSize()
+                .navigationBarsPadding()
+                .background(MaterialTheme.colorScheme.background)
+        } else {
+            Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
         }
-        when (uiState) {
-            WaifuInfoUiState.Initial -> {
-                // Nothing is shown
-            }
+    ) {
 
-            WaifuInfoUiState.Loading -> {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .padding(all = 8.dp)
-                        .align(Alignment.CenterHorizontally)
-                ) {
-                    CircularProgressIndicator()
-                }
-            }
+        AsyncImage(
+            model= ImageRequest.Builder(LocalContext.current)
+                .data("https://nekos.best/api/v2/neko/a534dc1a-0309-4e8b-983e-dd6b24231b58.png")
+                .crossfade(true)
+                .build(),
+            error = painterResource(R.drawable.ic_error_grey),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize(),
+        )
 
-            is WaifuInfoUiState.Success -> {
-                Card(
-                    modifier = Modifier
-                        .padding(vertical = 16.dp)
-                        .fillMaxWidth(),
-                    shape = MaterialTheme.shapes.large,
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.onSecondaryContainer
-                    )
+        Column(modifier = Modifier.padding(all = 16.dp).verticalScroll(rememberScrollState()) ,) {
+            Card(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Row(
+                    modifier = Modifier.padding(top = 16.dp)
                 ) {
-                    Row(
+                    IconButton(
+                        onClick = {
+                            pickMedia.launch(
+                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                            )
+                        },
                         modifier = Modifier
-                            .padding(all = 16.dp)
-                            .fillMaxWidth()
+                            .padding(all = 4.dp)
+                            .align(Alignment.CenterVertically)
                     ) {
                         Icon(
-                            Icons.Outlined.Person,
-                            contentDescription = "Person Icon",
-                            tint = MaterialTheme.colorScheme.onSecondary,
-                            modifier = Modifier
-                                .requiredSize(36.dp)
-                                .drawBehind {
-                                    drawCircle(color = Color.White)
-                                }
+                            Icons.Rounded.Add,
+                            contentDescription = stringResource(R.string.add_image),
                         )
-                        Text(
-                            text = uiState.outputText, // TODO(thatfiredev): Figure out Markdown support
-                            color = MaterialTheme.colorScheme.onSecondary,
+                    }
+                    OutlinedTextField(
+                        value = userQuestion,
+                        label = { Text(stringResource(R.string.reason_label)) },
+                        placeholder = { Text(stringResource(R.string.reason_hint)) },
+                        onValueChange = { userQuestion = it },
+                        modifier = Modifier
+                            .fillMaxWidth(0.8f)
+                    )
+                    TextButton(
+                        onClick = {
+                            if (userQuestion.isNotBlank()) {
+                                onReasonClicked(userQuestion, imageUris.toList())
+                            }
+                        },
+                        modifier = Modifier
+                            .padding(all = 4.dp)
+                            .align(Alignment.CenterVertically)
+                    ) {
+                        Text(stringResource(R.string.action_go))
+                    }
+                }
+                LazyRow(
+                    modifier = Modifier.padding(all = 8.dp)
+                ) {
+                    items(imageUris) { imageUri ->
+                        AsyncImage(
+                            model = imageUri,
+                            contentDescription = null,
                             modifier = Modifier
-                                .padding(start = 16.dp)
-                                .fillMaxWidth()
+                                .padding(4.dp)
+                                .requiredSize(72.dp)
                         )
                     }
                 }
             }
+            when (uiState) {
+                WaifuInfoUiState.Initial -> {
+                    // Nothing is shown
+                }
 
-            is WaifuInfoUiState.Error -> {
-                Card(
-                    modifier = Modifier
-                        .padding(vertical = 16.dp)
-                        .fillMaxWidth(),
-                    shape = MaterialTheme.shapes.large,
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.errorContainer
-                    )
-                ) {
-                    Text(
-                        text = uiState.errorMessage,
-                        color = MaterialTheme.colorScheme.error,
-                        modifier = Modifier.padding(all = 16.dp)
-                    )
+                WaifuInfoUiState.Loading -> {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .padding(all = 8.dp)
+                            .align(Alignment.CenterHorizontally)
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                }
+
+                is WaifuInfoUiState.Success -> {
+                    Card(
+                        modifier = Modifier
+                            .padding(vertical = 16.dp)
+                            .fillMaxWidth(),
+                        shape = MaterialTheme.shapes.large,
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.onSecondaryContainer
+                        )
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .padding(all = 16.dp)
+                                .fillMaxWidth()
+                        ) {
+                            Icon(
+                                Icons.Outlined.Person,
+                                contentDescription = "Person Icon",
+                                tint = MaterialTheme.colorScheme.onSecondary,
+                                modifier = Modifier
+                                    .requiredSize(36.dp)
+                                    .drawBehind {
+                                        drawCircle(color = Color.White)
+                                    }
+                            )
+                            Text(
+                                text = uiState.outputText, // TODO(thatfiredev): Figure out Markdown support
+                                color = MaterialTheme.colorScheme.onSecondary,
+                                modifier = Modifier
+                                    .padding(start = 16.dp)
+                                    .fillMaxWidth()
+                            )
+                        }
+                    }
+                }
+
+                is WaifuInfoUiState.Error -> {
+                    Card(
+                        modifier = Modifier
+                            .padding(vertical = 16.dp)
+                            .fillMaxWidth(),
+                        shape = MaterialTheme.shapes.large,
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.errorContainer
+                        )
+                    ) {
+                        Text(
+                            text = uiState.errorMessage,
+                            color = MaterialTheme.colorScheme.error,
+                            modifier = Modifier.padding(all = 16.dp)
+                        )
+                    }
                 }
             }
         }
+
     }
 }
 

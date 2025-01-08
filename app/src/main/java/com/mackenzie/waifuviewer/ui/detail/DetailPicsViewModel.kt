@@ -2,7 +2,6 @@ package com.mackenzie.waifuviewer.ui.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mackenzie.waifuviewer.di.WaifuId
 import com.mackenzie.waifuviewer.domain.AnimeSearchItem
 import com.mackenzie.waifuviewer.domain.WaifuPicItem
 import com.mackenzie.waifuviewer.domain.Error
@@ -19,8 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailPicsViewModel @Inject constructor(
-    @WaifuId private val waifuId: Int,
-    findWaifuPicUseCase: FindWaifuPicUseCase,
+    // @WaifuId private val waifuId: Int,
+    private val findWaifuPicUseCase: FindWaifuPicUseCase,
     private val switchPicFavoriteUseCase: SwitchPicFavoriteUseCase,
     private val getSearchMoeUseCase : GetSearchMoeUseCase
     ): ViewModel() {
@@ -28,7 +27,15 @@ class DetailPicsViewModel @Inject constructor(
     private val _state = MutableStateFlow(UiState())
     val state: StateFlow<UiState> = _state.asStateFlow()
 
-    init {
+    /*init {
+        viewModelScope.launch {
+            findWaifuPicUseCase(waifuId).collect {
+                _state.value = UiState(waifuPic = it)
+            }
+        }
+    }*/
+
+    fun getWaifuResultNavigate(waifuId: Int) {
         viewModelScope.launch {
             findWaifuPicUseCase(waifuId).collect {
                 _state.value = UiState(waifuPic = it)

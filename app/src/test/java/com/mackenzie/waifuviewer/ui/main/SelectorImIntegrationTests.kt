@@ -13,10 +13,13 @@ import com.mackenzie.waifuviewer.ui.buildImRepositoryWith
 import com.mackenzie.waifuviewer.ui.buildImRemoteWaifus
 import com.mackenzie.waifuviewer.ui.buildPicRepositoryWith
 import com.mackenzie.waifuviewer.ui.helpers.buildBestRepositoryWith
+import com.mackenzie.waifuviewer.usecases.best.ClearWaifuBestUseCase
 import com.mackenzie.waifuviewer.usecases.best.RequestOnlyWaifuBestUseCase
+import com.mackenzie.waifuviewer.usecases.im.ClearWaifuImUseCase
 import com.mackenzie.waifuviewer.usecases.im.GetWaifuImTagsUseCase
 import com.mackenzie.waifuviewer.usecases.im.RequestOnlyWaifuImUseCase
 import com.mackenzie.waifuviewer.usecases.im.RequestWaifuImTagsUseCase
+import com.mackenzie.waifuviewer.usecases.pics.ClearWaifuPicUseCase
 import com.mackenzie.waifuviewer.usecases.pics.RequestOnlyWaifuPicUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -131,7 +134,19 @@ class SelectorImIntegrationTests {
         val requestOnlyWaifuPicUseCase = RequestOnlyWaifuPicUseCase(repoPic)
         val requestOnlyWaifuBestUseCase = RequestOnlyWaifuBestUseCase(repoBest)
         val requestWaifuImTagsUseCase = RequestWaifuImTagsUseCase(repo)
-        val vm = SelectorViewModel(getWaifuImTagsUseCase, requestOnlyWaifuImUseCase, requestOnlyWaifuPicUseCase, requestOnlyWaifuBestUseCase, requestWaifuImTagsUseCase)
+        val clearWaifuImUseCase = ClearWaifuImUseCase(repo)
+        val clearWaifuPicUseCase = ClearWaifuPicUseCase(repoPic)
+        val clearWaifuUseCase = ClearWaifuBestUseCase(repoBest)
+        val vm = SelectorViewModel(
+            getWaifuImTagsUseCase,
+            requestOnlyWaifuImUseCase,
+            requestOnlyWaifuPicUseCase,
+            requestOnlyWaifuBestUseCase,
+            requestWaifuImTagsUseCase,
+            clearWaifuImUseCase,
+            clearWaifuPicUseCase,
+            clearWaifuUseCase
+        )
         return vm
     }
 

@@ -44,7 +44,7 @@ class DetailPicsViewModelTest {
     @Before
     fun setUp() {
         whenever(findWaifuPicUseCase(9)).thenReturn(flowOf(picSample))
-        vm = DetailPicsViewModel(9, findWaifuPicUseCase, switchPicFavoriteUseCase, getSearchMoeUseCase)
+        vm = DetailPicsViewModel(findWaifuPicUseCase, switchPicFavoriteUseCase, getSearchMoeUseCase)
     }
 
     @Test

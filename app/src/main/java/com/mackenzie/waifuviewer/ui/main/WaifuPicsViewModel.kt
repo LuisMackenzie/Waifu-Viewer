@@ -19,7 +19,6 @@ class WaifuPicsViewModel @Inject constructor(
     getWaifuPicUseCase: GetWaifuPicUseCase,
     private val requestWaifuPicUseCase: RequestWaifuPicUseCase,
     private val requestMorePicUseCase: RequestMoreWaifuPicUseCase,
-    private val clearWaifuPicUseCase: ClearWaifuPicUseCase
     ): ViewModel() {
 
     private val _state = MutableStateFlow(UiState())
@@ -46,13 +45,6 @@ class WaifuPicsViewModel @Inject constructor(
             moreWaifusGetter("nsfw", tag)
         } else {
             moreWaifusGetter("sfw", tag)
-        }
-    }
-
-    fun onClearPicsDatabase() {
-        viewModelScope.launch {
-            val error = clearWaifuPicUseCase()
-            _state.update { _state.value.copy(error = error) }
         }
     }
 

@@ -165,6 +165,7 @@ dependencies {
 
     // Hilt
     implementation(Libs.Hilt.android)
+    implementation(Libs.AndroidX.Compose.hiltNav)
     ksp(Libs.Hilt.compiler)
 
     // Glide libraries

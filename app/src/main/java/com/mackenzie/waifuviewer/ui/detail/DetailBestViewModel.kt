@@ -2,7 +2,6 @@ package com.mackenzie.waifuviewer.ui.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mackenzie.waifuviewer.di.WaifuId
 import com.mackenzie.waifuviewer.domain.AnimeSearchItem
 import com.mackenzie.waifuviewer.domain.Error
 import com.mackenzie.waifuviewer.domain.WaifuBestItem
@@ -19,8 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailBestViewModel @Inject constructor (
-    @WaifuId private val waifuId: Int,
-    findWaifuBestUseCase: FindWaifuBestUseCase,
+    // @WaifuId private val waifuId: Int,
+    private val findWaifuBestUseCase: FindWaifuBestUseCase,
     private val switchBestFavoriteUseCase : SwitchBestFavoriteUseCase,
     private val getSearchMoeUseCase : GetSearchMoeUseCase
 ): ViewModel() {
@@ -28,7 +27,15 @@ class DetailBestViewModel @Inject constructor (
     private val _state = MutableStateFlow(UiState())
     val state: StateFlow<UiState> = _state.asStateFlow()
 
-    init {
+    /*init {
+        viewModelScope.launch {
+            findWaifuBestUseCase(waifuId).collect {
+                _state.value = UiState(waifu = it)
+            }
+        }
+    }*/
+
+    fun getWaifuResultNavigate(waifuId: Int) {
         viewModelScope.launch {
             findWaifuBestUseCase(waifuId).collect {
                 _state.value = UiState(waifu = it)

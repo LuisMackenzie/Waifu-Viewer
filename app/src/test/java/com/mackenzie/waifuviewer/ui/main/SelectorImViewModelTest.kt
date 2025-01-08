@@ -7,10 +7,13 @@ import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.testrules.CoroutinesTestRule
 import com.mackenzie.waifuviewer.ui.selector.SelectorViewModel
 import com.mackenzie.waifuviewer.ui.selector.SelectorViewModel.UiState
+import com.mackenzie.waifuviewer.usecases.best.ClearWaifuBestUseCase
 import com.mackenzie.waifuviewer.usecases.best.RequestOnlyWaifuBestUseCase
+import com.mackenzie.waifuviewer.usecases.im.ClearWaifuImUseCase
 import com.mackenzie.waifuviewer.usecases.im.GetWaifuImTagsUseCase
 import com.mackenzie.waifuviewer.usecases.im.RequestOnlyWaifuImUseCase
 import com.mackenzie.waifuviewer.usecases.im.RequestWaifuImTagsUseCase
+import com.mackenzie.waifuviewer.usecases.pics.ClearWaifuPicUseCase
 import com.mackenzie.waifuviewer.usecases.pics.RequestOnlyWaifuPicUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runCurrent
@@ -48,6 +51,15 @@ class SelectorImViewModelTest {
     @Mock
     private lateinit var requestWaifuImTagsUseCase: RequestWaifuImTagsUseCase
 
+    @Mock
+    private lateinit var clearWaifuImUseCase: ClearWaifuImUseCase
+
+    @Mock
+    private lateinit var clearWaifuPicUseCase: ClearWaifuPicUseCase
+
+    @Mock
+    private lateinit var clearWaifuBestUseCase: ClearWaifuBestUseCase
+
     private lateinit var  vm: SelectorViewModel
 
     private var imSample = sampleImWaifu.copy(id = 1)
@@ -56,7 +68,16 @@ class SelectorImViewModelTest {
 
     @Before
     fun setUp() {
-        vm = SelectorViewModel(getWaifuImTagsUseCase, requestOnlyWaifuImUseCase,requestOnlyWaifuPicUseCase, requestOnlyWaifuBestUseCase, requestWaifuImTagsUseCase)
+        vm = SelectorViewModel(
+            getWaifuImTagsUseCase,
+            requestOnlyWaifuImUseCase,
+            requestOnlyWaifuPicUseCase,
+            requestOnlyWaifuBestUseCase,
+            requestWaifuImTagsUseCase,
+            clearWaifuImUseCase,
+            clearWaifuPicUseCase,
+            clearWaifuBestUseCase
+        )
     }
 
     @Test
@@ -129,6 +150,33 @@ class SelectorImViewModelTest {
         runCurrent()
 
         verify(requestOnlyWaifuPicUseCase).invoke()
+    }
+
+    @Test
+    fun `Clear IM Waifus when press Button`() = runTest {
+        vm.onClearImDatabase()
+
+        runCurrent()
+
+        verify(clearWaifuImUseCase).invoke()
+    }
+
+    @Test
+    fun `Clear PICS Waifus when press Button`() = runTest {
+        vm.onClearPicsDatabase()
+
+        runCurrent()
+
+        verify(clearWaifuPicUseCase).invoke()
+    }
+
+    @Test
+    fun `Clear BEST Waifus when press Button`() = runTest {
+        vm.onClearBestDatabase()
+
+        runCurrent()
+
+        verify(clearWaifuBestUseCase).invoke()
     }
 
 }

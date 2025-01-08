@@ -52,7 +52,7 @@ fun WaifuImScreenContent(
     }*/
 
     state.waifus?.let { waifus ->
-        "${stringResource(id = R.string.waifus_size)} ${waifus.size}".showToast(LocalContext.current)
+        // "${stringResource(id = R.string.waifus_size)} ${waifus.size}".showToast(LocalContext.current)
         /*val count = waifus.size
         if (count != 0 && !state.isShowedInfo) {
             "${stringResource(id = R.string.waifus_size)} $count".showToast(LocalContext.current)

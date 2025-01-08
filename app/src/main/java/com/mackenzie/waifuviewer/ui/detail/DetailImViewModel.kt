@@ -1,8 +1,11 @@
 package com.mackenzie.waifuviewer.ui.detail
 
+import android.Manifest
+import android.app.Activity
+import android.content.Context
+import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mackenzie.waifuviewer.di.WaifuId
 import com.mackenzie.waifuviewer.domain.AnimeSearchItem
 import com.mackenzie.waifuviewer.usecases.im.FindWaifuImUseCase
 import com.mackenzie.waifuviewer.usecases.im.SwitchImFavoriteUseCase
@@ -19,17 +22,24 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailImViewModel @Inject constructor (
-    @WaifuId private val waifuId: Int,
-    findWaifuImUseCase: FindWaifuImUseCase,
+    // @WaifuId private val waifuId: Int,
+    private val findWaifuImUseCase: FindWaifuImUseCase,
     private val switchImFavoriteUseCase : SwitchImFavoriteUseCase,
-    private val getSearchMoeUseCase : GetSearchMoeUseCase,
-    // private val getSearchMoeUseCase2 : GetSearchMoeUseCase2
+    private val getSearchMoeUseCase : GetSearchMoeUseCase
     ): ViewModel() {
 
     private val _state = MutableStateFlow(UiState())
     val state: StateFlow<UiState> = _state.asStateFlow()
 
-    init {
+    /*init {
+        viewModelScope.launch {
+            findWaifuImUseCase(waifuId).collect {
+                _state.value = UiState(waifuIm = it)
+            }
+        }
+    }*/
+
+    fun getWaifuResultNavigate(waifuId: Int) {
         viewModelScope.launch {
             findWaifuImUseCase(waifuId).collect {
                 _state.value = UiState(waifuIm = it)
