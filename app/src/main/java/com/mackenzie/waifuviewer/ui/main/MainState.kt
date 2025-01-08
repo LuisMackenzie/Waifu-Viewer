@@ -26,45 +26,6 @@ class MainState(
     private val navController: NavController,
     private val permissionRequester: PermissionRequester
 ) {
-    /*fun onWaifuImClicked(waifu: WaifuImItem) {
-        val action = WaifuFragmentDirections.actionWaifuImToDetail(waifu.id)
-        navController.navigate(action)
-    }*/
-
-    /*fun onWaifuPicsClicked(waifu: WaifuPicItem) {
-        val action = WaifuFragmentDirections.actionWaifuPicsToDetail(waifu.id)
-        navController.navigate(action)
-    }*/
-
-    /*fun onWaifuBestClicked(waifu: WaifuBestItem) {
-        val action = WaifuFragmentDirections.actionWaifuBestToDetail(waifu.id)
-        navController.navigate(action)
-    }*/
-
-    /*fun onWaifuFavoriteClicked(waifu: FavoriteItem) {
-        val action = FavoriteFragmentDirections.actionFavoritesToDetail(waifu.id)
-        navController.navigate(action)
-    }*/
-
-    /*fun onButtonGetWaifuClicked(bun: Bundle) {
-        val action = SelectorFragmentDirections.actionSelectorToWaifu(bun)
-        navController.navigate(action)
-    }*/
-
-    /*fun onButtonFavoritesClicked(bun: Bundle) {
-        val action = SelectorFragmentDirections.actionSelectorToFavorites(bun)
-        navController.navigate(action)
-    }*/
-
-    /*fun onButtonGptClicked() {
-        val action = SelectorFragmentDirections.actionSelectorToGpt()
-        navController.navigate(action)
-    }*/
-
-    /*fun onButtonGeminiClicked() {
-        val action = SelectorFragmentDirections.actionSelectorToGemini()
-        navController.navigate(action)
-    }*/
 
     fun requestPermissionLauncher(afterRequest: (Boolean) -> Unit) {
         scope.launch {
@@ -80,16 +41,6 @@ class MainState(
     }
 
 }
-
-/*fun Fragment.buildMainState(
-    context: Context = requireContext(),
-    scope: CoroutineScope = viewLifecycleOwner.lifecycleScope,
-    navController: NavController = findNavController(),
-    locationPermissionRequester: PermissionRequester = PermissionRequester(
-        this,
-        Manifest.permission.READ_EXTERNAL_STORAGE
-    )
-) = MainState(context, scope, navController, locationPermissionRequester)*/
 
 
 
