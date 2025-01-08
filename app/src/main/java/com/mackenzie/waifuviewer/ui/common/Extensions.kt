@@ -54,16 +54,6 @@ import kotlinx.coroutines.launch
 fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = true): View =
     LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
 
-/*fun ImageView.loadUrl(url: String) {
-    Glide.with(context)
-        .load(url)
-        .diskCacheStrategy(DiskCacheStrategy.ALL)
-        .transition(DrawableTransitionOptions.withCrossFade())
-        .error(R.drawable.ic_error_grey)
-        .into(this)
-}*/
-
-// Unnussed
 /*fun ImageView.loadUrlCenterCrop(url: String) {
     Glide.with(context)
         .load(url)
@@ -117,7 +107,7 @@ fun RemoteConfigValues.saveServerType(app: Activity) {
     Log.v("SaveMode", "SERVER_MODE=${type}, isFavorite=${isFavorite}")
 }
 
-fun ServerType.saveServerType(app: Activity) {
+/*fun ServerType.saveServerType(app: Activity) {
     val sharedPref = app.getPreferences(Context.MODE_PRIVATE)
     requireNotNull(sharedPref)
     with (sharedPref.edit()) {
@@ -126,7 +116,7 @@ fun ServerType.saveServerType(app: Activity) {
         apply()
     }
     Log.v("SaveMode", "SERVER_MODE=${this.value}")
-}
+}*/
 
 fun getServerType(app: Activity): ServerType {
     val sharedPref = app.getPreferences(Context.MODE_PRIVATE)
@@ -156,7 +146,7 @@ fun getServerModeOnly(app: Activity): Int {
     return mode
 }
 
-fun saveBundle(ctx: Context, mode: ServerType?, switchValues: SwitchState, tag: String): Bundle {
+/*fun saveBundle(ctx: Context, mode: ServerType?, switchValues: SwitchState, tag: String): Bundle {
     val bun = bundleOf()
     bun.putString(Constants.SERVER_MODE, mode?.value)
     bun.putBoolean(Constants.IS_NSFW_WAIFU, switchValues.nsfw)
@@ -166,26 +156,8 @@ fun saveBundle(ctx: Context, mode: ServerType?, switchValues: SwitchState, tag: 
     mode?.saveServerType(ctx as Activity)
     Log.v("saveBundle", "SERVER_MODE=${mode?.value}")
     return bun
-}
+}*/
 
-fun tagFilter(ctx: Context, mode: ServerType?, switchValues: SwitchState, tag: String): String {
-    var updatedTag: String = tag
-    if (tag == getString(ctx, R.string.categories) || tag == getString(ctx, R.string.categories_items)) {
-        when (mode) {
-            NORMAL, ENHANCED -> {
-                updatedTag = getString(ctx, R.string.tag_waifu)
-            }
-            else -> {
-                if (!switchValues.gifs) {
-                    updatedTag = getString(ctx, R.string.tag_neko)
-                } else {
-                    updatedTag = getString(ctx, R.string.tag_pat)
-                }
-            }
-        }
-    }
-    return updatedTag
-}
 
 fun String.tagFilter(ctx: Context, mode: ServerType?, switchValues: SwitchState): String {
     var updatedTag: String = this
@@ -247,19 +219,7 @@ fun Context.errorToString(error: Error) = when (error) {
     is Error.Unknown -> getString(R.string.unknown_error) + error.message
 }
 
-fun Activity.showFullscreenCutout() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-        window.attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
-    }
-}
-
-fun Activity.showBelowCutout() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-        window.attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_NEVER
-    }
-}
-
-fun Fragment.composeView(content: @Composable () -> Unit): ComposeView {
+/*fun Fragment.composeView(content: @Composable () -> Unit): ComposeView {
     return ComposeView(requireContext()).apply {
         setContent {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
@@ -268,9 +228,9 @@ fun Fragment.composeView(content: @Composable () -> Unit): ComposeView {
             }
         }
     }
-}
+}*/
 
-fun onDownloadClick(download: DownloadModel, scope: CoroutineScope, context: Context, launcher: ManagedActivityResultLauncher<String, Boolean>) {
+/*fun onDownloadClick(download: DownloadModel, scope: CoroutineScope, context: Context, launcher: ManagedActivityResultLauncher<String, Boolean>) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
         downloadImage(scope, context, download.title, download.link, download.imageExt)
     } else {
@@ -282,14 +242,14 @@ fun onDownloadClick(download: DownloadModel, scope: CoroutineScope, context: Con
             downloadImage(scope, context, download.title, download.link, download.imageExt)
         }
     }
-}
+}*/
 
-fun Context.hasLocationPermissionGranted(): Boolean {
+/*fun Context.hasLocationPermissionGranted(): Boolean {
     return ContextCompat.checkSelfPermission(
         this,
         Manifest.permission.ACCESS_COARSE_LOCATION
     ) == PackageManager.PERMISSION_GRANTED
-}
+}*/
 
 fun Context.hasWriteExternalStoragePermission(): Boolean {
     return ContextCompat.checkSelfPermission(
@@ -333,15 +293,6 @@ fun loadInitialServer(): ServerType {
     }
 }
 
-/*fun String.getSimpleText(ctx: Context): String {
-    return when (this) {
-        NORMAL.value -> getString(ctx, R.string.server_normal_toast)
-        ENHANCED.value -> getString(ctx, R.string.server_enhanced_toast)
-        NEKOS.value -> getString(ctx, R.string.server_best_toast)
-        else -> getString(ctx, R.string.server_unknown_toast)
-    }
-}*/
-
 @Composable
 fun String.getSimpleText(): String {
     return when (this) {
@@ -351,77 +302,6 @@ fun String.getSimpleText(): String {
         else -> stringResource(R.string.server_unknown_toast)
     }
 }
-
-
-
-@RequiresApi(Build.VERSION_CODES.R)
-fun Context.isNightModeActive(): Boolean {
-    return resources.configuration.isNightModeActive
-}
-// Deprecated
-/*fun Context.isNavigationActive2(): Boolean {
-    val cm = this.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-    val adapter = cm.defaultDisplay
-    return adapter != null
-}*/
-
-// Deprecated
-/*fun Context.isNavigationActive(): Boolean {
-    val displayManager = getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
-    val displays = displayManager.getDisplays()
-    displays.forEach {
-        Log.e("NavHostActivity", "isNotEmpty=${displays.isNotEmpty()}, flags=${it.flags} height=${it.height}, width=${it.width}")
-        Log.e("NavHostActivity", "isHdr=${it.isHdr} isValid=${it.isValid}, displayId=${it.displayId}")
-    }
-    return displays.isNotEmpty()
-}*/
-
-fun isNfcAvailable(context: Context): Boolean {
-    val cm = context.getSystemService(Context.NFC_SERVICE) as NfcManager
-    val adapter = cm.defaultAdapter
-    return adapter != null
-}
-
-// Deprecated
-/*fun Context.isSystemNavBarVisible(): Boolean {
-    val decorView = (this as? WindowManager)?.defaultDisplay?.run {
-        val realDisplayMetrics = android.util.DisplayMetrics()
-        getRealMetrics(realDisplayMetrics)
-        val realHeight = realDisplayMetrics.heightPixels
-        val realWidth = realDisplayMetrics.widthPixels
-        Log.e("NavHostActivity", "realHeight=$realHeight, realWidth=$realWidth")
-
-        val displayMetrics = android.util.DisplayMetrics()
-        getMetrics(displayMetrics)
-        val displayHeight = displayMetrics.heightPixels
-        val displayWidth = displayMetrics.widthPixels
-        Log.e("NavHostActivity", "displayHeight=$displayHeight, displayWidth=$displayWidth")
-
-        realHeight - displayHeight > 0 || realWidth - displayWidth > 0
-    }
-    Log.e("NavHostActivity", "decorView=$decorView")
-    return decorView ?: false
-}*/
-
-// Deprecated
-/*fun Context.isSystemNavBarVisible2(): Boolean {
-    val cm = this.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-    val realDisplay = cm.defaultDisplay
-    val realMetrics = android.util.DisplayMetrics()
-    Log.e("NavHostActivity", "realDisplay=$realDisplay, realMetrics=$realMetrics")
-    return realDisplay != null && realMetrics.equals(realDisplay)
-}*/
-
-// Deprecated
-/*fun Context.isNavigationBarVisible(): Boolean {
-    val windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
-    val display = windowManager.defaultDisplay
-    val realSize = Point()
-    val screenSize = Point()
-    display.getRealSize(realSize)
-    display.getSize(screenSize)
-    return realSize.y != screenSize.y
-}*/
 
 inline fun <T : Any> basicDiffUtil(
     crossinline areItemsTheSame: (T, T) -> Boolean = { old, new -> old == new },
@@ -457,10 +337,6 @@ fun <T> ComposableWrapper(value: T, body: @Composable (T) -> Unit) {
 }
 
 val Context.app: App get() = applicationContext as App
-
-fun Context.isPortrait(): Boolean {
-    return resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT
-}
 
 fun Context.isLandscape(): Boolean {
     return resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
