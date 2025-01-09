@@ -1,7 +1,10 @@
 package com.mackenzie.waifuviewer.ui.selector
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
+import android.Manifest.permission.POST_NOTIFICATIONS
 import android.app.Activity
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -100,6 +103,7 @@ internal fun SelectorScreenContentRoute(
 
     if(state.reqPermisions) {
         PermissionRequestEffect(ACCESS_COARSE_LOCATION) { granted -> if (!granted) { getString(context, R.string.waifus_permissions_content).showToast(context) } }
+        // PermissionRequestEffect(POST_NOTIFICATIONS) { granted -> if (!granted) { getString(context, R.string.waifus_permissions_content).showToast(context) } }
     }
 
     SelectorScreenContent(

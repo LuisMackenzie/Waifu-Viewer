@@ -264,6 +264,23 @@ fun Context.hasWriteExternalStoragePermission(): Boolean {
     ) == PackageManager.PERMISSION_GRANTED
 }
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
+fun Context.hasPushPermission(): Boolean {
+    return ContextCompat.checkSelfPermission(
+        this,
+        Manifest.permission.POST_NOTIFICATIONS
+    ) == PackageManager.PERMISSION_GRANTED
+}
+
+fun Activity.hasPushPermissionRationale(): Boolean {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        if (this.shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+            return true
+        }
+    }
+    return false
+}
+
 fun downloadImage(scope: CoroutineScope, ctx: Context, title: String, link: String, fileType: String) {
     val type: String = selectMimeType(fileType)
     scope.launch(IO) { SaveImage().saveImageToStorage(ctx, title, type, link) }
