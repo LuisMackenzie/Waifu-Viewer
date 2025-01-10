@@ -4,6 +4,7 @@ import android.Manifest
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
@@ -26,6 +27,38 @@ fun PermissionRequestEffect(permission: String, onResult: (Boolean) -> Unit) {
 
     LaunchedEffect(Unit) {
         permissionLauncher.launch(permission)
+    }
+}
+
+@Composable
+fun MultiplePermissionRequestEffect(permissions: List<String>, onResult: (Map<String, Boolean>) -> Unit) {
+
+    val multiplePermissionsLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { result ->
+            // 'result' es un Map<String, Boolean>, donde la key es el permiso
+            // y el value indica si fue concedido (true) o denegado (false).
+            onResult(result)
+
+    }
+
+    LaunchedEffect(Unit) {
+        multiplePermissionsLauncher.launch(permissions.toTypedArray())
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
+@Composable
+fun PermissionPushRequestEffect(onResult: (Boolean) -> Unit) {
+    val permissionLauncher =
+        rememberLauncherForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) {
+            onResult(it)
+        }
+
+    LaunchedEffect(Unit) {
+        permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
     }
 }
 

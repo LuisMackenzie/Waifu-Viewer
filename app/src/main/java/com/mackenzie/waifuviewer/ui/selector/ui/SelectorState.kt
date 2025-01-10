@@ -18,7 +18,7 @@ fun rememberSelectorState(
     // scope: CoroutineScope = rememberCoroutineScope(),
     isSelectorBgLoaded: MutableState<Boolean> = rememberSaveable { mutableStateOf(false) },
     selectedTag: MutableState<String> = remember { mutableStateOf("") },
-    reqPermisions : MutableState<Boolean> = remember { mutableStateOf(false) },
+    reqPermisions : MutableState<Boolean> = remember { mutableStateOf(true) },
     remoteConfigValues: MutableState<RemoteConfigValues> = remember { mutableStateOf(RemoteConfigValues()) },
     switchState: SwitchState,
     tagsState: MutableState<TagsState> = remember { mutableStateOf(TagsState()) },
