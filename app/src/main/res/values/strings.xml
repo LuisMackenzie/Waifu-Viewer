@@ -88,5 +88,7 @@
     <string name="chat_label">Mensaje</string>
     <string name="action_send">Enviar</string>
 
+    <string name="default_notification_channel_id">notification_channel</string>
+
 
 </resources>
