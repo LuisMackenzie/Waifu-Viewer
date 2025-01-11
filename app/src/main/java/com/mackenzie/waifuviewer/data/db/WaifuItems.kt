@@ -59,7 +59,8 @@ data class WaifuImTagDb(
 @Parcelize
 @Entity
 data class FcmTokenDb(
-    @PrimaryKey(autoGenerate = true) val id: Int,
+    @PrimaryKey(autoGenerate = true)
+    val id: Int,
     val token: String,
     val validUtil: String
 ): Parcelable
@@ -67,9 +68,10 @@ data class FcmTokenDb(
 @Parcelize
 @Entity
 data class NotificationDb(
+    @PrimaryKey(autoGenerate = true)
     val id: Int,
     val pushId: String,
-    val date: Date?,
+    val date: String,
     val title: String,
     val description: String,
     var isRead: Boolean,
