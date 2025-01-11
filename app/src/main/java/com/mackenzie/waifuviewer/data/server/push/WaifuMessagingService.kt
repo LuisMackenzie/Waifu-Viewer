@@ -33,7 +33,7 @@ class WaifuMessagingService : FirebaseMessagingService() {
     override fun onNewToken(token: String) {
         super.onNewToken(token)
         // Aquí puedes guardar el token localmente, enviarlo a tu servidor, etc.
-        Log.d("MyFirebaseMsgService", "Nuevo token: $token")
+        Log.d("WaifuMessagingService", "Nuevo token: $token")
 
         // TOKEN EJemplo
         // Nuevo token: f6oEL7bRSP66hbN5W9Nvsx:APA91bHYqteimxS_5bH6jdEbQhOIyc2T51B1D-tt-KvQz9I4BhwDClXpWvPZ_znTKr-1B0oAhsQnF0MtobfmLsXOSadVUHXkNOZBVoUNr8POj-enkFbp3cc
@@ -52,8 +52,8 @@ class WaifuMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
 
-        Log.e("MyFirebaseMsgService", "Notification:Data ${message.data}")
-        Log.e("MyFirebaseMsgService", "Notification title=${message.notification?.title}, body=${message.notification?.body}")
+        Log.e("WaifuMessagingService", "Notification:Data ${message.data}")
+        Log.e("WaifuMessagingService", "Notification title=${message.notification?.title}, body=${message.notification?.body}")
 
 
         if (message.data.isNotEmpty()) {
@@ -68,7 +68,7 @@ class WaifuMessagingService : FirebaseMessagingService() {
 
             generateNotification(notification, notification.id)
 
-            Log.d("MyFirebaseMsgService", "Data recibida: ${message.data}")
+            Log.d("WaifuMessagingService", "Data recibida: ${message.data}")
         } else if (message.notification != null) {
             val notification = createCustomNotification(
                 NotificationType.NEWS, message.notification?.title ?: "", message.notification?.body ?: ""
@@ -76,7 +76,7 @@ class WaifuMessagingService : FirebaseMessagingService() {
             // TODO guardar la notificación en room
             // notificationRepository.saveNotification(notification)
             generateNotification(notification, notification.id)
-            Log.d("MyFirebaseMsgService", "Notificación recibida: title=${message.notification?.title}, Body=${message.notification?.body}")
+            Log.d("WaifuMessagingService", "Notificación recibida: title=${message.notification?.title}, Body=${message.notification?.body}")
         }
 
         // Si el mensaje contiene datos (remoteMessage.data), puedes procesarlos aquí:
@@ -87,7 +87,7 @@ class WaifuMessagingService : FirebaseMessagingService() {
 
         // Si el mensaje contiene una notificación (remoteMessage.notification), también puedes procesarla:
         message.notification?.let { notification ->
-            Log.d("MyFirebaseMsgService", "Notificación recibida: ${notification.body}")
+            // Log.d("WaifuMessagingService", "Notificación recibida: ${notification.body}")
             // Por ejemplo, mostrar una notificación en la barra de estado
             // showNotification(notification.title, notification.body)
         }
@@ -161,7 +161,7 @@ class WaifuMessagingService : FirebaseMessagingService() {
      */
     override fun onDeletedMessages() {
         super.onDeletedMessages()
-        Log.d("MyFirebaseMsgService", "Se han eliminado algunos mensajes en el servidor.")
+        Log.d("WaifuMessagingService", "Se han eliminado algunos mensajes en el servidor.")
         // Por ejemplo, podrías notificar a tu servidor para volver a sincronizar datos importantes.
     }
 
@@ -171,7 +171,7 @@ class WaifuMessagingService : FirebaseMessagingService() {
      */
     override fun onMessageSent(msgId: String) {
         super.onMessageSent(msgId)
-        Log.d("MyFirebaseMsgService", "Mensaje enviado con éxito. ID: $msgId")
+        Log.d("WaifuMessagingService", "Mensaje enviado con éxito. ID: $msgId")
     }
 
     /**
@@ -179,7 +179,7 @@ class WaifuMessagingService : FirebaseMessagingService() {
      */
     override fun onSendError(msgId: String, exception: Exception) {
         super.onSendError(msgId, exception)
-        Log.e("MyFirebaseMsgService", "Error al enviar mensaje: $msgId. Excepción: $exception")
+        Log.e("WaifuMessagingService", "Error al enviar mensaje: $msgId. Excepción: $exception")
     }
 
 }

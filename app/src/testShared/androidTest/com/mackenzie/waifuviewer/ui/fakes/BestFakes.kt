@@ -1,6 +1,6 @@
 package com.mackenzie.waifuviewer.ui.fakes
 
-import com.mackenzie.waifuviewer.data.db.WaifuBestDao
+import com.mackenzie.waifuviewer.data.db.dao.WaifuBestDao
 import com.mackenzie.waifuviewer.data.db.WaifuBestDbItem
 import com.mackenzie.waifuviewer.data.server.*
 import com.mackenzie.waifuviewer.data.server.models.WaifuBestGif

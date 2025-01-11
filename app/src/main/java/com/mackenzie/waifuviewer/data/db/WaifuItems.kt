@@ -54,6 +54,14 @@ data class WaifuImTagDb(
     val nsfw: String
 ): Parcelable
 
+@Parcelize
+@Entity
+data class FcmTokenDb(
+    @PrimaryKey(autoGenerate = true) val id: Int,
+    val token: String,
+    val validUtil: String
+): Parcelable
+
 /*@Parcelize
 @Entity
 data class WaifuBestPngDbItem(

@@ -1,10 +1,10 @@
 package com.mackenzie.waifuviewer.data.db.datasources
 
 import com.mackenzie.waifuviewer.data.datasource.WaifusImLocalDataSource
-import com.mackenzie.waifuviewer.data.db.WaifuImDao
+import com.mackenzie.waifuviewer.data.db.dao.WaifuImDao
 import com.mackenzie.waifuviewer.data.db.WaifuImDbItem
 import com.mackenzie.waifuviewer.data.db.WaifuImTagDb
-import com.mackenzie.waifuviewer.data.db.WaifuImTagsDao
+import com.mackenzie.waifuviewer.data.db.dao.WaifuImTagsDao
 import com.mackenzie.waifuviewer.data.db.datasources.RoomImDataSource.Companion.artistAdapter
 import com.mackenzie.waifuviewer.data.db.datasources.RoomImDataSource.Companion.stringAdapter
 import com.mackenzie.waifuviewer.data.db.datasources.RoomImDataSource.Companion.tagsAdapter

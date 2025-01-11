@@ -1,6 +1,6 @@
 package com.mackenzie.waifuviewer.ui.fakes
 
-import com.mackenzie.waifuviewer.data.db.FavoriteDao
+import com.mackenzie.waifuviewer.data.db.dao.FavoriteDao
 import com.mackenzie.waifuviewer.data.db.FavoriteDbItem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

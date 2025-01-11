@@ -2,7 +2,7 @@ package com.mackenzie.waifuviewer
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.rule.GrantPermissionRule
-import com.mackenzie.waifuviewer.data.db.WaifuBestDao
+import com.mackenzie.waifuviewer.data.db.dao.WaifuBestDao
 import com.mackenzie.waifuviewer.data.server.MockWebServerRule
 import com.mackenzie.waifuviewer.data.server.ServerBestDataSource
 import com.mackenzie.waifuviewer.ui.NavHostActivity

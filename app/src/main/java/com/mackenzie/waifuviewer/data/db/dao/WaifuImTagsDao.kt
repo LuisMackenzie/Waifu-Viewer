@@ -1,9 +1,10 @@
-package com.mackenzie.waifuviewer.data.db
+package com.mackenzie.waifuviewer.data.db.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.mackenzie.waifuviewer.data.db.WaifuImTagDb
 import kotlinx.coroutines.flow.Flow
 
 @Dao
