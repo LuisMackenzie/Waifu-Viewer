@@ -9,39 +9,39 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class PushRepository @Inject constructor(
-    private val tokenDataSource: TokenLocalDataSource,
-    private val pushDataSource: NotificationLocalDataSource
+    private val localTokenDataSource: TokenLocalDataSource,
+    private val localPushDataSource: NotificationLocalDataSource
 ) {
 
-    val tokenPush = tokenDataSource.token
+    val tokenPush = localTokenDataSource.token
 
-    val notifications = pushDataSource.pushes
+    val notifications = localPushDataSource.pushes
 
-    fun findPushById(id: Int): Flow<Notification> = pushDataSource.findPushById(id)
+    fun findPushById(id: Int): Flow<Notification> = localPushDataSource.findPushById(id)
 
-    fun findPushByPushId(pushId: String): Flow<Notification> = pushDataSource.findPushByPushId(pushId)
+    fun findPushByPushId(pushId: String): Flow<Notification> = localPushDataSource.findPushByPushId(pushId)
 
     suspend fun saveToken(token: FcmToken): Error? {
-        return tokenDataSource.saveToken(token)
+        return localTokenDataSource.saveToken(token)
     }
 
     suspend fun saveAllTokens(tokens: List<FcmToken>): Error? {
-        return tokenDataSource.saveAllToken(tokens)
+        return localTokenDataSource.saveAllToken(tokens)
     }
 
     suspend fun savePush(push: Notification): Error? {
-        return pushDataSource.saveOnlyPush(push)
+        return localPushDataSource.saveOnlyPush(push)
     }
 
     suspend fun saveAllPushes(pushes: List<Notification>): Error? {
-        return pushDataSource.savePushes(pushes)
+        return localPushDataSource.savePushes(pushes)
     }
 
     suspend fun deleteNotification(push: Notification): Error? {
-        return pushDataSource.deletePush(push)
+        return localPushDataSource.deletePush(push)
     }
 
     suspend fun deleteAllNotifications(): Error? {
-        return pushDataSource.deleteAll()
+        return localPushDataSource.deleteAll()
     }
 }
