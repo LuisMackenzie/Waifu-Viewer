@@ -39,10 +39,6 @@ class WaifuMessagingService : FirebaseMessagingService() {
         super.onNewToken(token)
         // Aquí puedes guardar el token localmente, enviarlo a tu servidor, etc.
         Log.d("WaifuMessagingService", "Nuevo token: $token")
-
-        // TOKEN EJemplo
-        // Nuevo token: f6oEL7bRSP66hbN5W9Nvsx:APA91bHYqteimxS_5bH6jdEbQhOIyc2T51B1D-tt-KvQz9I4BhwDClXpWvPZ_znTKr-1B0oAhsQnF0MtobfmLsXOSadVUHXkNOZBVoUNr8POj-enkFbp3cc
-
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
         // FCM registration token to your app server.
