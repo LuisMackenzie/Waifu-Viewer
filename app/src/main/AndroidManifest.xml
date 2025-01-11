@@ -32,7 +32,7 @@
         </activity>
 
         <service
-            android:name=".data.server.WaifuMessagingService"
+            android:name=".data.server.push.WaifuMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
