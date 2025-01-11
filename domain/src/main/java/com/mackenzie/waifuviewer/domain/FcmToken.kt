@@ -6,5 +6,6 @@ data class FcmToken(
     val createdAt: String,
     val validUntil: String,
     val deviceBrand: String,
-    val deviceModel: String
+    val deviceModel: String,
+    val deviceId: String
 )

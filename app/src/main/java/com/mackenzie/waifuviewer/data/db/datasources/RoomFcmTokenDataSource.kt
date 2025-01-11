@@ -33,7 +33,8 @@ private fun FcmTokenDb.toDomainModel(): FcmToken =
         createdAt,
         validUntil,
         deviceBrand,
-        deviceModel
+        deviceModel,
+        deviceId
     )
 
 private fun List<FcmToken>.fromDomainModel(): List<FcmTokenDb> = map { it.fromDomainModel() }
@@ -45,5 +46,6 @@ private fun FcmToken.fromDomainModel(): FcmTokenDb =
         createdAt,
         validUntil,
         deviceBrand,
-        deviceModel
+        deviceModel,
+        deviceId
     )

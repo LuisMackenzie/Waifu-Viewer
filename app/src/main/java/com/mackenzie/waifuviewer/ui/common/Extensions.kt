@@ -55,6 +55,7 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -378,6 +379,21 @@ fun getCurrentLocalDateTime(): String {
     } else {
         val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         return format.format(Date())
+    }
+}
+
+fun getDefaultTokenValidity(): String {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val currentDateTime = LocalDateTime.now().plusDays(7)
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        return currentDateTime.format(formatter)
+    } else {
+        val calendar = Calendar.getInstance()
+        calendar.time = Date()
+        calendar.add(Calendar.DAY_OF_YEAR, 7)
+        val newDate = calendar.time
+        val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        return format.format(newDate)
     }
 }
 
