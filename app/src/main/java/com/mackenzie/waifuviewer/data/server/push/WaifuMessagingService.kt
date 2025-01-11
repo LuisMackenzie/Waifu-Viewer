@@ -12,14 +12,19 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.mackenzie.waifuviewer.R
+import com.mackenzie.waifuviewer.data.PushRepository
 import com.mackenzie.waifuviewer.domain.Notification
 import com.mackenzie.waifuviewer.domain.NotificationType
 import com.mackenzie.waifuviewer.ui.NavHostActivity
+import javax.inject.Inject
 
 class WaifuMessagingService : FirebaseMessagingService() {
 
     private val channelId = "notification_channel"
     private val channelName = "com.mackenzie.waifuviewer"
+
+    @Inject
+    lateinit var notificationRepository: PushRepository
 
 
     /**
