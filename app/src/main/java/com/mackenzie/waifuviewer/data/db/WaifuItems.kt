@@ -62,7 +62,10 @@ data class FcmTokenDb(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val token: String,
-    val validUtil: String
+    val createdAt: String,
+    val validUntil: String,
+    val deviceBrand: String,
+    val deviceModel: String
 ): Parcelable
 
 @Parcelize

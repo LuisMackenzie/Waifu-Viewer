@@ -12,17 +12,21 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.mackenzie.waifuviewer.R
+import com.mackenzie.waifuviewer.data.FavoritesRepository
 import com.mackenzie.waifuviewer.data.PushRepository
+import com.mackenzie.waifuviewer.data.db.dao.WaifuFcmTokenDao
 import com.mackenzie.waifuviewer.data.server.mapper.toDomainModel
 import com.mackenzie.waifuviewer.domain.Notification
 import com.mackenzie.waifuviewer.domain.NotificationType
 import com.mackenzie.waifuviewer.ui.NavHostActivity
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class WaifuMessagingService : FirebaseMessagingService() {
+@AndroidEntryPoint
+class WaifuMessagingService  : FirebaseMessagingService() {
 
     private val channelId = "notification_channel"
     private val channelName = "com.mackenzie.waifuviewer"
@@ -42,17 +46,30 @@ class WaifuMessagingService : FirebaseMessagingService() {
     override fun onNewToken(token: String) {
         super.onNewToken(token)
         // Aquí puedes guardar el token localmente, enviarlo a tu servidor, etc.
-        Log.d("WaifuMessagingService", "Nuevo token: $token")
+        Log.e("WaifuMessagingService", "Nuevo token: $token")
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
         // FCM registration token to your app server.
-        // TODO guardar el token en room
-        withContext(context = Dispatchers.IO) {
 
+        Log.e("WaifuMessagingService", "FcmToken: ${token.toDomainModel()}")
+        CoroutineScope(Dispatchers.IO).launch {
+            saveToken(token)
         }
-        val error = notificationRepository.saveToken(token.toDomainModel())
+
+        // TODO guardar el token en servidor
+        // repo.saveToken(token.toDomainModel())
+        // val error = notificationRepository.saveToken(token.toDomainModel())
         // sendRegistrationToServer(token)
     }
+
+    private suspend fun saveToken(token: String) {
+
+        val error = notificationRepository.saveToken(token.toDomainModel())
+        error?.let {
+            Log.e("WaifuMessagingService", "Error al guardar el token: $error")
+        }
+    }
+
 
     /**
      * Se invoca cada vez que se recibe un mensaje de FCM.

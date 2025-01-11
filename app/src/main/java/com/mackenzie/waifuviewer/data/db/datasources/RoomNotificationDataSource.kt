@@ -1,6 +1,5 @@
 package com.mackenzie.waifuviewer.data.db.datasources
 
-import android.icu.text.DateFormat
 import com.mackenzie.waifuviewer.data.datasource.NotificationLocalDataSource
 import com.mackenzie.waifuviewer.data.db.NotificationDb
 import com.mackenzie.waifuviewer.data.db.dao.WaifuPushDao
@@ -11,7 +10,6 @@ import com.mackenzie.waifuviewer.ui.common.dateToString
 import com.mackenzie.waifuviewer.ui.common.stringToDate
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import java.util.Date
 import javax.inject.Inject
 
 class RoomNotificationDataSource @Inject constructor(private val dao: WaifuPushDao): NotificationLocalDataSource {

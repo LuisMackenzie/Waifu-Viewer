@@ -3,10 +3,8 @@ package com.mackenzie.waifuviewer.data
 import com.mackenzie.waifuviewer.data.datasource.NotificationLocalDataSource
 import com.mackenzie.waifuviewer.data.datasource.TokenLocalDataSource
 import com.mackenzie.waifuviewer.domain.Error
-import com.mackenzie.waifuviewer.domain.FavoriteItem
 import com.mackenzie.waifuviewer.domain.FcmToken
 import com.mackenzie.waifuviewer.domain.Notification
-import com.mackenzie.waifuviewer.domain.im.WaifuImItem
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

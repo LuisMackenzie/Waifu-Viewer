@@ -58,6 +58,14 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideTokenDao(db: WaifuDataBase) = db.waifuFcmTokenDao()
+
+    @Provides
+    @Singleton
+    fun providePushDao(db: WaifuDataBase) = db.waifuPushDao()
+
+    @Provides
+    @Singleton
     fun provideApiUrl(): ApiUrl = ApiUrl()
 
     @Provides
@@ -181,5 +189,11 @@ abstract class AppDataModule {
 
     @Binds
     abstract fun bindPermissionChecker(permissionChecker: AndroidPermissionChecker): PermissionChecker
+
+    @Binds
+    abstract fun bindLocalTokenDataSource(localTokenDataSource: RoomFcmTokenDataSource): TokenLocalDataSource
+
+    @Binds
+    abstract fun bindLocalPushDataSource(localPushDataSource: RoomNotificationDataSource): NotificationLocalDataSource
 
 }
