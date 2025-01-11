@@ -13,9 +13,13 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.data.PushRepository
+import com.mackenzie.waifuviewer.data.server.mapper.toDomainModel
 import com.mackenzie.waifuviewer.domain.Notification
 import com.mackenzie.waifuviewer.domain.NotificationType
 import com.mackenzie.waifuviewer.ui.NavHostActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class WaifuMessagingService : FirebaseMessagingService() {
@@ -43,6 +47,10 @@ class WaifuMessagingService : FirebaseMessagingService() {
         // manage this apps subscriptions on the server side, send the
         // FCM registration token to your app server.
         // TODO guardar el token en room
+        withContext(context = Dispatchers.IO) {
+
+        }
+        val error = notificationRepository.saveToken(token.toDomainModel())
         // sendRegistrationToServer(token)
     }
 
