@@ -3,7 +3,9 @@ package com.mackenzie.waifuviewer.data.db
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.mackenzie.waifuviewer.domain.NotificationType
 import kotlinx.parcelize.Parcelize
+import java.util.Date
 
 @Parcelize
 @Entity
@@ -60,6 +62,19 @@ data class FcmTokenDb(
     @PrimaryKey(autoGenerate = true) val id: Int,
     val token: String,
     val validUtil: String
+): Parcelable
+
+@Parcelize
+@Entity
+data class NotificationDb(
+    val id: Int,
+    val pushId: String,
+    val date: Date?,
+    val title: String,
+    val description: String,
+    var isRead: Boolean,
+    var type: NotificationType,
+    // var type: Int,
 ): Parcelable
 
 /*@Parcelize

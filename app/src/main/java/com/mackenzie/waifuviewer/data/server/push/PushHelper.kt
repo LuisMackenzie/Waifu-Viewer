@@ -4,8 +4,8 @@ import android.app.PendingIntent
 import android.content.res.Resources
 import androidx.core.app.NotificationCompat
 import com.mackenzie.waifuviewer.R
-import com.mackenzie.waifuviewer.data.server.models.Notification
-import com.mackenzie.waifuviewer.data.server.models.NotificationType
+import com.mackenzie.waifuviewer.domain.Notification
+import com.mackenzie.waifuviewer.domain.NotificationType
 import java.util.Date
 import java.util.UUID
 
@@ -50,7 +50,8 @@ fun createCustomNotification(
     id: String? = null
 ) =
     Notification(
-        id = id ?: UUID.randomUUID().mostSignificantBits.toString(),
+        id = 0,
+        pushId = id ?: UUID.randomUUID().mostSignificantBits.toString(),
         date = Date(),
         title = title,
         description = body,

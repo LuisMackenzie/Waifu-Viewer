@@ -1,9 +1,10 @@
-package com.mackenzie.waifuviewer.data.server.models
+package com.mackenzie.waifuviewer.domain
 
 import java.util.Date
 
 data class Notification(
-    val id: String,
+    val id: Int,
+    val pushId: String,
     val date: Date?,
     val title: String,
     val description: String,

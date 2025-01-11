@@ -1,11 +1,8 @@
-package com.mackenzie.waifuviewer.data.server.models
+package com.mackenzie.waifuviewer.domain
 
-import android.os.Parcelable
-import com.mackenzie.waifuviewer.data.server.models.NotificationType.*
-import kotlinx.parcelize.Parcelize
+import com.mackenzie.waifuviewer.domain.NotificationType.*
 
-@Parcelize
-enum class NotificationType(val code: Int) : Parcelable {
+enum class NotificationType(val code: Int) {
     NEWS(0),
     UPDATES(1),
     CALL_TO_ACTION(2),

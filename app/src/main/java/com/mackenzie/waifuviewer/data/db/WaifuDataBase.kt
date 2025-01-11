@@ -8,6 +8,7 @@ import com.mackenzie.waifuviewer.data.db.dao.WaifuFcmTokenDao
 import com.mackenzie.waifuviewer.data.db.dao.WaifuImDao
 import com.mackenzie.waifuviewer.data.db.dao.WaifuImTagsDao
 import com.mackenzie.waifuviewer.data.db.dao.WaifuPicDao
+import com.mackenzie.waifuviewer.data.db.dao.WaifuPushDao
 
 @Database(entities = [
     WaifuPicDbItem::class,
@@ -15,7 +16,8 @@ import com.mackenzie.waifuviewer.data.db.dao.WaifuPicDao
     WaifuBestDbItem::class,
     WaifuImTagDb::class,
     FavoriteDbItem::class,
-    FcmTokenDb::class], version = 1, exportSchema = false)
+    FcmTokenDb::class,
+    NotificationDb::class], version = 1, exportSchema = false)
 abstract class WaifuDataBase: RoomDatabase() {
     abstract fun waifuPicDao(): WaifuPicDao
     abstract fun waifuImDao(): WaifuImDao
@@ -23,4 +25,5 @@ abstract class WaifuDataBase: RoomDatabase() {
     abstract fun waifuBestDao(): WaifuBestDao
     abstract fun waifuImTagsDao(): WaifuImTagsDao
     abstract fun waifuFcmTokenDao(): WaifuFcmTokenDao
+    abstract fun waifuPushDao(): WaifuPushDao
 }

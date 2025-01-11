@@ -12,8 +12,8 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.mackenzie.waifuviewer.R
-import com.mackenzie.waifuviewer.data.server.models.Notification
-import com.mackenzie.waifuviewer.data.server.models.NotificationType
+import com.mackenzie.waifuviewer.domain.Notification
+import com.mackenzie.waifuviewer.domain.NotificationType
 import com.mackenzie.waifuviewer.ui.NavHostActivity
 
 class WaifuMessagingService : FirebaseMessagingService() {
@@ -66,7 +66,7 @@ class WaifuMessagingService : FirebaseMessagingService() {
                 NotificationType.UPDATES, message.notification?.title ?: "", message.notification?.body ?: ""
             )
 
-            generateNotification(notification, notification.id)
+            generateNotification(notification, notification.pushId)
 
             Log.d("WaifuMessagingService", "Data recibida: ${message.data}")
         } else if (message.notification != null) {
@@ -75,7 +75,7 @@ class WaifuMessagingService : FirebaseMessagingService() {
             )
             // TODO guardar la notificación en room
             // notificationRepository.saveNotification(notification)
-            generateNotification(notification, notification.id)
+            generateNotification(notification, notification.pushId)
             Log.d("WaifuMessagingService", "Notificación recibida: title=${message.notification?.title}, Body=${message.notification?.body}")
         }
 
