@@ -57,17 +57,7 @@ class WaifuMessagingService  : FirebaseMessagingService() {
         }
 
         // TODO guardar el token en servidor
-        // repo.saveToken(token.toDomainModel())
-        // val error = notificationRepository.saveToken(token.toDomainModel())
         // sendRegistrationToServer(token)
-    }
-
-    private suspend fun saveToken(token: String) {
-
-        val error = notificationRepository.saveToken(token.toDomainModel())
-        error?.let {
-            Log.e("WaifuMessagingService", "Error al guardar el token: $error")
-        }
     }
 
 
@@ -92,6 +82,11 @@ class WaifuMessagingService  : FirebaseMessagingService() {
                 NotificationType.UPDATES, message.notification?.title ?: "", message.notification?.body ?: ""
             )
 
+            // TODO guardar la notificación en room
+            CoroutineScope(Dispatchers.IO).launch {
+                // notificationRepository.savePush(notification)
+            }
+
             generateNotification(notification, notification.pushId)
 
             Log.d("WaifuMessagingService", "Data recibida: ${message.data}")
@@ -100,7 +95,7 @@ class WaifuMessagingService  : FirebaseMessagingService() {
                 NotificationType.NEWS, message.notification?.title ?: "", message.notification?.body ?: ""
             )
             // TODO guardar la notificación en room
-            // notificationRepository.saveNotification(notification)
+            // notificationRepository.savePush(notification)
             generateNotification(notification, notification.pushId)
             Log.d("WaifuMessagingService", "Notificación recibida: title=${message.notification?.title}, Body=${message.notification?.body}")
         }
@@ -179,6 +174,13 @@ class WaifuMessagingService  : FirebaseMessagingService() {
             }
             notificationManager.notify((0..10000).random(), builder.build())
         }
+    }
+
+    private suspend fun saveToken(token: String) {
+        val error = notificationRepository.saveToken(token.toDomainModel())
+        error?.let {
+            Log.e("WaifuMessagingService", "Error al guardar el token: $error")
+        } ?: Log.e("WaifuMessagingService", "Token guardado con éxito")
     }
 
     /**
