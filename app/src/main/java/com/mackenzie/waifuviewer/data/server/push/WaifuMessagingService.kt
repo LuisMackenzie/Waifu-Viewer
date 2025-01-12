@@ -20,6 +20,7 @@ import com.mackenzie.waifuviewer.data.server.models.RemoteConnect
 import com.mackenzie.waifuviewer.domain.Notification
 import com.mackenzie.waifuviewer.domain.NotificationType
 import com.mackenzie.waifuviewer.ui.NavHostActivity
+import com.mackenzie.waifuviewer.usecases.push.SaveTokenUseCase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -32,8 +33,11 @@ class WaifuMessagingService : FirebaseMessagingService() {
     private val channelId = "notification_channel"
     private val channelName = "com.mackenzie.waifuviewer"
 
-    @Inject
-    lateinit var notificationRepository: PushRepository
+    // @Inject
+    // lateinit var notificationRepository: PushRepository
+
+    // @Inject
+    // lateinit var saveUseCase: SaveTokenUseCase
 
 
     /**
@@ -54,20 +58,21 @@ class WaifuMessagingService : FirebaseMessagingService() {
 
         Log.e("WaifuMessagingService", "FcmToken: ${token.toDomainModel()}")
         CoroutineScope(Dispatchers.IO).launch {
-            saveToken(token)
+            // saveToken(token)
         }
 
         // TODO guardar el token en servidor
         // sendRegistrationToServer(token)
     }
 
-    private suspend fun saveToken(token: String) {
+    /*private suspend fun saveToken(token: String) {
         // val error = repo.saveToken(token.toDomainModel())
-        val error = notificationRepository.saveToken(token.toDomainModel())
+        // val error = notificationRepository.saveToken(token.toDomainModel())
+        val error = saveUseCase(token.toDomainModel())
         error?.let {
             Log.e("WaifuMessagingService", "Error al guardar el token: $error")
         } ?: Log.e("WaifuMessagingService", "Token guardado con éxito")
-    }
+    }*/
 
 
     /**
