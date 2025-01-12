@@ -6,6 +6,7 @@ import androidx.room.Room
 import com.mackenzie.waifuviewer.data.*
 import com.mackenzie.waifuviewer.data.datasource.*
 import com.mackenzie.waifuviewer.data.db.WaifuDataBase
+import com.mackenzie.waifuviewer.data.db.WaifuDataBase.Companion.DATABASE_NAME
 import com.mackenzie.waifuviewer.data.db.datasources.*
 import com.mackenzie.waifuviewer.data.server.*
 import com.mackenzie.waifuviewer.data.server.models.RemoteConnect
@@ -33,7 +34,7 @@ object AppModule {
     fun provideDatabase(app: Application) = Room.databaseBuilder(
         app,
         WaifuDataBase::class.java,
-        "waifu-database"
+        DATABASE_NAME
     ).build()
 
     @Provides

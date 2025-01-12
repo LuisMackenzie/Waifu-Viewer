@@ -20,12 +20,17 @@ import com.google.firebase.messaging.RemoteMessage
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.data.FavoritesRepository
 import com.mackenzie.waifuviewer.data.PushRepository
+import com.mackenzie.waifuviewer.data.db.WaifuDataBase
 import com.mackenzie.waifuviewer.data.db.dao.WaifuFcmTokenDao
+import com.mackenzie.waifuviewer.data.db.datasources.RoomFcmTokenDataSource
+import com.mackenzie.waifuviewer.data.db.datasources.RoomNotificationDataSource
 import com.mackenzie.waifuviewer.data.server.mapper.toDomainModel
 import com.mackenzie.waifuviewer.data.server.models.RemoteConnect
+import com.mackenzie.waifuviewer.di.AppModule.provideDatabase
 import com.mackenzie.waifuviewer.domain.Notification
 import com.mackenzie.waifuviewer.domain.NotificationType
 import com.mackenzie.waifuviewer.ui.NavHostActivity
+import com.mackenzie.waifuviewer.ui.common.app
 import com.mackenzie.waifuviewer.usecases.push.SaveTokenUseCase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -33,11 +38,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@AndroidEntryPoint
-class WaifuMessagingService : FirebaseMessagingService(), ViewModelStoreOwner {
+class WaifuMessagingService : FirebaseMessagingService() {
 
     private val channelId = "notification_channel"
     private val channelName = "com.mackenzie.waifuviewer"
+
 
     /*@Inject
     lateinit var vm: FcmViewModel*/
@@ -48,17 +53,19 @@ class WaifuMessagingService : FirebaseMessagingService(), ViewModelStoreOwner {
     // @Inject
     // lateinit var saveUseCase: SaveTokenUseCase
 
-    private val store: ViewModelStore = ViewModelStore()
-    private lateinit var vm: FcmViewModel
+    // private val store: ViewModelStore = ViewModelStore()
+    // private lateinit var vm: FcmViewModel
 
-    override val viewModelStore: ViewModelStore
-        get() = store
+    /*override val viewModelStore: ViewModelStore
+        get() = store*/
+
+    /*override val viewModelStore: ViewModelStore = store
 
     override fun onCreate() {
         super.onCreate()
         val viewModelProvider = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())
-        vm = viewModelProvider.get(FcmViewModel::class.java)
-    }
+        vm = viewModelProvider[FcmViewModel::class.java]
+    }*/
 
     /**
      * Se invoca cuando se recibe un nuevo token de registro.
@@ -77,23 +84,26 @@ class WaifuMessagingService : FirebaseMessagingService(), ViewModelStoreOwner {
         // FCM registration token to your app server.
 
         Log.e("WaifuMessagingService", "FcmToken: ${token.toDomainModel()}")
-        CoroutineScope(Dispatchers.IO).launch {
-            vm.onTestReceived(token.toDomainModel(), null)
-            // saveToken(token)
+        CoroutineScope(Dispatchers.Main).launch {
+            val db = WaifuDataBase.getDatabase(applicationContext)
+            val repo = PushRepository(RoomFcmTokenDataSource(db.waifuFcmTokenDao()), RoomNotificationDataSource(db.waifuPushDao()))
+
+            // repo.onTestReceived(token.toDomainModel(), null)
+            saveToken(repo, token)
         }
 
         // TODO guardar el token en servidor
         // sendRegistrationToServer(token)
     }
 
-    /*private suspend fun saveToken(token: String) {
-        // val error = repo.saveToken(token.toDomainModel())
+    private suspend fun saveToken(repo: PushRepository, token: String) {
+        val error = repo.saveToken(token.toDomainModel())
         // val error = notificationRepository.saveToken(token.toDomainModel())
-        val error = saveUseCase(token.toDomainModel())
+        // val error = saveUseCase(token.toDomainModel())
         error?.let {
             Log.e("WaifuMessagingService", "Error al guardar el token: $error")
         } ?: Log.e("WaifuMessagingService", "Token guardado con éxito")
-    }*/
+    }
 
 
     /**
