@@ -9,6 +9,12 @@ import android.content.Intent
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.fragment.app.viewModels
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStore
+import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.mackenzie.waifuviewer.R
@@ -28,10 +34,13 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class WaifuMessagingService : FirebaseMessagingService() {
+class WaifuMessagingService : FirebaseMessagingService(), ViewModelStoreOwner {
 
     private val channelId = "notification_channel"
     private val channelName = "com.mackenzie.waifuviewer"
+
+    /*@Inject
+    lateinit var vm: FcmViewModel*/
 
     // @Inject
     // lateinit var notificationRepository: PushRepository
@@ -39,6 +48,17 @@ class WaifuMessagingService : FirebaseMessagingService() {
     // @Inject
     // lateinit var saveUseCase: SaveTokenUseCase
 
+    private val store: ViewModelStore = ViewModelStore()
+    private lateinit var vm: FcmViewModel
+
+    override val viewModelStore: ViewModelStore
+        get() = store
+
+    override fun onCreate() {
+        super.onCreate()
+        val viewModelProvider = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())
+        vm = viewModelProvider.get(FcmViewModel::class.java)
+    }
 
     /**
      * Se invoca cuando se recibe un nuevo token de registro.
@@ -58,6 +78,7 @@ class WaifuMessagingService : FirebaseMessagingService() {
 
         Log.e("WaifuMessagingService", "FcmToken: ${token.toDomainModel()}")
         CoroutineScope(Dispatchers.IO).launch {
+            vm.onTestReceived(token.toDomainModel(), null)
             // saveToken(token)
         }
 
