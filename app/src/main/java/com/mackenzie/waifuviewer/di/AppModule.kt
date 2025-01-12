@@ -31,11 +31,15 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideDatabase(app: Application) = WaifuDataBase.getDatabase(app)
+
+    /*@Provides
+    @Singleton
     fun provideDatabase(app: Application) = Room.databaseBuilder(
         app,
         WaifuDataBase::class.java,
         DATABASE_NAME
-    ).build()
+    ).build()*/
 
     @Provides
     @Singleton
