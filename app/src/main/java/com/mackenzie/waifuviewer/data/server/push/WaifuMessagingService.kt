@@ -194,17 +194,17 @@ class WaifuMessagingService : FirebaseMessagingService() {
      * Se invoca cuando un mensaje enviado al servidor FCM se ha enviado con éxito.
      * Suele usarse para confirmar que un upstream message realmente llegó.
      */
-    override fun onMessageSent(msgId: String) {
+    /*override fun onMessageSent(msgId: String) {
         super.onMessageSent(msgId)
         Log.d("WaifuMessagingService", "Mensaje enviado con éxito. ID: $msgId")
-    }
+    }*/
 
     /**
      * Se invoca cuando ocurre un error al enviar un mensaje upstream.
      */
-    override fun onSendError(msgId: String, exception: Exception) {
+    /*override fun onSendError(msgId: String, exception: Exception) {
         super.onSendError(msgId, exception)
         Log.e("WaifuMessagingService", "Error al enviar mensaje: $msgId. Excepción: $exception")
-    }
+    }*/
 
 }
