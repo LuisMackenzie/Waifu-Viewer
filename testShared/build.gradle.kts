@@ -11,3 +11,9 @@ java {
 dependencies {
     implementation(project(Modules.domain))
 }
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile> {
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+}
