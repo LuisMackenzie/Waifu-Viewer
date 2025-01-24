@@ -56,10 +56,13 @@ class WaifuMessagingService : FirebaseMessagingService() {
         CoroutineScope(Dispatchers.Main).launch {
             val db = WaifuDataBase.getDatabase(applicationContext)
             val repo = PushRepository(RoomFcmTokenDataSource(db.waifuFcmTokenDao()), RoomNotificationDataSource(db.waifuPushDao()))
-            val error = repo.saveToken(token.toDomainModel())
+            repo.saveToken(token.toDomainModel())?.let {
+                Log.e("WaifuMessagingService", "Error al guardar el token: $it")
+            } ?: Log.e("WaifuMessagingService", "Token guardado con éxito")
+            /*val error = repo.saveToken(token.toDomainModel())
             error?.let {
                 Log.e("WaifuMessagingService", "Error al guardar el token: $error")
-            } ?: Log.e("WaifuMessagingService", "Token guardado con éxito")
+            } ?: Log.e("WaifuMessagingService", "Token guardado con éxito")*/
 
         }
     }
