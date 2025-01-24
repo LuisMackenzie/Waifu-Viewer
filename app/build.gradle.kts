@@ -67,6 +67,7 @@ android {
         getByName(SignConstants.variantNameRelease) {
             isMinifyEnabled = false
             versionNameSuffix = SignConstants.versionNameSuffixRelease
+            isDebuggable = true
             proguardFiles(getDefaultProguardFile(Constants.proGuardFile), Constants.proGuardRules)
             signingConfig = signingConfigs.getByName(SignConstants.variantNameRelease)
         }
@@ -74,6 +75,7 @@ android {
             isMinifyEnabled = false
             applicationIdSuffix = SignConstants.appIdSuffixEnhanced
             versionNameSuffix = SignConstants.versionNameSuffixEnhanced
+            isDebuggable = true
             resValue(Constants.type, SignConstants.varAppName, SignConstants.valueAppNameEnhanced)
             resValue(Constants.type, SignConstants.varWaifuViewer, SignConstants.homeWaifuViewerEnhanced)
             proguardFiles(getDefaultProguardFile(Constants.proGuardFile), Constants.proGuardRules)

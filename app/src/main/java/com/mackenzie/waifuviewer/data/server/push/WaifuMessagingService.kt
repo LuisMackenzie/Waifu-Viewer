@@ -130,7 +130,7 @@ class WaifuMessagingService : FirebaseMessagingService() {
         // loginRequired: Boolean,
         pendingActivity: Activity? = null
     ) {
-        val smallIcon = R.mipmap.ic_launcher
+        val smallIcon = R.mipmap.ic_launcher_foreground
 
         /** Go to Notifications Activity by default */
         /*val activity2 = pendingActivity ?: AppComponents.assembly?.getFeatures()?.let { features ->
