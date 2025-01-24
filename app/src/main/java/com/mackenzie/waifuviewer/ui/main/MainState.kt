@@ -27,6 +27,8 @@ class MainState(
     private val permissionRequester: PermissionRequester
 ) {
 
+    // TODO Delete this
+
     fun requestPermissionLauncher(afterRequest: (Boolean) -> Unit) {
         scope.launch {
             val result = permissionRequester.request()
