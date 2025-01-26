@@ -58,7 +58,7 @@ fun SplashScreenRoute(
 
     SplashScreenContent(
         imagePainter = painterResource(id =
-        R.drawable.ic_waifu_gemini),
+        R.drawable.ic_splash),
         scaleAnimation = scaleAnimation
     )
 }
