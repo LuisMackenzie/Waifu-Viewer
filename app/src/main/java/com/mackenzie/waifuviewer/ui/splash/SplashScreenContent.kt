@@ -54,7 +54,7 @@ fun SplashScreenRoute(
         scaleAnimation = scaleAnimation,
         onNavigate = onNavigate,
         durationMillisAnimation = 1500,
-        delayScreen = 15000L
+        delayScreen = 200L
     )
 
     SplashScreenContent(
