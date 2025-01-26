@@ -18,6 +18,8 @@ private val DarkColorScheme = darkColorScheme(
     secondary = PurpleGrey80,
     tertiary = Black10,
     onTertiary = Color.White,
+    inverseSurface = Color.Black,
+    inverseOnSurface = Purple40,
     // tertiaryContainer = PurpleOld,
     // background = Color(0xFFFFFBFE),
     // surface = Color(0xFFFFFBFE),
@@ -34,6 +36,8 @@ private val LightColorScheme = lightColorScheme(
     secondary = PurpleGrey40,
     tertiary = Pink80,
     onTertiary = Color.Black,
+    inverseSurface = Color.White,
+    inverseOnSurface = Purple80,
     // tertiaryContainer = PurpleOld,
 
     // background = Color(0xFFFFFBFE),
