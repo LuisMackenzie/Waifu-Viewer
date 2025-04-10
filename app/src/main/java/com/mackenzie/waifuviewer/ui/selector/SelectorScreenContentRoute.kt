@@ -41,6 +41,7 @@ import com.mackenzie.waifuviewer.ui.common.tagFilter
 import com.mackenzie.waifuviewer.ui.common.ui.MultiplePermissionRequestEffect
 import com.mackenzie.waifuviewer.ui.common.ui.PermissionRequestEffect
 import com.mackenzie.waifuviewer.ui.selector.ui.SelectorScreenContent
+import com.mackenzie.waifuviewer.ui.selector.ui.WaifuUpdateDialog
 import com.mackenzie.waifuviewer.ui.selector.ui.rememberSelectorState
 import kotlinx.coroutines.Dispatchers.IO
 
@@ -66,12 +67,21 @@ internal fun SelectorScreenContentRoute(
             state.remoteValues.type = getServerType(context)
             state.remoteValues.mode = getServerModeOnly(context)
         }) }
-    LaunchedEffect(IO) {
-        remote.latestServerVersion = remote.getLatestVersion().latestServerVersion
-    }
 
     var loadedServer by remember { mutableStateOf(getServerTypeByMode(remote.mode)) }
     var serverState by remember { mutableStateOf(remote.type ?: NORMAL) }
+    var openUpdateDialog by remember { mutableStateOf(false) }
+
+    if (openUpdateDialog) {
+        WaifuUpdateDialog(
+            latestVersion = remote.latestServerVersion ?: "",
+            onDismissRequest = { openUpdateDialog = it },
+            onConfirmation = {
+                // TODO
+                openUpdateDialog = false
+            }
+        )
+    }
 
     serverToClean?.let {
         when(it) {
@@ -122,26 +132,6 @@ internal fun SelectorScreenContentRoute(
         }
     }
 
-    remote.latestServerVersion?.let { latestVersion ->
-        when (latestVersion.compareVersion()) {
-            0 -> {
-                Log.e("SelectorScreenContentRoute", "La version del Servidor es la misma que la local")
-                Log.e("SelectorScreenContentRoute", "local Version=${BuildConfig.VERSION_NAME}")
-                Log.e("SelectorScreenContentRoute", "Server Version=${remote.latestServerVersion}")
-            }
-            1 -> {
-                Log.e("SelectorScreenContentRoute", "La version del Servidor es MENOR que la local")
-                Log.e("SelectorScreenContentRoute", "local Version=${BuildConfig.VERSION_NAME}")
-                Log.e("SelectorScreenContentRoute", "Server Version=${remote.latestServerVersion}")
-            }
-            -1 -> {
-                Log.e("SelectorScreenContentRoute", "La version del Servidor es MAYOR que la local")
-                Log.e("SelectorScreenContentRoute", "local Version=${BuildConfig.VERSION_NAME}")
-                Log.e("SelectorScreenContentRoute", "Server Version=${remote.latestServerVersion}")
-            }
-        }
-    }
-
     SelectorScreenContent(
         state = selectorState,
         onServerButtonClicked = {
@@ -182,6 +172,35 @@ internal fun SelectorScreenContentRoute(
         tags = state.tagsState,
         server = serverState
     )
+
+    LaunchedEffect(IO) {
+        remote.latestServerVersion = remote.getLatestVersion().latestServerVersion
+        remote.latestServerVersion?.let { latestVersion ->
+            when (latestVersion.compareVersion()) {
+                0 -> {
+                    Log.e("SelectorScreenContentRoute", "La version del Servidor es la misma que la local")
+                    Log.e("SelectorScreenContentRoute", "local Version=${BuildConfig.VERSION_NAME}")
+                    Log.e("SelectorScreenContentRoute", "Server Version=${remote.latestServerVersion}")
+                }
+                1 -> {
+                    Log.e("SelectorScreenContentRoute", "La version del Servidor es MENOR que la local")
+                    Log.e("SelectorScreenContentRoute", "local Version=${BuildConfig.VERSION_NAME}")
+                    Log.e("SelectorScreenContentRoute", "Server Version=${remote.latestServerVersion}")
+                }
+                -1 -> {
+                    openUpdateDialog = true
+                    Log.e("SelectorScreenContentRoute", "La version del Servidor es MAYOR que la local")
+                    Log.e("SelectorScreenContentRoute", "local Version=${BuildConfig.VERSION_NAME}")
+                    Log.e("SelectorScreenContentRoute", "Server Version=${remote.latestServerVersion}")
+                }
+                else -> {
+                    Log.e("SelectorScreenContentRoute", "Error al comparar versiones")
+                    Log.e("SelectorScreenContentRoute", "local Version=${BuildConfig.VERSION_NAME}")
+                    Log.e("SelectorScreenContentRoute", "Server Version=${remote.latestServerVersion}")
+                }
+            }
+        }
+    }
 }
 
 private fun handlePermissions(permissionsMap: Map<String, Boolean>) {
