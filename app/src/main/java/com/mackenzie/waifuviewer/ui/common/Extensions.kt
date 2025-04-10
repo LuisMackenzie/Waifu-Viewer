@@ -37,6 +37,7 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import com.mackenzie.waifuviewer.App
+import com.mackenzie.waifuviewer.BuildConfig
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.domain.DownloadModel
 import com.mackenzie.waifuviewer.domain.Error
@@ -77,8 +78,8 @@ fun RemoteConfigValues.getConfig(app: Activity): RemoteConfigValues {
     var configValues = this
     val remoteConfig: FirebaseRemoteConfig = Firebase.remoteConfig
     val configSettings = remoteConfigSettings {
-        minimumFetchIntervalInSeconds = Constants.RELEASEINTERVALINSECONDS
-        // minimumFetchIntervalInSeconds = Constants.DEBUGINTERVALINSECONDS
+        // minimumFetchIntervalInSeconds = Constants.RELEASEINTERVALINSECONDS
+        minimumFetchIntervalInSeconds = Constants.DEBUGINTERVALINSECONDS
     }
     remoteConfig.setConfigSettingsAsync(configSettings)
     remoteConfig.fetchAndActivate().addOnCompleteListener { task ->
@@ -88,6 +89,7 @@ fun RemoteConfigValues.getConfig(app: Activity): RemoteConfigValues {
                 remoteConfig.getBoolean("waifu_gpt_service"),
                 remoteConfig.getBoolean("waifu_gemini_service"),
                 remoteConfig.getBoolean("automatic_server"),
+                remoteConfig.getString("latest_server_version"),
                 false,
                 remoteConfig.getLong("server_mode").toInt(),
                 getServerType(app),
@@ -101,6 +103,50 @@ fun RemoteConfigValues.getConfig(app: Activity): RemoteConfigValues {
         }
     }
     return configValues
+}
+
+fun String.compareVersion(): Int {
+    val currentVersion = BuildConfig.VERSION_NAME.removeVersionSuffix()
+    return if (this.isNotEmpty()) {
+        val currentVersionParts = currentVersion.split(".")
+        val latestVersionParts = this.split(".")
+        if (currentVersionParts.size == latestVersionParts.size) {
+            for (i in currentVersionParts.indices) {
+                if (currentVersionParts[i].toInt() < latestVersionParts[i].toInt()) {
+                    return -1
+                } else if (currentVersionParts[i].toInt() > latestVersionParts[i].toInt()) {
+                    return 1
+                }
+            }
+        }
+        0
+    } else {
+        0
+    }
+}
+
+suspend fun RemoteConfigValues.getLatestVersion(): RemoteConfigValues {
+    val deferred = CompletableDeferred<RemoteConfigValues>()
+    var configValues = this
+    val remoteConfig: FirebaseRemoteConfig = Firebase.remoteConfig
+    val configSettings = remoteConfigSettings {
+        // minimumFetchIntervalInSeconds = Constants.RELEASEINTERVALINSECONDS
+        minimumFetchIntervalInSeconds = Constants.DEBUGINTERVALINSECONDS
+    }
+    remoteConfig.setConfigSettingsAsync(configSettings)
+    remoteConfig.fetchAndActivate().addOnCompleteListener { task ->
+        if (task.isSuccessful) {
+            configValues.latestServerVersion = remoteConfig.getString("latest_server_version")
+            deferred.complete(configValues)
+        } else {
+            Log.e("getRemoteConfig", "Hubo un Error al recuperar de remote config: ${task.exception}")
+        }
+    }
+    return deferred.await()
+}
+
+fun String.removeVersionSuffix(): String {
+    return this.substringBefore("-")
 }
 
 fun RemoteConfigValues.saveServerType(app: Activity) {
