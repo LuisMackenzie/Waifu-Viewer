@@ -1,7 +1,7 @@
 package com.mackenzie.waifuviewer.data.db.datasources
 
 import com.mackenzie.waifuviewer.data.datasource.WaifusBestLocalDataSource
-import com.mackenzie.waifuviewer.data.db.WaifuBestDao
+import com.mackenzie.waifuviewer.data.db.dao.WaifuBestDao
 import com.mackenzie.waifuviewer.data.db.WaifuBestDbItem
 import com.mackenzie.waifuviewer.data.tryCall
 import com.mackenzie.waifuviewer.domain.Error

@@ -1,7 +1,7 @@
 package com.mackenzie.waifuviewer.data.db.datasources
 
 import com.mackenzie.waifuviewer.data.datasource.WaifusPicLocalDataSource
-import com.mackenzie.waifuviewer.data.db.WaifuPicDao
+import com.mackenzie.waifuviewer.data.db.dao.WaifuPicDao
 import com.mackenzie.waifuviewer.data.db.WaifuPicDbItem
 import com.mackenzie.waifuviewer.data.tryCall
 import com.mackenzie.waifuviewer.domain.WaifuPicItem

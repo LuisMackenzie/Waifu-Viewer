@@ -1,12 +1,9 @@
 package com.mackenzie.waifuviewer
 
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.IdlingRegistry
-import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.rule.GrantPermissionRule
-import com.mackenzie.waifuviewer.data.db.WaifuPicDao
+import com.mackenzie.waifuviewer.data.db.dao.WaifuPicDao
 import com.mackenzie.waifuviewer.data.server.MockWebServerRule
 import com.mackenzie.waifuviewer.data.server.OkHttp3IdlingResource
 import com.mackenzie.waifuviewer.data.server.ServerPicDataSource

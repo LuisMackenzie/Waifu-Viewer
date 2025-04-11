@@ -2,6 +2,7 @@ package com.mackenzie.waifuviewer.ui.detail
 
 import android.app.Activity
 import android.content.Context
+import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat.getString
@@ -30,7 +31,7 @@ internal fun DetailScreenContentRoute(
 ) {
 
     val context = LocalContext.current
-    val sharedPref = (LocalContext.current as Activity).getPreferences(Context.MODE_PRIVATE)
+    val sharedPref = (LocalActivity.current as Activity).getPreferences(Context.MODE_PRIVATE)
     requireNotNull(sharedPref)
     val serverMode = sharedPref.getString(Constants.SERVER_MODE, "") ?: ""
 

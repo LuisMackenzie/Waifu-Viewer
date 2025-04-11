@@ -1,7 +1,7 @@
 package com.mackenzie.waifuviewer.data.db.datasources
 
 import com.mackenzie.waifuviewer.data.datasource.FavoriteLocalDataSource
-import com.mackenzie.waifuviewer.data.db.FavoriteDao
+import com.mackenzie.waifuviewer.data.db.dao.FavoriteDao
 import com.mackenzie.waifuviewer.data.db.FavoriteDbItem
 import com.mackenzie.waifuviewer.data.tryCall
 import com.mackenzie.waifuviewer.domain.*

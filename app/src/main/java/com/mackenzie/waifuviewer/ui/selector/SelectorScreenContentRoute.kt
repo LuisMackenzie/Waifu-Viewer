@@ -1,8 +1,13 @@
 package com.mackenzie.waifuviewer.ui.selector
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
+import android.Manifest.permission.POST_NOTIFICATIONS
 import android.app.Activity
+import android.os.Build
+import android.util.Log
+import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -21,7 +26,9 @@ import com.mackenzie.waifuviewer.domain.ServerType.ENHANCED
 import com.mackenzie.waifuviewer.domain.ServerType.NEKOS
 import com.mackenzie.waifuviewer.domain.ServerType.NORMAL
 import com.mackenzie.waifuviewer.domain.selector.SwitchState
+import com.mackenzie.waifuviewer.ui.common.compareVersion
 import com.mackenzie.waifuviewer.ui.common.getConfig
+import com.mackenzie.waifuviewer.ui.common.getLatestVersion
 import com.mackenzie.waifuviewer.ui.common.getServerModeOnly
 import com.mackenzie.waifuviewer.ui.common.getServerType
 import com.mackenzie.waifuviewer.ui.common.getServerTypeByMode
@@ -31,9 +38,12 @@ import com.mackenzie.waifuviewer.ui.common.loadInitialServer
 import com.mackenzie.waifuviewer.ui.common.saveServerType
 import com.mackenzie.waifuviewer.ui.common.showToast
 import com.mackenzie.waifuviewer.ui.common.tagFilter
+import com.mackenzie.waifuviewer.ui.common.ui.MultiplePermissionRequestEffect
 import com.mackenzie.waifuviewer.ui.common.ui.PermissionRequestEffect
 import com.mackenzie.waifuviewer.ui.selector.ui.SelectorScreenContent
+import com.mackenzie.waifuviewer.ui.selector.ui.WaifuUpdateDialog
 import com.mackenzie.waifuviewer.ui.selector.ui.rememberSelectorState
+import kotlinx.coroutines.Dispatchers.IO
 
 @Composable
 internal fun SelectorScreenContentRoute(
@@ -60,6 +70,18 @@ internal fun SelectorScreenContentRoute(
 
     var loadedServer by remember { mutableStateOf(getServerTypeByMode(remote.mode)) }
     var serverState by remember { mutableStateOf(remote.type ?: NORMAL) }
+    var openUpdateDialog by remember { mutableStateOf(false) }
+
+    if (openUpdateDialog) {
+        WaifuUpdateDialog(
+            latestVersion = remote.latestServerVersion ?: "",
+            onDismissRequest = { openUpdateDialog = it },
+            onConfirmation = {
+                // TODO
+                openUpdateDialog = false
+            }
+        )
+    }
 
     serverToClean?.let {
         when(it) {
@@ -79,7 +101,7 @@ internal fun SelectorScreenContentRoute(
             remote.type = loadedServer
 
             remote.mode = 1
-            remote.saveServerType(LocalContext.current as Activity)
+            remote.saveServerType(LocalActivity.current as Activity)
             LoadWaifuServer(loadedServer, vm) { state.isSelectorLoaded = true }
         }
     } else if (!state.isSelectorLoaded) {
@@ -94,12 +116,20 @@ internal fun SelectorScreenContentRoute(
             NEKOS -> remote.mode = 2
             else -> remote.mode = 0
         }
-        remote.saveServerType(LocalContext.current as Activity)
+        remote.saveServerType(LocalActivity.current as Activity)
         LoadWaifuServer(loadedServer, vm) { state.isSelectorLoaded = true }
     }
 
     if(state.reqPermisions) {
-        PermissionRequestEffect(ACCESS_COARSE_LOCATION) { granted -> if (!granted) { getString(context, R.string.waifus_permissions_content).showToast(context) } }
+        // PermissionRequestEffect(ACCESS_COARSE_LOCATION) { granted -> if (!granted) { getString(context, R.string.waifus_permissions_content).showToast(context) } }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            MultiplePermissionRequestEffect(
+                listOf(POST_NOTIFICATIONS, ACCESS_COARSE_LOCATION)
+            ) { permissionsMap -> handlePermissions(permissionsMap) }
+        } else {
+            // en este caso no se solicita permiso de de notificacion
+            PermissionRequestEffect(ACCESS_COARSE_LOCATION) { granted -> if (!granted) { getString(context, R.string.waifus_permissions_content).showToast(context) } }
+        }
     }
 
     SelectorScreenContent(
@@ -142,6 +172,49 @@ internal fun SelectorScreenContentRoute(
         tags = state.tagsState,
         server = serverState
     )
+
+    LaunchedEffect(IO) {
+        remote.latestServerVersion = remote.getLatestVersion().latestServerVersion
+        remote.latestServerVersion?.let { latestVersion ->
+            when (latestVersion.compareVersion()) {
+                0 -> {
+                    Log.e("SelectorScreenContentRoute", "La version del Servidor es la misma que la local")
+                    Log.e("SelectorScreenContentRoute", "local Version=${BuildConfig.VERSION_NAME}")
+                    Log.e("SelectorScreenContentRoute", "Server Version=${remote.latestServerVersion}")
+                }
+                1 -> {
+                    Log.e("SelectorScreenContentRoute", "La version del Servidor es MENOR que la local")
+                    Log.e("SelectorScreenContentRoute", "local Version=${BuildConfig.VERSION_NAME}")
+                    Log.e("SelectorScreenContentRoute", "Server Version=${remote.latestServerVersion}")
+                }
+                -1 -> {
+                    openUpdateDialog = true
+                    Log.e("SelectorScreenContentRoute", "La version del Servidor es MAYOR que la local")
+                    Log.e("SelectorScreenContentRoute", "local Version=${BuildConfig.VERSION_NAME}")
+                    Log.e("SelectorScreenContentRoute", "Server Version=${remote.latestServerVersion}")
+                }
+                else -> {
+                    Log.e("SelectorScreenContentRoute", "Error al comparar versiones")
+                    Log.e("SelectorScreenContentRoute", "local Version=${BuildConfig.VERSION_NAME}")
+                    Log.e("SelectorScreenContentRoute", "Server Version=${remote.latestServerVersion}")
+                }
+            }
+        }
+    }
+}
+
+private fun handlePermissions(permissionsMap: Map<String, Boolean>) {
+    permissionsMap.forEach { (permiso, granted) ->
+        if (!granted) {
+            when (permiso) {
+                // en caso denegado, no emitimos aviso
+                POST_NOTIFICATIONS -> {} // { getString(context, R.string.waifus_permissions_push).showToast(context) }
+                // en caso denegado, no emitimos aviso
+                ACCESS_COARSE_LOCATION -> {} // { getString(context, R.string.waifus_permissions_location).showToast(context) }
+                else -> {}
+            }
+        }
+    }
 }
 
 @Composable

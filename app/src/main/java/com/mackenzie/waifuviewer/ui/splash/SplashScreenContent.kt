@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -58,7 +59,7 @@ fun SplashScreenRoute(
 
     SplashScreenContent(
         imagePainter = painterResource(id =
-        R.drawable.ic_waifu_gemini),
+        R.drawable.ic_splash),
         scaleAnimation = scaleAnimation
     )
 }
@@ -72,9 +73,9 @@ fun SplashScreenContent(
 
     val gradientBrush = Brush.linearGradient(
         colors = listOf(
-            Color(143, 244, 235, 255),
-            Color(246, 248, 250, 255),
-            Color(223, 116, 241, 255),
+            MaterialTheme.colorScheme.inverseSurface,
+            MaterialTheme.colorScheme.inverseOnSurface,
+            MaterialTheme.colorScheme.inverseSurface
         )
     )
 
@@ -96,7 +97,7 @@ fun SplashScreenContent(
 
             Text(
                 text = stringResource(id = R.string.app_name),
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.onTertiary,
                 fontSize = 40.sp,
                 fontWeight = FontWeight.ExtraBold,
                 fontFamily = FontFamily.Serif,
@@ -110,13 +111,13 @@ fun SplashScreenContent(
             Box(modifier = modifier.fillMaxHeight(), contentAlignment = Alignment.BottomCenter) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     CircularProgressIndicator(
-                        color = Color.White,
+                        color = MaterialTheme.colorScheme.onTertiary,
                         strokeWidth = 5.dp,
                         modifier = modifier.size(50.dp),
                         // strokeCap = ProgressIndicatorDefaults.LinearStrokeCap
                     )
                     Spacer(modifier = modifier.size(25.dp))
-                    Text(text = loadingText(), color = Color.White, fontSize = 20.sp)
+                    Text(text = loadingText(), color = MaterialTheme.colorScheme.onTertiary, fontSize = 20.sp)
                 }
             }
         }

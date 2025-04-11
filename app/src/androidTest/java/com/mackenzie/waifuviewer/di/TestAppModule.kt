@@ -3,6 +3,11 @@ package com.mackenzie.waifuviewer.di
 import android.app.Application
 import androidx.room.Room
 import com.mackenzie.waifuviewer.data.db.*
+import com.mackenzie.waifuviewer.data.db.dao.FavoriteDao
+import com.mackenzie.waifuviewer.data.db.dao.WaifuBestDao
+import com.mackenzie.waifuviewer.data.db.dao.WaifuImDao
+import com.mackenzie.waifuviewer.data.db.dao.WaifuImTagsDao
+import com.mackenzie.waifuviewer.data.db.dao.WaifuPicDao
 import com.mackenzie.waifuviewer.data.server.OpenAIService
 import com.mackenzie.waifuviewer.data.server.models.RemoteConnect
 import com.mackenzie.waifuviewer.data.server.WaifuBestService
@@ -38,7 +43,7 @@ object TestAppModule {
 
     @Provides
     @Singleton
-    fun provideImDao(db: WaifuDataBase): WaifuImDao  = db.waifuImDao()
+    fun provideImDao(db: WaifuDataBase): WaifuImDao = db.waifuImDao()
 
     @Provides
     @Singleton
@@ -46,7 +51,7 @@ object TestAppModule {
 
     @Provides
     @Singleton
-    fun provideBestDao(db: WaifuDataBase): WaifuBestDao  = db.waifuBestDao()
+    fun provideBestDao(db: WaifuDataBase): WaifuBestDao = db.waifuBestDao()
 
     @Provides
     @Singleton

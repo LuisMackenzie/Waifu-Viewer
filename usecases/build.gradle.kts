@@ -21,3 +21,9 @@ dependencies {
     testImplementation(Libs.Mockito.inline)
     testImplementation(Libs.JUnit.junit)
 }
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile> {
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+}

@@ -1,9 +1,9 @@
 package com.mackenzie.waifuviewer.ui.fakes
 
-import com.mackenzie.waifuviewer.data.db.WaifuImDao
+import com.mackenzie.waifuviewer.data.db.dao.WaifuImDao
 import com.mackenzie.waifuviewer.data.db.WaifuImDbItem
 import com.mackenzie.waifuviewer.data.db.WaifuImTagDb
-import com.mackenzie.waifuviewer.data.db.WaifuImTagsDao
+import com.mackenzie.waifuviewer.data.db.dao.WaifuImTagsDao
 import com.mackenzie.waifuviewer.data.server.WaifuImService
 import com.mackenzie.waifuviewer.data.server.models.WaifuIm
 import com.mackenzie.waifuviewer.data.server.models.WaifuImResult

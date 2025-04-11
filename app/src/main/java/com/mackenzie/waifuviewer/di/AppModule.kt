@@ -6,6 +6,7 @@ import androidx.room.Room
 import com.mackenzie.waifuviewer.data.*
 import com.mackenzie.waifuviewer.data.datasource.*
 import com.mackenzie.waifuviewer.data.db.WaifuDataBase
+import com.mackenzie.waifuviewer.data.db.WaifuDataBase.Companion.DATABASE_NAME
 import com.mackenzie.waifuviewer.data.db.datasources.*
 import com.mackenzie.waifuviewer.data.server.*
 import com.mackenzie.waifuviewer.data.server.models.RemoteConnect
@@ -30,11 +31,15 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideDatabase(app: Application) = WaifuDataBase.getDatabase(app)
+
+    /*@Provides
+    @Singleton
     fun provideDatabase(app: Application) = Room.databaseBuilder(
         app,
         WaifuDataBase::class.java,
-        "waifu-database"
-    ).build()
+        DATABASE_NAME
+    ).build()*/
 
     @Provides
     @Singleton
@@ -55,6 +60,14 @@ object AppModule {
     @Provides
     @Singleton
     fun provideTagsDao(db: WaifuDataBase) = db.waifuImTagsDao()
+
+    @Provides
+    @Singleton
+    fun provideTokenDao(db: WaifuDataBase) = db.waifuFcmTokenDao()
+
+    @Provides
+    @Singleton
+    fun providePushDao(db: WaifuDataBase) = db.waifuPushDao()
 
     @Provides
     @Singleton
@@ -181,5 +194,11 @@ abstract class AppDataModule {
 
     @Binds
     abstract fun bindPermissionChecker(permissionChecker: AndroidPermissionChecker): PermissionChecker
+
+    @Binds
+    abstract fun bindLocalTokenDataSource(localTokenDataSource: RoomFcmTokenDataSource): TokenLocalDataSource
+
+    @Binds
+    abstract fun bindLocalPushDataSource(localPushDataSource: RoomNotificationDataSource): NotificationLocalDataSource
 
 }

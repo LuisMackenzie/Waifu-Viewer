@@ -1,6 +1,7 @@
-package com.mackenzie.waifuviewer.data.db
+package com.mackenzie.waifuviewer.data.db.dao
 
 import androidx.room.*
+import com.mackenzie.waifuviewer.data.db.WaifuBestDbItem
 import kotlinx.coroutines.flow.Flow
 
 @Dao

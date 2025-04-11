@@ -48,6 +48,8 @@
     <string name="waifus_content">Here is shown some waifus</string>
     <string name="waifus_detail_downloading">Descargando…</string>
     <string name="waifus_permissions_content">Debes aceptar el permiso para usar esta funcion</string>
+    <string name="waifus_permissions_location">El permiso de localizacion es opcional para usar una caracteristica.</string>
+    <string name="waifus_permissions_push">Debes aceptar el permiso de notificaciones para recibir los avisos</string>
 
     <string name="server_normal_string">normal</string>
     <string name="server_enhanced_string">enhanced</string>
@@ -65,6 +67,11 @@
     <string name="dialog_search_subtitle">La busqueda avanzada tardara unos segundos…</string>
     <string name="dialog_search_accept">Buscar Waifu</string>
     <string name="dialog_search_deny">Cancelar Busqueda</string>
+
+    <string name="dialog_update_title">Hay una nueva actualización</string>
+    <string name="dialog_update_subtitle">Se ha liberado una nueva version. Se recomienda actualizar.\nTu Version:</string>
+    <string name="dialog_update_subtitle_hint">\nÚltima Version Lanzada:</string>
+    <string name="dialog_update_accept">Actualizar</string>
 
     <!-- Gemini Menu strings -->
     <string name="menu_summarize_title">Generar texto desde un Input de texto</string>
@@ -85,6 +92,8 @@
     <!-- Chat sample strings -->
     <string name="chat_label">Mensaje</string>
     <string name="action_send">Enviar</string>
+
+    <string name="default_notification_channel_id">notification_channel</string>
 
 
 </resources>
