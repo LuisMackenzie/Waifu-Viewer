@@ -2,11 +2,7 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="17">
-      <module name="Waifu_Viewer.app" target="21" />
       <module name="Waifu_Viewer.app.test" target="11" />
-      <module name="Waifu_Viewer.buildSrc" target="21" />
-      <module name="Waifu_Viewer.buildSrc.main" target="21" />
-      <module name="Waifu_Viewer.buildSrc.test" target="21" />
       <module name="WaifuViewer.buildSrc" target="11" />
       <module name="WaifuViewer.buildSrc.main" target="11" />
       <module name="WaifuViewer.buildSrc.test" target="11" />
