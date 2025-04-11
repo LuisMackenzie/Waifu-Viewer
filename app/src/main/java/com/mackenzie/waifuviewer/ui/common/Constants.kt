@@ -22,6 +22,7 @@ class Constants {
 
         const val DEBUGINTERVALINSECONDS = 10L
         const val RELEASEINTERVALINSECONDS = 43200L
+        const val SPACE = " "
 
     }
 }
