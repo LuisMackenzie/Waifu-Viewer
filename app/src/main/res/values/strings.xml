@@ -68,9 +68,10 @@
     <string name="dialog_search_accept">Buscar Waifu</string>
     <string name="dialog_search_deny">Cancelar Busqueda</string>
 
-    <string name="dialog_update_title">Hay una nueva actualización</string>
-    <string name="dialog_update_subtitle">Se ha liberado una nueva version. Se recomienda actualizar.\nTu Version:</string>
-    <string name="dialog_update_subtitle_hint">\nÚltima Version Lanzada:</string>
+    <string name="dialog_update_title">Hay una actualización</string>
+    <string name="dialog_update_subtitle">Se recomienda actualizar la aplicación.</string>
+    <string name="dialog_update_local_version">Tu Version:</string>
+    <string name="dialog_update_latest_version">Última Version Lanzada:</string>
     <string name="dialog_update_accept">Actualizar</string>
 
     <!-- Gemini Menu strings -->
