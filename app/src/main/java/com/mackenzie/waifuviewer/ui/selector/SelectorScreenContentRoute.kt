@@ -3,6 +3,7 @@ package com.mackenzie.waifuviewer.ui.selector
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.POST_NOTIFICATIONS
 import android.app.Activity
+import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.activity.compose.LocalActivity
@@ -26,6 +27,7 @@ import com.mackenzie.waifuviewer.domain.ServerType.ENHANCED
 import com.mackenzie.waifuviewer.domain.ServerType.NEKOS
 import com.mackenzie.waifuviewer.domain.ServerType.NORMAL
 import com.mackenzie.waifuviewer.domain.selector.SwitchState
+import com.mackenzie.waifuviewer.ui.common.SaveUtils
 import com.mackenzie.waifuviewer.ui.common.compareVersion
 import com.mackenzie.waifuviewer.ui.common.getConfig
 import com.mackenzie.waifuviewer.ui.common.getLatestVersion
@@ -78,6 +80,10 @@ internal fun SelectorScreenContentRoute(
             onDismissRequest = { openUpdateDialog = it },
             onConfirmation = {
                 // TODO
+                remote.latestServerVersion?.let {
+                    SaveUtils().downloadAndInstallUpdate(context, it)
+                    "downloading...".showToast(context)
+                }
                 openUpdateDialog = false
             }
         )

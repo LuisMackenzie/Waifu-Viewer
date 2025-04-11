@@ -21,6 +21,7 @@ import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 import androidx.core.net.toUri
+import com.mackenzie.waifuviewer.BuildConfig
 
 class SaveUtils {
 
@@ -91,14 +92,15 @@ class SaveUtils {
     }
 
 
-    fun downloadAndInstallUpdate(context: Context, apkUrl: String) {
-        val request = DownloadManager.Request(apkUrl.toUri())
+    fun downloadAndInstallUpdate(context: Context, latestVer: String) {
+        val flavorLink = latestVer.getFlavorLink(context)
+        val request = DownloadManager.Request(flavorLink.toUri())
             .setTitle(context.getString(R.string.app_name))
             .setDescription(context.getString(R.string.dialog_update_accept))
             .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
             .setDestinationInExternalPublicDir(
                 Environment.DIRECTORY_DOWNLOADS,
-                "waifu-viewer-update.apk"
+                "waifu-update-${latestVer}.apk"
             )
             .setMimeType("application/vnd.android.package-archive")
 
@@ -136,8 +138,26 @@ class SaveUtils {
             context,
             onComplete,
             IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE),
-            ContextCompat.RECEIVER_NOT_EXPORTED
+            ContextCompat.RECEIVER_EXPORTED
         )
+    }
+
+    private fun String.getFlavorLink(context: Context): String {
+        val baseLink = context.getString(R.string.dialog_update_download_base_link)
+        val debugFile = context.getString(R.string.dialog_update_download_debug_file_name)
+        val enhancedFile = context.getString(R.string.dialog_update_download_enhanced_file_name)
+        val releaseFile = context.getString(R.string.dialog_update_download_release_file_name)
+        val mockVersion = "0.8.6"
+        /*return when (BuildConfig.VERSION_NAME.substringAfterLast("-")) {
+            "DEBUG" -> { baseLink + this + debugFile }
+            "PRIME" -> { baseLink + this + enhancedFile }
+            else -> { baseLink + this + releaseFile }
+        }*/
+        return when (BuildConfig.VERSION_NAME.substringAfterLast("-")) {
+            "DEBUG" -> { baseLink + mockVersion + debugFile }
+            "PRIME" -> { baseLink + mockVersion + enhancedFile }
+            else -> { baseLink + mockVersion + releaseFile }
+        }
     }
 
     fun installApk(context: Context, apkFile: File) {
