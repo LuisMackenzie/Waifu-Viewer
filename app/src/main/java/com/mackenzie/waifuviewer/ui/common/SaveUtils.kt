@@ -94,13 +94,14 @@ class SaveUtils {
 
     fun downloadAndInstallUpdate(context: Context, latestVer: String) {
         val flavorLink = latestVer.getFlavorLink(context)
+        val updateNameFile = "waifu-${BuildConfig.BUILD_TYPE}-${latestVer}.apk"
         val request = DownloadManager.Request(flavorLink.toUri())
             .setTitle(context.getString(R.string.app_name))
             .setDescription(context.getString(R.string.dialog_update_accept))
             .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
             .setDestinationInExternalPublicDir(
                 Environment.DIRECTORY_DOWNLOADS,
-                "waifu-update-${latestVer}.apk"
+                updateNameFile
             )
             .setMimeType("application/vnd.android.package-archive")
 
