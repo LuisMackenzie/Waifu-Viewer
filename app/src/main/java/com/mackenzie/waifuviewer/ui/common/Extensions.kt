@@ -78,8 +78,8 @@ fun RemoteConfigValues.getConfig(app: Activity): RemoteConfigValues {
     var configValues = this
     val remoteConfig: FirebaseRemoteConfig = Firebase.remoteConfig
     val configSettings = remoteConfigSettings {
-        // minimumFetchIntervalInSeconds = Constants.RELEASEINTERVALINSECONDS
-        minimumFetchIntervalInSeconds = Constants.DEBUGINTERVALINSECONDS
+        minimumFetchIntervalInSeconds = Constants.RELEASEINTERVALINSECONDS
+        // minimumFetchIntervalInSeconds = Constants.DEBUGINTERVALINSECONDS
     }
     remoteConfig.setConfigSettingsAsync(configSettings)
     remoteConfig.fetchAndActivate().addOnCompleteListener { task ->
