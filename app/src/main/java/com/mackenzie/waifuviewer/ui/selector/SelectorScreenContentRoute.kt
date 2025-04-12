@@ -79,12 +79,12 @@ internal fun SelectorScreenContentRoute(
             latestVersion = remote.latestServerVersion ?: "",
             onDismissRequest = { openUpdateDialog = it },
             onConfirmation = {
-                // TODO
                 remote.latestServerVersion?.let {
-                    SaveUtils().downloadAndInstallUpdate(context, it)
-                    "downloading...".showToast(context)
+                    if (SaveUtils().downloadAndInstallUpdate(context, it)) {
+                        getString(context, R.string.waifus_updates_downloading).showToast(context)
+                        openUpdateDialog = false
+                    }
                 }
-                openUpdateDialog = false
             }
         )
     }

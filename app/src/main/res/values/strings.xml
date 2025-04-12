@@ -47,6 +47,7 @@
     <string name="waifus_size">Total Waifus = </string>
     <string name="waifus_content">Here is shown some waifus</string>
     <string name="waifus_detail_downloading">Descargando…</string>
+    <string name="waifus_updates_downloading">Descargando actualización…</string>
     <string name="waifus_permissions_content">Debes aceptar el permiso para usar esta funcion</string>
     <string name="waifus_permissions_location">El permiso de localizacion es opcional para usar una caracteristica.</string>
     <string name="waifus_permissions_push">Debes aceptar el permiso de notificaciones para recibir los avisos</string>
