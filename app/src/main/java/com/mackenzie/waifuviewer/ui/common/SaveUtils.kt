@@ -148,16 +148,10 @@ class SaveUtils {
         val debugFile = context.getString(R.string.dialog_update_download_debug_file_name)
         val enhancedFile = context.getString(R.string.dialog_update_download_enhanced_file_name)
         val releaseFile = context.getString(R.string.dialog_update_download_release_file_name)
-        val mockVersion = "0.8.6"
-        /*return when (BuildConfig.VERSION_NAME.substringAfterLast("-")) {
+        return when (BuildConfig.VERSION_NAME.substringAfterLast("-")) {
             "DEBUG" -> { baseLink + this + debugFile }
             "PRIME" -> { baseLink + this + enhancedFile }
             else -> { baseLink + this + releaseFile }
-        }*/
-        return when (BuildConfig.VERSION_NAME.substringAfterLast("-")) {
-            "DEBUG" -> { baseLink + mockVersion + debugFile }
-            "PRIME" -> { baseLink + mockVersion + enhancedFile }
-            else -> { baseLink + mockVersion + releaseFile }
         }
     }
 
