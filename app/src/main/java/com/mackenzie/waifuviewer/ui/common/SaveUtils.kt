@@ -1,9 +1,18 @@
 package com.mackenzie.waifuviewer.ui.common
 
+import android.app.DownloadManager
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
+import android.os.Build
 import android.os.Environment
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
+import com.mackenzie.waifuviewer.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -11,6 +20,8 @@ import java.io.FileOutputStream
 import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
+import androidx.core.net.toUri
+import com.mackenzie.waifuviewer.BuildConfig
 
 class SaveUtils {
 
@@ -78,5 +89,89 @@ class SaveUtils {
             e.printStackTrace()
             false
         }
+    }
+
+
+    fun downloadAndInstallUpdate(context: Context, latestVer: String) {
+        val flavorLink = latestVer.getFlavorLink(context)
+        val updateNameFile = "waifu-${BuildConfig.BUILD_TYPE}-${latestVer}.apk"
+        val request = DownloadManager.Request(flavorLink.toUri())
+            .setTitle(context.getString(R.string.app_name))
+            .setDescription(context.getString(R.string.dialog_update_accept))
+            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+            .setDestinationInExternalPublicDir(
+                Environment.DIRECTORY_DOWNLOADS,
+                updateNameFile
+            )
+            .setMimeType("application/vnd.android.package-archive")
+
+        val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        val downloadId = downloadManager.enqueue(request)
+
+        // Registrar un receptor para detectar cuando finaliza la descarga
+        val onComplete = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
+                if (id == downloadId) {
+                    // Iniciar la instalación
+                    val query = DownloadManager.Query().setFilterById(downloadId)
+                    val cursor = downloadManager.query(query)
+
+                    if (cursor.moveToFirst()) {
+                        val statusIndex = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)
+                        val status = cursor.getInt(statusIndex)
+
+                        if (status == DownloadManager.STATUS_SUCCESSFUL) {
+                            val localUriIndex = cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI)
+                            val localUri = cursor.getString(localUriIndex).toUri()
+                            val apkFile = File(localUri.path?.replace("file://", "") ?: "")
+
+                            installApk(context, apkFile)
+                        }
+                    }
+                    cursor.close()
+                    context.unregisterReceiver(this)
+                }
+            }
+        }
+
+        ContextCompat.registerReceiver(
+            context,
+            onComplete,
+            IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE),
+            ContextCompat.RECEIVER_EXPORTED
+        )
+    }
+
+    private fun String.getFlavorLink(context: Context): String {
+        val baseLink = context.getString(R.string.dialog_update_download_base_link)
+        val debugFile = context.getString(R.string.dialog_update_download_debug_file_name)
+        val enhancedFile = context.getString(R.string.dialog_update_download_enhanced_file_name)
+        val releaseFile = context.getString(R.string.dialog_update_download_release_file_name)
+        return when (BuildConfig.VERSION_NAME.substringAfterLast("-")) {
+            "DEBUG" -> { baseLink + this + debugFile }
+            "PRIME" -> { baseLink + this + enhancedFile }
+            else -> { baseLink + this + releaseFile }
+        }
+    }
+
+    fun installApk(context: Context, apkFile: File) {
+        val apkUri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            FileProvider.getUriForFile(
+                context,
+                "${context.packageName}.fileprovider",
+                apkFile
+            )
+        } else {
+            Uri.fromFile(apkFile)
+        }
+
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            setDataAndType(apkUri, "application/vnd.android.package-archive")
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+
+        context.startActivity(intent)
     }
 }

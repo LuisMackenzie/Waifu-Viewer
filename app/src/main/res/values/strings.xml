@@ -68,10 +68,15 @@
     <string name="dialog_search_accept">Buscar Waifu</string>
     <string name="dialog_search_deny">Cancelar Busqueda</string>
 
-    <string name="dialog_update_title">Hay una nueva actualización</string>
-    <string name="dialog_update_subtitle">Se ha liberado una nueva version. Se recomienda actualizar.\nTu Version:</string>
-    <string name="dialog_update_subtitle_hint">\nÚltima Version Lanzada:</string>
+    <string name="dialog_update_title">Hay una actualización</string>
+    <string name="dialog_update_subtitle">Se recomienda actualizar la aplicación.</string>
+    <string name="dialog_update_local_version">Tu Version:</string>
+    <string name="dialog_update_latest_version">Última Version Lanzada:</string>
     <string name="dialog_update_accept">Actualizar</string>
+    <string name="dialog_update_download_base_link">https://github.com/LuisMackenzie/Waifu-Viewer/releases/download/v</string>
+    <string name="dialog_update_download_debug_file_name">/app-debug.apk</string>
+    <string name="dialog_update_download_release_file_name">/app-release.apk</string>
+    <string name="dialog_update_download_enhanced_file_name">/app-enhanced.apk</string>
 
     <!-- Gemini Menu strings -->
     <string name="menu_summarize_title">Generar texto desde un Input de texto</string>
