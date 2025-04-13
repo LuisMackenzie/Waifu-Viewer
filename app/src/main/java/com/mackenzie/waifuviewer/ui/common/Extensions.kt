@@ -107,22 +107,19 @@ fun RemoteConfigValues.getConfig(app: Activity): RemoteConfigValues {
 
 fun String.compareVersion(): Int {
     val currentVersion = BuildConfig.VERSION_NAME.removeVersionSuffix()
-    return if (this.isNotEmpty()) {
-        val currentVersionParts = currentVersion.split(".")
-        val latestVersionParts = this.split(".")
-        if (currentVersionParts.size == latestVersionParts.size) {
-            for (i in currentVersionParts.indices) {
-                if (currentVersionParts[i].toInt() < latestVersionParts[i].toInt()) {
-                    return -1
-                } else if (currentVersionParts[i].toInt() > latestVersionParts[i].toInt()) {
-                    return 1
-                }
-            }
-        }
-        0
-    } else {
-        0
+    if (this.isEmpty()) return 0
+    val localParts = currentVersion.split(".")
+    val serverParts = this.split(".")
+    if (serverParts.size > localParts.size) return -1
+    val maxLength = maxOf(localParts.size, serverParts.size)
+    for (i in 0 until maxLength) {
+        val localValue = if (i < localParts.size) localParts[i].toIntOrNull() ?: 0 else 0
+        val serverValue = if (i < serverParts.size) serverParts[i].toIntOrNull() ?: 0 else 0
+
+        if (localValue < serverValue) return -1
+        if (localValue > serverValue) return 1
     }
+    return 0
 }
 
 suspend fun RemoteConfigValues.getLatestVersion(): RemoteConfigValues {
@@ -143,6 +140,18 @@ suspend fun RemoteConfigValues.getLatestVersion(): RemoteConfigValues {
         }
     }
     return deferred.await()
+}
+
+fun String.getFlavorLink(context: Context): String {
+    val baseLink = context.getString(R.string.dialog_update_download_base_link)
+    val debugFile = context.getString(R.string.dialog_update_download_debug_file_name)
+    val enhancedFile = context.getString(R.string.dialog_update_download_enhanced_file_name)
+    val releaseFile = context.getString(R.string.dialog_update_download_release_file_name)
+    return when (BuildConfig.VERSION_NAME.substringAfterLast("-")) {
+        "DEBUG" -> { baseLink + this + debugFile }
+        "PRIME" -> { baseLink + this + enhancedFile }
+        else -> { baseLink + this + releaseFile }
+    }
 }
 
 fun String.removeVersionSuffix(): String {
