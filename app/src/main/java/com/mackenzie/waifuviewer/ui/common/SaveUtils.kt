@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -126,7 +127,11 @@ class SaveUtils {
                     val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
                     if (id == downloadId) {
                         // Iniciar la instalación
-                        val query = DownloadManager.Query().setFilterById(downloadId)
+                        val downloadedUri = downloadManager.getUriForDownloadedFile(downloadId)
+                        downloadedUri?.let {
+                            installApk(context, it)
+                        }
+                        /*val query = DownloadManager.Query().setFilterById(downloadId)
                         val cursor = downloadManager.query(query)
 
                         if (cursor.moveToFirst()) {
@@ -141,7 +146,7 @@ class SaveUtils {
                                 installApk(context, apkFile)
                             }
                         }
-                        cursor.close()
+                        cursor.close()*/
                         context.unregisterReceiver(this)
                     }
                 }
@@ -169,8 +174,8 @@ class SaveUtils {
         }
     }
 
-    fun installApk(context: Context, apkFile: File) {
-        val apkUri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+    fun installApk(context: Context, apkUri: Uri) {
+        /*val apkUri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             FileProvider.getUriForFile(
                 context,
                 "${context.packageName}.fileprovider",
@@ -178,7 +183,8 @@ class SaveUtils {
             )
         } else {
             Uri.fromFile(apkFile)
-        }
+        }*/
+        Log.e( "TAG", "APK URI: $apkUri")
 
         val intent = Intent(Intent.ACTION_VIEW).apply {
             setDataAndType(apkUri, "application/vnd.android.package-archive")
