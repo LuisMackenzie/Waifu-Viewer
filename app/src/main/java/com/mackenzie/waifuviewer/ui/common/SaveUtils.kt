@@ -112,10 +112,7 @@ class SaveUtils {
                 .setTitle(context.getString(R.string.app_name))
                 .setDescription(context.getString(R.string.dialog_update_accept))
                 .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-                .setDestinationInExternalPublicDir(
-                    Environment.DIRECTORY_DOWNLOADS,
-                    updateNameFile
-                )
+                .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, updateNameFile)
                 .setMimeType("application/vnd.android.package-archive")
 
             val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
@@ -127,26 +124,31 @@ class SaveUtils {
                     val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
                     if (id == downloadId) {
                         // Iniciar la instalación
-                        val downloadedUri = downloadManager.getUriForDownloadedFile(downloadId)
-                        downloadedUri?.let {
-                            installApk(context, it)
-                        }
-                        /*val query = DownloadManager.Query().setFilterById(downloadId)
+                        val query = DownloadManager.Query().setFilterById(downloadId)
                         val cursor = downloadManager.query(query)
-
                         if (cursor.moveToFirst()) {
                             val statusIndex = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)
                             val status = cursor.getInt(statusIndex)
-
                             if (status == DownloadManager.STATUS_SUCCESSFUL) {
-                                val localUriIndex = cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI)
-                                val localUri = cursor.getString(localUriIndex).toUri()
-                                val apkFile = File(localUri.path?.replace("file://", "") ?: "")
-
-                                installApk(context, apkFile)
+                                val apkUri: Uri? = if(Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                                    val fileNameIndex = cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_FILENAME)
+                                    if (fileNameIndex != -1) {
+                                        val localfileName = cursor.getString(fileNameIndex)
+                                        localfileName?.let {
+                                            Uri.fromFile(File(it))
+                                        } ?: run { null }
+                                    } else {
+                                        null
+                                    }
+                                } else {
+                                    downloadManager.getUriForDownloadedFile(downloadId)
+                                }
+                                apkUri?.let {
+                                    installApk(context, it)
+                                }
                             }
                         }
-                        cursor.close()*/
+                        cursor.close()
                         context.unregisterReceiver(this)
                     }
                 }
@@ -175,23 +177,11 @@ class SaveUtils {
     }
 
     fun installApk(context: Context, apkUri: Uri) {
-        /*val apkUri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            FileProvider.getUriForFile(
-                context,
-                "${context.packageName}.fileprovider",
-                apkFile
-            )
-        } else {
-            Uri.fromFile(apkFile)
-        }*/
-        Log.e( "TAG", "APK URI: $apkUri")
-
         val intent = Intent(Intent.ACTION_VIEW).apply {
             setDataAndType(apkUri, "application/vnd.android.package-archive")
             flags = Intent.FLAG_ACTIVITY_NEW_TASK
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
-
         context.startActivity(intent)
     }
 }
