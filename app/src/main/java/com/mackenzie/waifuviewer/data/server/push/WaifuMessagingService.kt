@@ -1,5 +1,6 @@
 package com.mackenzie.waifuviewer.data.server.push
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -20,6 +21,7 @@ import com.mackenzie.waifuviewer.data.server.mapper.toDomainModel
 import com.mackenzie.waifuviewer.domain.Notification
 import com.mackenzie.waifuviewer.domain.NotificationType
 import com.mackenzie.waifuviewer.ui.NavHostActivity
+import com.mackenzie.waifuviewer.ui.common.urlToBitmap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -148,9 +150,15 @@ class WaifuMessagingService : FirebaseMessagingService() {
                     smallIcon, notification.title, notification.description, notification.imageUrl, pendingIntent
                 )
             } else {
-                builder.setUpBuilderWithBackground(
-                    smallIcon, notification.title, resources, notification.description, notification.imageUrl, pendingIntent
-                )
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    builder.setUpBuilderAndBigPicture(
+                        smallIcon, notification.title, resources, notification.description, notification.imageUrl, pendingIntent
+                    )
+                } else {
+                    builder.setUpBuilderWithBackground(
+                        smallIcon, notification.title, resources, notification.description, notification.imageUrl, pendingIntent
+                    )
+                }
             }
 
             val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
