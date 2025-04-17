@@ -100,6 +100,7 @@
     <string name="action_send">Enviar</string>
 
     <string name="default_notification_channel_id">notification_channel</string>
+    <string name="default_notification_name">com.mackenzie.waifuviewer</string>
 
 
 </resources>

@@ -13,6 +13,7 @@ fun NotificationCompat.Builder.setUpBuilder(
     icon: Int,
     title: String,
     description: String,
+    imageUrl: String,
     intent: PendingIntent? = null
 ): NotificationCompat.Builder {
 
@@ -23,6 +24,7 @@ fun NotificationCompat.Builder.setUpBuilder(
         .setVibrate(longArrayOf(1000, 1000, 1000, 1000))
         .setOnlyAlertOnce(true)
         .setContentIntent(intent)
+
 }
 
 fun NotificationCompat.Builder.setUpBuilderWithBackground(
@@ -30,6 +32,7 @@ fun NotificationCompat.Builder.setUpBuilderWithBackground(
     title: String,
     res: Resources,
     description: String,
+    imageUrl: String,
     intent: PendingIntent? = null
 ): NotificationCompat.Builder {
 
@@ -47,6 +50,7 @@ fun createCustomNotification(
     type: NotificationType,
     title: String,
     body: String,
+    imageUrl: String,
     id: String? = null
 ) =
     Notification(
@@ -55,6 +59,7 @@ fun createCustomNotification(
         date = Date(),
         title = title,
         description = body,
+        imageUrl = imageUrl,
         isRead = false,
         type = type
     )

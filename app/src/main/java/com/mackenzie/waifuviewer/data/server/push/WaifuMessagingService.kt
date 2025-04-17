@@ -85,7 +85,7 @@ class WaifuMessagingService : FirebaseMessagingService() {
 
 
             val notification = createCustomNotification(
-                NotificationType.UPDATES, message.notification?.title ?: "", message.notification?.body ?: ""
+                NotificationType.UPDATES, message.notification?.title ?: "", message.notification?.body ?: "", message.notification?.imageUrl.toString()
             )
 
             generateNotification(notification, notification.pushId)
@@ -93,23 +93,24 @@ class WaifuMessagingService : FirebaseMessagingService() {
             Log.d("WaifuMessagingService", "Data recibida: ${message.data}")
         } else if (message.notification != null) {
             val notification = createCustomNotification(
-                NotificationType.NEWS, message.notification?.title ?: "", message.notification?.body ?: ""
+                NotificationType.NEWS, message.notification?.title ?: "", message.notification?.body ?: "", message.notification?.imageUrl.toString()
             )
             // TODO guardar la notificación en room
             // notificationRepository.savePush(notification)
             generateNotification(notification, notification.pushId)
-            Log.d("WaifuMessagingService", "Notificación recibida: title=${message.notification?.title}, Body=${message.notification?.body}")
+            Log.d("WaifuMessagingService", "Notificación recibida: title=${message.notification?.title}, Body=${message.notification?.body}, image=${message.notification?.imageUrl}")
         }
 
         // Si el mensaje contiene datos (remoteMessage.data), puedes procesarlos aquí:
         message.data.let { data ->
             // Maneja la lógica de los datos aquí
+            // Log.e("WaifuMessagingService", "Data recibida: ${data}")
 
         }
 
         // Si el mensaje contiene una notificación (remoteMessage.notification), también puedes procesarla:
         message.notification?.let { notification ->
-            // Log.d("WaifuMessagingService", "Notificación recibida: ${notification.body}")
+            // Log.e("WaifuMessagingService", "Notificación recibida: ${notification.body}")
             // Por ejemplo, mostrar una notificación en la barra de estado
             // showNotification(notification.title, notification.body)
         }
@@ -123,6 +124,7 @@ class WaifuMessagingService : FirebaseMessagingService() {
 
     private fun generateNotification(
         notification: Notification,
+        // imageUrl: String,
         notificationId: String,
         pendingActivity: Activity? = null
     ) {
@@ -143,11 +145,11 @@ class WaifuMessagingService : FirebaseMessagingService() {
             val builder = NotificationCompat.Builder(applicationContext, channelId)
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
                 builder.setUpBuilder(
-                    smallIcon, notification.title, notification.description, pendingIntent
+                    smallIcon, notification.title, notification.description, notification.imageUrl, pendingIntent
                 )
             } else {
                 builder.setUpBuilderWithBackground(
-                    smallIcon, notification.title, resources, notification.description, pendingIntent
+                    smallIcon, notification.title, resources, notification.description, notification.imageUrl, pendingIntent
                 )
             }
 

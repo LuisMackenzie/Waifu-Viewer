@@ -8,6 +8,7 @@ data class Notification(
     val date: Date?,
     val title: String,
     val description: String,
+    val imageUrl: String,
     var isRead: Boolean,
     var type: NotificationType,
 )
