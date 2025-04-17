@@ -35,30 +35,6 @@ fun NotificationCompat.Builder.setUpBuilder(
 
 }
 
-fun NotificationCompat.Builder.setUpBuilderWithBackground(
-    icon: Int,
-    title: String,
-    res: Resources,
-    description: String,
-    imageUrl: String,
-    intent: PendingIntent? = null
-): NotificationCompat.Builder {
-
-    return this.setSmallIcon(icon)
-        .setContentTitle(title)
-        .setContentText(description)
-        .setAutoCancel(true)
-        .setOnlyAlertOnce(true)
-        .setColor(res.getColor(R.color.purple_100, null))
-        .setVibrate(longArrayOf(1000, 1000, 1000, 1000))
-        .setContentIntent(intent)
-        .setStyle(
-        NotificationCompat.BigPictureStyle()
-            .bigPicture(imageUrl.urlToBitmap())
-    )
-}
-
-@RequiresApi(Build.VERSION_CODES.S)
 fun NotificationCompat.Builder.setUpBuilderAndBigPicture(
     icon: Int,
     title: String,
@@ -77,9 +53,14 @@ fun NotificationCompat.Builder.setUpBuilderAndBigPicture(
         .setVibrate(longArrayOf(1000, 1000, 1000, 1000))
         .setContentIntent(intent)
         .setStyle(
-            NotificationCompat.BigPictureStyle()
-                .bigPicture(imageUrl.urlToBitmap())
-                .showBigPictureWhenCollapsed(true)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                NotificationCompat.BigPictureStyle()
+                    .bigPicture(imageUrl.urlToBitmap())
+                    .showBigPictureWhenCollapsed(true)
+            } else {
+                NotificationCompat.BigPictureStyle()
+                    .bigPicture(imageUrl.urlToBitmap())
+            }
         )
 }
 

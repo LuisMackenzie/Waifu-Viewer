@@ -150,15 +150,9 @@ class WaifuMessagingService : FirebaseMessagingService() {
                     smallIcon, notification.title, notification.description, notification.imageUrl, pendingIntent
                 )
             } else {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    builder.setUpBuilderAndBigPicture(
-                        smallIcon, notification.title, resources, notification.description, notification.imageUrl, pendingIntent
-                    )
-                } else {
-                    builder.setUpBuilderWithBackground(
-                        smallIcon, notification.title, resources, notification.description, notification.imageUrl, pendingIntent
-                    )
-                }
+                builder.setUpBuilderAndBigPicture(
+                    smallIcon, notification.title, resources, notification.description, notification.imageUrl, pendingIntent
+                )
             }
 
             val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
