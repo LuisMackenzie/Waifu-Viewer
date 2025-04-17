@@ -37,7 +37,7 @@ fun NotificationCompat.Builder.setUpBuilderWithBackground(
         .setAutoCancel(true)
         .setContentTitle(title)
         .setContentText(description)
-        .setColor(res.getColor(R.color.error, null))
+        .setColor(res.getColor(R.color.purple_100, null))
         .setVibrate(longArrayOf(1000, 1000, 1000, 1000))
         .setOnlyAlertOnce(true)
         .setContentIntent(intent)
