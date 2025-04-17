@@ -41,7 +41,7 @@ abstract class WaifuDataBase: RoomDatabase() {
                     context.applicationContext,
                     WaifuDataBase::class.java,
                     DATABASE_NAME
-                ).build()
+                ).fallbackToDestructiveMigration(false).build()
                 INSTANCE = instance
                 instance
             }
