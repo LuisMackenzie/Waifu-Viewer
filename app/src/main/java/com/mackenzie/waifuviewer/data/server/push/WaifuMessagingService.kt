@@ -85,21 +85,17 @@ class WaifuMessagingService : FirebaseMessagingService() {
             // var textReferences: Pair<Int, Int>? = null
             // var notificationTitle: Int? = null
 
-
-            val notification = createCustomNotification(
+            generateNotification(createCustomNotification(
                 NotificationType.UPDATES, message.notification?.title ?: "", message.notification?.body ?: "", message.notification?.imageUrl.toString()
-            )
-
-            generateNotification(notification, notification.pushId)
+            ))
 
             Log.d("WaifuMessagingService", "Data recibida: ${message.data}")
         } else if (message.notification != null) {
-            val notification = createCustomNotification(
-                NotificationType.NEWS, message.notification?.title ?: "", message.notification?.body ?: "", message.notification?.imageUrl.toString()
-            )
             // TODO guardar la notificación en room
             // notificationRepository.savePush(notification)
-            generateNotification(notification, notification.pushId)
+            generateNotification(createCustomNotification(
+                NotificationType.NEWS, message.notification?.title ?: "", message.notification?.body ?: "", message.notification?.imageUrl.toString()
+            ))
             Log.d("WaifuMessagingService", "Notificación recibida: title=${message.notification?.title}, Body=${message.notification?.body}, image=${message.notification?.imageUrl}")
         }
 
@@ -124,12 +120,7 @@ class WaifuMessagingService : FirebaseMessagingService() {
         return if (p1 != null && p2 != null) block(p1, p2) else null
     }
 
-    private fun generateNotification(
-        notification: Notification,
-        // imageUrl: String,
-        notificationId: String,
-        pendingActivity: Activity? = null
-    ) {
+    private fun generateNotification(notification: Notification) {
         val smallIcon = R.drawable.ic_waifu_gpt
 
         val activity = NavHostActivity::class.java
