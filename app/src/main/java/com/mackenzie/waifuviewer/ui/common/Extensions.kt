@@ -5,6 +5,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.nfc.NfcManager
 import android.os.Build
 import android.os.Bundle
@@ -53,6 +55,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import java.net.URL
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -317,6 +320,18 @@ fun getFirebaseInstance(): FirebaseAnalytics {
         Manifest.permission.ACCESS_COARSE_LOCATION
     ) == PackageManager.PERMISSION_GRANTED
 }*/
+
+fun String.urlToBitmap(): Bitmap? {
+    return try {
+        val url = URL(this)
+        val connection = url.openConnection()
+        connection.connect()
+        BitmapFactory.decodeStream(connection.getInputStream())
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
+    }
+}
 
 fun Context.hasWriteExternalStoragePermission(): Boolean {
     return ContextCompat.checkSelfPermission(
