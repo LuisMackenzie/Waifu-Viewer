@@ -49,7 +49,7 @@ fun NotificationCompat.Builder.setUpBuilderAndBigPicture(
         .setContentText(description)
         .setAutoCancel(true)
         .setOnlyAlertOnce(true)
-        .setColor(res.getColor(R.color.purple_100, null))
+        .setColor(res.getColor(R.color.purple_200, null))
         .setVibrate(longArrayOf(1000, 1000, 1000, 1000))
         .setContentIntent(intent)
         .setStyle(
