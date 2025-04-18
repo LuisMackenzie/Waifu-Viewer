@@ -138,7 +138,7 @@ class WaifuMessagingService : FirebaseMessagingService() {
             val builder = NotificationCompat.Builder(applicationContext, channelId)
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
                 builder.setUpBuilder(
-                    smallIcon, notification.title, notification.description, notification.imageUrl, pendingIntent
+                    smallIcon, notification.title, resources, notification.description, notification.imageUrl, pendingIntent
                 )
             } else {
                 builder.setUpBuilderAndBigPicture(
