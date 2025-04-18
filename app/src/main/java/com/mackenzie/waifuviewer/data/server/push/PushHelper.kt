@@ -3,10 +3,7 @@ package com.mackenzie.waifuviewer.data.server.push
 import android.app.PendingIntent
 import android.content.res.Resources
 import android.os.Build
-import android.widget.RemoteViews
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import com.mackenzie.waifuviewer.BuildConfig
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.domain.Notification
 import com.mackenzie.waifuviewer.domain.NotificationType
@@ -37,7 +34,6 @@ fun NotificationCompat.Builder.setUpBuilder(
             NotificationCompat.BigPictureStyle()
                 .bigPicture(imageUrl.urlToBitmap())
         )
-
 }
 
 fun NotificationCompat.Builder.setUpBuilderAndBigPicture(
