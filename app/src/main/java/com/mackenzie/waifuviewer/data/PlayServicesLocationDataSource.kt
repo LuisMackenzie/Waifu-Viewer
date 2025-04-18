@@ -26,7 +26,7 @@ class PlayServicesLocationDataSource @Inject constructor(application: Applicatio
                 }
         }
 
-    @Suppress("DEPRECATION")
+    // TODO
     private fun Location?.toRegion(): String? {
         var newCC: String? = null
         this?.let {
@@ -48,7 +48,7 @@ class PlayServicesLocationDataSource @Inject constructor(application: Applicatio
         return newCC ?: "US"
     }
 
-    @Suppress("DEPRECATION")
+    // TODO
     private fun Location?.toRegion2(): String? {
         val addresses = this?.let {
             geocoder.getFromLocation(latitude, longitude, 1)
