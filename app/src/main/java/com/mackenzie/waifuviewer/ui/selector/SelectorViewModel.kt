@@ -8,6 +8,7 @@ import com.mackenzie.waifuviewer.domain.WaifuBestItem
 import com.mackenzie.waifuviewer.domain.WaifuPicItem
 import com.mackenzie.waifuviewer.domain.im.WaifuImItem
 import com.mackenzie.waifuviewer.domain.im.WaifuImTagList
+import com.mackenzie.waifuviewer.usecases.GetLocationUseCase
 import com.mackenzie.waifuviewer.usecases.best.ClearWaifuBestUseCase
 import com.mackenzie.waifuviewer.usecases.best.RequestOnlyWaifuBestUseCase
 import com.mackenzie.waifuviewer.usecases.im.ClearWaifuImUseCase
@@ -34,7 +35,8 @@ class SelectorViewModel @Inject constructor(
     private val requestWaifuImTagsUseCase: RequestWaifuImTagsUseCase,
     private val clearWaifuImUseCase: ClearWaifuImUseCase,
     private val clearWaifuPicUseCase: ClearWaifuPicUseCase,
-    private val clearWaifuBestUseCase: ClearWaifuBestUseCase
+    private val clearWaifuBestUseCase: ClearWaifuBestUseCase,
+    private val getLocationUseCase: GetLocationUseCase
 ): ViewModel() {
 
     private val _state = MutableStateFlow(UiState())
@@ -120,11 +122,19 @@ class SelectorViewModel @Inject constructor(
         }
     }
 
+    fun onLocationPermissionGranted() {
+        viewModelScope.launch {
+            val region = getLocationUseCase()
+            _state.update { _state.value.copy(loc = region) }
+        }
+    }
+
     data class UiState(
         val waifuIm: WaifuImItem? = null,
         val waifuPic: WaifuPicItem? = null,
         val waifuNeko: WaifuBestItem? = null,
         val tags: WaifuImTagList? = null,
+        val loc: String? = null,
         val error: Error? = null
     )
 
