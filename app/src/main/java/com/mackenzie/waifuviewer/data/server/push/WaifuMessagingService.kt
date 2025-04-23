@@ -121,7 +121,7 @@ class WaifuMessagingService : FirebaseMessagingService() {
     }
 
     private fun generateNotification(notification: Notification) {
-        val smallIcon = R.drawable.ic_waifu_push_test
+        val smallIcon = R.drawable.ic_push_positive
 
         val activity = NavHostActivity::class.java
 
