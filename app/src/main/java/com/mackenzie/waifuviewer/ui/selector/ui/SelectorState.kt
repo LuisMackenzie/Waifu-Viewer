@@ -46,7 +46,7 @@ class SelectorState(
     // val scope: CoroutineScope,
     val isSelectorBgLoaded: MutableState<Boolean>,
     val selectedTag: MutableState<String>,
-    val reqPermisions: Boolean,
+    var reqPermisions: Boolean,
     val remoteInitValues: MutableState<RemoteConfigValues>,
     val switchState: SwitchState,
     val tagsInitState: MutableState<TagsState>,

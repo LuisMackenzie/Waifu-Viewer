@@ -35,8 +35,6 @@ fun WaifuUpdateDialog(
                     Text(text = stringResource(id = R.string.dialog_update_local_version) )
                     Text(
                         text = Constants.SPACE + BuildConfig.VERSION_NAME.removeVersionSuffix(),
-                        color = Color.Black,
-                        // fontStyle = FontStyle.Italic,
                         fontFamily = FontFamily.Monospace
                     )
                 }

@@ -97,9 +97,6 @@ class SaveUtils {
 
     fun downloadAndInstallUpdate(context: Context, latestVer: String): Boolean {
         val flavorLink = latestVer.getFlavorLink(context)
-        val updateNameFile = "waifu-${BuildConfig.BUILD_TYPE}-${latestVer}-${BuildConfig.VERSION_CODE}.apk"
-
-        // Verificar si el permiso de almacenamiento está concedido
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q && !context.hasWriteExternalStoragePermission()) {
             ActivityCompat.requestPermissions(
                 context as Activity,
@@ -112,7 +109,9 @@ class SaveUtils {
                 .setTitle(context.getString(R.string.app_name))
                 .setDescription(context.getString(R.string.dialog_update_accept))
                 .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-                .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, updateNameFile)
+                .setDestinationInExternalPublicDir(
+                    Environment.DIRECTORY_DOWNLOADS,
+                    "waifu-${BuildConfig.BUILD_TYPE}-V${latestVer}-C${BuildConfig.VERSION_CODE}.apk")
                 .setMimeType("application/vnd.android.package-archive")
 
             val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
@@ -140,12 +139,8 @@ class SaveUtils {
                                     } else {
                                         null
                                     }
-                                } else {
-                                    downloadManager.getUriForDownloadedFile(downloadId)
-                                }
-                                apkUri?.let {
-                                    installApk(context, it)
-                                }
+                                } else { downloadManager.getUriForDownloadedFile(downloadId) }
+                                apkUri?.let { installApk(context, it) }
                             }
                         }
                         cursor.close()
@@ -161,18 +156,6 @@ class SaveUtils {
                 ContextCompat.RECEIVER_EXPORTED
             )
             return true
-        }
-    }
-
-    private fun String.getFlavorLink(context: Context): String {
-        val baseLink = context.getString(R.string.dialog_update_download_base_link)
-        val debugFile = context.getString(R.string.dialog_update_download_debug_file_name)
-        val enhancedFile = context.getString(R.string.dialog_update_download_enhanced_file_name)
-        val releaseFile = context.getString(R.string.dialog_update_download_release_file_name)
-        return when (BuildConfig.VERSION_NAME.substringAfterLast("-")) {
-            "DEBUG" -> { baseLink + this + debugFile }
-            "PRIME" -> { baseLink + this + enhancedFile }
-            else -> { baseLink + this + releaseFile }
         }
     }
 

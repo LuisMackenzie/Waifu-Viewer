@@ -208,6 +208,7 @@ dependencies {
     implementation(Libs.Firebase.crashlitycsKtx)
     implementation(Libs.Firebase.playIntegrity)
     implementation(Libs.Firebase.messaging)
+    implementation(Libs.Firebase.inAppMessaging)
 
     // Serialization
     // implementation(JakeWharton.retrofit2.converter.kotlinxSerialization)

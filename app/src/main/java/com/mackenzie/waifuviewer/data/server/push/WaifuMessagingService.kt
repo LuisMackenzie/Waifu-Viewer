@@ -1,6 +1,5 @@
 package com.mackenzie.waifuviewer.data.server.push
 
-import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.NotificationManager.IMPORTANCE_HIGH
@@ -40,7 +39,7 @@ class WaifuMessagingService : FirebaseMessagingService() {
     override fun onNewToken(token: String) {
         super.onNewToken(token)
         // Aquí puedes guardar el token localmente, enviarlo a tu servidor, etc.
-        Log.e("WaifuMessagingService", "Nuevo token: $token")
+        Log.i("WaifuMessagingService", "Nuevo token: $token")
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
         // FCM registration token to your app server.
@@ -52,13 +51,13 @@ class WaifuMessagingService : FirebaseMessagingService() {
     }
 
     private fun saveToken(token: String) {
-        Log.e("WaifuMessagingService", "guardando el token: ${token.toDomainModel()}")
+        Log.i("WaifuMessagingService", "guardando el token: ${token.toDomainModel()}")
         CoroutineScope(Dispatchers.Main).launch {
             val db = WaifuDataBase.getDatabase(applicationContext)
             val repo = PushRepository(RoomFcmTokenDataSource(db.waifuFcmTokenDao()), RoomNotificationDataSource(db.waifuPushDao()))
             repo.saveToken(token.toDomainModel())?.let {
-                Log.e("WaifuMessagingService", "Error al guardar el token: $it")
-            } ?: Log.e("WaifuMessagingService", "Token guardado con éxito")
+                Log.i("WaifuMessagingService", "Error al guardar el token: $it")
+            } ?: Log.i("WaifuMessagingService", "Token guardado con éxito")
             /*val error = repo.saveToken(token.toDomainModel())
             error?.let {
                 Log.e("WaifuMessagingService", "Error al guardar el token: $error")
@@ -75,47 +74,38 @@ class WaifuMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
 
-        Log.e("WaifuMessagingService", "Notification:Data ${message.data}")
-        Log.e("WaifuMessagingService", "Notification title=${message.notification?.title}, body=${message.notification?.body}")
+        Log.i("WaifuMessagingService", "Notification:Data ${message.data}")
+        Log.i("WaifuMessagingService", "Notification title=${message.notification?.title}, body=${message.notification?.body}")
 
 
         if (message.data.isNotEmpty()) {
-            var textReferences: Pair<Int, Int>? = null
-            var notificationTitle: Int? = null
+            // var textReferences: Pair<Int, Int>? = null
+            // var notificationTitle: Int? = null
 
-
-
-            val notification = createCustomNotification(
-                NotificationType.UPDATES, message.notification?.title ?: "", message.notification?.body ?: ""
-            )
-
-            // TODO guardar la notificación en room
-            CoroutineScope(Dispatchers.IO).launch {
-                // notificationRepository.savePush(notification)
-            }
-
-            generateNotification(notification, notification.pushId)
+            generateNotification(createCustomNotification(
+                NotificationType.UPDATES, message.notification?.title ?: "", message.notification?.body ?: "", message.notification?.imageUrl.toString()
+            ))
 
             Log.d("WaifuMessagingService", "Data recibida: ${message.data}")
         } else if (message.notification != null) {
-            val notification = createCustomNotification(
-                NotificationType.NEWS, message.notification?.title ?: "", message.notification?.body ?: ""
-            )
             // TODO guardar la notificación en room
             // notificationRepository.savePush(notification)
-            generateNotification(notification, notification.pushId)
-            Log.d("WaifuMessagingService", "Notificación recibida: title=${message.notification?.title}, Body=${message.notification?.body}")
+            generateNotification(createCustomNotification(
+                NotificationType.NEWS, message.notification?.title ?: "", message.notification?.body ?: "", message.notification?.imageUrl.toString()
+            ))
+            Log.d("WaifuMessagingService", "Notificación recibida: title=${message.notification?.title}, Body=${message.notification?.body}, image=${message.notification?.imageUrl}")
         }
 
         // Si el mensaje contiene datos (remoteMessage.data), puedes procesarlos aquí:
         message.data.let { data ->
             // Maneja la lógica de los datos aquí
+            // Log.e("WaifuMessagingService", "Data recibida: ${data}")
 
         }
 
         // Si el mensaje contiene una notificación (remoteMessage.notification), también puedes procesarla:
         message.notification?.let { notification ->
-            // Log.d("WaifuMessagingService", "Notificación recibida: ${notification.body}")
+            // Log.e("WaifuMessagingService", "Notificación recibida: ${notification.body}")
             // Por ejemplo, mostrar una notificación en la barra de estado
             // showNotification(notification.title, notification.body)
         }
@@ -127,34 +117,14 @@ class WaifuMessagingService : FirebaseMessagingService() {
         return if (p1 != null && p2 != null) block(p1, p2) else null
     }
 
-    private fun generateNotification(
-        notification: Notification,
-        notificationId: String,
-        // loginRequired: Boolean,
-        pendingActivity: Activity? = null
-    ) {
-        val smallIcon = R.mipmap.ic_launcher_foreground
-
-        /** Go to Notifications Activity by default */
-        /*val activity2 = pendingActivity ?: AppComponents.assembly?.getFeatures()?.let { features ->
-            features.firstOrNull { it is IFeatureNotifications }?.let { fragment ->
-                (fragment as IFeatureNotifications).notificationsActivity
-            }
-        }*/
-
-
+    private fun generateNotification(notification: Notification) {
+        val smallIcon = R.drawable.ic_push_positive
 
         val activity = NavHostActivity::class.java
 
         activity.let {
-            // Aqui se guarda el id de la push en las preferencias
-            /*applicationContext.putPreferenceString(
-                hashMapOf(
-                    Pair(PreferencesKey.NOTIFICATIONID.value, notificationId)
-                )
-            )*/
 
-            val intent = Intent(this, activity::class.java).apply {
+            val intent = Intent(this, it::class.java).apply {
                 // putExtra(NOTIFICATION_TOOLBAR, false)
                 // putExtra(NOTIFICATION_LOGIN_REQUIRED, loginRequired)
             }
@@ -165,18 +135,17 @@ class WaifuMessagingService : FirebaseMessagingService() {
             val builder = NotificationCompat.Builder(applicationContext, channelId)
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
                 builder.setUpBuilder(
-                    smallIcon, notification.title, notification.description, pendingIntent
+                    smallIcon, notification.title, resources, notification.description, notification.imageUrl, pendingIntent
                 )
             } else {
-                builder.setUpBuilderWithBackground(
-                    smallIcon, notification.title, resources, notification.description, pendingIntent
+                builder.setUpBuilderAndBigPicture(
+                    smallIcon, notification.title, resources, notification.description, notification.imageUrl, pendingIntent
                 )
             }
 
             val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val notificationChannel =
-                    NotificationChannel(channelId, channelName, IMPORTANCE_HIGH)
+                val notificationChannel = NotificationChannel(channelId, channelName, IMPORTANCE_HIGH)
                 notificationManager.createNotificationChannel(notificationChannel)
             }
             notificationManager.notify((0..10000).random(), builder.build())

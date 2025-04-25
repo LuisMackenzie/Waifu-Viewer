@@ -78,6 +78,7 @@ data class NotificationDb(
     val date: String,
     val title: String,
     val description: String,
+    val imageUrl: String,
     var isRead: Boolean,
     var type: NotificationType,
     // var type: Int,

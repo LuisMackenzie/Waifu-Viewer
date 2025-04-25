@@ -2,6 +2,7 @@ package com.mackenzie.waifuviewer.data
 
 import com.mackenzie.waifuviewer.data.datasource.LocationDataSource
 import com.mackenzie.waifuviewer.data.PermissionChecker.Permission.COARSE_LOCATION
+import com.sun.tools.javac.util.Context
 import javax.inject.Inject
 
 class RegionRepository @Inject constructor(
@@ -14,10 +15,6 @@ class RegionRepository @Inject constructor(
     }
 
     suspend fun findLastRegion(): String {
-        return if (permissionChecker.check(COARSE_LOCATION)) {
-            locationDataSource.findLastRegion() ?: DEFAULT_REGION
-        } else {
-            DEFAULT_REGION
-        }
+        return locationDataSource.findLastRegion() ?: DEFAULT_REGION
     }
 }

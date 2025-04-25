@@ -131,10 +131,23 @@ internal fun SelectorScreenContentRoute(
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             MultiplePermissionRequestEffect(
                 listOf(POST_NOTIFICATIONS, ACCESS_COARSE_LOCATION)
-            ) { permissionsMap -> handlePermissions(permissionsMap) }
+            ) { permissionsMap ->
+                val handle = handlePermissions(permissionsMap)
+                if (handle) {
+                    vm.onLocationPermissionGranted()
+                    state.reqPermisions = false
+                }
+            }
         } else {
             // en este caso no se solicita permiso de de notificacion
-            PermissionRequestEffect(ACCESS_COARSE_LOCATION) { granted -> if (!granted) { getString(context, R.string.waifus_permissions_content).showToast(context) } }
+            PermissionRequestEffect(ACCESS_COARSE_LOCATION) { granted ->
+                if (!granted) {
+                    getString(context, R.string.waifus_permissions_content).showToast(context)
+                } else {
+                    vm.onLocationPermissionGranted()
+                    state.reqPermisions = false
+                }
+            }
         }
     }
 
@@ -209,7 +222,7 @@ internal fun SelectorScreenContentRoute(
     }
 }
 
-private fun handlePermissions(permissionsMap: Map<String, Boolean>) {
+private fun handlePermissions(permissionsMap: Map<String, Boolean>): Boolean {
     permissionsMap.forEach { (permiso, granted) ->
         if (!granted) {
             when (permiso) {
@@ -219,8 +232,17 @@ private fun handlePermissions(permissionsMap: Map<String, Boolean>) {
                 ACCESS_COARSE_LOCATION -> {} // { getString(context, R.string.waifus_permissions_location).showToast(context) }
                 else -> {}
             }
+        } else {
+            when (permiso) {
+                POST_NOTIFICATIONS -> {} // { getString(context, R.string.waifus_permissions_push).showToast(context) }
+                ACCESS_COARSE_LOCATION -> {
+                    return true
+                } // { getString(context, R.string.waifus_permissions_location).showToast(context) }
+                else -> {}
+            }
         }
     }
+    return false
 }
 
 @Composable

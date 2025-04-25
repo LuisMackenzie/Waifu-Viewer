@@ -49,6 +49,7 @@ private fun NotificationDb.toDomainModel(): Notification =
         date.stringToDate(),
         title,
         description,
+        imageUrl,
         isRead,
         type
     )
@@ -62,6 +63,7 @@ private fun Notification.fromDomainModel(): NotificationDb =
         date.dateToString(),
         title,
         description,
+        imageUrl,
         isRead,
         type
     )
