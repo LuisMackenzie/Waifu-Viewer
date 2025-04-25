@@ -1,7 +1,5 @@
 package com.mackenzie.waifuviewer.data.server.push
 
-import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.NotificationManager.IMPORTANCE_HIGH
@@ -21,7 +19,6 @@ import com.mackenzie.waifuviewer.data.server.mapper.toDomainModel
 import com.mackenzie.waifuviewer.domain.Notification
 import com.mackenzie.waifuviewer.domain.NotificationType
 import com.mackenzie.waifuviewer.ui.NavHostActivity
-import com.mackenzie.waifuviewer.ui.common.urlToBitmap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -148,8 +145,7 @@ class WaifuMessagingService : FirebaseMessagingService() {
 
             val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val notificationChannel =
-                    NotificationChannel(channelId, channelName, IMPORTANCE_HIGH)
+                val notificationChannel = NotificationChannel(channelId, channelName, IMPORTANCE_HIGH)
                 notificationManager.createNotificationChannel(notificationChannel)
             }
             notificationManager.notify((0..10000).random(), builder.build())
