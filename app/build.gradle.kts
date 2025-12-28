@@ -134,6 +134,9 @@ dependencies {
     val composeBom = platform(Libs.AndroidX.Compose.bom)
     implementation(composeBom)
     implementation(Libs.AndroidX.Compose.material3)
+    implementation(Libs.AndroidX.Compose.iconsCore)
+    // Libreria con todos los iconos extendidos
+    // implementation(Libs.AndroidX.Compose.iconsExtend)
     implementation(Libs.AndroidX.Compose.foundation)
     implementation(Libs.AndroidX.Compose.runtime)
     implementation(Libs.AndroidX.Compose.livedata)
