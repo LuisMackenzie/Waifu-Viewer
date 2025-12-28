@@ -42,65 +42,13 @@ import com.mackenzie.waifuviewer.ui.common.ui.isNavigationBarVisible
 @Composable
 fun WaifuGptScreenContent() {
 
-    var chatState by rememberSaveable { mutableStateOf("") }
+    // var chatState by rememberSaveable { mutableStateOf("") }
 
     Scaffold(
         topBar = { MainAppBar() }
     ) { padding ->
 
-        val media1 = getMedia()
-        val media2 = getMedia2()
-
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(3),
-            // columns = GridCells.Adaptive(150.dp), // Esto mostrará 2-3 items por fila dependiendo del ancho de pantalla
-            modifier = if (isNavigationBarVisible()) {
-                Modifier
-                    .fillMaxSize()
-                    .navigationBarsPadding()
-                    .background(MaterialTheme.colorScheme.background)
-                    .padding(padding)
-            } else {
-                Modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.background)
-                    .padding(padding)
-            }
-        ) {
-            // Primera sección - Header
-            item(span = { GridItemSpan(maxLineSpan) }) {
-                Text(
-                    text = "Seccion numero 01",
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp),
-                    textAlign = TextAlign.Center
-                )
-            }
-
-            // Primera sección - Items
-            items(media1) { item ->
-                RenderItem(item, modifier = Modifier.padding(4.dp))
-            }
-
-            // Segunda sección - Header
-            item(span = { GridItemSpan(maxLineSpan) }) {
-                Text(
-                    text = "Seccion numero 02",
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp),
-                    textAlign = TextAlign.Center
-                )
-            }
-
-            // Segunda sección - Items
-            items(media2) { item ->
-                RenderItem(item, modifier = Modifier.padding(4.dp))
-            }
-        }
+        MediaList(padding= padding)
 
         Snackbar.make(LocalView.current, "Under Development!", Snackbar.LENGTH_SHORT).show()
     }

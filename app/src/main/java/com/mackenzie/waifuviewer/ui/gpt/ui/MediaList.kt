@@ -10,10 +10,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CornerSize
@@ -44,35 +46,58 @@ import coil3.request.crossfade
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.domain.VideoItem
 import com.mackenzie.waifuviewer.domain.getMedia
+import com.mackenzie.waifuviewer.domain.getMedia2
+import com.mackenzie.waifuviewer.ui.common.ui.isNavigationBarVisible
 
-@Preview(showBackground = true)
+
 @Composable
-fun MediaList(items: List<VideoItem> = getMedia(), modifier: Modifier = Modifier) {
-    /*LazyRow {
-            items(items) { item ->
-                RenderItem2(item)
-            }
-        }*/
-    /*LazyColumn(
-        contentPadding = PaddingValues(8.dp),
-        verticalArrangement = Arrangement.spacedBy(4.dp)
-    ) {
-        items(items) { item ->
-            RenderItem(item)
-        }
-    }*/
+fun MediaList(
+    itemSection01: List<VideoItem> = getMedia(),
+    itemSection02: List<VideoItem> = getMedia2(),
+    padding: PaddingValues
+) {
     LazyVerticalGrid(
         // Ayuda a ver los margenes
         // modifier = Modifier.background(Color.Cyan),
         contentPadding = PaddingValues(4.dp),
-        // columns = GridCells.Fixed(2),
-        columns = GridCells.Adaptive(150.dp),
-        modifier = modifier
+        columns = GridCells.Fixed(3),
+        // columns = GridCells.Adaptive(150.dp),
+        modifier = if (isNavigationBarVisible()) {
+            Modifier
+                .fillMaxSize()
+                .navigationBarsPadding()
+                .background(MaterialTheme.colorScheme.background)
+                .padding(padding)
+        } else {
+            Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .padding(padding)
+        }
     ) {
-        items(items) { item ->
+        // Primera sección - Header
+        item(span = { GridItemSpan(maxLineSpan) }) {
+            TitleText("Seccion numero 01")
+        }
+
+        // Primera sección - Items
+        items(itemSection01) { item ->
+            RenderItem(item, modifier = Modifier.padding(4.dp))
+        }
+
+        // Segunda sección - Header
+        item(span = { GridItemSpan(maxLineSpan) }) {
+            TitleText("Seccion numero 02")
+        }
+
+        // Segunda sección - Items
+        items(itemSection02) { item ->
+            RenderItem(item, modifier = Modifier.padding(4.dp))
+        }
+        /*items(items) { item ->
             RenderItem(item, modifier = Modifier
                 .padding(4.dp))
-        }
+        }*/
     }
 }
 
