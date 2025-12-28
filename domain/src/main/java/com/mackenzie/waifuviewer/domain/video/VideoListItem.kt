@@ -23,7 +23,7 @@ data class VideoItemDetails(
     val duration: String,
     val defaultThumb: String,
     val thumbs: List<ThumbItem>? = null,
-    val tags: List<TagInfo>? = null,
+    val tags: List<TagDomainInfo>? = null,
     val stars: List<StarItem>? = null
 )
 

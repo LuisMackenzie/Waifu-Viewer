@@ -1,16 +1,16 @@
 package com.mackenzie.waifuviewer.domain.video
 
 
-data class TagsResponse(
-    val tags: List<TagItem>,
+data class TagsResponseItem(
+    val tags: List<TagDomainItem>,
     val count: Int
 )
 
 
-data class TagItem(
-   val tag: TagInfo
+data class TagDomainItem(
+   val tag: TagDomainInfo
 )
 
-data class TagInfo(
+data class TagDomainInfo(
     val tagName: String
 )

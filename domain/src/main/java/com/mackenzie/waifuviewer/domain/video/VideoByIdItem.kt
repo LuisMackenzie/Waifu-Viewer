@@ -1,12 +1,12 @@
 package com.mackenzie.waifuviewer.domain.video
 
 
-data class VideoByIdRItem(
-    val video: VideoDetailsById
+data class VideoByIdItem(
+    val video: VideoDetailsByIdItem
 )
 
 
-data class VideoDetailsById(
+data class VideoDetailsByIdItem(
     val videoId: String,
     val title: String,
     val thumb: String,
@@ -19,6 +19,6 @@ data class VideoDetailsById(
     val duration: String,
     val defaultThumb: String,
     val thumbs: List<ThumbItem>? = null,
-    val tags: List<TagItem>? = null,
+    val tags: List<TagDomainItem>? = null,
     val stars: List<StarItem>? = null
 )

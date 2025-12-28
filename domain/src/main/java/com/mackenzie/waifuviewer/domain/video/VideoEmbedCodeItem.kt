@@ -2,10 +2,10 @@ package com.mackenzie.waifuviewer.domain.video
 
 
 data class VideoEmbedCodeItem(
-    val embed: EmbedInfo
+    val embed: EmbedInfoItem
 )
 
 
-data class EmbedInfo(
+data class EmbedInfoItem(
     val code: String
 )

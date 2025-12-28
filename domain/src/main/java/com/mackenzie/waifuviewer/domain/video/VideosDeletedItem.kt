@@ -1,15 +1,15 @@
 package com.mackenzie.waifuviewer.domain.video
 
 data class VideosDeletedItem(
-    val deleted: DeletedInfo
+    val deleted: DeletedInfoItem
 )
 
-data class DeletedInfo(
+data class DeletedInfoItem(
     val count: Int,
-    val videos: List<DeletedVideo>
+    val videos: List<DeletedVideoItem>
 )
 
-data class DeletedVideo(
+data class DeletedVideoItem(
     val videoId: String,
     val deleted: String
 )

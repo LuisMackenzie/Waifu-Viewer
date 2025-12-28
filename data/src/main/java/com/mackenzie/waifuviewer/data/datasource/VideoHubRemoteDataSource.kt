@@ -2,14 +2,15 @@ package com.mackenzie.waifuviewer.data.datasource
 
 import arrow.core.Either
 import com.mackenzie.waifuviewer.domain.Error
+import com.mackenzie.waifuviewer.domain.video.CategoriesItem
+import com.mackenzie.waifuviewer.domain.video.StarsDetailedItems
+import com.mackenzie.waifuviewer.domain.video.StarsItems
+import com.mackenzie.waifuviewer.domain.video.TagsResponseItem
+import com.mackenzie.waifuviewer.domain.video.VideoActiveItems
+import com.mackenzie.waifuviewer.domain.video.VideoByIdItem
+import com.mackenzie.waifuviewer.domain.video.VideoEmbedCodeItem
 import com.mackenzie.waifuviewer.domain.video.VideoListItem
-import com.mackenzie.waifuviewer.domain.video.category.CategoryList
-import com.mackenzie.waifuviewer.domain.video.embed.VideoEmbed
-import com.mackenzie.waifuviewer.domain.video.star.StarList
-import com.mackenzie.waifuviewer.domain.video.star.StarListDetailed
-import com.mackenzie.waifuviewer.domain.video.status.VideoStatus
-import com.mackenzie.waifuviewer.domain.video.tag.TagList
-import com.mackenzie.waifuviewer.domain.video.video.VideoById
+import com.mackenzie.waifuviewer.domain.video.VideosDeletedItem
 
 interface VideoHubRemoteDataSource {
 
@@ -26,20 +27,20 @@ interface VideoHubRemoteDataSource {
         period: String? = null
     ): Either<Error, VideoListItem>
 
-    suspend fun getCategories(): Either<Error, CategoryList>
+    suspend fun getCategories(): Either<Error, CategoriesItem>
 
-    suspend fun getTags(): Either<Error, TagList>
+    suspend fun getTags(): Either<Error, TagsResponseItem>
 
-    suspend fun getStars(): Either<Error, StarList>
+    suspend fun getStars(): Either<Error, StarsItems>
 
-    suspend fun getStarDetailedList(): Either<Error, StarListDetailed>
+    suspend fun getStarDetailedList(): Either<Error, StarsDetailedItems>
 
-    suspend fun isVideoActive(videoId: Int): Either<Error, VideoStatus>
+    suspend fun isVideoActive(videoId: Int): Either<Error, VideoActiveItems>
 
-    suspend fun getVideoById(videoId: Int, thumbsize: String? = null): Either<Error, VideoById>
+    suspend fun getVideoById(videoId: Int, thumbsize: String? = null): Either<Error, VideoByIdItem>
 
-    suspend fun getVideoEmbedCode(videoId: Int): Either<Error, VideoEmbed>
+    suspend fun getVideoEmbedCode(videoId: Int): Either<Error, VideoEmbedCodeItem>
 
-    suspend fun areVideosDeleted(videoIds: List<Int>): Either<Error, VideoStatus>
+    suspend fun areVideosDeleted(videoIds: List<Int>): Either<Error, VideosDeletedItem>
 
 }

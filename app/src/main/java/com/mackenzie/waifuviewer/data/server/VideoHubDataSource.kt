@@ -4,19 +4,48 @@ import arrow.core.Either
 import com.mackenzie.waifuviewer.data.datasource.VideoHubRemoteDataSource
 import com.mackenzie.waifuviewer.data.server.models.RemoteVideoHubConnect
 import com.mackenzie.waifuviewer.data.server.models.videohub.CategoriesResponse
+import com.mackenzie.waifuviewer.data.server.models.videohub.Category
+import com.mackenzie.waifuviewer.data.server.models.videohub.DeletedVideo
+import com.mackenzie.waifuviewer.data.server.models.videohub.DetailedStarInfo
+import com.mackenzie.waifuviewer.data.server.models.videohub.EmbedInfo
 import com.mackenzie.waifuviewer.data.server.models.videohub.StarsDetailedResponse
 import com.mackenzie.waifuviewer.data.server.models.videohub.StarsResponse
+import com.mackenzie.waifuviewer.data.server.models.videohub.TagItem
+import com.mackenzie.waifuviewer.data.server.models.videohub.TagsResponse
 import com.mackenzie.waifuviewer.data.server.models.videohub.VideoActiveResponse
 import com.mackenzie.waifuviewer.data.server.models.videohub.VideoByIdResponse
+import com.mackenzie.waifuviewer.data.server.models.videohub.VideoDetails
+import com.mackenzie.waifuviewer.data.server.models.videohub.VideoDetailsById
 import com.mackenzie.waifuviewer.data.server.models.videohub.VideoEmbedCodeResponse
 import com.mackenzie.waifuviewer.data.server.models.videohub.VideoSearchResponse
 import com.mackenzie.waifuviewer.data.server.models.videohub.VideosDeletedResponse
-import com.mackenzie.waifuviewer.data.server.models.videohub.TagsResponse
 import com.mackenzie.waifuviewer.data.tryCall
 import com.mackenzie.waifuviewer.domain.Error
-import com.mackenzie.waifuviewer.domain.video.TagInfo
-import com.mackenzie.waifuviewer.domain.video.TagItem
+import com.mackenzie.waifuviewer.domain.video.ActiveInfo
+import com.mackenzie.waifuviewer.domain.video.CategoriesItem
+import com.mackenzie.waifuviewer.domain.video.CategoryItem
+import com.mackenzie.waifuviewer.domain.video.DeletedInfoItem
+import com.mackenzie.waifuviewer.domain.video.DeletedVideoItem
+import com.mackenzie.waifuviewer.domain.video.DetailedStarDomainItem
+import com.mackenzie.waifuviewer.domain.video.DetailedStarInfoItem
+import com.mackenzie.waifuviewer.domain.video.EmbedInfoItem
+import com.mackenzie.waifuviewer.domain.video.StarBasicDomainInfo
+import com.mackenzie.waifuviewer.domain.video.StarDomainItem
+import com.mackenzie.waifuviewer.domain.video.StarInfoItem
+import com.mackenzie.waifuviewer.domain.video.StarItem
+import com.mackenzie.waifuviewer.domain.video.StarsDetailedItems
+import com.mackenzie.waifuviewer.domain.video.StarsItems
+import com.mackenzie.waifuviewer.domain.video.TagDomainInfo
+import com.mackenzie.waifuviewer.domain.video.TagDomainItem
+import com.mackenzie.waifuviewer.domain.video.TagsResponseItem
+import com.mackenzie.waifuviewer.domain.video.ThumbItem
+import com.mackenzie.waifuviewer.domain.video.VideoActiveItems
+import com.mackenzie.waifuviewer.domain.video.VideoByIdItem
+import com.mackenzie.waifuviewer.domain.video.VideoDetailsByIdItem
+import com.mackenzie.waifuviewer.domain.video.VideoEmbedCodeItem
+import com.mackenzie.waifuviewer.domain.video.VideoItemDetails
 import com.mackenzie.waifuviewer.domain.video.VideoListItem
+import com.mackenzie.waifuviewer.domain.video.VideosDeletedItem
 import javax.inject.Inject
 
 class VideoHubDataSource @Inject constructor(
@@ -48,49 +77,49 @@ class VideoHubDataSource @Inject constructor(
             ).toDomainModel()
     }
 
-    override suspend fun getCategories() = tryCall {
+    override suspend fun getCategories(): Either<Error, CategoriesItem> = tryCall {
         remoteService.videoHubService
             .getCategories()
             .toDomainModel()
     }
 
-    override suspend fun getTags() = tryCall {
+    override suspend fun getTags(): Either<Error, TagsResponseItem> = tryCall {
         remoteService.videoHubService
             .getTags()
             .toDomainModel()
     }
 
-    override suspend fun getStars() = tryCall {
+    override suspend fun getStars(): Either<Error, StarsItems> = tryCall {
         remoteService.videoHubService
             .getStars()
             .toDomainModel()
     }
 
-    override suspend fun getStarDetailedList() = tryCall {
+    override suspend fun getStarDetailedList(): Either<Error, StarsDetailedItems> = tryCall {
         remoteService.videoHubService
             .getStarDetailedList()
             .toDomainModel()
     }
 
-    override suspend fun isVideoActive(videoId: Int) = tryCall {
+    override suspend fun isVideoActive(videoId: Int): Either<Error, VideoActiveItems> = tryCall {
         remoteService.videoHubService
             .isVideoActive(videoid = videoId)
             .toDomainModel()
     }
 
-    override suspend fun getVideoById(videoId: Int, thumbsize: String?) = tryCall {
+    override suspend fun getVideoById(videoId: Int, thumbsize: String?): Either<Error, VideoByIdItem> = tryCall {
         remoteService.videoHubService
             .getVideoById(videoid = videoId, thumbsize = thumbsize)
             .toDomainModel()
     }
 
-    override suspend fun getVideoEmbedCode(videoId: Int) = tryCall {
+    override suspend fun getVideoEmbedCode(videoId: Int): Either<Error, VideoEmbedCodeItem> = tryCall {
         remoteService.videoHubService
             .getVideoEmbedCode(videoid = videoId)
             .toDomainModel()
     }
 
-    override suspend fun areVideosDeleted(videoIds: List<Int>) = tryCall {
+    override suspend fun areVideosDeleted(videoIds: List<Int>): Either<Error, VideosDeletedItem> = tryCall {
         remoteService.videoHubService
             .areVideosDeleted(videoids = videoIds.joinToString(","))
             .toDomainModel()
@@ -108,8 +137,8 @@ private fun com.mackenzie.waifuviewer.data.server.models.videohub.Video.toDomain
         video = video.toDomainModel()
     )
 
-private fun com.mackenzie.waifuviewer.data.server.models.videohub.VideoDetails.toDomainModel() =
-    com.mackenzie.waifuviewer.domain.video.VideoItemDetails(
+private fun VideoDetails.toDomainModel() =
+    VideoItemDetails(
         videoId = videoId,
         title = title,
         thumb = thumb,
@@ -121,7 +150,7 @@ private fun com.mackenzie.waifuviewer.data.server.models.videohub.VideoDetails.t
         duration = duration,
         defaultThumb = defaultThumb,
         thumbs = thumbs?.map {
-            com.mackenzie.waifuviewer.domain.video.ThumbItem(
+            ThumbItem(
                 size = it.size,
                 width = it.width,
                 height = it.height,
@@ -129,52 +158,113 @@ private fun com.mackenzie.waifuviewer.data.server.models.videohub.VideoDetails.t
             )
         },
         tags = tags?.map {
-            com.mackenzie.waifuviewer.domain.video.TagItem(
-                tagName = it.tagName
-            )
+            TagDomainInfo(tagName = it.tagName)
         },
         stars = stars?.map {
-            com.mackenzie.waifuviewer.domain.video.StarItem(
-                star = com.mackenzie.waifuviewer.domain.video.StarInfoItem(
+            StarItem(
+                star = StarInfoItem(
                     starName = it.star.starName,
-                    starThumb = it.star.starThumb
+                    starThumb = it.star.starThumb ?: ""
                 )
             )
         }
     )
 
-private fun CategoriesResponse.toDomainModel(): CategoryList =
-    CategoryList(categories = categories.map { CategorySummary(name = it.category) })
+private fun CategoriesResponse.toDomainModel(): CategoriesItem =
+    CategoriesItem(categories = categories.toDomainCategoryModel(), count = count)
 
-private fun TagsResponse.toDomainModel(): TagItem =
-    TagItem(tag = tags.map { TagInfo(name = it.tag.tagName) })
+private fun List<Category>.toDomainCategoryModel(): List<CategoryItem> =
+    this.map { CategoryItem(category = it.category) }
 
-private fun StarsResponse.toDomainModel(): StarList =
-    StarList(stars = stars.map {
-        StarSummary(
-            name = it.star.starName,
-            thumb = it.star.starThumb
+private fun TagsResponse.toDomainModel(): TagsResponseItem =
+    TagsResponseItem(tags = tags.toDomainTagItemModel(), count = count)
+
+private fun List<TagItem>.toDomainTagItemModel(): List<TagDomainItem> =
+    this.map { TagDomainItem(tag = TagDomainInfo(tagName = it.tag.tagName)) }
+
+private fun StarsResponse.toDomainModel(): StarsItems =
+    StarsItems(
+        stars = stars.map { StarDomainItem(
+            star = StarBasicDomainInfo(
+                starName = it.star.starName,
+                starThumb = it.star.starThumb)
+        ) },
+        count = count)
+
+
+/*private fun StarBasicInfo.toDomainModel(): StarBasicDomainInfo =
+    StarBasicDomainInfo(starName = starName, starThumb = starThumb)  */
+
+private fun StarsDetailedResponse.toDomainModel(): StarsDetailedItems =
+    StarsDetailedItems(
+        stars = stars.map { it.star.toDomainModel() },
+        count = count
+    )
+
+private fun DetailedStarInfo.toDomainModel(): DetailedStarDomainItem =
+    DetailedStarDomainItem(
+        star = DetailedStarInfoItem(
+            starName = starName,
+            starThumb = starThumb,
+            starUrl = starUrl,
+            videosCountAll = videosCountAll
         )
-    })
+    )
 
-private fun StarsDetailedResponse.toDomainModel(): StarListDetailed =
-    StarListDetailed(stars = stars.map {
-        StarItemSummary(
-            name = it.star.starName,
-            thumb = it.star.starThumb,
-            url = it.star.starUrl,
-            videosCount = it.star.videosCountAll
-        )
-    })
+private fun VideoActiveResponse.toDomainModel(): VideoActiveItems =
+    VideoActiveItems(active = ActiveInfo(active.active))
 
-private fun VideoActiveResponse.toDomainModel(): VideoStatus =
-    VideoStatus(isActive = active.active == "1")
+private fun VideoByIdResponse.toDomainModel(): VideoByIdItem =
+    VideoByIdItem(video = video.toDomainModel())
 
-private fun VideoByIdResponse.toDomainModel(): VideoById =
-    VideoById(video = video.toDomainModel())
+private fun VideoDetailsById.toDomainModel(): VideoDetailsByIdItem =
+    VideoDetailsByIdItem(
+        videoId = videoId,
+        title = title,
+        thumb = thumb,
+        url = url,
+        embedUrl = embedUrl,
+        publishDate = publishDate,
+        rating = rating,
+        ratings = ratings,
+        views = views,
+        duration = duration,
+        defaultThumb = defaultThumb,
+        thumbs = thumbs?.map {
+            ThumbItem(
+                size = it.size,
+                width = it.width,
+                height = it.height,
+                src = it.src
+            )
+        },
+        tags = tags?.map {
+            TagDomainItem(
+                tag = TagDomainInfo(it.tagName)
+            )
+        },
+        stars = stars?.map {
+            StarItem(
+                star = StarInfoItem(
+                    starName = it.star.starName,
+                    starThumb = it.star.starThumb ?: ""
+                )
+            )
+        }
+    )
 
-private fun VideoEmbedCodeResponse.toDomainModel(): VideoEmbed =
-    VideoEmbed(embedCode = embed.code)
+private fun VideoEmbedCodeResponse.toDomainModel(): VideoEmbedCodeItem =
+    VideoEmbedCodeItem(embed = embed.toDomainModel())
 
-private fun VideosDeletedResponse.toDomainModel(): VideoStatus =
-    VideoStatus(isActive = deleted.videos.any { it.deleted == "0" })
+private fun EmbedInfo.toDomainModel()= EmbedInfoItem(
+    code = code,
+)
+
+private fun VideosDeletedResponse.toDomainModel(): VideosDeletedItem =
+    VideosDeletedItem(deleted = DeletedInfoItem(count= deleted.count, videos = deleted.videos.map { it.toDomainModel() }))
+
+private fun DeletedVideo.toDomainModel(): DeletedVideoItem =
+    DeletedVideoItem(
+        videoId = videoId,
+        deleted = deleted
+    )

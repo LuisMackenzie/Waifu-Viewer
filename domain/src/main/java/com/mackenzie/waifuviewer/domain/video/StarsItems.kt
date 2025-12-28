@@ -2,17 +2,17 @@ package com.mackenzie.waifuviewer.domain.video
 
 
 data class StarsItems(
-    val stars: List<StarItem>,
+    val stars: List<StarDomainItem>,
     val count: Int
 )
 
 
-data class StarItem(
-    val star: StarBasicInfo
+data class StarDomainItem(
+    val star: StarBasicDomainInfo
 )
 
 
-data class StarBasicInfo(
+data class StarBasicDomainInfo(
     val starName: String,
     val starThumb: String
 )
