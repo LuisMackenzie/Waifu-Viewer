@@ -7,7 +7,7 @@ import javax.inject.Inject
 class VideoHubRepository @Inject constructor(val remoteDataSource: VideoHubRemoteDataSource) {
 
     suspend fun requestVideoSources(): Error? {
-        val error = remoteDataSource.getVideoServer("apiKey")
+        val error = remoteDataSource.getVideoServer()
             .fold(ifLeft = { it }) { null }
 
         // Guardar en DBBD

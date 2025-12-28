@@ -14,7 +14,3 @@ data class RemoteConnect(
     val serviceMoe: WaifuTraceMoeService,
     val serviceOpenAi: OpenAIService
     )
-
-data class RemoteVideoHubConnect(
-    val serviceHub: VideoHubService
-)

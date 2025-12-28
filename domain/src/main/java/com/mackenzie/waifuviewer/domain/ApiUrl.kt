@@ -7,11 +7,3 @@ data class ApiUrl (
     val traceMoeBaseUrl: String = "https://api.trace.moe/",
     val openAiBaseUrl: String = "https://api.openai.com/v1/"
         )
-
-data class ApiVideoUrl (
-    val pornHubBaseUrl: String = "",
-    val redtubeBaseUrl: String = "",
-    val hentaiBaseUrl: String = "",
-    val youpornBaseUrl: String = "",
-    val tube8BaseUrl: String = ""
-)
