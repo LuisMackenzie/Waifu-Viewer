@@ -40,22 +40,22 @@ fun WaifuGptScreenContent() {
                 .background(MaterialTheme.colorScheme.background)
         }
     ) {
-        AsyncImage(
+        /*AsyncImage(
             model= ImageRequest.Builder(LocalContext.current)
                 .data("https://nekos.best/api/v2/neko/f09f1d72-4d7d-43ac-9aec-79f0544b95c3.png")
                 .crossfade(true)
                 .build(),
-            error = painterResource(R.drawable.ic_error_grey),
+            error = painterResource(R.drawable.ic_offline_background),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize(),
-        )
+        )*/
 
 
-        TextFieldChat(
+        /*TextFieldChat(
             value = chatState,
             onValueChange = { chatState = it }
-        )
+        )*/
 
         Snackbar.make(LocalView.current, "Under Development!", Snackbar.LENGTH_SHORT).show()
     }
