@@ -4,7 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,36 +29,26 @@ fun WaifuGptScreenContent() {
 
     var chatState by rememberSaveable { mutableStateOf("") }
 
+    Scaffold(
+        topBar = { MainAppBar() }
+    ) { padding ->
 
-    Box(
-        modifier = if (isNavigationBarVisible()) {
-            Modifier
-                .fillMaxSize()
-                .navigationBarsPadding()
-                .background(MaterialTheme.colorScheme.background)
-        } else {
-            Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
+        Box(
+            modifier = if (isNavigationBarVisible()) {
+                Modifier
+                    .fillMaxSize()
+                    .navigationBarsPadding()
+                    .background(MaterialTheme.colorScheme.background)
+            } else {
+                Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
+            }
+        ) {
+            MediaList(modifier = Modifier.padding(padding))
+
+
+            Snackbar.make(LocalView.current, "Under Development!", Snackbar.LENGTH_SHORT).show()
         }
-    ) {
-        /*AsyncImage(
-            model= ImageRequest.Builder(LocalContext.current)
-                .data("https://nekos.best/api/v2/neko/f09f1d72-4d7d-43ac-9aec-79f0544b95c3.png")
-                .crossfade(true)
-                .build(),
-            error = painterResource(R.drawable.ic_offline_background),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize(),
-        )*/
-
-
-        /*TextFieldChat(
-            value = chatState,
-            onValueChange = { chatState = it }
-        )*/
-
-        Snackbar.make(LocalView.current, "Under Development!", Snackbar.LENGTH_SHORT).show()
     }
 }
