@@ -1,6 +1,7 @@
 package com.mackenzie.waifuviewer.data.server.models
 
 import com.mackenzie.waifuviewer.data.server.OpenAIService
+import com.mackenzie.waifuviewer.data.server.VideoHubService
 import com.mackenzie.waifuviewer.data.server.WaifuBestService
 import com.mackenzie.waifuviewer.data.server.WaifuImService
 import com.mackenzie.waifuviewer.data.server.WaifuPicService
@@ -13,3 +14,7 @@ data class RemoteConnect(
     val serviceMoe: WaifuTraceMoeService,
     val serviceOpenAi: OpenAIService
     )
+
+data class RemoteVideoHubConnect(
+    val serviceHub: VideoHubService
+)
