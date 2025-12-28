@@ -1,6 +1,5 @@
 package com.mackenzie.waifuviewer.ui.common.nav
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,7 +16,7 @@ import com.mackenzie.waifuviewer.domain.selector.SwitchState
 import com.mackenzie.waifuviewer.ui.detail.DetailScreenContentRoute
 import com.mackenzie.waifuviewer.ui.favs.ui.FavoriteScreenContentRoute
 import com.mackenzie.waifuviewer.ui.gemini.menu.WaifuGeminiScreenMenuRoute
-import com.mackenzie.waifuviewer.ui.gpt.ui.WaifuGptScreenContent
+import com.mackenzie.waifuviewer.ui.gpt.ui.VideoHubScreenContent
 import com.mackenzie.waifuviewer.ui.main.WaifuScreenContentRoute
 import com.mackenzie.waifuviewer.ui.selector.SelectorScreenContentRoute
 import com.mackenzie.waifuviewer.ui.splash.SplashScreenRoute
@@ -77,7 +76,7 @@ fun Navigation() {
             FavoriteScreenContentRoute() { waifu -> navController.navigate(route = NavItem.WaifuDetail.createRoute(waifu, true)) }
         }
         composable(NavItem.WaifuGptScreen) {
-            WaifuGptScreenContent()
+            VideoHubScreenContent()
         }
         composable(NavItem.WaifuGeminiScreen) {
             WaifuGeminiScreenMenuRoute()
