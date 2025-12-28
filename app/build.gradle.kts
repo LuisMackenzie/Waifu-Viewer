@@ -206,9 +206,9 @@ dependencies {
 
     // Firebase
     implementation(platform(Libs.Firebase.coreBom))
-    implementation(Libs.Firebase.analitycsKtx)
-    implementation(Libs.Firebase.remoteconfigKtx)
-    implementation(Libs.Firebase.crashlitycsKtx)
+    implementation(Libs.Firebase.analitycs)
+    implementation(Libs.Firebase.remoteconfig)
+    implementation(Libs.Firebase.crashlitycs)
     implementation(Libs.Firebase.playIntegrity)
     implementation(Libs.Firebase.messaging)
     implementation(Libs.Firebase.inAppMessaging)
