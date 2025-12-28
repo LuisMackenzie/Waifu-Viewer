@@ -5,8 +5,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -22,6 +28,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.LineHeightStyle
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
@@ -40,21 +48,57 @@ fun WaifuGptScreenContent() {
         topBar = { MainAppBar() }
     ) { padding ->
 
-        Column(modifier = if (isNavigationBarVisible()) {
-            Modifier
-                .fillMaxSize()
-                .navigationBarsPadding()
-                .background(MaterialTheme.colorScheme.background)
-                .padding(padding)
-        } else {
-            Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
-                .padding(padding)
-        }) {
-            Column() {
-                Text("Seccion numero 01", modifier = Modifier.align(Alignment.CenterHorizontally))
-                MediaList(items= getMedia())
+        val media1 = getMedia()
+        val media2 = getMedia2()
+
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(3),
+            // columns = GridCells.Adaptive(150.dp), // Esto mostrará 2-3 items por fila dependiendo del ancho de pantalla
+            modifier = if (isNavigationBarVisible()) {
+                Modifier
+                    .fillMaxSize()
+                    .navigationBarsPadding()
+                    .background(MaterialTheme.colorScheme.background)
+                    .padding(padding)
+            } else {
+                Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
+                    .padding(padding)
+            }
+        ) {
+            // Primera sección - Header
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                Text(
+                    text = "Seccion numero 01",
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    textAlign = TextAlign.Center
+                )
+            }
+
+            // Primera sección - Items
+            items(media1) { item ->
+                RenderItem(item, modifier = Modifier.padding(4.dp))
+            }
+
+            // Segunda sección - Header
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                Text(
+                    text = "Seccion numero 02",
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    textAlign = TextAlign.Center
+                )
+            }
+
+            // Segunda sección - Items
+            items(media2) { item ->
+                RenderItem(item, modifier = Modifier.padding(4.dp))
             }
         }
 

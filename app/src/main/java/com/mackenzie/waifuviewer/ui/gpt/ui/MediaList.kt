@@ -135,7 +135,7 @@ fun RenderItem(item: VideoItem, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun RenderItem2(item: VideoItem, modifier: Modifier = Modifier) {
+fun RenderItem2(item: VideoItem, modifier: Modifier = Modifier) {
     Card(
         modifier = Modifier
             .padding(8.dp),
