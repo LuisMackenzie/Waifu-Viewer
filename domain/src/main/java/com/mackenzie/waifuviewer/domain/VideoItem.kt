@@ -22,6 +22,17 @@ fun getMedia() = (1..20).map {
     )
 }
 
+fun getMedia2() = (21..30).map {
+    VideoItem(
+        it,
+        "Title $it",
+        "https://loremflickr.com/400/400/cat?lock=1",
+        "https://loremflickr.com/400/400/girl?lock=$it",
+        getType(it),
+        "Generic Description $it"
+    )
+}
+
 fun getType(id: Int): VideoItem.Type {
     return when (id % 5) {
         0 -> VideoItem.Type.VIDEO
