@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.mackenzie.waifuviewer.domain.VideoItem
 import com.mackenzie.waifuviewer.domain.getMedia2
 import com.mackenzie.waifuviewer.domain.getVideoServers
+import com.mackenzie.waifuviewer.domain.im.WaifuImItem
 import com.mackenzie.waifuviewer.ui.common.ui.isNavigationBarVisible
 
 
@@ -23,7 +24,8 @@ import com.mackenzie.waifuviewer.ui.common.ui.isNavigationBarVisible
 fun MediaList(
     itemSection01: List<VideoItem> = getVideoServers(),
     itemSection02: List<VideoItem> = getMedia2(),
-    padding: PaddingValues
+    padding: PaddingValues,
+    onItemClick: (VideoItem) -> Unit = {}
 ) {
     LazyVerticalGrid(
         contentPadding = PaddingValues(4.dp),
@@ -46,14 +48,22 @@ fun MediaList(
             TitleText("Seccion numero 01")
         }
         items(itemSection01) { item ->
-            RenderItem(item, modifier = Modifier.padding(4.dp))
+            RenderItem(
+                item = item,
+                modifier = Modifier.padding(4.dp),
+                onItemClick = { onItemClick(item) }
+            )
         }
 
         item(span = { GridItemSpan(maxLineSpan) }) {
             TitleText("Seccion numero 02")
         }
         items(itemSection02) { item ->
-            RenderItem(item, modifier = Modifier.padding(4.dp))
+            RenderItem(
+                item = item,
+                modifier = Modifier.padding(4.dp),
+                onItemClick = { onItemClick(item) }
+            )
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.mackenzie.waifuviewer.ui.common.nav
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -45,7 +46,7 @@ fun Navigation() {
                     navController.navigate(route = NavItem.WaifuScreen.createRoute(server, tag, nsfw, gif, lands))
                 },
                 onGptButtonClicked = { gptType ->
-                    if (gptType) navController.navigate(route = NavItem.WaifuGptScreen.route)
+                    if (gptType) navController.navigate(route = NavItem.VideoServersScreen.route)
                     else navController.navigate(route = NavItem.WaifuGeminiScreen.route)
                 },
                 onFavoriteButtonClicked = { navController.navigate(route = NavItem.FavoriteScreen.route) },
@@ -75,8 +76,14 @@ fun Navigation() {
         composable(NavItem.FavoriteScreen) {
             FavoriteScreenContentRoute() { waifu -> navController.navigate(route = NavItem.WaifuDetail.createRoute(waifu, true)) }
         }
-        composable(NavItem.WaifuGptScreen) {
-            VideoHubScreenContent()
+        composable(NavItem.VideoServersScreen) {
+            VideoHubScreenContent() { serverId ->
+                // Navegar hacia una nueva pantaalla basada en el ID del servidor
+                Log.e( "Navigation", "Navigating to Video List Screen with server ID: $serverId")
+            }
+        }
+        composable(NavItem.VideoListScreen) {
+            // VideoListScreenContent()
         }
         composable(NavItem.WaifuGeminiScreen) {
             WaifuGeminiScreenMenuRoute()

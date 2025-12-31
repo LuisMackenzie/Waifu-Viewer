@@ -25,6 +25,12 @@ sealed class NavItem(
 
     object WaifuGptScreen : NavItem("gpt_screen")
 
+    object VideoServersScreen : NavItem("video_hub_screen")
+
+    object VideoListScreen : NavItem("video_list_screen", listOf(NavArg.VideoHubServer)) {
+        fun createRoute(server: Int) = baseRoute + File.separator + server
+    }
+
     object WaifuGeminiScreen : NavItem("gemini_screen")
 
     val route = run {
@@ -47,4 +53,5 @@ enum class NavArg(val key: String, val navType: NavType<*>) {
     NsfwState("nsfwState", NavType.BoolType),
     GifState("gifState", NavType.BoolType),
     LandsState("landsState", NavType.BoolType),
+    VideoHubServer("videoHubServer", NavType.IntType)
 }

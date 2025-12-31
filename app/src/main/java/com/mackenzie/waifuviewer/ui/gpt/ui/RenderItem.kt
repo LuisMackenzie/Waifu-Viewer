@@ -2,6 +2,7 @@ package com.mackenzie.waifuviewer.ui.gpt.ui
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -40,10 +41,14 @@ import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.domain.VideoItem
 
 @Composable
-fun RenderItem(item: VideoItem, modifier: Modifier = Modifier) {
+fun RenderItem(
+    item: VideoItem,
+    modifier: Modifier = Modifier,
+    onItemClick: (VideoItem) -> Unit = {}
+) {
     // Card(
     Column(
-        modifier = modifier
+        modifier = modifier.clickable { onItemClick(item) }
     ) {
         Box(
             modifier = Modifier

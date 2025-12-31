@@ -13,7 +13,10 @@ import com.mackenzie.waifuviewer.ui.gpt.VideoHubViewModel
 import com.mackenzie.waifuviewer.ui.selector.SelectorViewModel
 
 @Composable
-fun VideoHubScreenContent(vm: VideoHubViewModel = hiltViewModel()) {
+fun VideoHubScreenContent(
+    vm: VideoHubViewModel = hiltViewModel(),
+    onNavigate: (Int) -> Unit = {}
+) {
 
     val videoHubState by vm.state.collectAsStateWithLifecycle()
     LaunchedEffect(true) {
@@ -24,7 +27,13 @@ fun VideoHubScreenContent(vm: VideoHubViewModel = hiltViewModel()) {
         topBar = { MainAppBar() }
     ) { padding ->
 
-        MediaList(padding= padding)
+        MediaList(
+            padding= padding,
+            onItemClick = { item ->
+                Log.e( "VideoHubScreenContent", "ID=${item.id}, Clicked item: ${item.title}")
+                onNavigate(item.id)
+            }
+        )
 
         Snackbar.make(LocalView.current, "Under Development!", Snackbar.LENGTH_SHORT).show()
     }
