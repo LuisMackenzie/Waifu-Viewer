@@ -1,5 +1,6 @@
 package com.mackenzie.waifuviewer.ui.gpt
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mackenzie.waifuviewer.data.toError
@@ -33,12 +34,14 @@ class VideoHubViewModel @Inject constructor(
     fun getServers() {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true,  error = null) }
-            val error = getVideoServersUseCase("apiKey")
-            if (error != null) {
-                _state.update { it.copy(isLoading = false, error = error.toString()) }
-            } else {
-                _state.update { it.copy(isLoading = false, error = null, videoServerResponse = "Video servers fetched successfully") }
+            val error = getVideoServersUseCase().fold(ifLeft = { return@fold it }) { item ->
+                Log.e("", " Video servers fetched: ${item.videos.first().video.url} ")
+                Log.e("", " Video servers fetched: ${item.videos.last().video.url} ")
+                Log.e("", " Video list size: ${item.videos.size} ")
+                _state.update { it.copy(isLoading = false,  videoServerResponse = item.videos.first().video.url) }
+
             }
+            _state.update { it.copy(isLoading = false, error = error.toString()) }
         }
     }
 

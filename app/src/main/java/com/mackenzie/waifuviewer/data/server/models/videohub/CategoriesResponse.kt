@@ -5,12 +5,12 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class CategoriesResponse(
-    @Json(name = "categories") val categories: List<Category>,
+    @Json(name = "categories") val categories: List<CategoryResponse>,
     @Json(name = "count") val count: Int
 )
 
 @JsonClass(generateAdapter = true)
-data class Category(
+data class CategoryResponse(
     @Json(name = "category") val category: String
 )
 

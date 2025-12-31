@@ -4,7 +4,7 @@ import arrow.core.Either
 import com.mackenzie.waifuviewer.data.datasource.VideoHubRemoteDataSource
 import com.mackenzie.waifuviewer.data.server.models.RemoteVideoHubConnect
 import com.mackenzie.waifuviewer.data.server.models.videohub.CategoriesResponse
-import com.mackenzie.waifuviewer.data.server.models.videohub.Category
+import com.mackenzie.waifuviewer.data.server.models.videohub.CategoryResponse
 import com.mackenzie.waifuviewer.data.server.models.videohub.DeletedVideo
 import com.mackenzie.waifuviewer.data.server.models.videohub.DetailedStarInfo
 import com.mackenzie.waifuviewer.data.server.models.videohub.EmbedInfo
@@ -17,6 +17,7 @@ import com.mackenzie.waifuviewer.data.server.models.videohub.VideoByIdResponse
 import com.mackenzie.waifuviewer.data.server.models.videohub.VideoDetails
 import com.mackenzie.waifuviewer.data.server.models.videohub.VideoDetailsById
 import com.mackenzie.waifuviewer.data.server.models.videohub.VideoEmbedCodeResponse
+import com.mackenzie.waifuviewer.data.server.models.videohub.VideoResponse
 import com.mackenzie.waifuviewer.data.server.models.videohub.VideoSearchResponse
 import com.mackenzie.waifuviewer.data.server.models.videohub.VideosDeletedResponse
 import com.mackenzie.waifuviewer.data.tryCall
@@ -132,8 +133,8 @@ private fun VideoSearchResponse.toDomainModel(): VideoListItem =
         count = count
     )
 
-private fun com.mackenzie.waifuviewer.data.server.models.videohub.Video.toDomainModel() =
-    com.mackenzie.waifuviewer.domain.video.VideoItem(
+private fun VideoResponse.toDomainModel() =
+    com.mackenzie.waifuviewer.domain.video.VideoDomainItem(
         video = video.toDomainModel()
     )
 
@@ -173,7 +174,7 @@ private fun VideoDetails.toDomainModel() =
 private fun CategoriesResponse.toDomainModel(): CategoriesItem =
     CategoriesItem(categories = categories.toDomainCategoryModel(), count = count)
 
-private fun List<Category>.toDomainCategoryModel(): List<CategoryItem> =
+private fun List<CategoryResponse>.toDomainCategoryModel(): List<CategoryItem> =
     this.map { CategoryItem(category = it.category) }
 
 private fun TagsResponse.toDomainModel(): TagsResponseItem =

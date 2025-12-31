@@ -122,7 +122,7 @@ object AppModule {
     fun provideVideoHubService(apiUrl: ApiVideoUrl, client: OkHttpClient, moshi: Moshi): RemoteVideoHubConnect {
 
         val builderHub = Retrofit.Builder()
-            .baseUrl(apiUrl.pornHubBaseUrl)
+            .baseUrl(apiUrl.redtubeBaseUrl)
             .client(client)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
@@ -214,6 +214,9 @@ abstract class AppDataModule {
 
     @Binds
     abstract fun bindRemoteVideoHubDataSource(remoteVideoHubDataSource: VideoHubDataSource): VideoHubRemoteDataSource
+
+    // @Binds
+    // abstract fun bindLocalVideoHubDataSource(localVideoHubDataSource: RoomVideoHubDataSource): VideoHubLocalDataSource
 
     @Binds
     abstract fun bindLocationDataSource(locationDataSource: PlayServicesLocationDataSource): LocationDataSource

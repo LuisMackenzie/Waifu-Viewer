@@ -2,12 +2,12 @@ package com.mackenzie.waifuviewer.domain.video
 
 
 data class VideoListItem(
-    val videos: List<VideoItem>,
+    val videos: List<VideoDomainItem>,
     val count: Int
 )
 
 
-data class VideoItem(
+data class VideoDomainItem(
     val video: VideoItemDetails
 )
 

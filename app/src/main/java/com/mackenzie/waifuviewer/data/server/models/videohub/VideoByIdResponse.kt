@@ -21,8 +21,8 @@ data class VideoDetailsById(
     @Json(name = "views") val views: String,
     @Json(name = "duration") val duration: String,
     @Json(name = "default_thumb") val defaultThumb: String,
-    @Json(name = "thumbs") val thumbs: List<Thumb>? = null,
-    @Json(name = "tags") val tags: List<Tag>? = null,
-    @Json(name = "stars") val stars: List<Star>? = null
+    @Json(name = "thumbs") val thumbs: List<ThumbResponse>? = null,
+    @Json(name = "tags") val tags: List<TagResponse>? = null,
+    @Json(name = "stars") val stars: List<StarResponse>? = null
 )
 

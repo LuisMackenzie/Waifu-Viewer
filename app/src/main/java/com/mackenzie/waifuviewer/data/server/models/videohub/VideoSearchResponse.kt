@@ -5,12 +5,12 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class VideoSearchResponse(
-    @Json(name = "videos") val videos: List<Video>,
+    @Json(name = "videos") val videos: List<VideoResponse>,
     @Json(name = "count") val count: Int
 )
 
 @JsonClass(generateAdapter = true)
-data class Video(
+data class VideoResponse(
     @Json(name = "video") val video: VideoDetails
 )
 
@@ -26,13 +26,13 @@ data class VideoDetails(
     @Json(name = "views") val views: String,
     @Json(name = "duration") val duration: String,
     @Json(name = "default_thumb") val defaultThumb: String,
-    @Json(name = "thumbs") val thumbs: List<Thumb>? = null,
-    @Json(name = "tags") val tags: List<Tag>? = null,
-    @Json(name = "stars") val stars: List<Star>? = null
+    @Json(name = "thumbs") val thumbs: List<ThumbResponse>? = null,
+    @Json(name = "tags") val tags: List<TagResponse>? = null,
+    @Json(name = "stars") val stars: List<StarResponse>? = null
 )
 
 @JsonClass(generateAdapter = true)
-data class Thumb(
+data class ThumbResponse(
     @Json(name = "size") val size: String,
     @Json(name = "width") val width: String,
     @Json(name = "height") val height: String,
@@ -40,17 +40,17 @@ data class Thumb(
 )
 
 @JsonClass(generateAdapter = true)
-data class Tag(
+data class TagResponse(
     @Json(name = "tag_name") val tagName: String
 )
 
 @JsonClass(generateAdapter = true)
-data class Star(
-    @Json(name = "star") val star: StarInfo
+data class StarResponse(
+    @Json(name = "star") val star: StarInfoResponse
 )
 
 @JsonClass(generateAdapter = true)
-data class StarInfo(
+data class StarInfoResponse(
     @Json(name = "star_name") val starName: String,
     @Json(name = "star_thumb") val starThumb: String? = null
 )

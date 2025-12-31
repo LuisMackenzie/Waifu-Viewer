@@ -5,11 +5,11 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class VideoActiveResponse(
-    @Json(name = "active") val active: ActiveInfo
+    @Json(name = "active") val active: ActiveInfoResponse
 )
 
 @JsonClass(generateAdapter = true)
-data class ActiveInfo(
+data class ActiveInfoResponse(
     @Json(name = "active") val active: String
 )
 
