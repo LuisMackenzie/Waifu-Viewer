@@ -18,6 +18,7 @@ import com.mackenzie.waifuviewer.ui.detail.DetailScreenContentRoute
 import com.mackenzie.waifuviewer.ui.favs.ui.FavoriteScreenContentRoute
 import com.mackenzie.waifuviewer.ui.gemini.menu.WaifuGeminiScreenMenuRoute
 import com.mackenzie.waifuviewer.ui.gpt.ui.VideoHubScreenContent
+import com.mackenzie.waifuviewer.ui.gpt.ui.VideoListScreenContent
 import com.mackenzie.waifuviewer.ui.main.WaifuScreenContentRoute
 import com.mackenzie.waifuviewer.ui.selector.SelectorScreenContentRoute
 import com.mackenzie.waifuviewer.ui.splash.SplashScreenRoute
@@ -78,12 +79,19 @@ fun Navigation() {
         }
         composable(NavItem.VideoServersScreen) {
             VideoHubScreenContent() { serverId ->
-                // Navegar hacia una nueva pantaalla basada en el ID del servidor
+                // Navegar hacia una nueva pantalla basada en el ID del servidor
                 Log.e( "Navigation", "Navigating to Video List Screen with server ID: $serverId")
+                navController.navigate(route= NavItem.VideoListScreen.createRoute(serverId))
+
             }
         }
-        composable(NavItem.VideoListScreen) {
-            // VideoListScreenContent()
+        composable(NavItem.VideoListScreen) { backStackEntry ->
+
+            val serverId :Int = backStackEntry.findArg(NavArg.VideoHubServer)
+            Log.e( "Navigation", "Navigating succesfull!!: RECIBIDO eL ServerId=$serverId")
+            VideoListScreenContent(backStackEntry.findArg(NavArg.VideoHubServer)) { videoId ->
+
+            }
         }
         composable(NavItem.WaifuGeminiScreen) {
             WaifuGeminiScreenMenuRoute()

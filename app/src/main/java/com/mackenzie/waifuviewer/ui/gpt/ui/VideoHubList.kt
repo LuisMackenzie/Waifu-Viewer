@@ -14,16 +14,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.mackenzie.waifuviewer.domain.VideoItem
+import com.mackenzie.waifuviewer.domain.getMedia
 import com.mackenzie.waifuviewer.domain.getMedia2
 import com.mackenzie.waifuviewer.domain.getVideoServers
-import com.mackenzie.waifuviewer.domain.im.WaifuImItem
 import com.mackenzie.waifuviewer.ui.common.ui.isNavigationBarVisible
 
-
 @Composable
-fun MediaList(
-    itemSection01: List<VideoItem> = getVideoServers(),
-    itemSection02: List<VideoItem> = getMedia2(),
+fun VideoHubList(
+    itemSection01: List<VideoItem> = getMedia(),
     padding: PaddingValues,
     onItemClick: (VideoItem) -> Unit = {}
 ) {
@@ -48,17 +46,6 @@ fun MediaList(
             TitleText("Seccion numero 01")
         }
         items(itemSection01) { item ->
-            RenderItem(
-                item = item,
-                modifier = Modifier.padding(4.dp),
-                onItemClick = { onItemClick(item) }
-            )
-        }
-
-        item(span = { GridItemSpan(maxLineSpan) }) {
-            TitleText("Seccion numero 02")
-        }
-        items(itemSection02) { item ->
             RenderItem(
                 item = item,
                 modifier = Modifier.padding(4.dp),
