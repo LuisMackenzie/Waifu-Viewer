@@ -78,17 +78,9 @@ fun Navigation() {
             FavoriteScreenContentRoute() { waifu -> navController.navigate(route = NavItem.WaifuDetail.createRoute(waifu, true)) }
         }
         composable(NavItem.VideoServersScreen) {
-            VideoHubScreenContent() { serverId ->
-                // Navegar hacia una nueva pantalla basada en el ID del servidor
-                Log.e( "Navigation", "Navigating to Video List Screen with server ID: $serverId")
-                navController.navigate(route= NavItem.VideoListScreen.createRoute(serverId))
-
-            }
+            VideoHubScreenContent() { serverId -> navController.navigate(route= NavItem.VideoListScreen.createRoute(serverId)) }
         }
         composable(NavItem.VideoListScreen) { backStackEntry ->
-
-            val serverId :Int = backStackEntry.findArg(NavArg.VideoHubServer)
-            Log.e( "Navigation", "Navigating succesfull!!: RECIBIDO eL ServerId=$serverId")
             VideoListScreenContent(backStackEntry.findArg(NavArg.VideoHubServer)) { videoId ->
 
             }

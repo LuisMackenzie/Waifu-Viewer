@@ -22,6 +22,7 @@ import com.mackenzie.waifuviewer.ui.common.ui.isNavigationBarVisible
 @Composable
 fun VideoHubList(
     itemSection01: List<VideoItem> = getMedia(),
+    titleServer: String = "Video Server",
     padding: PaddingValues,
     onItemClick: (VideoItem) -> Unit = {}
 ) {
@@ -43,7 +44,7 @@ fun VideoHubList(
         }
     ) {
         item(span = { GridItemSpan(maxLineSpan) }) {
-            TitleText("Seccion numero 01")
+            TitleText(titleServer)
         }
         items(itemSection01) { item ->
             RenderItem(

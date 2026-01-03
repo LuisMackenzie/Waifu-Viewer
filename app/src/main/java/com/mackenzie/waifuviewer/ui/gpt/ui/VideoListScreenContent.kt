@@ -5,6 +5,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalView
 import com.google.android.material.snackbar.Snackbar
+import com.mackenzie.waifuviewer.domain.getNameById
 
 
 @Composable
@@ -22,6 +23,7 @@ fun VideoListScreenContent(
     ) { padding ->
 
         VideoHubList(
+            titleServer = getNameById(serverId),
             padding= padding,
             onItemClick = { item ->
                 Log.e( "VideoHubScreenContent", "ID=${item.id}, Clicked item: ${item.title}")
