@@ -1,5 +1,6 @@
 package com.mackenzie.waifuviewer.ui.gpt.ui
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -47,7 +48,9 @@ fun VideoHubList(
             TitleText(titleServer)
         }
         items(itemSection01) { item ->
-            RenderItem(
+            Log.e("VideoHubList", "VideoHubList - item.thumb: ${item.thumb}")
+            Log.e("VideoHubList", "VideoHubList - item.thumb: ${item.url}")
+            RenderVideo(
                 item = item,
                 modifier = Modifier.padding(4.dp),
                 onItemClick = { onItemClick(item) }

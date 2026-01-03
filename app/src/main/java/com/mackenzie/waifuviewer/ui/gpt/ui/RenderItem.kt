@@ -177,7 +177,7 @@ fun RenderItem2(item: VideoItem, modifier: Modifier = Modifier) {
     }
 }
 
-private fun loadIcon(type: VideoItem.Type): ImageVector = when (type) {
+fun loadIcon(type: VideoItem.Type): ImageVector = when (type) {
     VideoItem.Type.PHOTO -> Icons.Default.Image
     VideoItem.Type.VIDEO -> Icons.Default.SmartDisplay
     VideoItem.Type.AUDIO -> Icons.Default.Mic
