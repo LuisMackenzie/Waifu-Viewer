@@ -64,19 +64,9 @@ fun RenderItem(
                 placeholder = painterResource(R.drawable.baseline_downloading),
                 error = painterResource(R.drawable.baseline_report_error),
                 contentDescription = null,
-                contentScale = ContentScale.Crop,
+                contentScale = ContentScale.FillWidth,
                 modifier = Modifier.matchParentSize(),
             )
-            if (item.type == VideoItem.Type.VIDEO) {
-                Icon(
-                    imageVector = Icons.Default.PlayCircleOutline,
-                    contentDescription = null,
-                    tint = Color.White,
-                    modifier = Modifier
-                        .size(98.dp)
-                        .align(Alignment.Center)
-                )
-            }
         }
         Box(
             // contentAlignment = Alignment.Center,
@@ -86,17 +76,9 @@ fun RenderItem(
                 .padding(16.dp)
         ) {
             Text(
-                textAlign = TextAlign.Start,
+                textAlign = TextAlign.Center,
                 text = item.title,
                 style = MaterialTheme.typography.bodyLarge
-            )
-            Icon(
-                imageVector = loadIcon(item.type),
-                contentDescription = null,
-                tint = Color.White,
-                modifier = Modifier
-                    .size(26.dp)
-                    .align(Alignment.CenterEnd)
             )
         }
     }
