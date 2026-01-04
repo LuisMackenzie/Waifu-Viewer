@@ -30,7 +30,6 @@ class VideoHubViewModel @Inject constructor(
                     _state.update { it.copy(isLoading = false, error = error.toString()) }
                 },
                 ifRight = { videoListItem ->
-                    Log.e("VideoHubViewModel", "Video servers fetched: ${videoListItem.videos.size} videos")
                     _state.update {
                         it.copy(
                             isLoading = false,

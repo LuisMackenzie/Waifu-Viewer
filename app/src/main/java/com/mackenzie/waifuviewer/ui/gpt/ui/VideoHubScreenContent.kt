@@ -29,7 +29,7 @@ fun VideoHubScreenContent(
         ServerList(
             padding= padding,
             onItemClick = { item ->
-                Log.e( "VideoHubScreenContent", "ID=${item.id}, Clicked item: ${item.title}")
+                Log.e( "VideoHubScreenContent", "Server ID=${item.id}, Clicked Server: ${item.title}")
                 onNavigate(item.id)
             }
         )

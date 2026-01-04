@@ -1,6 +1,5 @@
 package com.mackenzie.waifuviewer.ui.gpt.ui
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,8 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.mackenzie.waifuviewer.domain.VideoItem
 import com.mackenzie.waifuviewer.domain.getMedia
-import com.mackenzie.waifuviewer.domain.getMedia2
-import com.mackenzie.waifuviewer.domain.getVideoServers
 import com.mackenzie.waifuviewer.ui.common.ui.isNavigationBarVisible
 
 @Composable
@@ -48,8 +45,6 @@ fun VideoHubList(
             TitleText(titleServer)
         }
         items(itemSection01) { item ->
-            Log.e("VideoHubList", "VideoHubList - item.thumb: ${item.thumb}")
-            Log.e("VideoHubList", "VideoHubList - item.thumb: ${item.url}")
             RenderVideo(
                 item = item,
                 modifier = Modifier.padding(4.dp),
