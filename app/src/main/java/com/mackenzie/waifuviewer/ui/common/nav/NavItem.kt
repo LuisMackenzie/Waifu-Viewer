@@ -58,6 +58,5 @@ enum class NavArg(val key: String, val navType: NavType<*>) {
     GifState("gifState", NavType.BoolType),
     LandsState("landsState", NavType.BoolType),
     VideoHubServer("videoHubServer", NavType.IntType),
-
     VideoInfo("videoInfo", NavType.StringType)
 }

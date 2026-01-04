@@ -82,11 +82,14 @@ fun Navigation() {
         composable(NavItem.VideoListScreen) { backStackEntry ->
             VideoListScreenContent(backStackEntry.findArg(NavArg.VideoHubServer)) { videoUrl ->
                 // Aquí puedes manejar la navegación al reproductor de video si es necesario
-                navController.navigate(route= NavItem.PlayerScreen.createRoute(videoUrl))
+                val temp = videoUrl
+                /*navController.navigate(route= NavItem.PlayerScreen.createRoute(videoUrl))*/
             }
         }
         composable(NavItem.PlayerScreen) { backStackEntry ->
-            val videoUrl:String = backStackEntry.findArg(NavArg.VideoInfo)
+//            val videoUrl:String = backStackEntry.findArg(NavArg.VideoInfo)
+
+
 
         }
         composable(NavItem.WaifuGeminiScreen) {
