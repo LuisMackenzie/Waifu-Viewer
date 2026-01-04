@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Mic
+import androidx.compose.material.icons.filled.PlayCircle
 import androidx.compose.material.icons.filled.PlayCircleOutline
 import androidx.compose.material.icons.filled.SmartDisplay
 import androidx.compose.material3.Card
@@ -163,4 +164,5 @@ fun loadIcon(type: VideoItem.Type): ImageVector = when (type) {
     VideoItem.Type.PHOTO -> Icons.Default.Image
     VideoItem.Type.VIDEO -> Icons.Default.SmartDisplay
     VideoItem.Type.AUDIO -> Icons.Default.Mic
+    VideoItem.Type.SERVER -> Icons.Default.PlayCircle
 }
