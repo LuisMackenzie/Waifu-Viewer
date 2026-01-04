@@ -1,6 +1,5 @@
 package com.mackenzie.waifuviewer.ui.common.nav
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -81,7 +80,8 @@ fun Navigation() {
             VideoHubScreenContent() { serverId -> navController.navigate(route= NavItem.VideoListScreen.createRoute(serverId)) }
         }
         composable(NavItem.VideoListScreen) { backStackEntry ->
-            VideoListScreenContent(backStackEntry.findArg(NavArg.VideoHubServer)) { videoId ->
+            VideoListScreenContent(backStackEntry.findArg(NavArg.VideoHubServer)) { videoUrl ->
+                // Aquí puedes manejar la navegación al reproductor de video si es necesario
 
             }
         }
