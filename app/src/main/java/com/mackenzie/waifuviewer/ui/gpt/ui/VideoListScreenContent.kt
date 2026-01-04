@@ -22,7 +22,7 @@ import com.mackenzie.waifuviewer.ui.gpt.VideoHubViewModel
 fun VideoListScreenContent(
     serverId: Int,
     vm: VideoHubViewModel = hiltViewModel(),
-    onNavigate: (Int) -> Unit = {}
+    onNavigate: (String) -> Unit = {}
 ) {
 
     val state by vm.state.collectAsStateWithLifecycle()
@@ -55,6 +55,7 @@ fun VideoListScreenContent(
                 }
             }
             else -> {
+                // TODO ELiminar este mapear y subirlo de capa al repositorio.
                 // Mapear VideoDomainItem a VideoItem
                 val videoItems = state.videos.map { videoDomainItem ->
                     VideoItem(
@@ -73,7 +74,8 @@ fun VideoListScreenContent(
                     padding = padding,
                     onItemClick = { item ->
                         Log.e("VideoHubScreenContent", "ID=${item.id}, Clicked item: ${item.title}")
-                        onNavigate(item.id)
+                        Log.e("VideoHubScreenContent", "Loading URL...=${item.url}")
+                        onNavigate(item.url)
                     }
                 )
             }
