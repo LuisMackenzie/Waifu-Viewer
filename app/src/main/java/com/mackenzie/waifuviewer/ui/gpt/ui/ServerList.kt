@@ -16,7 +16,8 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
 import com.google.android.material.snackbar.Snackbar
 import com.mackenzie.waifuviewer.domain.VideoItem
-import com.mackenzie.waifuviewer.domain.getMedia2
+import com.mackenzie.waifuviewer.domain.getHentaiServers
+import com.mackenzie.waifuviewer.domain.getLiveCamsServers
 import com.mackenzie.waifuviewer.domain.getVideoServers
 import com.mackenzie.waifuviewer.ui.common.ui.isNavigationBarVisible
 
@@ -24,7 +25,8 @@ import com.mackenzie.waifuviewer.ui.common.ui.isNavigationBarVisible
 @Composable
 fun ServerList(
     itemSection01: List<VideoItem> = getVideoServers(),
-    itemSection02: List<VideoItem> = getMedia2(),
+    itemSection02: List<VideoItem> = getLiveCamsServers(),
+    itemSection03: List<VideoItem> = getHentaiServers(),
     padding: PaddingValues,
     onItemClick: (VideoItem) -> Unit = {}
 ) {
@@ -59,7 +61,7 @@ fun ServerList(
                 when (serverItem.id) {
                     2 -> onItemClick(item)
                     else -> {
-                        Snackbar.make(localView, "Section Under Development!", Snackbar.LENGTH_SHORT).show()
+                        Snackbar.make(localView, "Server Under Development!", Snackbar.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -72,7 +74,24 @@ fun ServerList(
             RenderItem(
                 item = item,
                 modifier = Modifier.padding(4.dp),
-                onItemClick = { onItemClick(item) }
+                onItemClick = {
+                    Snackbar.make(localView, "Section Under Development!", Snackbar.LENGTH_SHORT).show()
+                    // onItemClick(item)
+                }
+            )
+        }
+
+        item(span = { GridItemSpan(maxLineSpan) }) {
+            TitleText("Seccion numero 03")
+        }
+        items(itemSection03) { item ->
+            RenderItem(
+                item = item,
+                modifier = Modifier.padding(4.dp),
+                onItemClick = {
+                    Snackbar.make(localView, "Section Under Development!", Snackbar.LENGTH_SHORT).show()
+                    // onItemClick(item)
+                }
             )
         }
     }
