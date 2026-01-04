@@ -12,7 +12,9 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
+import com.google.android.material.snackbar.Snackbar
 import com.mackenzie.waifuviewer.domain.VideoItem
 import com.mackenzie.waifuviewer.domain.getMedia2
 import com.mackenzie.waifuviewer.domain.getVideoServers
@@ -26,6 +28,9 @@ fun ServerList(
     padding: PaddingValues,
     onItemClick: (VideoItem) -> Unit = {}
 ) {
+
+    val localView = LocalView.current
+
     LazyVerticalGrid(
         contentPadding = PaddingValues(4.dp),
         columns = GridCells.Fixed(3),
@@ -49,9 +54,15 @@ fun ServerList(
         items(itemSection01) { item ->
             RenderItem(
                 item = item,
-                modifier = Modifier.padding(4.dp),
-                onItemClick = { onItemClick(item) }
-            )
+                modifier = Modifier.padding(4.dp)
+            ) { serverItem ->
+                when (serverItem.id) {
+                    2 -> onItemClick(item)
+                    else -> {
+                        Snackbar.make(localView, "Section Under Development!", Snackbar.LENGTH_SHORT).show()
+                    }
+                }
+            }
         }
 
         item(span = { GridItemSpan(maxLineSpan) }) {
