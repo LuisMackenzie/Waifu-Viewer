@@ -1,5 +1,6 @@
 package com.mackenzie.waifuviewer.ui.gpt.ui
 
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -20,6 +21,8 @@ fun VideoPlayerScreenContent(modifier: Modifier = Modifier.fillMaxSize(), videoU
         ExoPlayer.Builder(context).build().apply {
             // 2. Crear el MediaItem a partir de la URL
             val mediaItem = MediaItem.fromUri(videoUrl)
+
+            Log.e("VideoHubScreenContent", "Loading EXOPLayer URL...=${videoUrl}")
             setMediaItem(mediaItem)
             // 3. Preparar el reproductor
             prepare()

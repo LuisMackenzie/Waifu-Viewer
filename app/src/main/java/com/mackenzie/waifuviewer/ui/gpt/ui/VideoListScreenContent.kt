@@ -75,7 +75,10 @@ fun VideoListScreenContent(
                     onItemClick = { item ->
                         Log.e("VideoHubScreenContent", "ID=${item.id}, Clicked item: ${item.title}")
                         Log.e("VideoHubScreenContent", "Loading URL...=${item.url}")
-                        onNavigate(item.url)
+                        Log.e("VideoHubScreenContent", "Loading Item...=${item}")
+                        // Me falta el EmbededUrl en el modelo de dominio
+                        // alli esta el video que se podria reproducir directamente
+                        // onNavigate(item.url)
                     }
                 )
             }
