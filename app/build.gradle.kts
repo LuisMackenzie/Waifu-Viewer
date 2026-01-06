@@ -233,6 +233,10 @@ dependencies {
     // implementation("com.google.ai.client.generativeai:generativeai:0.2.2")
     implementation(Libs.GenerativeAI.generativeai)
 
+    // Exoplayer
+    implementation(Libs.AndroidX.Media3.exoplayer)
+    implementation(Libs.AndroidX.Media3.ui)
+
     // JUnit y Mockito
     testImplementation(Libs.JUnit.junit)
     testImplementation(Libs.Mockito.kotlin)

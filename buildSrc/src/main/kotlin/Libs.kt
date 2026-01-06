@@ -71,6 +71,11 @@ object Libs {
             const val gradlePlugin = "androidx.navigation:navigation-safe-args-gradle-plugin:_"
         }
 
+        object Media3 {
+            const val exoplayer = "androidx.media3:media3-exoplayer:1.3.1"
+            const val ui = "androidx.media3:media3-ui:1.3.1"
+        }
+
         object Room {
             const val runtime = "androidx.room:room-runtime:_"
             const val paging = "androidx.room:room-paging:_"
