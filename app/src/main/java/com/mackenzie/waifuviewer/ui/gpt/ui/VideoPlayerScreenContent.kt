@@ -7,13 +7,18 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun VideoPlayerScreenContent(modifier: Modifier = Modifier, videoUrl: String) {
+fun VideoPlayerScreenContent(
+    videoUrl: String = "",
+    videoId: String = "",
+) {
     val context = LocalContext.current
 
     // 1. Recordar la instancia de ExoPlayer
@@ -23,6 +28,7 @@ fun VideoPlayerScreenContent(modifier: Modifier = Modifier, videoUrl: String) {
             val mediaItem = MediaItem.fromUri(videoUrl)
 
             Log.e("VideoHubScreenContent", "Loading EXOPLayer URL...=${videoUrl}")
+            Log.e("VideoHubScreenContent", "Loading EXOPLayer Video ID...=${videoId}")
             setMediaItem(mediaItem)
             // 3. Preparar el reproductor
             prepare()
@@ -40,7 +46,7 @@ fun VideoPlayerScreenContent(modifier: Modifier = Modifier, videoUrl: String) {
 
     // 5. Integrar el PlayerView de ExoPlayer usando AndroidView
     AndroidView(
-        modifier = modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         factory = {
             PlayerView(it).apply {
                 player = exoPlayer

@@ -31,8 +31,8 @@ sealed class NavItem(
         fun createRoute(server: Int) = baseRoute + File.separator + server
     }
 
-    object PlayerScreen : NavItem("player_screen", listOf(NavArg.VideoInfo)) {
-        fun createRoute(videoId: String) = baseRoute + File.separator + videoId
+    object PlayerScreen : NavItem("player_screen", listOf(NavArg.VideoInfo, NavArg.VideoId)) {
+        fun createRoute(videoUrl: String, videoId: String) = baseRoute + File.separator + videoUrl + File.separator + videoId
     }
 
     object WaifuGeminiScreen : NavItem("gemini_screen")
@@ -58,5 +58,6 @@ enum class NavArg(val key: String, val navType: NavType<*>) {
     GifState("gifState", NavType.BoolType),
     LandsState("landsState", NavType.BoolType),
     VideoHubServer("videoHubServer", NavType.IntType),
-    VideoInfo("videoInfo", NavType.StringType)
+    VideoInfo("videoInfo", NavType.StringType),
+    VideoId("videoId", NavType.StringType)
 }

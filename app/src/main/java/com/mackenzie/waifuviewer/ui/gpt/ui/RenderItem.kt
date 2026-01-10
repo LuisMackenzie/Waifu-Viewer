@@ -68,7 +68,7 @@ fun RenderItem(
         Box(
             modifier = Modifier
                 .height(120.dp)
-                .background(Color.LightGray)
+                .background(MaterialTheme.colorScheme.background)
         ) {
             AsyncImage(
                 model= ImageRequest.Builder(LocalContext.current)

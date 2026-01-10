@@ -22,7 +22,7 @@ import com.mackenzie.waifuviewer.ui.gpt.VideoHubViewModel
 fun VideoListScreenContent(
     serverId: Int,
     vm: VideoHubViewModel = hiltViewModel(),
-    onNavigate: (String) -> Unit = {}
+    onNavigate: (String, String) -> Unit = { _, _ -> }
 ) {
 
     val state by vm.state.collectAsStateWithLifecycle()
@@ -55,19 +55,6 @@ fun VideoListScreenContent(
                 }
             }
             else -> {
-                // TODO ELiminar este mapear y subirlo de capa al repositorio.
-                // Mapear VideoDomainItem a VideoItem
-                /*val videoItems = state.videos.map { videoDomainItem ->
-                    VideoItem(
-                        id = videoDomainItem.video.videoId.toIntOrNull() ?: 0,
-                        title = videoDomainItem.video.title,
-                        thumb = videoDomainItem.video.thumb,
-                        url = videoDomainItem.video.url,
-                        type = VideoItem.Type.VIDEO,
-                        description = "${videoDomainItem.video.views} views • ${videoDomainItem.video.duration}"
-                    )
-                }*/
-
                 VideoHubList(
                     itemSection01 = state.videos,
                     titleServer = getNameById(serverId),
@@ -79,7 +66,7 @@ fun VideoListScreenContent(
                         Log.e("VideoHubScreenContent", "Loading Item...=${item}")
                         // Me falta el EmbededUrl en el modelo de dominio
                         // alli esta el video que se podria reproducir directamente
-                        onNavigate(item.video.embedUrl)
+                        onNavigate(item.video.embedUrl, item.video.videoId)
                     }
                 )
             }
