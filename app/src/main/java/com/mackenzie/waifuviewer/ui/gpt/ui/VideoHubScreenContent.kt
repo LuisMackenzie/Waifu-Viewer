@@ -26,13 +26,17 @@ fun VideoHubScreenContent(
         topBar = { MainAppBar() }
     ) { padding ->
 
+        val localview = LocalView.current
+
         ServerList(
             padding= padding,
-            onItemClick = { item ->
-                Log.e( "VideoHubScreenContent", "Server ID=${item.id}, Clicked Server: ${item.title}")
-                onNavigate(item.id)
+            onFavoriteClick = {
+                Snackbar.make(localview, "Favorite Feature Under Development!", Snackbar.LENGTH_SHORT).show()
             }
-        )
+        ) { item ->
+            Log.e( "VideoHubScreenContent", "Server ID=${item.id}, Clicked Server: ${item.title}")
+            onNavigate(item.id)
+        }
 
         Snackbar.make(LocalView.current, "Under Development!", Snackbar.LENGTH_SHORT).show()
     }

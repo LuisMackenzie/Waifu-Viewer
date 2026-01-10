@@ -28,6 +28,7 @@ fun ServerList(
     itemSection02: List<VideoItem> = getLiveCamsServers(),
     itemSection03: List<VideoItem> = getHentaiServers(),
     padding: PaddingValues,
+    onFavoriteClick: () -> Unit = {},
     onItemClick: (VideoItem) -> Unit = {}
 ) {
 
@@ -56,7 +57,8 @@ fun ServerList(
         items(itemSection01) { item ->
             RenderItem(
                 item = item,
-                modifier = Modifier.padding(4.dp)
+                modifier = Modifier.padding(4.dp),
+                onFavoriteClick = onFavoriteClick,
             ) { serverItem ->
                 when (serverItem.id) {
                     2 -> onItemClick(item)
@@ -74,6 +76,7 @@ fun ServerList(
             RenderItem(
                 item = item,
                 modifier = Modifier.padding(4.dp),
+                onFavoriteClick = onFavoriteClick,
                 onItemClick = {
                     Snackbar.make(localView, "Section Under Development!", Snackbar.LENGTH_SHORT).show()
                     // onItemClick(item)
@@ -88,6 +91,7 @@ fun ServerList(
             RenderItem(
                 item = item,
                 modifier = Modifier.padding(4.dp),
+                onFavoriteClick = onFavoriteClick,
                 onItemClick = {
                     Snackbar.make(localView, "Section Under Development!", Snackbar.LENGTH_SHORT).show()
                     // onItemClick(item)
