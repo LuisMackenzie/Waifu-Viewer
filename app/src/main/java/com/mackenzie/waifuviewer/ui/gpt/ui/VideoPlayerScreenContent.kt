@@ -13,7 +13,7 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 
 @Composable
-fun VideoPlayerScreenContent(modifier: Modifier = Modifier.fillMaxSize(), videoUrl: String) {
+fun VideoPlayerScreenContent(modifier: Modifier = Modifier, videoUrl: String) {
     val context = LocalContext.current
 
     // 1. Recordar la instancia de ExoPlayer
@@ -40,7 +40,7 @@ fun VideoPlayerScreenContent(modifier: Modifier = Modifier.fillMaxSize(), videoU
 
     // 5. Integrar el PlayerView de ExoPlayer usando AndroidView
     AndroidView(
-        modifier = modifier,
+        modifier = modifier.fillMaxSize(),
         factory = {
             PlayerView(it).apply {
                 player = exoPlayer

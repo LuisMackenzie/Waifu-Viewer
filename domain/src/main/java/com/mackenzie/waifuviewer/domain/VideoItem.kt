@@ -1,6 +1,12 @@
 package com.mackenzie.waifuviewer.domain
 
 import com.mackenzie.waifuviewer.domain.VideoItem.Type
+import com.mackenzie.waifuviewer.domain.video.StarInfoItem
+import com.mackenzie.waifuviewer.domain.video.StarItem
+import com.mackenzie.waifuviewer.domain.video.TagDomainInfo
+import com.mackenzie.waifuviewer.domain.video.ThumbItem
+import com.mackenzie.waifuviewer.domain.video.VideoDomainItem
+import com.mackenzie.waifuviewer.domain.video.VideoItemDetails
 
 data class VideoItem(
     val id: Int,
@@ -14,6 +20,45 @@ data class VideoItem(
 }
 
 fun getMedia() = (1..20).map {
+    VideoDomainItem(
+        video = VideoItemDetails(
+            videoId = it.toString(),
+            title = "Title $it",
+            thumb = "https://loremflickr.com/400/400/girl?lock=$it",
+            url = "https://loremflickr.com/400/400/girl?lock=$it",
+            embedUrl = "",
+            publishDate = "",
+            rating = "4.5",
+            ratings = "4.5",
+            views = (1000 * it).toString(),
+            duration = "5:00",
+            defaultThumb = "https://loremflickr.com/400/400/girl?lock=$it",
+            type = getType(it).name,
+            thumbs = listOf(ThumbItem(
+                size = "small",
+                width = "200",
+                height = "200",
+                src = "https://loremflickr.com/200/200/girl?lock=$it"
+            )),
+            tags = listOf(TagDomainInfo("tag2"), TagDomainInfo("tag2")),
+
+            stars = listOf(StarItem(
+                star = StarInfoItem(
+                    starName = "Star 01 $it",
+                    starThumb = "https://loremflickr.com/400/400/cat?lock=$it"
+                )
+            ), StarItem(
+                star = StarInfoItem(
+                    starName = "Star 02 $it",
+                    starThumb = "https://loremflickr.com/400/400/cat?lock=$it"
+                )
+            ))
+
+        )
+    )
+}
+
+fun getMedia2() = (1..20).map {
     VideoItem(
         it,
         "Title $it",

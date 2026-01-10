@@ -57,7 +57,7 @@ fun VideoListScreenContent(
             else -> {
                 // TODO ELiminar este mapear y subirlo de capa al repositorio.
                 // Mapear VideoDomainItem a VideoItem
-                val videoItems = state.videos.map { videoDomainItem ->
+                /*val videoItems = state.videos.map { videoDomainItem ->
                     VideoItem(
                         id = videoDomainItem.video.videoId.toIntOrNull() ?: 0,
                         title = videoDomainItem.video.title,
@@ -66,19 +66,20 @@ fun VideoListScreenContent(
                         type = VideoItem.Type.VIDEO,
                         description = "${videoDomainItem.video.views} views • ${videoDomainItem.video.duration}"
                     )
-                }
+                }*/
 
                 VideoHubList(
-                    itemSection01 = videoItems,
+                    itemSection01 = state.videos,
                     titleServer = getNameById(serverId),
                     padding = padding,
                     onItemClick = { item ->
-                        Log.e("VideoHubScreenContent", "ID=${item.id}, Clicked item: ${item.title}")
-                        Log.e("VideoHubScreenContent", "Loading URL...=${item.url}")
+                        Log.e("VideoHubScreenContent", "ID=${item.video.videoId}, Clicked item: ${item.video.title}")
+                        Log.e("VideoHubScreenContent", "Loading URL...=${item.video.url}")
+                        Log.e("VideoHubScreenContent", "Loading Embedded URL...=${item.video.embedUrl}")
                         Log.e("VideoHubScreenContent", "Loading Item...=${item}")
                         // Me falta el EmbededUrl en el modelo de dominio
                         // alli esta el video que se podria reproducir directamente
-                        // onNavigate(item.url)
+                        onNavigate(item.video.embedUrl)
                     }
                 )
             }

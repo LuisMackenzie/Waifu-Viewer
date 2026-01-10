@@ -20,6 +20,7 @@ data class VideoDetails(
     @Json(name = "title") val title: String,
     @Json(name = "thumb") val thumb: String,
     @Json(name = "url") val url: String,
+    @Json(name = "embed_url") val embedUrl: String,
     @Json(name = "publish_date") val publishDate: String,
     @Json(name = "rating") val rating: String,
     @Json(name = "ratings") val ratings: String,

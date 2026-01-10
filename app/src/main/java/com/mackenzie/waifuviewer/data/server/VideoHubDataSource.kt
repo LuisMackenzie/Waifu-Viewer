@@ -22,6 +22,7 @@ import com.mackenzie.waifuviewer.data.server.models.videohub.VideoSearchResponse
 import com.mackenzie.waifuviewer.data.server.models.videohub.VideosDeletedResponse
 import com.mackenzie.waifuviewer.data.tryCall
 import com.mackenzie.waifuviewer.domain.Error
+import com.mackenzie.waifuviewer.domain.VideoItem
 import com.mackenzie.waifuviewer.domain.video.ActiveInfo
 import com.mackenzie.waifuviewer.domain.video.CategoriesItem
 import com.mackenzie.waifuviewer.domain.video.CategoryItem
@@ -144,12 +145,14 @@ private fun VideoDetails.toDomainModel() =
         title = title,
         thumb = thumb,
         url = url,
+        embedUrl = embedUrl,
         publishDate = publishDate,
         rating = rating,
         ratings = ratings,
         views = views,
         duration = duration,
         defaultThumb = defaultThumb,
+        type = "VIDEO",
         thumbs = thumbs?.map {
             ThumbItem(
                 size = it.size,

@@ -15,19 +15,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.mackenzie.waifuviewer.domain.VideoItem
 import com.mackenzie.waifuviewer.domain.getMedia
+import com.mackenzie.waifuviewer.domain.video.VideoDomainItem
 import com.mackenzie.waifuviewer.ui.common.ui.isNavigationBarVisible
 
 @Composable
 fun VideoHubList(
-    itemSection01: List<VideoItem> = getMedia(),
+    itemSection01: List<VideoDomainItem> = getMedia(),
     titleServer: String = "Video Server",
     padding: PaddingValues,
-    onItemClick: (VideoItem) -> Unit = {}
+    onItemClick: (VideoDomainItem) -> Unit = {}
 ) {
     LazyVerticalGrid(
         contentPadding = PaddingValues(4.dp),
-        columns = GridCells.Fixed(3),
-        // columns = GridCells.Adaptive(150.dp),
+        // columns = GridCells.Fixed(3),
+        columns = GridCells.Adaptive(150.dp),
         modifier = if (isNavigationBarVisible()) {
             Modifier
                 .fillMaxSize()
@@ -47,7 +48,6 @@ fun VideoHubList(
         items(itemSection01) { item ->
             RenderVideo(
                 item = item,
-                modifier = Modifier.padding(4.dp),
                 onItemClick = { onItemClick(item) }
             )
         }
