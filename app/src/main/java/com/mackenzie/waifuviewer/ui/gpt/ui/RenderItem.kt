@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.PlayCircle
@@ -28,33 +29,45 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
+import com.google.android.material.snackbar.Snackbar
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.domain.VideoItem
+import com.mackenzie.waifuviewer.domain.getMedia
+import com.mackenzie.waifuviewer.domain.getMedia2
 
+
+@Preview(showBackground = true, heightDp = 150, widthDp = 120)
 @Composable
 fun RenderItem(
-    item: VideoItem,
     modifier: Modifier = Modifier,
+    item: VideoItem = getMedia2().first(),
+    onFavoriteClick: () -> Unit = {},
     onItemClick: (VideoItem) -> Unit = {}
 ) {
-    // Card(
-    Column(
-        modifier = modifier.clickable { onItemClick(item) }
+    Card(
+        shape =  MaterialTheme.shapes.medium,
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        modifier = modifier
+            .clickable { onItemClick(item) }
+            .fillMaxSize()
     ) {
         Box(
             modifier = Modifier
-                .height(100.dp)
-                .fillMaxSize()
+                .height(120.dp)
                 .background(Color.LightGray)
         ) {
             AsyncImage(
@@ -66,20 +79,37 @@ fun RenderItem(
                 error = painterResource(R.drawable.baseline_report_error),
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth,
-                modifier = Modifier.matchParentSize(),
+                modifier = Modifier.fillMaxSize(),
             )
-        }
-        Box(
-            // contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.secondary)
-                .padding(16.dp)
-        ) {
+
             Text(
                 textAlign = TextAlign.Center,
                 text = item.title,
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.bodyLarge,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 1.dp)
+                    .background(
+                        shape = MaterialTheme.shapes.small,
+                        brush = Brush.verticalGradient(
+                            colors = listOf(
+                                Color.Transparent,
+                                MaterialTheme.colorScheme.background
+                            )
+                        ))
+            )
+
+            Icon(
+                imageVector = Icons.Default.FavoriteBorder,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier
+                    .size(30.dp)
+                    .align(Alignment.TopEnd)
+                    .clickable { onFavoriteClick() }
+
             )
         }
     }
