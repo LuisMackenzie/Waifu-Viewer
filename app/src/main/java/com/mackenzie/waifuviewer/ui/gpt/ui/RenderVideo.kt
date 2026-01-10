@@ -23,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -49,7 +50,7 @@ fun RenderVideo(
 
     Card(
         shape =  MaterialTheme.shapes.medium,
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         modifier = Modifier
             .padding(4.dp)
             .height(200.dp)
@@ -63,8 +64,8 @@ fun RenderVideo(
         ) {
             AsyncImage(
                 model= ImageRequest.Builder(LocalContext.current)
-                    // .data(item.video.thumb)
-                    .data("https://loremflickr.com/400/400/girl?lock=24")
+                    .data(item.video.thumb)
+                    // .data("https://loremflickr.com/400/400/girl?lock=24")
                     .crossfade(true)
                     .build(),
                 placeholder = painterResource(R.drawable.baseline_downloading),
@@ -84,12 +85,21 @@ fun RenderVideo(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(2.dp)
-                    .background(Color.LightGray, shape = MaterialTheme.shapes.small)
+                    .background(MaterialTheme.colorScheme.background, shape = MaterialTheme.shapes.small)
             )
 
             Row(
                 modifier = Modifier
+                    .background(
+                        brush = Brush.verticalGradient(
+                        colors = listOf(
+                            Color.Transparent,
+                            MaterialTheme.colorScheme.background,
+                            MaterialTheme.colorScheme.background
+                        )
+                    ))
                     .fillMaxWidth()
+                    .padding(start = 2.dp, end = 2.dp, bottom = 2.dp)
                     .align(Alignment.BottomCenter)
 
             ) {
@@ -102,13 +112,14 @@ fun RenderVideo(
                     overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier
-                        .background(Color.LightGray, shape = MaterialTheme.shapes.small)
+                        // .background(MaterialTheme.colorScheme.background)
+                        .background(Color.Transparent)
                         .weight(5f)
                 )
                 Icon(
                     imageVector = loadIcon(VideoItem.Type.VIDEO),
                     contentDescription = null,
-                    tint = Color.White,
+                    tint = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier
                         .size(40.dp)
                         .weight(1f)
