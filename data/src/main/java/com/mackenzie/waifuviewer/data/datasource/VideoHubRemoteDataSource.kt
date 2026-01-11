@@ -27,6 +27,8 @@ interface VideoHubRemoteDataSource {
         period: String? = null
     ): Either<Error, VideoListItem>
 
+    suspend fun searchDefaultVideos(): Either<Error, VideoListItem>
+
     suspend fun getCategories(): Either<Error, CategoriesItem>
 
     suspend fun getTags(): Either<Error, TagsResponseItem>

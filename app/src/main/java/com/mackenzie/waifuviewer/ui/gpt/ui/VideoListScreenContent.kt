@@ -30,7 +30,7 @@ fun VideoListScreenContent(
     // Llamar a getServers() cuando se monta el composable o cambia el serverId
     LaunchedEffect(serverId) {
         val serverName = getNameById(serverId)
-        vm.getServers()
+        vm.getVideoList()
     }
 
     Scaffold(

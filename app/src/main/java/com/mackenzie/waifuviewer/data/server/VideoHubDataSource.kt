@@ -54,7 +54,11 @@ class VideoHubDataSource @Inject constructor(
     private val remoteService: RemoteVideoHubConnect
 ) : VideoHubRemoteDataSource {
 
-    override suspend fun getVideoServer() = searchVideos()
+    override suspend fun getVideoServer() = tryCall {
+        remoteService.videoHubService
+            .searchVideos()
+            .toDomainModel()
+    }
 
     override suspend fun searchVideos(
         page: Int?,
@@ -77,6 +81,12 @@ class VideoHubDataSource @Inject constructor(
                 ordering = ordering,
                 period = period
             ).toDomainModel()
+    }
+
+    override suspend fun searchDefaultVideos(): Either<Error, VideoListItem> = tryCall {
+        remoteService.videoHubService
+            .searchVideos()
+            .toDomainModel()
     }
 
     override suspend fun getCategories(): Either<Error, CategoriesItem> = tryCall {

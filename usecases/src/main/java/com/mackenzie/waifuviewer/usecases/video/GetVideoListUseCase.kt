@@ -6,8 +6,8 @@ import com.mackenzie.waifuviewer.domain.Error
 import com.mackenzie.waifuviewer.domain.video.VideoListItem
 import javax.inject.Inject
 
-class GetVideoServersUseCase @Inject constructor(private val repo: VideoHubRepository) {
+class GetVideoListUseCase @Inject constructor(private val repo: VideoHubRepository) {
 
-    suspend operator fun invoke():  Either<Error, VideoListItem> = repo.requestVideoSources2()
+    suspend operator fun invoke():  Either<Error, VideoListItem> = repo.requestDefaultVideoList()
 
 }
