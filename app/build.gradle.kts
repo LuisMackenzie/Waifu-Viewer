@@ -87,6 +87,7 @@ android {
 
         // Flag to enable support for the new language APIs
         // Flag for scrapping Java 8+ APIs desugaring
+        // For Jsoup library
         isCoreLibraryDesugaringEnabled = true
 
         sourceCompatibility = JavaVersion.VERSION_17
@@ -118,17 +119,16 @@ android {
 
     packaging {
         resources {
+            pickFirsts += "mozilla/public-suffix-list.txt"
             excludes += Constants.metaLicenses
             excludes += Constants.metaInf
+            // For exclude things by ScrapeIt library
             excludes += Constants.metaInfDependencies
         }
     }
 }
 
 dependencies {
-
-    // modules Implementation
-    coreLibraryDesugaring(Libs.AndroidX.CoreDesugar.desugar)
 
     // modules Implementation
     implementation(project(Modules.domain))
@@ -248,6 +248,8 @@ dependencies {
     // Scrapping Libraries
     implementation(Libs.Scrapping.skrapeIt)
     implementation(Libs.Scrapping.jSoup)
+    // modules Implementation for Jsoup Dependency
+    coreLibraryDesugaring(Libs.AndroidX.CoreDesugar.desugar)
 
     // JUnit y Mockito
     testImplementation(Libs.JUnit.junit)
