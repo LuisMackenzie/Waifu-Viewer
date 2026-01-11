@@ -84,6 +84,11 @@ android {
     }
 
     compileOptions {
+
+        // Flag to enable support for the new language APIs
+        // Flag for scrapping Java 8+ APIs desugaring
+        isCoreLibraryDesugaringEnabled = true
+
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
@@ -115,12 +120,15 @@ android {
         resources {
             excludes += Constants.metaLicenses
             excludes += Constants.metaInf
+            excludes += Constants.metaInfDependencies
         }
-        // resources.excludes.add(Constants.metaInf)
     }
 }
 
 dependencies {
+
+    // modules Implementation
+    coreLibraryDesugaring(Libs.AndroidX.CoreDesugar.desugar)
 
     // modules Implementation
     implementation(project(Modules.domain))

@@ -83,6 +83,10 @@ object Libs {
             const val compiler = "androidx.room:room-compiler:_"
         }
 
+        object CoreDesugar {
+            const val desugar = "com.android.tools:desugar_jdk_libs:2.0.3"
+        }
+
         object Test {
             object Ext {
                 const val junit = "androidx.test.ext:junit-ktx:_"
