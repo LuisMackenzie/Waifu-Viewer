@@ -99,6 +99,11 @@ object Libs {
         }
     }
 
+    object Scrapping {
+        const val skrapeIt = "it.skrape:skrapeit:1.2.2"
+        const val jSoup = "org.jsoup:jsoup:1.22.1"
+    }
+
     object Glide {
         const val glide = "com.github.bumptech.glide:glide:_"
         const val compiler = "com.github.bumptech.glide:compiler:_"

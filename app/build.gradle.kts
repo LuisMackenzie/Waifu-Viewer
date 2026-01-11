@@ -237,6 +237,10 @@ dependencies {
     implementation(Libs.AndroidX.Media3.exoplayer)
     implementation(Libs.AndroidX.Media3.ui)
 
+    // Scrapping Libraries
+    implementation(Libs.Scrapping.skrapeIt)
+    implementation(Libs.Scrapping.jSoup)
+
     // JUnit y Mockito
     testImplementation(Libs.JUnit.junit)
     testImplementation(Libs.Mockito.kotlin)
