@@ -55,6 +55,7 @@ class VideoHubDataSource @Inject constructor(
 ) : VideoHubRemoteDataSource {
 
     override suspend fun getVideoServer() = tryCall {
+        // TODO subir la info de los servidores y recuperarla aqui
         remoteService.videoHubService
             .searchVideos()
             .toDomainModel()
