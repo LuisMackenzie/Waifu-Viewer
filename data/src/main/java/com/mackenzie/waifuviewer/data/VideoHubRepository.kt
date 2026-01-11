@@ -34,17 +34,7 @@ class VideoHubRepository @Inject constructor(
         ordering: String?,
         period: String?
     ):  Either<Error, VideoListItem> {
-
-        return remoteDataSource.searchVideos(
-            page,
-            thumbsize,
-            search,
-            tags,
-            stars,
-            category,
-            ordering,
-            period
-        )
+        return remoteDataSource.searchVideos(page, thumbsize, search, tags, stars, category, ordering, period)
     }
 
     suspend fun requestDefaultVideoList():  Either<Error, VideoListItem> {
