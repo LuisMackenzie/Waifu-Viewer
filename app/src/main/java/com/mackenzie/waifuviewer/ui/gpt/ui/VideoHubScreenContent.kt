@@ -17,9 +17,10 @@ fun VideoHubScreenContent(
     onNavigate: (Int) -> Unit = {}
 ) {
 
-    val videoHubState by vm.state.collectAsStateWithLifecycle()
+    // val videoHubState by vm.state.collectAsStateWithLifecycle()
     LaunchedEffect(true) {
         // vm.getServers()
+        vm.getUrlFetcher()
     }
 
     Scaffold(
