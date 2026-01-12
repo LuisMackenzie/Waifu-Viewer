@@ -123,7 +123,7 @@ android {
             excludes += Constants.metaLicenses
             excludes += Constants.metaInf
             // For exclude things by ScrapeIt library
-            excludes += Constants.metaInfDependencies
+            // excludes += Constants.metaInfDependencies
         }
     }
 }
@@ -246,7 +246,11 @@ dependencies {
     implementation(Libs.AndroidX.Media3.ui)
 
     // Scrapping Libraries
-    implementation(Libs.Scrapping.skrapeIt)
+    // implementation(Libs.Scrapping.skrapeIt)
+    // implementation(Libs.Scrapping.skrapeHttpFetcher)
+    // implementation(Libs.Ktor.KtorCore)
+    // implementation(Libs.Ktor.KtorClient)
+
     implementation(Libs.Scrapping.jSoup)
     // modules Implementation for Jsoup Dependency
     coreLibraryDesugaring(Libs.AndroidX.CoreDesugar.desugar)
