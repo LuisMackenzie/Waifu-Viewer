@@ -105,7 +105,14 @@ object Libs {
 
     object Scrapping {
         const val skrapeIt = "it.skrape:skrapeit:1.2.2"
+
+        const val skrapeHttpFetcher = "it.skrape:skrapeit-http-fetcher:1.2.2"
         const val jSoup = "org.jsoup:jsoup:1.22.1"
+    }
+
+    object Ktor {
+        const val KtorCore = "io.ktor:ktor-client-core:1.6.8"
+        const val KtorClient = "io.ktor:ktor-client-android:1.6.8"
     }
 
     object Glide {
