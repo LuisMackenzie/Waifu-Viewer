@@ -30,13 +30,11 @@ fun VideoListScreenContent(
 
     // Llamar a getServers() cuando se monta el composable o cambia el serverId
     LaunchedEffect(serverId) {
-        val serverName = getNameById(serverId)
-        Log.e("VideoListScreenContent", "Server ID: $serverId with name: $serverName and url: $serverUrl")
         when (serverId) {
-            1 -> vm.getUrlFetcher()
+            1 -> vm.getUrlFetcher(serverUrl)
             2 -> vm.getDefaultVideoList()
             else -> {
-                Log.e("VideoListScreenContent", "Unknown server ID: $serverId with name: $serverName")
+                Log.e("VideoListScreenContent", "Unknown server ID: $serverId with name: ${getNameById(serverId)}")
             }
         }
     }

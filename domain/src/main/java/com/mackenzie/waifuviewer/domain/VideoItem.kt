@@ -177,7 +177,7 @@ fun getLiveCamNameById(id: Int): String {
 fun getServerUrlById(id: Int): String {
     return when (id) {
         1 -> "https://es.pornhub.com/video/"  // PornHub
-        2 -> "https://es.redtube.com/newest" // RedTube
+        2 -> "https://es.redtube.com/newest/" // RedTube
         3 -> "https://beeg.com/" // Beeg
         4 -> "https://www.eporner.com/" // Eporner
         5 -> "https://www.tube8.com/" // Tube8

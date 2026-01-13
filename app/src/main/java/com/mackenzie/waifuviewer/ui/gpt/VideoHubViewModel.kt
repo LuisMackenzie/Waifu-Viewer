@@ -80,13 +80,15 @@ class VideoHubViewModel @Inject constructor(
         }
     }
 
-    fun getUrlFetcher() {
+    fun getUrlFetcher(serverUrl: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 _state.update { it.copy(isLoading = true, error = null) }
 
+                Log.d("VideoHubViewModel", "cargando la siguiente URL..: $serverUrl")
+
                 // Hacer la petición HTTP y obtener el documento HTML
-                val doc = Jsoup.connect("https://es.pornhub.com/video/")
+                val doc = Jsoup.connect(serverUrl)
                     .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
                     .referrer("https://www.google.com")
                     .timeout(15000)
