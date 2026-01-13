@@ -21,6 +21,7 @@ import com.mackenzie.waifuviewer.ui.gpt.VideoHubViewModel
 @Composable
 fun VideoListScreenContent(
     serverId: Int,
+    serverUrl: String,
     vm: VideoHubViewModel = hiltViewModel(),
     onNavigate: (String, String) -> Unit = { _, _ -> }
 ) {
@@ -30,7 +31,14 @@ fun VideoListScreenContent(
     // Llamar a getServers() cuando se monta el composable o cambia el serverId
     LaunchedEffect(serverId) {
         val serverName = getNameById(serverId)
-        vm.getDefaultVideoList()
+        Log.e("VideoListScreenContent", "Server ID: $serverId with name: $serverName and url: $serverUrl")
+        when (serverId) {
+            1 -> vm.getUrlFetcher()
+            2 -> vm.getDefaultVideoList()
+            else -> {
+                Log.e("VideoListScreenContent", "Unknown server ID: $serverId with name: $serverName")
+            }
+        }
     }
 
     Scaffold(

@@ -27,12 +27,12 @@ sealed class NavItem(
 
     object VideoServersScreen : NavItem("video_hub_screen")
 
-    object VideoListScreen : NavItem("video_list_screen", listOf(NavArg.VideoHubServer)) {
-        fun createRoute(server: Int) = baseRoute + File.separator + server
+    object VideoListScreen : NavItem("video_list_screen", listOf(NavArg.VideoHubServerId, NavArg.VideoHubServerUrl)) {
+        fun createRoute(serverId: Int, serverUrl: String,) = baseRoute + File.separator + serverId + File.separator + serverUrl
     }
 
-    object PlayerScreen : NavItem("player_screen", listOf(NavArg.VideoInfo, NavArg.VideoId)) {
-        fun createRoute(videoUrl: String, videoId: String) = baseRoute + File.separator + videoUrl + File.separator + videoId
+    object PlayerScreen : NavItem("player_screen", listOf(NavArg.VideoId, NavArg.VideoInfo)) {
+        fun createRoute( videoId: String, videoUrl: String) = baseRoute + File.separator + videoId + File.separator + videoUrl
     }
 
     object WaifuGeminiScreen : NavItem("gemini_screen")
@@ -57,7 +57,8 @@ enum class NavArg(val key: String, val navType: NavType<*>) {
     NsfwState("nsfwState", NavType.BoolType),
     GifState("gifState", NavType.BoolType),
     LandsState("landsState", NavType.BoolType),
-    VideoHubServer("videoHubServer", NavType.IntType),
+    VideoHubServerId("videoHubServerId", NavType.IntType),
+    VideoHubServerUrl("videoHubServerUrl", NavType.StringType),
     VideoInfo("videoInfo", NavType.StringType),
     VideoId("videoId", NavType.StringType)
 }

@@ -14,13 +14,13 @@ import com.mackenzie.waifuviewer.ui.gpt.VideoHubViewModel
 @Composable
 fun VideoHubScreenContent(
     vm: VideoHubViewModel = hiltViewModel(),
-    onNavigate: (Int) -> Unit = {}
+    onNavigate: (Int, String) -> Unit = { _, _ -> }
 ) {
 
     // val videoHubState by vm.state.collectAsStateWithLifecycle()
     LaunchedEffect(true) {
         // vm.getServers()
-        vm.getUrlFetcher()
+
     }
 
     Scaffold(
@@ -36,7 +36,7 @@ fun VideoHubScreenContent(
             }
         ) { item ->
             Log.e( "VideoHubScreenContent", "Server ID=${item.id}, Clicked Server: ${item.title}")
-            onNavigate(item.id)
+            onNavigate(item.id, item.url)
         }
 
         Snackbar.make(LocalView.current, "Under Development!", Snackbar.LENGTH_SHORT).show()
