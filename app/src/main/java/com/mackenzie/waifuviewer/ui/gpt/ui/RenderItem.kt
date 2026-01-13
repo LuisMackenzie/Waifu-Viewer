@@ -72,7 +72,7 @@ fun RenderItem(
         ) {
             AsyncImage(
                 model= ImageRequest.Builder(LocalContext.current)
-                    .data(item.url)
+                    .data(item.thumb)
                     .crossfade(true)
                     .build(),
                 placeholder = painterResource(R.drawable.baseline_downloading),

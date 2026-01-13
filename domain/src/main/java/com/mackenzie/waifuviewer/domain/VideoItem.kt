@@ -73,8 +73,8 @@ fun getHentaiServers() = (51..65).map {
     VideoItem(
         it,
         getAnimeServerNameById(it),
-        "https://loremflickr.com/400/400/cat?lock=1",
         getImageFromServerId(it).ifBlank { "https://loremflickr.com/400/400/girl?lock=$it" },
+        getServerUrlById(it),
         Type.SERVER,
         "Generic Description $it"
     )
@@ -84,8 +84,8 @@ fun getLiveCamsServers() = (66..73).map {
     VideoItem(
         it,
         getLiveCamNameById(it),
-        "https://loremflickr.com/400/400/cat?lock=1",
         getImageFromServerId(it).ifBlank { "https://loremflickr.com/400/400/girl?lock=$it" },
+        getServerUrlById(it),
         Type.SERVER,
         "Generic Description $it"
     )
@@ -95,8 +95,8 @@ fun getVideoServers() = (1..22).map {
     VideoItem(
         it,
         getNameById(it),
-        "https://loremflickr.com/400/400/cat?lock=1",
         getImageFromServerId(it).ifBlank { "https://loremflickr.com/400/400/girl?lock=$it" },
+        getServerUrlById(it),
         Type.SERVER,
         "Generic Description of ${getNameById(it)}"
     )
@@ -171,6 +171,18 @@ fun getLiveCamNameById(id: Int): String {
         73 -> "Streamate"
         // 9 -> "MyFreeCams"
         else -> "Server Name Unknown"
+    }
+}
+
+fun getServerUrlById(id: Int): String {
+    return when (id) {
+        1 -> "https://es.pornhub.com/video/"  // PornHub
+        2 -> "https://es.redtube.com/newest" // RedTube
+        3 -> "https://beeg.com/" // Beeg
+        4 -> "https://www.eporner.com/" // Eporner
+        5 -> "https://www.tube8.com/" // Tube8
+        6 -> "https://xhamster.com/" // XHamster
+        else -> ""
     }
 }
 
