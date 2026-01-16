@@ -31,8 +31,9 @@ fun VideoListScreenContent(
     // Llamar a getServers() cuando se monta el composable o cambia el serverId
     LaunchedEffect(serverId) {
         when (serverId) {
-            1 -> vm.getUrlFetcher(serverUrl)
+            1 -> vm.getPHUrlFetcher(serverUrl)
             2 -> vm.getDefaultVideoList()
+            in 3..22 -> vm.getBeegUrlFetcher(serverUrl)
             else -> {
                 Log.e("VideoListScreenContent", "Unknown server ID: $serverId with name: ${getNameById(serverId)}")
             }

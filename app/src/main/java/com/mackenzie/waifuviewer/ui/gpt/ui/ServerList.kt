@@ -61,8 +61,7 @@ fun ServerList(
                 onFavoriteClick = onFavoriteClick,
             ) { serverItem ->
                 when (serverItem.id) {
-                    1 -> onItemClick(item)
-                    2 -> onItemClick(item)
+                    in 1..22 -> onItemClick(item)
                     else -> {
                         Snackbar.make(localView, "Server Under Development!", Snackbar.LENGTH_SHORT).show()
                     }

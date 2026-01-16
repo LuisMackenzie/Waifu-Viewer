@@ -178,10 +178,57 @@ fun getServerUrlById(id: Int): String {
     return when (id) {
         1 -> "https://es.pornhub.com/video/"  // PornHub
         2 -> "https://es.redtube.com/newest/" // RedTube
-        3 -> "https://beeg.com/" // Beeg
+        3 -> "https://www.beeg.com/" // Beeg
         4 -> "https://www.eporner.com/" // Eporner
         5 -> "https://www.tube8.com/" // Tube8
-        6 -> "https://xhamster.com/" // XHamster
+        6 -> "https://www.xhamster.com/" // XHamster
+        7 -> "https://www.youjizz.com/" // YouJizz
+        8 -> "https://www.youporn.com/" // YouPorn
+        9 -> "https://www.xvideos.com/" // XVideos
+        10 -> "https://www.xnxx.com/"  // XNXX
+        11 -> "https://www.tnaflix.com/"  // TNAFLix
+        12 -> "https://blowjobs.pro/" // Blowjobs.pro
+        13 -> "https://es.spangbang.com/" // SpangBang
+        14 -> "https://www.porntrex.com/" // PornTrex
+        15 -> "https://hqporner.com/" // HQPorner
+        16 -> "https://www.analdin.com/" // Analdin
+        17 -> "https://www.xxxfiles.com/" // XXXFiles
+        18 -> "https://www.pornslash.com/" // PornSlash
+        19 -> "https://watchporn.to/" // WatchPorn
+        20 -> "https://www.whoreshub.com/" // WhoresHub
+        21 -> "https://www.porn.com/" // Porn.com
+        22 -> "https://www.pornhd.com/" // Porn HD
+
+        51 -> "https://hanime.tv/" // Hanime.tv
+        52 -> "https://www.hentaicloud.com/" // HentaiCloud
+        53 -> "https://hentaigasm.com/" // HentaiGasm
+        54 -> {
+            // TODO añadir los 3 servidores de HentaiMama y comporbar cual es el bueno
+            // "https://hentaimama.xxx" // HentaiMama
+            // "https://hentaimama.tv" // HentaiMama
+            "https://hentaimama.io/" // HentaiMama
+        }
+
+        55 -> {
+            // TODO añadir los 2 servidores de HentaiTube y comporbar cual es el bueno
+            // "https://hentaitube.icu/" // HentaiTube
+            "https://www.hentaitube.online/" // HentaiTube
+        }
+        56 -> "https://hentaiplay.net/" // HentaiPlay
+        57 -> "https://muchohentai.com/" // MuchoHentai
+        58 -> "https://www.naughtymachinima.com/" // Naughty Machinima
+        59 -> "https://ohentai.org" // OHentai
+        60 -> "https://porcore.com" // PorCore
+        61 -> "https://xanimeporn.com/" // xAnimePorn
+        62 -> "https://aniporn.com/most-popular/" // AniPorn
+        63 -> "https://www.zzcartoon.com" // ZZCartoon
+        64 -> "https://www.PornHub" // PornHub Hentai
+        65 -> {
+            // TODO comprobar si es este u otro
+            // "https://hentaiheaven.xxx" // HentaiHeaven
+            // "https://hentaiheaven.icu" // HentaiHeaven
+            "https://hentaiheaven.com" // HentaiHeaven
+        }
         else -> ""
     }
 }
