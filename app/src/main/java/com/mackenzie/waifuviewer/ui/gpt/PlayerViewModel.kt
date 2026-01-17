@@ -23,6 +23,8 @@ class PlayerViewModel @Inject constructor(): ViewModel() {
             // Aquí podrías implementar la lógica para extraer el video desde la URL embebida
             // Por ahora, solo simulamos una carga exitosa sin datos reales
 
+            https://es.pornhub.com/embed/694a9bbbf23fd
+
             _state.update {
                 it.copy(
                     isLoading = false,
