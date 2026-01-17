@@ -13,6 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.net.toUri
@@ -22,6 +23,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import com.google.android.material.progressindicator.CircularProgressIndicator
+import com.google.android.material.snackbar.Snackbar
 import com.mackenzie.waifuviewer.ui.gpt.PlayerViewModel
 
 @Preview(showBackground = true, showSystemUi = true)
@@ -77,6 +79,7 @@ fun VideoPlayerScreenContent(
                     }
                 }
             )
+            Snackbar.make(LocalView.current, "Loading...", Snackbar.LENGTH_SHORT).show()
         }
         state.error != null -> {
             Log.e("VideoPlayerScreenContent", "Error: ${state.error}")
@@ -94,6 +97,7 @@ fun VideoPlayerScreenContent(
                     }
                 }
             )
+            Snackbar.make(LocalView.current, "Error=${state.error}", Snackbar.LENGTH_SHORT).show()
         }
         else -> {
 
