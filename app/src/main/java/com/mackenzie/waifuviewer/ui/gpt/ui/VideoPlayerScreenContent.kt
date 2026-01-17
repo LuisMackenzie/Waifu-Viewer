@@ -45,28 +45,6 @@ fun VideoPlayerScreenContent(
     }
 
 
-
-    /*// 1. Recordar la instancia de ExoPlayer
-    val exoPlayer = remember {
-        ExoPlayer.Builder(context).build().apply {
-            // 2. Crear el MediaItem a partir de la URL
-            val mediaItem = MediaItem.fromUri(state.embeddedVideoFile?.toUri() ?: videoUrl.toUri())
-
-            Log.e("VideoHubScreenContent", "Loading EXOPLayer URL...=${videoUrl}")
-            Log.e("VideoHubScreenContent", "Loading EXOPLayer URL.toURI()...=${videoUrl.toUri()}")
-            Log.e("VideoHubScreenContent", "embeddedVideoFile=${state.embeddedVideoFile}")
-            Log.e("VideoHubScreenContent", "embeddedVideoFile.toUTI()=${state.embeddedVideoFile?.toUri()}")
-            Log.e("VideoHubScreenContent", "Loading EXOPLayer Video ID...=${videoId}")
-            setMediaItem(mediaItem)
-            // 3. Preparar el reproductor
-            prepare()
-            // Iniciar la reproducción automáticamente
-            playWhenReady = true
-        }
-    }*/
-
-
-
     when {
         state.isLoading -> {
             Log.e("VideoPlayerScreenContent", "Loading...")
@@ -91,15 +69,7 @@ fun VideoPlayerScreenContent(
         else -> {
 
             exoPlayer.apply {
-                // 2. Crear el MediaItem a partir de la URL
-                // val mediaItem2 = MediaItem.fromUri(videoUrl.toUri())
                 val mediaItem = MediaItem.fromUri(state.embeddedVideoFile?.toUri() ?: videoUrl.toUri())
-
-                Log.e("VideoHubScreenContent", "Loading EXOPLayer URL...=${videoUrl}")
-                Log.e("VideoHubScreenContent", "Loading EXOPLayer URL.toURI()...=${videoUrl.toUri()}")
-                Log.e("VideoHubScreenContent", "embeddedVideoFile=${state.embeddedVideoFile}")
-                Log.e("VideoHubScreenContent", "embeddedVideoFile.toUTI()=${state.embeddedVideoFile?.toUri()}")
-                Log.e("VideoHubScreenContent", "Loading EXOPLayer Video ID...=${videoId}")
                 setMediaItem(mediaItem)
                 // 3. Preparar el reproductor
                 prepare()
@@ -107,8 +77,11 @@ fun VideoPlayerScreenContent(
                 playWhenReady = true
             }
 
-            Log.e("VideoHubScreenContent", "ELSE CASE::embeddedVideoFile=${state.embeddedVideoFile}")
-            Log.e("VideoHubScreenContent", "ELSE CASE::embeddedVideoFile.toUTI()=${state.embeddedVideoFile?.toUri()}")
+            Log.e("VideoHubScreenContent", "Loading EXOPLayer URL...=${videoUrl}")
+            Log.e("VideoHubScreenContent", "Loading EXOPLayer URL.toURI()...=${videoUrl.toUri()}")
+            Log.e("VideoHubScreenContent", "embeddedVideoFile=${state.embeddedVideoFile}")
+            Log.e("VideoHubScreenContent", "embeddedVideoFile.toUTI()=${state.embeddedVideoFile?.toUri()}")
+            Log.e("VideoHubScreenContent", "Loading EXOPLayer Video ID...=${videoId}")
             // 5. Integrar el PlayerView de ExoPlayer usando AndroidView
             AndroidView(
                 modifier = Modifier.fillMaxSize(),
@@ -127,14 +100,4 @@ fun VideoPlayerScreenContent(
             exoPlayer.release()
         }
     }
-
-    // 5. Integrar el PlayerView de ExoPlayer usando AndroidView
-    /*AndroidView(
-        modifier = Modifier.fillMaxSize(),
-        factory = {
-            PlayerView(it).apply {
-                player = exoPlayer
-            }
-        }
-    )*/
 }
