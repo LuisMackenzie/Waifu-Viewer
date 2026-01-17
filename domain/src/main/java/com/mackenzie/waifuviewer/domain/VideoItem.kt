@@ -213,7 +213,7 @@ fun getServerUrlById(id: Int): String {
         56 -> "https://www.hentaitube.online/" // HentaiTube
         57 -> "https://hentaitube.icu/" // HentaiTube
         58 -> "https://hentaiplay.net/" // HentaiPlay
-        59 -> "https://muchohentai.com/" // MuchoHentai
+        59 -> "https://muchohentai.com/home" // MuchoHentai
         60 -> "https://www.naughtymachinima.com/" // Naughty Machinima
         61 -> "https://ohentai.org" // OHentai
         62 -> "https://porcore.com" // PorCore

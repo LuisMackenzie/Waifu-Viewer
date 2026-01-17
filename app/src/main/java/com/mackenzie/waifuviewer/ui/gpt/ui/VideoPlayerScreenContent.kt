@@ -16,8 +16,8 @@ import androidx.media3.ui.PlayerView
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun VideoPlayerScreenContent(
-    videoUrl: String = "",
     videoId: String = "",
+    videoUrl: String = ""
 ) {
     val context = LocalContext.current
 

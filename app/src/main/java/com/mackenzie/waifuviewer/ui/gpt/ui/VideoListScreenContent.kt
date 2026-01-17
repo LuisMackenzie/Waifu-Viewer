@@ -19,13 +19,12 @@ import com.mackenzie.waifuviewer.domain.getNameById
 import com.mackenzie.waifuviewer.domain.getServerUrlById
 import com.mackenzie.waifuviewer.ui.gpt.VideoHubViewModel
 
-@Preview
 @Composable
 fun VideoListScreenContent(
-    serverId: Int = 2,
-    serverUrl: String = getServerUrlById(18),
+    serverId: Int,
+    serverUrl: String,
     vm: VideoHubViewModel = hiltViewModel(),
-    onNavigate: (String, String) -> Unit = { _, _ -> }
+    onNavigate: (String, String) -> Unit = { videoId, videoUrl -> }
 ) {
 
     val state by vm.state.collectAsStateWithLifecycle()
@@ -75,7 +74,7 @@ fun VideoListScreenContent(
                         Log.e("VideoHubScreenContent", "Loading Item...=${item}")
                         // Me falta el EmbededUrl en el modelo de dominio
                         // alli esta el video que se podria reproducir directamente
-                        onNavigate(item.video.embedUrl, item.video.videoId)
+                        onNavigate(item.video.videoId, item.video.embedUrl)
                     }
                 )
             }

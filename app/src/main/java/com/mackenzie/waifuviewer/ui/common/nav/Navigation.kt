@@ -92,14 +92,14 @@ fun Navigation() {
             VideoListScreenContent(
                 serverId = backStackEntry.findArg(NavArg.VideoHubServerId),
                 serverUrl = backStackEntry.findArg(NavArg.VideoHubServerUrl)
-            ) { videoUrl, videoId ->
+            ) { videoId, videoUrl ->
                 navController.navigate(route= NavItem.PlayerScreen.createRoute(videoId, videoUrl.urlEncoder()))
             }
         }
         composable(NavItem.PlayerScreen) { backStackEntry ->
             VideoPlayerScreenContent(
-                videoUrl = backStackEntry.findArg(NavArg.VideoInfo),
-                videoId = backStackEntry.findArg(NavArg.VideoId)
+                videoId = backStackEntry.findArg(NavArg.VideoId),
+                videoUrl = backStackEntry.findArg(NavArg.VideoInfo)
             )
         }
         composable(NavItem.WaifuGeminiScreen) {

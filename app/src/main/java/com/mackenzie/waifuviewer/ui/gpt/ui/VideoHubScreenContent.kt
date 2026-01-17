@@ -10,7 +10,7 @@ import com.google.android.material.snackbar.Snackbar
 @Preview
 @Composable
 fun VideoHubScreenContent(
-    onNavigate: (Int, String) -> Unit = { _, _ -> }
+    onNavigate: (Int, String) -> Unit = { serverId, serverUrl -> }
 ) {
 
     Scaffold(
