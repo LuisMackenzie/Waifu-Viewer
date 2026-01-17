@@ -11,17 +11,19 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.mackenzie.waifuviewer.domain.VideoItem
 import com.mackenzie.waifuviewer.domain.getNameById
+import com.mackenzie.waifuviewer.domain.getServerUrlById
 import com.mackenzie.waifuviewer.ui.gpt.VideoHubViewModel
 
-
+@Preview
 @Composable
 fun VideoListScreenContent(
-    serverId: Int,
-    serverUrl: String,
+    serverId: Int = 2,
+    serverUrl: String = getServerUrlById(18),
     vm: VideoHubViewModel = hiltViewModel(),
     onNavigate: (String, String) -> Unit = { _, _ -> }
 ) {

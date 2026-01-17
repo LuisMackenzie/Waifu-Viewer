@@ -12,17 +12,19 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mackenzie.waifuviewer.domain.VideoItem
 import com.mackenzie.waifuviewer.domain.getMedia
 import com.mackenzie.waifuviewer.domain.video.VideoDomainItem
 import com.mackenzie.waifuviewer.ui.common.ui.isNavigationBarVisible
 
+@Preview(showBackground = true)
 @Composable
 fun VideoHubList(
     itemSection01: List<VideoDomainItem> = getMedia(),
     titleServer: String = "Video Server",
-    padding: PaddingValues,
+    padding: PaddingValues = PaddingValues(),
     onItemClick: (VideoDomainItem) -> Unit = {}
 ) {
     LazyVerticalGrid(
