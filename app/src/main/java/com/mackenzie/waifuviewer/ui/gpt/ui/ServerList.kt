@@ -93,8 +93,8 @@ fun ServerList(
                 modifier = Modifier.padding(4.dp),
                 onFavoriteClick = onFavoriteClick,
                 onItemClick = {
-                    Snackbar.make(localView, "Section Under Development!", Snackbar.LENGTH_SHORT).show()
-                    // onItemClick(item)
+                    // Snackbar.make(localView, "Section Under Development!", Snackbar.LENGTH_SHORT).show()
+                    onItemClick(item)
                 }
             )
         }

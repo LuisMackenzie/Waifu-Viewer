@@ -178,26 +178,26 @@ fun getServerUrlById(id: Int): String {
     return when (id) {
         1 -> "https://es.pornhub.com/video/"  // PornHub
         2 -> "https://es.redtube.com/newest/" // RedTube
-        3 -> "https://www.beeg.com/" // Beeg
-        4 -> "https://www.eporner.com/" // Eporner
-        5 -> "https://www.tube8.com/" // Tube8
-        6 -> "https://www.xhamster.com/" // XHamster
-        7 -> "https://www.youjizz.com/" // YouJizz
-        8 -> "https://www.youporn.com/" // YouPorn
-        9 -> "https://www.xvideos.com/" // XVideos
-        10 -> "https://www.xnxx.com/"  // XNXX
-        11 -> "https://www.tnaflix.com/"  // TNAFLix
-        12 -> "https://blowjobs.pro/" // Blowjobs.pro
-        13 -> "https://es.spangbang.com/" // SpangBang
-        14 -> "https://www.porntrex.com/" // PornTrex
-        15 -> "https://hqporner.com/" // HQPorner
-        16 -> "https://www.analdin.com/" // Analdin
-        17 -> "https://www.xxxfiles.com/" // XXXFiles
-        18 -> "https://www.pornslash.com/" // PornSlash
-        19 -> "https://watchporn.to/" // WatchPorn
-        20 -> "https://www.whoreshub.com/" // WhoresHub
-        21 -> "https://www.porn.com/" // Porn.com
-        22 -> "https://www.pornhd.com/" // Porn HD
+        3 -> "https://www.beeg.com/" // Beeg No funciona
+        4 -> "https://www.eporner.com/" // Eporner Funciona Bien ***
+        5 -> "https://tube8.com/" // Tube8 No funciona
+        6 -> "https://www.xhamster.com/" // XHamster Funciona sin thumbs
+        7 -> "https://www.youjizz.com/" // YouJizz Funciona sin thumbs
+        8 -> "https://www.youporn.com/" // YouPorn No funciona
+        9 -> "https://www.xvideos.com/" // XVideos Funciona sin thumbs
+        10 -> "https://www.xnxx.es/"  // XNXX No funciona
+        11 -> "https://www.tnaflix.com/"  // TNAFLix No funciona
+        12 -> "https://blowjobs.pro/" // Blowjobs.pro No funciona
+        13 -> "https://es.spankbang.com/" // SpangBang No funciona
+        14 -> "https://www.porntrex.com/" // PornTrex Funciona Bien ***
+        15 -> "https://hqporner.com/" // HQPorner No funciona
+        16 -> "https://www.analdin.com/" // Analdin No funciona
+        17 -> "https://www.xxxfiles.com/" // XXXFiles No funciona
+        18 -> "https://www.pornslash.com/" // PornSlash Funciona Bien ***
+        19 -> "https://watchporn.to/" // WatchPorn No funciona
+        20 -> "https://www.whoreshub.com/" // WhoresHub No funciona
+        21 -> "https://www.porn.com/" // Porn.com No funciona
+        22 -> "https://www.pornhd.com/" // Porn HD No funciona
 
         51 -> "https://hanime.tv/" // Hanime.tv
         52 -> "https://www.hentaicloud.com/" // HentaiCloud

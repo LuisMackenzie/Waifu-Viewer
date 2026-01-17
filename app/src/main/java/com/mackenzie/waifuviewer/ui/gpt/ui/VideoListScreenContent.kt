@@ -33,7 +33,7 @@ fun VideoListScreenContent(
         when (serverId) {
             1 -> vm.getPHUrlFetcher(serverUrl)
             2 -> vm.getDefaultVideoList()
-            in 3..22 -> vm.getBeegUrlFetcher(serverUrl)
+            in 3..65 -> vm.getBeegUrlFetcher(serverUrl)
             else -> {
                 Log.e("VideoListScreenContent", "Unknown server ID: $serverId with name: ${getNameById(serverId)}")
             }
