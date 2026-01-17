@@ -52,25 +52,19 @@ fun ServerList(
         }
     ) {
         item(span = { GridItemSpan(maxLineSpan) }) {
-            TitleText("Seccion numero 01")
+            TitleText("Seccion Videos")
         }
         items(itemSection01) { item ->
             RenderItem(
                 item = item,
                 modifier = Modifier.padding(4.dp),
                 onFavoriteClick = onFavoriteClick,
-            ) { serverItem ->
-                when (serverItem.id) {
-                    in 1..22 -> onItemClick(item)
-                    else -> {
-                        Snackbar.make(localView, "Server Under Development!", Snackbar.LENGTH_SHORT).show()
-                    }
-                }
-            }
+                onItemClick = { onItemClick(item) }
+            )
         }
 
         item(span = { GridItemSpan(maxLineSpan) }) {
-            TitleText("Seccion numero 02")
+            TitleText("Seccion LiveCams")
         }
         items(itemSection02) { item ->
             RenderItem(
@@ -85,17 +79,14 @@ fun ServerList(
         }
 
         item(span = { GridItemSpan(maxLineSpan) }) {
-            TitleText("Seccion numero 03")
+            TitleText("Seccion Hentai")
         }
         items(itemSection03) { item ->
             RenderItem(
                 item = item,
                 modifier = Modifier.padding(4.dp),
                 onFavoriteClick = onFavoriteClick,
-                onItemClick = {
-                    // Snackbar.make(localView, "Section Under Development!", Snackbar.LENGTH_SHORT).show()
-                    onItemClick(item)
-                }
+                onItemClick = { onItemClick(item) }
             )
         }
     }

@@ -69,7 +69,7 @@ fun getMedia2() = (1..20).map {
     )
 }
 
-fun getHentaiServers() = (51..65).map {
+fun getHentaiServers() = (50..69).map {
     VideoItem(
         it,
         getAnimeServerNameById(it),
@@ -80,7 +80,7 @@ fun getHentaiServers() = (51..65).map {
     )
 }
 
-fun getLiveCamsServers() = (66..73).map {
+fun getLiveCamsServers() = (80..87).map {
     VideoItem(
         it,
         getLiveCamNameById(it),
@@ -140,36 +140,41 @@ fun getNameById(id: Int): String {
 
 fun getAnimeServerNameById(id: Int): String {
     return when (id) {
-        51 -> "Hanime.tv"
-        52 -> "HentaiCloud"
-        53 -> "HentaiGasm"
-        54 -> "HentaiMama"
-        55 -> "HentaiTube"
-        56 -> "HentaiPlay"
-        57 -> "MuchoHentai"
-        58 -> "Naughty Machinima"
-        59 -> "OHentai"
-        60 -> "PorCore"
-        61 -> "xAnimePorn"
-        62 -> "AniPorn"
-        63 -> "ZZCartoon"
-        64 -> "PornHub"
-        65 -> "HentaiHeaven"
+        50 -> "Hanime.tv"
+        51 -> "HentaiCloud"
+        52 -> "HentaiGasm"
+        53 -> "HentaiMama 1"
+        54 -> "HentaiMama 2"
+        55 -> "HentaiMama 3"
+        56 -> "HentaiTube 1"
+        57 -> "HentaiTube 2"
+        58 -> "HentaiPlay"
+        59 -> "MuchoHentai"
+        60 -> "Naughty Machinima"
+        61 -> "OHentai"
+        62 -> "PorCore"
+        63 -> "xAnimePorn"
+        64 -> "AniPorn"
+        65 -> "ZZCartoon"
+        66 -> "PornHub"
+        67 -> "HentaiHeaven 1"
+        68 -> "HentaiHeaven 2"
+        69 -> "HentaiHeaven 3"
         else -> "Server Name Unknown"
     }
 }
 
 fun getLiveCamNameById(id: Int): String {
     return when (id) {
-        66 -> "Chaturbate"
-        67 -> "Amateur.tv"
-        68 -> "BongaCams"
-        69 -> "Cam4"
-        70 -> "Camsoda"
-        71 -> "CamWhoresBay"
-        72 -> "StripChat"
-        73 -> "Streamate"
-        // 9 -> "MyFreeCams"
+        80 -> "Chaturbate"
+        81 -> "Amateur.tv"
+        82 -> "BongaCams"
+        83 -> "Cam4"
+        84 -> "Camsoda"
+        85 -> "CamWhoresBay"
+        86 -> "StripChat"
+        87 -> "Streamate"
+        // 88 -> "MyFreeCams"
         else -> "Server Name Unknown"
     }
 }
@@ -199,36 +204,26 @@ fun getServerUrlById(id: Int): String {
         21 -> "https://www.porn.com/" // Porn.com No funciona
         22 -> "https://www.pornhd.com/" // Porn HD No funciona
 
-        51 -> "https://hanime.tv/" // Hanime.tv
-        52 -> "https://www.hentaicloud.com/" // HentaiCloud
-        53 -> "https://hentaigasm.com/" // HentaiGasm
-        54 -> {
-            // TODO añadir los 3 servidores de HentaiMama y comporbar cual es el bueno
-            // "https://hentaimama.xxx" // HentaiMama
-            // "https://hentaimama.tv" // HentaiMama
-            "https://hentaimama.io/" // HentaiMama
-        }
-
-        55 -> {
-            // TODO añadir los 2 servidores de HentaiTube y comporbar cual es el bueno
-            // "https://hentaitube.icu/" // HentaiTube
-            "https://www.hentaitube.online/" // HentaiTube
-        }
-        56 -> "https://hentaiplay.net/" // HentaiPlay
-        57 -> "https://muchohentai.com/" // MuchoHentai
-        58 -> "https://www.naughtymachinima.com/" // Naughty Machinima
-        59 -> "https://ohentai.org" // OHentai
-        60 -> "https://porcore.com" // PorCore
-        61 -> "https://xanimeporn.com/" // xAnimePorn
-        62 -> "https://aniporn.com/most-popular/" // AniPorn
-        63 -> "https://www.zzcartoon.com" // ZZCartoon
-        64 -> "https://www.PornHub" // PornHub Hentai
-        65 -> {
-            // TODO comprobar si es este u otro
-            // "https://hentaiheaven.xxx" // HentaiHeaven
-            // "https://hentaiheaven.icu" // HentaiHeaven
-            "https://hentaiheaven.com" // HentaiHeaven
-        }
+        50 -> "https://hanime.tv/" // Hanime.tv
+        51 -> "https://www.hentaicloud.com/" // HentaiCloud
+        52 -> "https://hentaigasm.com/" // HentaiGasm
+        53 -> "https://hentaimama.io/" // HentaiMama
+        54 -> "https://hentaimama.tv" // HentaiMama
+        55 -> "https://hentaimama.xxx" // HentaiMama
+        56 -> "https://www.hentaitube.online/" // HentaiTube
+        57 -> "https://hentaitube.icu/" // HentaiTube
+        58 -> "https://hentaiplay.net/" // HentaiPlay
+        59 -> "https://muchohentai.com/" // MuchoHentai
+        60 -> "https://www.naughtymachinima.com/" // Naughty Machinima
+        61 -> "https://ohentai.org" // OHentai
+        62 -> "https://porcore.com" // PorCore
+        63 -> "https://xanimeporn.com/" // xAnimePorn
+        64 -> "https://aniporn.com/most-popular/" // AniPorn
+        65 -> "https://www.zzcartoon.com" // ZZCartoon
+        66 -> "https://es.pornhub.com/categories/hentai" // PornHub Hentai
+        67 -> "https://hentaiheaven.com" // HentaiHeaven
+        68 -> "https://hentaiheaven.xxx" // HentaiHeaven
+        69 -> "https://hentaiheaven.icu" // HentaiHeaven
         else -> ""
     }
 }
@@ -258,30 +253,35 @@ fun getImageFromServerId(id: Int): String {
         21 -> "https://logos-world.net/wp-content/uploads/2023/01/Porn.-com-Logo-500x281.png" // Porn.com
         22 -> "https://logos-world.net/wp-content/uploads/2023/01/PornHD-Logo-500x281.png" // Porn HD
 
-        51 -> "https://ih1.redbubble.net/image.2357425361.6067/raf,360x360,075,t,fafafa:ca443f4786.u2.jpg"  // Hanime.tv
-        52 -> "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrLP_RgKcH7Ws83XP9us0Tjdv0cewIFyk0ag&s" // HentaiCloud
-        53 -> "https://hentaigasm.tv/wp-content/uploads/2024/12/HG.png" // HentaiGasm
+        50 -> "https://ih1.redbubble.net/image.2357425361.6067/raf,360x360,075,t,fafafa:ca443f4786.u2.jpg"  // Hanime.tv
+        51 -> "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrLP_RgKcH7Ws83XP9us0Tjdv0cewIFyk0ag&s" // HentaiCloud
+        52 -> "https://hentaigasm.tv/wp-content/uploads/2024/12/HG.png" // HentaiGasm
+        53 -> "https://hentaimama.tv/wp-content/uploads/2022/08/1-favicon_PNG.png" // HentaiMama
         54 -> "https://hentaimama.tv/wp-content/uploads/2022/08/1-favicon_PNG.png" // HentaiMama
-        55 -> "https://ih1.redbubble.net/image.1118561511.1643/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg" // HentaiTube
-        56 -> "https://www.soviet-power.com/image/cache/data/2021/w165%20%D0%B0-550x550.jpg" // HentaiPlay
-        57 -> "https://cdn2.steamgriddb.com/logo_thumb/3bbc8b8ac2f0e75cafa24ec9b9530352.png" // MuchoHentai
-        58 -> "https://static.wikia.nocookie.net/logopedia/images/1/1c/Machinima.svg/revision/latest/scale-to-width-down/200?cb=20161120075354" // Naughty Machinima
-        59 -> "https://pandatools.org/wp-content/uploads/2024/06/image-54.png" // OHentai
-        60 -> "https://thumbs.dreamstime.com/b/hentai-rosette-stamp-imitation-grunge-style-designed-round-ribbon-small-crowns-blue-vector-rubber-print-text-texture-136328212.jpg" // PorCore
-        61 -> "https://assets.thepornmap.com/wp-content/uploads/20251104195912/xanimeporn.png" // xAnimePorn
-        62 -> "https://ei.rdtcdn.com/m=eOhlbe/media/pics/sites/006/590/561/cover1687211108/1687211108.jpg" // AniPorn
-        63 -> "https://cdn.displate.com/artwork/380x270/2023-01-11/258b544708e5360b2a577e1311c67a40_ebb0719b47c2dcc503bbd57cb226caa8.jpg" // ZZCartoon
-        64 -> "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVC6zfQDXZ3GLXR2HebVdgj-n7vAdPB0jxbQ&s" // PornHub
-        65 -> "https://preview.redd.it/bi0o1d5qw7y21.jpg?auto=webp&s=55351ad97b3ae9503562da00d2d96d62f858899f" // HentaiHeaven
+        55 -> "https://hentaimama.tv/wp-content/uploads/2022/08/1-favicon_PNG.png" // HentaiMama
+        56 -> "https://ih1.redbubble.net/image.1118561511.1643/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg" // HentaiTube
+        57 -> "https://ih1.redbubble.net/image.1118561511.1643/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg" // HentaiTube
+        58 -> "https://www.soviet-power.com/image/cache/data/2021/w165%20%D0%B0-550x550.jpg" // HentaiPlay
+        59 -> "https://cdn2.steamgriddb.com/logo_thumb/3bbc8b8ac2f0e75cafa24ec9b9530352.png" // MuchoHentai
+        60 -> "https://static.wikia.nocookie.net/logopedia/images/1/1c/Machinima.svg/revision/latest/scale-to-width-down/200?cb=20161120075354" // Naughty Machinima
+        61 -> "https://pandatools.org/wp-content/uploads/2024/06/image-54.png" // OHentai
+        62 -> "https://thumbs.dreamstime.com/b/hentai-rosette-stamp-imitation-grunge-style-designed-round-ribbon-small-crowns-blue-vector-rubber-print-text-texture-136328212.jpg" // PorCore
+        63 -> "https://assets.thepornmap.com/wp-content/uploads/20251104195912/xanimeporn.png" // xAnimePorn
+        64 -> "https://ei.rdtcdn.com/m=eOhlbe/media/pics/sites/006/590/561/cover1687211108/1687211108.jpg" // AniPorn
+        65 -> "https://cdn.displate.com/artwork/380x270/2023-01-11/258b544708e5360b2a577e1311c67a40_ebb0719b47c2dcc503bbd57cb226caa8.jpg" // ZZCartoon
+        66 -> "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVC6zfQDXZ3GLXR2HebVdgj-n7vAdPB0jxbQ&s" // PornHub
+        67 -> "https://preview.redd.it/bi0o1d5qw7y21.jpg?auto=webp&s=55351ad97b3ae9503562da00d2d96d62f858899f" // HentaiHeaven
+        68 -> "https://preview.redd.it/bi0o1d5qw7y21.jpg?auto=webp&s=55351ad97b3ae9503562da00d2d96d62f858899f" // HentaiHeaven
+        69 -> "https://preview.redd.it/bi0o1d5qw7y21.jpg?auto=webp&s=55351ad97b3ae9503562da00d2d96d62f858899f" // HentaiHeaven
 
-        66 -> "https://logowik.com/content/uploads/images/chaturbate1720166505.logowik.com.webp" // Chaturbate
-        67-> "https://www.kamastudioagencia.com/wp-content/uploads/2024/10/amateur-scaled.jpg"  // Amateur.tv
-        68 -> "https://juanbustos.com/wp-content/uploads/2019/02/BongaCams_01-copia.jpg"  // BongaCams
-        69 -> "https://webcamstartup.com/wp-content/uploads/2024/07/CAM4_Site_Logo.png"  // Cam4
-        70 -> "https://play-lh.googleusercontent.com/BByJrJkoUsr1zl4-B16qjyfIlSZxvbiqaga27HCF_EebNkkQfIf2QgX4bXnWhBRMpF4"  // Camsoda
-        71 -> "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwCS5SYQKu0_tGhtO6d4sJuajxhBtobyCLgw&s" // CamWhoresBay
-        72 -> "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtMQA8Eky7VirE7acAwsscAqsOm3MrxSNvXg&s" // StripChat
-        73 -> "https://media.licdn.com/dms/image/v2/C560BAQF0a5MYbE0T2g/company-logo_200_200/company-logo_200_200/0/1630645346067?e=2147483647&v=beta&t=cImXQFmlhNwHsGbfz9Hx80D4jcN9q-BpWm3XKdZ_3Is" // Streamate
+        80 -> "https://logowik.com/content/uploads/images/chaturbate1720166505.logowik.com.webp" // Chaturbate
+        81-> "https://www.kamastudioagencia.com/wp-content/uploads/2024/10/amateur-scaled.jpg"  // Amateur.tv
+        82 -> "https://juanbustos.com/wp-content/uploads/2019/02/BongaCams_01-copia.jpg"  // BongaCams
+        83 -> "https://webcamstartup.com/wp-content/uploads/2024/07/CAM4_Site_Logo.png"  // Cam4
+        84 -> "https://play-lh.googleusercontent.com/BByJrJkoUsr1zl4-B16qjyfIlSZxvbiqaga27HCF_EebNkkQfIf2QgX4bXnWhBRMpF4"  // Camsoda
+        85 -> "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwCS5SYQKu0_tGhtO6d4sJuajxhBtobyCLgw&s" // CamWhoresBay
+        86 -> "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtMQA8Eky7VirE7acAwsscAqsOm3MrxSNvXg&s" // StripChat
+        87 -> "https://media.licdn.com/dms/image/v2/C560BAQF0a5MYbE0T2g/company-logo_200_200/company-logo_200_200/0/1630645346067?e=2147483647&v=beta&t=cImXQFmlhNwHsGbfz9Hx80D4jcN9q-BpWm3XKdZ_3Is" // Streamate
         else -> "https://loremflickr.com/400/400/girl?lock=$id"
     }
 }
