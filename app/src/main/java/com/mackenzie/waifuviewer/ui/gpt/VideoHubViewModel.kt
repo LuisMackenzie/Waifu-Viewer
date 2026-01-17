@@ -80,7 +80,7 @@ class VideoHubViewModel @Inject constructor(
         }
     }
 
-    fun getBeegUrlFetcher(serverUrl: String) {
+    fun getJavaScriptUrlFetcher(serverUrl: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 _state.update { it.copy(isLoading = true, error = null) }
