@@ -2,15 +2,15 @@ package com.mackenzie.waifuviewer.di
 
 import android.app.Application
 import android.os.Build
-import androidx.room.Room
 import com.mackenzie.waifuviewer.data.*
 import com.mackenzie.waifuviewer.data.datasource.*
 import com.mackenzie.waifuviewer.data.db.WaifuDataBase
-import com.mackenzie.waifuviewer.data.db.WaifuDataBase.Companion.DATABASE_NAME
 import com.mackenzie.waifuviewer.data.db.datasources.*
 import com.mackenzie.waifuviewer.data.server.*
 import com.mackenzie.waifuviewer.data.server.models.RemoteConnect
 import com.mackenzie.waifuviewer.data.server.models.RemoteVideoHubConnect
+import com.mackenzie.waifuviewer.data.datasource.EmbeddedVideoResolver
+import com.mackenzie.waifuviewer.data.embed.JsoupEmbeddedVideoResolver
 import com.mackenzie.waifuviewer.domain.ApiUrl
 import com.mackenzie.waifuviewer.domain.ApiVideoUrl
 import com.squareup.moshi.Moshi
@@ -229,5 +229,8 @@ abstract class AppDataModule {
 
     @Binds
     abstract fun bindLocalPushDataSource(localPushDataSource: RoomNotificationDataSource): NotificationLocalDataSource
+
+    @Binds
+    abstract fun bindEmbeddedVideoResolver(impl: JsoupEmbeddedVideoResolver): EmbeddedVideoResolver
 
 }
