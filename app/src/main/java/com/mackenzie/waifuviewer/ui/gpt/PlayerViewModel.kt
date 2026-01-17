@@ -16,14 +16,11 @@ class PlayerViewModel @Inject constructor(): ViewModel() {
     private val _state = MutableStateFlow(PlayerUiState())
     val state: StateFlow<PlayerUiState> = _state.asStateFlow()
 
-    fun getVideoFromEmbeddedUrl(url: String) {
+    fun getVideoFromEmbeddedUrl(url: String = "https://es.pornhub.com/embed/694a9bbbf23fd") {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, error = null) }
 
-            // Aquí podrías implementar la lógica para extraer el video desde la URL embebida
-            // Por ahora, solo simulamos una carga exitosa sin datos reales
 
-            https://es.pornhub.com/embed/694a9bbbf23fd
 
             _state.update {
                 it.copy(
