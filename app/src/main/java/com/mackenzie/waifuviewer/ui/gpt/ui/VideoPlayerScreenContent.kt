@@ -35,6 +35,7 @@ fun VideoPlayerScreenContent(
 ) {
     val context = LocalContext.current
     val state by vm.state.collectAsStateWithLifecycle()
+    val testUrl = "https://embed.redtube.com/?id=206274421"
 
     LaunchedEffect(videoUrl) {
         vm.getVideoFromEmbeddedUrl(videoUrl)
