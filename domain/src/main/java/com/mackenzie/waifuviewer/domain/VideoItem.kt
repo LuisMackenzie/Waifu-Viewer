@@ -231,12 +231,12 @@ fun getServerUrlById(id: Int): String {
 fun getImageFromServerId(id: Int): String {
     return when (id) {
         1 -> "https://img.icons8.com/color/512/pornhub.png"  // PornHub
-        2 -> "https://avatars.githubusercontent.com/u/46095600?s=200&v=4" // RedTube
-        3 -> "https://lh3.googleusercontent.com/YrLQ2iF13cX-RBTf-0iM5gBcDm3woauAzoT-AmMXGhRq-R48iBALY5lSDSy8ciMaoGN9" // Beeg
+        2 -> "https://static.wikia.nocookie.net/logopedia/images/a/ad/RedTube_2007_logo.png/revision/latest/scale-to-width-down/284?cb=20230616170943" // RedTube
+        3 -> "https://logos-world.net/wp-content/uploads/2023/01/Beeg-Logo.png" // Beeg
         4 -> "https://www.blackhatworld.com/data/avatars/o/1814/1814745.jpg?1695663155" // Eporner
         5 -> "https://firebounty.com/image/912-tube8" // Tube8
         6 -> "https://stripcash.com/blog/content/images/size/w2000/2024/12/2024-12-18_17-29-35.jpg" // XHamster
-        7 -> "https://1000logos.net/wp-content/uploads/2025/08/YouJizz-logo-500x281.jpg" // YouJizz
+        7 -> "https://www.dafont.com/forum/attach/orig/8/0/806734.png?1" // YouJizz
         8 -> "https://static0.polygonimages.com/wordpress/wp-content/uploads/chorus/uploads/chorus_asset/file/15030072/youporn-logo.0.0.1485620315.jpg?q=50&fit=crop&w=608&h=342&dpr=1.5" // YouPorn
         9 -> "https://thumbs.dreamstime.com/b/xvideos-pornographic-video-sharing-viewing-website-december-most-visited-pornographic-website-according-142175224.jpg" // XVideos
         10 -> "https://i.redd.it/83qah8xpljee1.jpg"  // XNXX
