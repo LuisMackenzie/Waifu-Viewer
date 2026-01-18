@@ -19,6 +19,10 @@ dependencies {
     implementation(Libs.OkHttp3.okhttp3)
     implementation(Libs.Scrapping.jSoup)
 
+    // Moshi converters
+    implementation(Libs.Retrofit.moshiKtx)
+    implementation(Libs.Retrofit.converterMoshi)
+
     // Paging library
 
     implementation(Libs.AndroidX.Paging.pagingCommonKtx)
