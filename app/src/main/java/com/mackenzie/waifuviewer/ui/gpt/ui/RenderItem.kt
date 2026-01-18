@@ -18,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Mic
+import androidx.compose.material.icons.filled.OnlinePrediction
 import androidx.compose.material.icons.filled.PlayCircle
 import androidx.compose.material.icons.filled.PlayCircleOutline
 import androidx.compose.material.icons.filled.SmartDisplay
@@ -108,6 +109,18 @@ fun RenderItem(
                 modifier = Modifier
                     .size(30.dp)
                     .align(Alignment.TopEnd)
+                    .clickable { onFavoriteClick() }
+
+            )
+
+            Icon(
+                imageVector = Icons.Default.OnlinePrediction,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier
+                    .size(20.dp)
+                    .background(if (item.isOnline) Color.Cyan else Color.Red, shape = MaterialTheme.shapes.medium)
+                    .align(Alignment.TopStart)
                     .clickable { onFavoriteClick() }
 
             )

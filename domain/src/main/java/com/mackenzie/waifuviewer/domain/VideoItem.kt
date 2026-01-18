@@ -14,6 +14,7 @@ data class VideoItem(
     val thumb: String,
     val url: String,
     val type: Type,
+    val isOnline: Boolean,
     val description: String
 ) {
     enum class Type { PHOTO, VIDEO, AUDIO, SERVER }
@@ -65,6 +66,7 @@ fun getMedia2() = (1..20).map {
         "https://loremflickr.com/400/400/cat?lock=1",
         "https://loremflickr.com/400/400/girl?lock=$it",
         getType(it),
+        true,
         "Generic Description $it"
     )
 }
@@ -76,6 +78,7 @@ fun getHentaiServers() = (50..67).map {
         getImageFromServerId(it).ifBlank { "https://loremflickr.com/400/400/girl?lock=$it" },
         getServerUrlById(it),
         Type.SERVER,
+        it != 67,
         "Generic Description $it"
     )
 }
@@ -87,6 +90,7 @@ fun getLiveCamsServers() = (80..87).map {
         getImageFromServerId(it).ifBlank { "https://loremflickr.com/400/400/girl?lock=$it" },
         getServerUrlById(it),
         Type.SERVER,
+        true,
         "Generic Description $it"
     )
 }
@@ -98,6 +102,7 @@ fun getVideoServers() = (1..22).map {
         getImageFromServerId(it).ifBlank { "https://loremflickr.com/400/400/girl?lock=$it" },
         getServerUrlById(it),
         Type.SERVER,
+        true,
         "Generic Description of ${getNameById(it)}"
     )
 }
@@ -167,47 +172,6 @@ fun getNameById(id: Int): String {
         else -> "Server Name Unknown"
     }
 }
-
-/*fun getAnimeServerNameById(id: Int): String {
-    return when (id) {
-        50 -> "Hanime.tv"
-        51 -> "HentaiCloud"
-        52 -> "HentaiGasm"
-        53 -> "HentaiMama 1"
-        54 -> "HentaiMama 2"
-        55 -> "HentaiMama 3"
-        56 -> "HentaiTube 1"
-        57 -> "HentaiTube 2"
-        58 -> "HentaiPlay"
-        59 -> "MuchoHentai"
-        60 -> "Naughty Machinima"
-        61 -> "OHentai"
-        62 -> "PorCore"
-        63 -> "xAnimePorn"
-        64 -> "AniPorn"
-        65 -> "ZZCartoon"
-        66 -> "PornHub"
-        67 -> "HentaiHeaven 1"
-        68 -> "HentaiHeaven 2"
-        69 -> "HentaiHeaven 3"
-        else -> "Server Name Unknown"
-    }
-}*/
-
-/*fun getLiveCamNameById(id: Int): String {
-    return when (id) {
-        80 -> "Chaturbate"
-        81 -> "Amateur.tv"
-        82 -> "BongaCams"
-        83 -> "Cam4"
-        84 -> "Camsoda"
-        85 -> "CamWhoresBay"
-        86 -> "StripChat"
-        87 -> "Streamate"
-        // 88 -> "MyFreeCams"
-        else -> "Server Name Unknown"
-    }
-}*/
 
 fun getServerUrlById(id: Int): String {
     return when (id) {
