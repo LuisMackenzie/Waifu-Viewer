@@ -1,13 +1,10 @@
 package com.mackenzie.waifuviewer.ui.common.nav
 
-import android.util.Log
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
@@ -16,7 +13,6 @@ import androidx.navigation.compose.rememberNavController
 import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.domain.getTypes
 import com.mackenzie.waifuviewer.domain.selector.SwitchState
-import com.mackenzie.waifuviewer.ui.common.urlDecoder
 import com.mackenzie.waifuviewer.ui.common.urlEncoder
 import com.mackenzie.waifuviewer.ui.detail.DetailScreenContentRoute
 import com.mackenzie.waifuviewer.ui.favs.ui.FavoriteScreenContentRoute
@@ -27,7 +23,6 @@ import com.mackenzie.waifuviewer.ui.gpt.ui.VideoPlayerScreenContent
 import com.mackenzie.waifuviewer.ui.main.WaifuScreenContentRoute
 import com.mackenzie.waifuviewer.ui.selector.SelectorScreenContentRoute
 import com.mackenzie.waifuviewer.ui.splash.SplashScreenRoute
-import okio.ByteString.Companion.encode
 
 @Composable
 fun Navigation() {
@@ -98,14 +93,15 @@ fun Navigation() {
             VideoListScreenContent(
                 serverId = backStackEntry.findArg(NavArg.VideoHubServerId),
                 serverUrl = backStackEntry.findArg(NavArg.VideoHubServerUrl)
-            ) { videoId, videoUrl ->
-                navController.navigate(route= NavItem.PlayerScreen.createRoute(videoId, videoUrl.urlEncoder()))
+            ) { videoId, videoUrl, embedUrl ->
+                navController.navigate(route= NavItem.PlayerScreen.createRoute(videoId, videoUrl.urlEncoder(), embedUrl.urlEncoder()) )
             }
         }
         composable(NavItem.PlayerScreen) { backStackEntry ->
             VideoPlayerScreenContent(
                 videoId = backStackEntry.findArg(NavArg.VideoId),
-                videoUrl = backStackEntry.findArg(NavArg.VideoInfo)
+                videoUrl = backStackEntry.findArg(NavArg.VideoUrl),
+                embedUrl = backStackEntry.findArg(NavArg.VideoEmbeddedUrl)
             )
         }
         composable(NavItem.WaifuGeminiScreen) {

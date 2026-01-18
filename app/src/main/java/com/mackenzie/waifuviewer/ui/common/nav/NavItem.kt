@@ -2,6 +2,7 @@ package com.mackenzie.waifuviewer.ui.common.nav
 
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import com.mackenzie.waifuviewer.domain.ServerStatus
 import java.io.File
 
 sealed class NavItem(
@@ -31,8 +32,8 @@ sealed class NavItem(
         fun createRoute(serverId: Int, serverUrl: String,) = baseRoute + File.separator + serverId + File.separator + serverUrl
     }
 
-    object PlayerScreen : NavItem("player_screen", listOf(NavArg.VideoId, NavArg.VideoInfo)) {
-        fun createRoute( videoId: String, videoUrl: String) = baseRoute + File.separator + videoId + File.separator + videoUrl
+    object PlayerScreen : NavItem("player_screen", listOf(NavArg.VideoId, NavArg.VideoUrl, NavArg.VideoEmbeddedUrl)) {
+        fun createRoute( videoId: String, videoUrl: String, embedUrl: String) = baseRoute + File.separator + videoId + File.separator + videoUrl + File.separator + embedUrl
     }
 
     object WaifuGeminiScreen : NavItem("gemini_screen")
@@ -59,6 +60,8 @@ enum class NavArg(val key: String, val navType: NavType<*>) {
     LandsState("landsState", NavType.BoolType),
     VideoHubServerId("videoHubServerId", NavType.IntType),
     VideoHubServerUrl("videoHubServerUrl", NavType.StringType),
-    VideoInfo("videoInfo", NavType.StringType),
+    VideoUrl("videoUrl", NavType.StringType),
+
+    VideoEmbeddedUrl("videoEmbeddedUrl", NavType.StringType),
     VideoId("videoId", NavType.StringType)
 }

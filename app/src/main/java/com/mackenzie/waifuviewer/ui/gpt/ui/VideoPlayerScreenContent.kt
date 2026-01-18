@@ -31,6 +31,7 @@ import com.mackenzie.waifuviewer.ui.gpt.PlayerViewModel
 fun VideoPlayerScreenContent(
     videoId: String = "",
     videoUrl: String = "",
+    embedUrl: String = "",
     vm: PlayerViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
@@ -44,6 +45,10 @@ fun VideoPlayerScreenContent(
     val exoPlayer = remember {
         ExoPlayer.Builder(context).build()
     }
+
+    Log.e("VideoHubScreenContent", "Loading EXOPLayer URL...=${videoUrl}")
+    Log.e("VideoHubScreenContent", "Loading EXOPLayer EmbedURL...=${embedUrl}")
+    Log.e("VideoHubScreenContent", "Loading EXOPLayer Video ID...=${videoId}")
 
 
     when {
@@ -78,11 +83,8 @@ fun VideoPlayerScreenContent(
                 playWhenReady = true
             }
 
-            Log.e("VideoHubScreenContent", "Loading EXOPLayer URL...=${videoUrl}")
-            Log.e("VideoHubScreenContent", "Loading EXOPLayer URL.toURI()...=${videoUrl.toUri()}")
             Log.e("VideoHubScreenContent", "embeddedVideoFile=${state.embeddedVideoFile}")
             Log.e("VideoHubScreenContent", "embeddedVideoFile.toUTI()=${state.embeddedVideoFile?.toUri()}")
-            Log.e("VideoHubScreenContent", "Loading EXOPLayer Video ID...=${videoId}")
             // 5. Integrar el PlayerView de ExoPlayer usando AndroidView
             AndroidView(
                 modifier = Modifier.fillMaxSize(),

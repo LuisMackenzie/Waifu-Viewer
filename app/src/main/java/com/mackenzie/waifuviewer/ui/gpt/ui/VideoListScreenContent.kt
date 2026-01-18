@@ -24,7 +24,7 @@ fun VideoListScreenContent(
     serverId: Int,
     serverUrl: String,
     vm: VideoHubViewModel = hiltViewModel(),
-    onNavigate: (String, String) -> Unit = { videoId, videoUrl -> }
+    onNavigate: (String, String, String) -> Unit = { videoId, videoUrl, embedUrl -> }
 ) {
 
     val state by vm.state.collectAsStateWithLifecycle()
@@ -75,7 +75,7 @@ fun VideoListScreenContent(
                         Log.e("VideoHubScreenContent", "Loading Item...=${item}")
                         // Me falta el EmbededUrl en el modelo de dominio
                         // alli esta el video que se podria reproducir directamente
-                        onNavigate(item.video.videoId, item.video.embedUrl)
+                        onNavigate(item.video.videoId, item.video.url, item.video.embedUrl)
                     }
                 )
             }
