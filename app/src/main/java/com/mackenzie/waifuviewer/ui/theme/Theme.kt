@@ -63,7 +63,8 @@ fun WaifuViewerTheme(
         }
 
         darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+        else -> LightColorScheme  // by default use LightColorScheme
+        // else -> DarkColorScheme // Only for testing VideoHub
     }
 
     MaterialTheme(
