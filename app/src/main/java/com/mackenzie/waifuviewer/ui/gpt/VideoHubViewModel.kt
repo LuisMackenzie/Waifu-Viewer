@@ -7,6 +7,7 @@ import com.mackenzie.waifuviewer.domain.video.TagDomainInfo
 import com.mackenzie.waifuviewer.domain.video.ThumbItem
 import com.mackenzie.waifuviewer.domain.video.VideoDomainItem
 import com.mackenzie.waifuviewer.domain.video.VideoItemDetails
+import com.mackenzie.waifuviewer.domain.video.embed.ServerSpec
 import com.mackenzie.waifuviewer.usecases.video.GetVideoDefaultListUseCase
 import com.mackenzie.waifuviewer.usecases.video.GetVideoListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -80,7 +81,7 @@ class VideoHubViewModel @Inject constructor(
         }
     }
 
-    fun getJavaScriptUrlFetcher(serverUrl: String) {
+    fun getJavaScriptUrlFetcher(serverUrl: String, serverName: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 _state.update { it.copy(isLoading = true, error = null) }
@@ -305,7 +306,7 @@ class VideoHubViewModel @Inject constructor(
 
                 if (scrapedVideos.isEmpty()) {
                     // Intentar imprimir información de debug
-                    Log.d("VideoHubViewModel", "HTML snippet: ${doc.body().html().take(500)}")
+                    // Log.d("VideoHubViewModel", "HTML snippet: ${doc.body().html().take(500)}")
 
                     _state.update {
                         it.copy(

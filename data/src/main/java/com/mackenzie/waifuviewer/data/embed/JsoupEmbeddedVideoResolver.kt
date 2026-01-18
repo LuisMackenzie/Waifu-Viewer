@@ -5,6 +5,7 @@ import arrow.core.left
 import arrow.core.right
 import com.mackenzie.waifuviewer.data.datasource.EmbeddedVideoResolver
 import com.mackenzie.waifuviewer.domain.video.embed.EmbeddedVideoResolveResult
+import com.mackenzie.waifuviewer.domain.video.embed.ServerSpec
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
@@ -18,11 +19,20 @@ class JsoupEmbeddedVideoResolver @Inject constructor(
     private val okHttpClient: OkHttpClient,
 ) : EmbeddedVideoResolver {
 
+    // Lista de servidores soportados (IDs 1-22) definidos en VideoItem.kt
+    private val supportedServers = ServerSpec.getSupportedServers()
+
     override suspend fun resolve(embedUrl: String): Either<EmbeddedVideoResolveError, EmbeddedVideoResolveResult> =
         withContext(Dispatchers.IO) {
             try {
+                // Identificamos si el servidor es uno de los soportados
+                val server = identifyServer(embedUrl)
+
+                // Intentamos obtener el documento, ya sea URL completa o embed
                 val initial = fetchDocument(embedUrl, referer = null)
-                val result = resolveFromDocument(initial, baseUrl = embedUrl)
+                
+                // Resolvemos usando el documento obtenido
+                val result = resolveFromDocument(initial, baseUrl = embedUrl, server = server)
                 result ?: EmbeddedVideoResolveError.NotFound().left()
             } catch (e: HttpException) {
                 EmbeddedVideoResolveError.Http(code = e.code, message = e.message).left()
@@ -33,7 +43,8 @@ class JsoupEmbeddedVideoResolver @Inject constructor(
 
     private fun resolveFromDocument(
         doc: Document,
-        baseUrl: String
+        baseUrl: String,
+        server: ServerSpec?
     ): Either<EmbeddedVideoResolveError, EmbeddedVideoResolveResult>? {
         // Señales comunes de que el contenido se genera con JS.
         val bodyText = doc.body().text().lowercase()
@@ -43,6 +54,7 @@ class JsoupEmbeddedVideoResolver @Inject constructor(
             return EmbeddedVideoResolveError.RequiresJavaScript().left()
         }
 
+        // Intento 1: Parser genérico (Video tags, meta tags, scripts conocidos)
         EmbeddedVideoHtmlParser.parse(doc, baseUrl)?.let { parsed ->
             return EmbeddedVideoResolveResult(
                 mediaUrl = parsed.mediaUrl,
@@ -52,19 +64,30 @@ class JsoupEmbeddedVideoResolver @Inject constructor(
             ).right()
         }
 
-        // Estrategia D: iframe => seguir y reintentar una vez.
+        // Estrategia D: Buscar iframe y seguirlo (reintentar una vez).
+        // Esto funciona tanto para webs que envuelven el video en iframe como para embeds.
         findIframeUrl(doc, baseUrl)?.let { iframeUrl ->
             val iframeDocEither = fetchDocumentEither(iframeUrl, referer = baseUrl)
             return iframeDocEither.fold(
                 ifLeft = { it.left() },
                 ifRight = { iframeDoc ->
-                    resolveFromDocument(iframeDoc, baseUrl = iframeUrl)
+                    // Recursión: Si encontramos un iframe, intentamos resolver desde ahí
+                    // pasando el mismo server si aplica (o re-identificando si fuera necesario, pero mantenemos el contexto)
+                    resolveFromDocument(iframeDoc, baseUrl = iframeUrl, server = server)
                         ?: EmbeddedVideoResolveError.NotFound().left()
                 }
             )
         }
 
         return null
+    }
+
+    private fun identifyServer(url: String): ServerSpec? {
+        val host = try { URI(url).host } catch (e: Exception) { return null } ?: return null
+        val lowerHost = host.lowercase()
+        return supportedServers.find { spec -> 
+            spec.domains.any { domain -> lowerHost.contains(domain) } 
+        }
     }
 
     private fun findIframeUrl(doc: Document, baseUrl: String): String? {
