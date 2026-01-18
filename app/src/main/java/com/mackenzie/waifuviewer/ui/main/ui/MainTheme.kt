@@ -15,6 +15,15 @@ fun MainTheme(content: @Composable () -> Unit) {
 }
 
 @Composable
+fun OnlyDarkMainTheme(content: @Composable () -> Unit) {
+    WaifuViewerTheme(darkTheme = true) {
+        Surface(color = MaterialTheme.colorScheme.background) {
+            content()
+        }
+    }
+}
+
+@Composable
 fun MainThemeForPreview(
     darkTheme: Boolean = false,
     content: @Composable () -> Unit
