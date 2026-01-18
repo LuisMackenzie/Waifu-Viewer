@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,6 +21,7 @@ import androidx.compose.material.icons.filled.OnlinePrediction
 import androidx.compose.material.icons.filled.PlayCircle
 import androidx.compose.material.icons.filled.PlayCircleOutline
 import androidx.compose.material.icons.filled.SmartDisplay
+import androidx.compose.material.icons.outlined.PlayCircle
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -35,7 +35,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -44,10 +43,8 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
-import com.google.android.material.snackbar.Snackbar
 import com.mackenzie.waifuviewer.R
 import com.mackenzie.waifuviewer.domain.VideoItem
-import com.mackenzie.waifuviewer.domain.getMedia
 import com.mackenzie.waifuviewer.domain.getMedia2
 
 
@@ -113,18 +110,35 @@ fun RenderItem(
 
             )
 
-            Icon(
-                imageVector = Icons.Default.OnlinePrediction,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onBackground,
-                modifier = Modifier
-                    .padding(2.dp)
-                    .size(20.dp)
-                    .background(if (item.isOnline) Color.Cyan else Color.Red, shape = MaterialTheme.shapes.medium)
-                    .align(Alignment.TopStart)
-                    .clickable { onFavoriteClick() }
+            if (item.status.isOffline) {
+                Icon(
+                    imageVector = Icons.Default.OnlinePrediction,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onBackground,
+                    modifier = Modifier
+                        .padding(2.dp)
+                        .size(20.dp)
+                        .background(Color.Red, shape = MaterialTheme.shapes.medium)
+                        .align(Alignment.TopStart)
+                        .clickable { onFavoriteClick() }
 
-            )
+                )
+            }
+
+            if (item.status.isFullyFunctional) {
+                Icon(
+                    imageVector = Icons.Outlined.PlayCircle,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onBackground,
+                    modifier = Modifier
+                        .padding(2.dp)
+                        .size(10.dp)
+                        .background(Color.Green, shape = MaterialTheme.shapes.medium)
+                        .align(Alignment.BottomEnd)
+                        .clickable { onFavoriteClick() }
+
+                )
+            }
         }
     }
 }

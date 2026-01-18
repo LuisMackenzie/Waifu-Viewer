@@ -14,11 +14,16 @@ data class VideoItem(
     val thumb: String,
     val url: String,
     val type: Type,
-    val isOnline: Boolean,
+    val status: ServerStatus, // Pair<isOffline, isFullyFunctional>
     val description: String
 ) {
     enum class Type { PHOTO, VIDEO, AUDIO, SERVER }
 }
+
+data class ServerStatus(
+    val isOffline: Boolean = false,
+    val isFullyFunctional: Boolean = false
+)
 
 fun getMedia() = (1..20).map {
     VideoDomainItem(
@@ -66,7 +71,7 @@ fun getMedia2() = (1..20).map {
         "https://loremflickr.com/400/400/cat?lock=1",
         "https://loremflickr.com/400/400/girl?lock=$it",
         getType(it),
-        true,
+        ServerStatus(),
         "Generic Description $it"
     )
 }
@@ -78,7 +83,10 @@ fun getHentaiServers() = (50..67).map {
         getImageFromServerId(it).ifBlank { "https://loremflickr.com/400/400/girl?lock=$it" },
         getServerUrlById(it),
         Type.SERVER,
-        it != 67,
+        ServerStatus(
+            isOffline = it == 67,
+            isFullyFunctional = false
+        ),
         "Generic Description $it"
     )
 }
@@ -90,7 +98,7 @@ fun getLiveCamsServers() = (80..87).map {
         getImageFromServerId(it).ifBlank { "https://loremflickr.com/400/400/girl?lock=$it" },
         getServerUrlById(it),
         Type.SERVER,
-        true,
+        ServerStatus(),
         "Generic Description $it"
     )
 }
@@ -102,7 +110,10 @@ fun getVideoServers() = (1..22).map {
         getImageFromServerId(it).ifBlank { "https://loremflickr.com/400/400/girl?lock=$it" },
         getServerUrlById(it),
         Type.SERVER,
-        true,
+        ServerStatus(
+            isOffline = false,
+            isFullyFunctional = it == 9 || it == 14
+        ),
         "Generic Description of ${getNameById(it)}"
     )
 }
