@@ -31,10 +31,11 @@ fun VideoListScreenContent(
 
     // Llamar a getServers() cuando se monta el composable o cambia el serverId
     LaunchedEffect(serverId) {
+        val serverName = getNameById(serverId)
         when (serverId) {
             1, 66 -> vm.getPHUrlFetcher(serverUrl)
             2 -> vm.getDefaultVideoList()
-            in 3..65, in 67 .. 69 -> vm.getJavaScriptUrlFetcher(serverUrl)
+            in 3..65, in 67 .. 69 -> vm.getJavaScriptUrlFetcher(serverUrl, serverName)
             else -> {
                 Log.e("VideoListScreenContent", "Unknown server ID: $serverId with name: ${getNameById(serverId)}")
             }
@@ -74,7 +75,7 @@ fun VideoListScreenContent(
                         Log.e("VideoHubScreenContent", "Loading Item...=${item}")
                         // Me falta el EmbededUrl en el modelo de dominio
                         // alli esta el video que se podria reproducir directamente
-                        onNavigate(item.video.videoId, item.video.url)
+                        onNavigate(item.video.videoId, item.video.embedUrl)
                     }
                 )
             }
