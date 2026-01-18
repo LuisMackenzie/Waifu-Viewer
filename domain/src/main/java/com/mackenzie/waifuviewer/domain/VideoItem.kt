@@ -69,7 +69,7 @@ fun getMedia2() = (1..20).map {
     )
 }
 
-fun getHentaiServers() = (50..69).map {
+fun getHentaiServers() = (50..67).map {
     VideoItem(
         it,
         getNameById(it),
@@ -211,7 +211,7 @@ fun getNameById(id: Int): String {
 
 fun getServerUrlById(id: Int): String {
     return when (id) {
-        1 -> "https://es.pornhub.com"
+        /*1 -> "https://es.pornhub.com"
         2 -> "https://es.redtube.com"
         3 -> "https://beeg.com"
         4 -> "https://www.eporner.com"
@@ -232,22 +232,22 @@ fun getServerUrlById(id: Int): String {
         19 -> "https://watchporn.to"
         20 -> "https://www.whoreshub.com"
         21 -> "https://www.porn.com"
-        22 -> "https://www.pornhd.com"
+        22 -> "https://www.pornhd.com"*/
 
-        /*1 -> "https://es.pornhub.com/video/"  // PornHub
+        1 -> "https://es.pornhub.com/video"  // PornHub
         2 -> "https://es.redtube.com/newest/" // RedTube
-        3 -> "https://www.beeg.com/" // Beeg No funciona
+        3 -> "https://www.beeg.com" // Beeg No funciona
         4 -> "https://www.eporner.com/" // Eporner Funciona Bien ***
         5 -> "https://tube8.com/" // Tube8 No funciona
         6 -> "https://www.xhamster.com/" // XHamster Funciona sin thumbs
         7 -> "https://www.youjizz.com/" // YouJizz Funciona sin thumbs
         8 -> "https://www.youporn.com/" // YouPorn No funciona
-        9 -> "https://www.xvideos.com/" // XVideos Funciona sin thumbs
+        9 -> "https://www.xvideos.com" // XVideos Funciona Bien *** y reproduce
         10 -> "https://www.xnxx.es/"  // XNXX No funciona
         11 -> "https://www.tnaflix.com/"  // TNAFLix No funciona
         12 -> "https://blowjobs.pro/" // Blowjobs.pro No funciona
         13 -> "https://es.spankbang.com/" // SpangBang No funciona
-        14 -> "https://www.porntrex.com/" // PornTrex Funciona Bien ***
+        14 -> "https://www.porntrex.com" // PornTrex Funciona Bien *** y reproduce
         15 -> "https://hqporner.com/" // HQPorner No funciona
         16 -> "https://www.analdin.com/" // Analdin No funciona
         17 -> "https://www.xxxfiles.com/" // XXXFiles No funciona
@@ -255,10 +255,10 @@ fun getServerUrlById(id: Int): String {
         19 -> "https://watchporn.to/" // WatchPorn No funciona
         20 -> "https://www.whoreshub.com/" // WhoresHub No funciona
         21 -> "https://www.porn.com/" // Porn.com No funciona
-        22 -> "https://www.pornhd.com/" // Porn HD No funciona*/
+        22 -> "https://www.pornhd.com/" // Porn HD No funciona
 
         50 -> "https://hanime.tv/" // Hanime.tv
-        51 -> "https://www.hentaicloud.com/" // HentaiCloud
+        51 -> "https://www.hentaicloud.com/" // HentaiCloud Funciona Bien ***
         52 -> "https://hentaigasm.com/" // HentaiGasm
         53 -> "https://hentaimama.io/" // HentaiMama
         54 -> "https://hentaimama.tv" // HentaiMama
@@ -275,8 +275,6 @@ fun getServerUrlById(id: Int): String {
         65 -> "https://www.zzcartoon.com" // ZZCartoon
         66 -> "https://es.pornhub.com/categories/hentai" // PornHub Hentai
         67 -> "https://hentaiheaven.com" // HentaiHeaven
-        68 -> "https://hentaiheaven.xxx" // HentaiHeaven
-        69 -> "https://hentaiheaven.icu" // HentaiHeaven
         else -> ""
     }
 }
