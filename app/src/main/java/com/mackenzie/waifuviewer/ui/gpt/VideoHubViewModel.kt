@@ -3,6 +3,9 @@ package com.mackenzie.waifuviewer.ui.gpt
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mackenzie.waifuviewer.domain.getEmbedUrl
+import com.mackenzie.waifuviewer.domain.getNameById
+import com.mackenzie.waifuviewer.domain.getServerUrlById
 import com.mackenzie.waifuviewer.domain.video.TagDomainInfo
 import com.mackenzie.waifuviewer.domain.video.ThumbItem
 import com.mackenzie.waifuviewer.domain.video.VideoDomainItem
@@ -81,261 +84,145 @@ class VideoHubViewModel @Inject constructor(
         }
     }
 
-    fun getJavaScriptUrlFetcher(serverUrl: String, serverName: String) {
+    /**
+     * Scrapea videos de cualquier servidor soportado en ServerSpec.
+     */
+    fun getJavaScriptUrlFetcher(serverId: Int, serverUrl: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 _state.update { it.copy(isLoading = true, error = null) }
+                
+                val serverName = getNameById(serverId)
+                val baseUrl = getServerUrlById(serverId)
 
-                Log.d("VideoHubViewModel", "Cargando URL de Beeg: $serverUrl")
+                Log.d("VideoHubViewModel", "Scrapeando $serverName ($serverId): $serverUrl")
 
-                // Hacer la petición HTTP y obtener el documento HTML
                 val doc = Jsoup.connect(serverUrl)
                     .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
                     .referrer("https://www.google.com")
-                    .timeout(15000)
+                    .timeout(20000)
                     .followRedirects(true)
-                    .ignoreContentType(false)
                     .get()
-
-                Log.d("VideoHubViewModel", "Título de la página: ${doc.title()}")
 
                 val scrapedVideos = mutableListOf<VideoDomainItem>()
 
-                // Beeg carga contenido dinámicamente con JavaScript
-                // Intentar extraer datos del JSON embebido en scripts
-                Log.d("VideoHubViewModel", "Buscando datos en scripts de Beeg...")
-                val scripts = doc.select("script:not([src])")
+                // 1. Estrategia específica para Beeg (ID 3) - Extracción de JSON en scripts
+                if (serverId == 3) {
+                    val scripts = doc.select("script:not([src])")
+                    scripts.forEach { script ->
+                        val content = script.html()
+                        if (content.contains("videos") && content.contains("\"id\"")) {
+                            try {
+                                val jsonPattern = """[\s\S]*?\{[\s\S]*?"id"[\s\S]*?\}[\s\S]*?]""".toRegex()
+                                jsonPattern.findAll(content).forEach { match ->
+                                    val jsonStr = match.value
+                                    val idPat = """"id"\s*:\s*"?(\d+)"?""".toRegex()
+                                    val titPat = """"title"\s*:\s*"([^"]+)"""".toRegex()
+                                    val thPat = """"thumb"\s*:\s*"([^"]+)"""".toRegex()
 
-                var foundVideos = false
-                scripts.forEach { script ->
-                    val content = script.html()
+                                    val ids = idPat.findAll(jsonStr).map { it.groupValues[1] }.toList()
+                                    val titles = titPat.findAll(jsonStr).map { it.groupValues[1] }.toList()
+                                    val thumbs = thPat.findAll(jsonStr).map { it.groupValues[1] }.toList()
 
-                    // Beeg suele tener datos en formato: window.INITIALSTATE o similar
-                    if (content.contains("videos") && content.contains("\"id\"")) {
-                        Log.d("VideoHubViewModel", "Script con datos encontrado")
-
-                        try {
-                            // Intentar extraer arrays JSON del script
-                            val jsonPattern = """[\s\S]*?\{[\s\S]*?"id"[\s\S]*?\}[\s\S]*?]""".toRegex()
-                            val matches = jsonPattern.findAll(content)
-
-                            matches.forEach { match ->
-                                val jsonStr = match.value
-                                Log.d("VideoHubViewModel", "JSON encontrado: ${jsonStr.take(200)}")
-
-                                // Aquí podrías usar una librería JSON como Gson o Kotlinx Serialization
-                                // Por ahora, extraemos manualmente los campos básicos
-                                val videoIdPattern = """"id"\s*:\s*"?(\d+)"?""".toRegex()
-                                val titlePattern = """"title"\s*:\s*"([^"]+)"""".toRegex()
-                                val thumbPattern = """"thumb"\s*:\s*"([^"]+)"""".toRegex()
-
-                                val videoIds = videoIdPattern.findAll(jsonStr).map { it.groupValues[1] }.toList()
-                                val titles = titlePattern.findAll(jsonStr).map { it.groupValues[1] }.toList()
-                                val thumbs = thumbPattern.findAll(jsonStr).map { it.groupValues[1] }.toList()
-
-                                videoIds.forEachIndexed { index, videoId ->
-                                    val title = titles.getOrNull(index) ?: ""
-                                    val thumb = thumbs.getOrNull(index) ?: ""
-
-                                    if (title.isNotEmpty() && videoId.isNotEmpty()) {
-                                        scrapedVideos.add(
-                                            VideoDomainItem(
-                                                video = VideoItemDetails(
-                                                    videoId = videoId,
-                                                    title = title,
-                                                    thumb = if (thumb.startsWith("//")) "https:$thumb" else thumb,
-                                                    url = "https://beeg.com/$videoId",
-                                                    embedUrl = "https://beeg.com/embed/$videoId",
-                                                    publishDate = "",
-                                                    rating = "",
-                                                    ratings = "0",
-                                                    views = "",
-                                                    duration = "",
-                                                    defaultThumb = if (thumb.startsWith("//")) "https:$thumb" else thumb,
-                                                    type = "video",
-                                                    thumbs = if (thumb.isNotEmpty()) listOf(
-                                                        ThumbItem(
-                                                            size = "medium",
-                                                            width = "640",
-                                                            height = "480",
-                                                            src = if (thumb.startsWith("//")) "https:$thumb" else thumb
-                                                        )
-                                                    ) else emptyList(),
-                                                    tags = null,
-                                                    stars = null
-                                                )
-                                            )
-                                        )
-                                        foundVideos = true
+                                    ids.forEachIndexed { index, vidId ->
+                                        val title = titles.getOrNull(index) ?: ""
+                                        val thumb = thumbs.getOrNull(index) ?: ""
+                                        if (title.isNotEmpty()) {
+                                            scrapedVideos.add(createVideoItem(serverId, vidId, title, thumb, "$baseUrl/$vidId", baseUrl))
+                                        }
                                     }
                                 }
-                            }
-                        } catch (e: Exception) {
-                            Log.e("VideoHubViewModel", "Error al parsear JSON de script: ${e.message}", e)
+                            } catch (e: Exception) { Log.e("VideoHubViewModel", "Error Beeg scripts: ${e.message}") }
                         }
                     }
                 }
 
-                // Si no se encontraron videos en scripts, intentar scraping HTML tradicional
-                if (!foundVideos) {
-                    Log.w("VideoHubViewModel", "No se encontraron videos en scripts, intentando HTML...")
-                    var videoElements = doc.select("article.thumb-item, div.thumb-item, div.video-item, article.video")
+                // 2. Estrategia HTML Genérica para todos los servidores (PornHub, RedTube, XVideos, etc.)
+                if (scrapedVideos.isEmpty()) {
+                    // Lista amplia de selectores comunes en sitios de videos
+                    val videoElements = doc.select(
+                        "li[data-video-vkey], div.videoBox, div.pcVideoListItem, article.thumb-item, " +
+                        "div.thumb-block, div.hvideo, div.video-wrapper, div.mozaique, " +
+                        "article[data-id], div[data-id], .thumb-item, .video-item, .video-block, " +
+                        "div[class*=videoblock], li[class*=pcVideoListItem]"
+                    )
 
-                    if (videoElements.isEmpty()) {
-                        videoElements = doc.select("article[data-id], div[data-id]")
-                    }
+                    Log.d("VideoHubViewModel", "Elementos HTML encontrados: ${videoElements.size}")
 
-                    Log.d("VideoHubViewModel", "Elementos de video encontrados: ${videoElements.size}")
-
-                    Log.d("VideoHubViewModel", "Elementos de video encontrados: ${videoElements.size}")
-
-                    val htmlVideos = videoElements.mapNotNull { element ->
+                    videoElements.forEach { element ->
                         try {
-                            // Extraer videoId - Beeg usa data-id o está en la URL
-                            val videoId = element.attr("data-id").ifEmpty {
-                                element.attr("data-video-id").ifEmpty {
-                                    val href = element.select("a").attr("href")
-                                    when {
-                                        href.contains("/video/") -> href.substringAfter("/video/").substringBefore("/").substringBefore("?")
-                                        href.matches(Regex(".*/\\d+.*")) -> href.split("/").find { it.matches(Regex("\\d+")) } ?: ""
-                                        else -> ""
-                                    }
-                                }
-                            }
+                            // Extraer ID
+                            val videoId = element.attr("data-video-vkey")
+                                .ifEmpty { element.attr("data-id") }
+                                .ifEmpty { element.attr("data-video-id") }
+                                .ifEmpty { extractVideoIdFromHref(element.select("a").attr("href")) }
 
-                            // Extraer título
-                            val titleElement = element.select("a[title]").firstOrNull()
-                                ?: element.select("h2 a, h3 a").firstOrNull()
-                                ?: element.select(".title a, .video-title a").firstOrNull()
+                            if (videoId.isEmpty()) return@forEach
+
+                            // Extraer Título
+                            val titleElement = element.select("a[title], .title a, h2 a, h3 a, span.title").firstOrNull()
                                 ?: element.select("a").firstOrNull()
-
+                            
                             val title = titleElement?.attr("title")?.ifEmpty { titleElement.text() }
                                 ?: titleElement?.text()
                                 ?: element.select("img").attr("alt")
-                                ?: ""
+                                ?: "Video $videoId"
 
                             // Extraer URL
-                            val url = element.select("a").attr("href").let { href ->
-                                when {
-                                    href.startsWith("http") -> href
-                                    href.startsWith("/") -> "https://beeg.com$href"
-                                    else -> "https://beeg.com/$href"
-                                }
+                            val href = element.select("a").attr("href")
+                            val fullUrl = when {
+                                href.startsWith("http") -> href
+                                href.startsWith("/") -> baseUrl + href
+                                else -> "$baseUrl/$href"
                             }
 
-                            // Extraer thumbnail
-                            val imgElement = element.select("img").firstOrNull()
-                            val thumb = imgElement?.attr("data-src")?.ifEmpty {
-                                imgElement.attr("src")
-                            }?.ifEmpty {
-                                imgElement.attr("data-lazy")
-                            }?.ifEmpty {
-                                imgElement.attr("data-original")
-                            }?.let { src ->
+                            // Extraer Thumbnail
+                            val img = element.select("img").firstOrNull()
+                            val thumb = img?.let {
+                                it.attr("data-src").ifEmpty { it.attr("src") }
+                                    .ifEmpty { it.attr("data-original") }
+                                    .ifEmpty { it.attr("data-thumb_url") }
+                                    .ifEmpty { it.attr("data-mediabook") }
+                            }?.let { 
                                 when {
-                                    src.startsWith("http") -> src
-                                    src.startsWith("//") -> "https:$src"
-                                    src.startsWith("/") -> "https://beeg.com$src"
-                                    else -> src
+                                    it.startsWith("//") -> "https:$it"
+                                    it.startsWith("/") -> baseUrl + it
+                                    else -> it
                                 }
                             } ?: ""
 
-                            // Extraer duración
-                            val duration = element.select(".duration, .time, .video-duration").text().ifEmpty {
-                                element.select("span[class*=duration], span[class*=time]").text()
-                            }
+                            // Metadatos adicionales
+                            val duration = element.select(".duration, .time, .video-duration, var").text()
+                            val views = element.select(".views, .video-views, span.views").text()
+                            val rating = element.select(".rating, .percent, .value, .rate, .rating-container .value").text()
+                            val tags = element.select("a.tag, .tags a, .videoTagsBlock a").map { TagDomainInfo(it.text().trim()) }.takeIf { it.isNotEmpty() }
 
-                            // Extraer vistas
-                            val views = element.select(".views, .video-views").text().ifEmpty {
-                                element.select("span[class*=view]").text()
-                            }
-
-                            // Extraer rating
-                            val rating = element.select(".rating, .rate").text().ifEmpty {
-                                element.select("span[class*=rating]").text()
-                            }
-
-                            // Extraer tags si están disponibles
-                            val tags = element.select("a.tag, .tags a").mapNotNull { tag ->
-                                val tagText = tag.text().trim()
-                                if (tagText.isNotEmpty()) TagDomainInfo(tagName = tagText) else null
-                            }
-
-                            // Validar que tengamos datos mínimos necesarios
-                            if (title.isNotEmpty() && url.isNotEmpty()) {
-                                VideoDomainItem(
-                                    video = VideoItemDetails(
-                                        videoId = videoId.ifEmpty { System.currentTimeMillis().toString() },
-                                        title = title,
-                                        thumb = thumb,
-                                        url = url,
-                                        embedUrl = if (videoId.isNotEmpty()) "https://beeg.com/embed/$videoId" else "",
-                                        publishDate = "",
-                                        rating = rating.replace("%", "").trim(),
-                                        ratings = "0",
-                                        views = views.trim(),
-                                        duration = duration.trim(),
-                                        defaultThumb = thumb,
-                                        type = "video",
-                                        thumbs = if (thumb.isNotEmpty()) listOf(
-                                            ThumbItem(
-                                                size = "medium",
-                                                width = "640",
-                                                height = "480",
-                                                src = thumb
-                                            )
-                                        ) else emptyList(),
-                                        tags = tags.takeIf { it.isNotEmpty() },
-                                        stars = null
-                                    )
-                                )
-                            } else {
-                                Log.w("VideoHubViewModel", "Video de Beeg ignorado - datos insuficientes (título: $title, url: $url)")
-                                null
-                            }
-                        } catch (e: Exception) {
-                            Log.e("VideoHubViewModel", "Error al parsear video individual de Beeg: ${e.message}", e)
-                            null
-                        }
-                    }
-
-                    scrapedVideos.addAll(htmlVideos)
-                }
-
-                Log.d("VideoHubViewModel", "Videos de Beeg scrapeados exitosamente: ${scrapedVideos.size}")
-
-                if (scrapedVideos.isEmpty()) {
-                    // Intentar imprimir información de debug
-                    // Log.d("VideoHubViewModel", "HTML snippet: ${doc.body().html().take(500)}")
-
-                    _state.update {
-                        it.copy(
-                            isLoading = false,
-                            videos = emptyList(),
-                            error = "No se encontraron videos en Beeg. La página puede usar JavaScript para cargar contenido dinámicamente o la estructura ha cambiado."
-                        )
-                    }
-                } else {
-                    _state.update {
-                        it.copy(
-                            isLoading = false,
-                            videos = scrapedVideos,
-                            error = null
-                        )
+                            scrapedVideos.add(
+                                createVideoItem(serverId, videoId, title, thumb, fullUrl, baseUrl, duration, views, rating, tags)
+                            )
+                        } catch (e: Exception) { /* Omitir elementos mal formados */ }
                     }
                 }
 
-            } catch (e: Exception) {
-                Log.e("VideoHubViewModel", "Error al scrapear Beeg: ${e.message}", e)
                 _state.update {
                     it.copy(
                         isLoading = false,
-                        error = "Error al cargar videos de Beeg: ${e.message}"
+                        videos = scrapedVideos.distinctBy { v -> v.video.videoId },
+                        error = if (scrapedVideos.isEmpty()) "No se encontraron videos en $serverName." else null
                     )
                 }
+
+            } catch (e: Exception) {
+                Log.e("VideoHubViewModel", "Error al scrapear $serverId: ${e.message}")
+                _state.update { it.copy(isLoading = false, error = "Error al cargar videos: ${e.message}") }
             }
         }
     }
+
+    // Mantener getPHUrlFetcher por compatibilidad, delegando al genérico
+    /*fun getPHUrlFetcher(serverUrl: String) {
+        getJavaScriptUrlFetcher(1, serverUrl)
+    }*/
 
     fun getPHUrlFetcher(serverUrl: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -505,6 +392,54 @@ class VideoHubViewModel @Inject constructor(
         }
     }
 
+    private fun createVideoItem(
+        serverId: Int,
+        videoId: String,
+        title: String,
+        thumb: String,
+        url: String,
+        baseUrl: String,
+        duration: String = "",
+        views: String = "",
+        rating: String = "",
+        tags: List<TagDomainInfo>? = null
+    ): VideoDomainItem {
+        val xvideosId = url.substringAfter("/video.", "").substringBefore( "/").substringBefore("?")
+        return VideoDomainItem(
+            video = VideoItemDetails(
+                videoId = videoId,
+                title = title,
+                thumb = thumb,
+                url = url,
+                embedUrl = if(serverId == 9) getEmbedUrl(serverId, xvideosId) else getEmbedUrl(serverId, videoId),
+                publishDate = "",
+                rating = rating.replace("%", "").trim(),
+                ratings = "0",
+                views = views.trim(),
+                duration = duration.trim(),
+                defaultThumb = thumb,
+                type = "video",
+                thumbs = if (thumb.isNotEmpty()) listOf(ThumbItem("medium", "640", "480", thumb)) else emptyList(),
+                tags = tags,
+                stars = null
+            )
+        )
+    }
+
+    private fun extractVideoIdFromHref(href: String): String {
+        return when {
+            href.contains("viewkey=") -> href.substringAfter("viewkey=").substringBefore("&").substringBefore("?")
+            href.contains("v=") -> href.substringAfter("v=").substringBefore("&").substringBefore("?")
+            href.contains("/video/") -> href.substringAfter("/video/").substringBefore("/").substringBefore("?")
+            href.contains("/video-") -> href.substringAfter("/video-").substringBefore("/").substringBefore("?")
+            href.contains("/v/") -> href.substringAfter("/v/").substringBefore("/").substringBefore("?")
+            href.matches(Regex(".*/\\d+.*")) -> {
+                val segments = href.split("/").filter { it.isNotEmpty() }
+                segments.find { it.matches(Regex("\\d+")) } ?: ""
+            }
+            else -> ""
+        }
+    }
 
     data class VideoHubUiState(
         val isLoading: Boolean = false,

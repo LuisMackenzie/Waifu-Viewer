@@ -72,7 +72,7 @@ fun getMedia2() = (1..20).map {
 fun getHentaiServers() = (50..69).map {
     VideoItem(
         it,
-        getAnimeServerNameById(it),
+        getNameById(it),
         getImageFromServerId(it).ifBlank { "https://loremflickr.com/400/400/girl?lock=$it" },
         getServerUrlById(it),
         Type.SERVER,
@@ -83,7 +83,7 @@ fun getHentaiServers() = (50..69).map {
 fun getLiveCamsServers() = (80..87).map {
     VideoItem(
         it,
-        getLiveCamNameById(it),
+        getNameById(it),
         getImageFromServerId(it).ifBlank { "https://loremflickr.com/400/400/girl?lock=$it" },
         getServerUrlById(it),
         Type.SERVER,
@@ -134,11 +134,41 @@ fun getNameById(id: Int): String {
         20 -> "WhoresHub"
         21 -> "Porn.com"
         22 -> "Porn HD"
+
+        50 -> "Hanime.tv"
+        51 -> "HentaiCloud"
+        52 -> "HentaiGasm"
+        53 -> "HentaiMama 1"
+        54 -> "HentaiMama 2"
+        55 -> "HentaiMama 3"
+        56 -> "HentaiTube 1"
+        57 -> "HentaiTube 2"
+        58 -> "HentaiPlay"
+        59 -> "MuchoHentai"
+        60 -> "Naughty Machinima"
+        61 -> "OHentai"
+        62 -> "PorCore"
+        63 -> "xAnimePorn"
+        64 -> "AniPorn"
+        65 -> "ZZCartoon"
+        66 -> "PornHub Hentai"
+        67 -> "HentaiHeaven 1"
+        68 -> "HentaiHeaven 2"
+        69 -> "HentaiHeaven 3"
+
+        80 -> "Chaturbate"
+        81 -> "Amateur.tv"
+        82 -> "BongaCams"
+        83 -> "Cam4"
+        84 -> "Camsoda"
+        85 -> "CamWhoresBay"
+        86 -> "StripChat"
+        87 -> "Streamate"
         else -> "Server Name Unknown"
     }
 }
 
-fun getAnimeServerNameById(id: Int): String {
+/*fun getAnimeServerNameById(id: Int): String {
     return when (id) {
         50 -> "Hanime.tv"
         51 -> "HentaiCloud"
@@ -162,9 +192,9 @@ fun getAnimeServerNameById(id: Int): String {
         69 -> "HentaiHeaven 3"
         else -> "Server Name Unknown"
     }
-}
+}*/
 
-fun getLiveCamNameById(id: Int): String {
+/*fun getLiveCamNameById(id: Int): String {
     return when (id) {
         80 -> "Chaturbate"
         81 -> "Amateur.tv"
@@ -177,11 +207,34 @@ fun getLiveCamNameById(id: Int): String {
         // 88 -> "MyFreeCams"
         else -> "Server Name Unknown"
     }
-}
+}*/
 
 fun getServerUrlById(id: Int): String {
     return when (id) {
-        1 -> "https://es.pornhub.com/video/"  // PornHub
+        1 -> "https://es.pornhub.com"
+        2 -> "https://es.redtube.com"
+        3 -> "https://beeg.com"
+        4 -> "https://www.eporner.com"
+        5 -> "https://www.tube8.com"
+        6 -> "https://www.xhamster.com"
+        7 -> "https://www.youjizz.com"
+        8 -> "https://www.youporn.com"
+        9 -> "https://www.xvideos.com"
+        10 -> "https://www.xnxx.com"
+        11 -> "https://www.tnaflix.com"
+        12 -> "https://blowjobs.pro"
+        13 -> "https://es.spankbang.com"
+        14 -> "https://www.porntrex.com"
+        15 -> "https://hqporner.com"
+        16 -> "https://www.analdin.com"
+        17 -> "https://www.xxxfiles.com"
+        18 -> "https://www.pornslash.com"
+        19 -> "https://watchporn.to"
+        20 -> "https://www.whoreshub.com"
+        21 -> "https://www.porn.com"
+        22 -> "https://www.pornhd.com"
+
+        /*1 -> "https://es.pornhub.com/video/"  // PornHub
         2 -> "https://es.redtube.com/newest/" // RedTube
         3 -> "https://www.beeg.com/" // Beeg No funciona
         4 -> "https://www.eporner.com/" // Eporner Funciona Bien ***
@@ -202,7 +255,7 @@ fun getServerUrlById(id: Int): String {
         19 -> "https://watchporn.to/" // WatchPorn No funciona
         20 -> "https://www.whoreshub.com/" // WhoresHub No funciona
         21 -> "https://www.porn.com/" // Porn.com No funciona
-        22 -> "https://www.pornhd.com/" // Porn HD No funciona
+        22 -> "https://www.pornhd.com/" // Porn HD No funciona*/
 
         50 -> "https://hanime.tv/" // Hanime.tv
         51 -> "https://www.hentaicloud.com/" // HentaiCloud
@@ -224,6 +277,31 @@ fun getServerUrlById(id: Int): String {
         67 -> "https://hentaiheaven.com" // HentaiHeaven
         68 -> "https://hentaiheaven.xxx" // HentaiHeaven
         69 -> "https://hentaiheaven.icu" // HentaiHeaven
+        else -> ""
+    }
+}
+
+fun getEmbedUrl(serverId: Int, videoId: String): String {
+    if (videoId.isEmpty()) return ""
+    return when (serverId) {
+        1 -> "https://es.pornhub.com/embed/$videoId"
+        2 -> "https://es.redtube.com/embed/$videoId"
+        3 -> "https://beeg.com/embed/$videoId"
+        4 -> "https://www.eporner.com/embed/$videoId/"
+        5 -> "https://www.tube8.com/embed/$videoId"
+        6 -> "https://www.xhamster.com/embed/$videoId"
+        7 -> "https://www.youjizz.com/embed/$videoId"
+        8 -> "https://www.youporn.com/embed/$videoId"
+        9 -> "https://www.xvideos.com/embedframe/$videoId"
+        10 -> "https://www.xnxx.com/embedframe/$videoId"
+        11 -> "https://www.tnaflix.com/embed/$videoId"
+        13 -> "https://spankbang.com/$videoId/embed/"
+        14 -> "https://www.porntrex.com/embed/$videoId"
+        15 -> "https://hqporner.com/embed/$videoId"
+        18 -> "https://www.pornslash.com/embed/$videoId"
+        20 -> "https://www.whoreshub.com/embed/$videoId"
+        21 -> "https://www.porn.com/videos/embed/$videoId"
+        22 -> "https://www.pornhd.com/embed/$videoId"
         else -> ""
     }
 }
