@@ -118,7 +118,7 @@ fun RenderItem(
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier
-                    .padding(4.dp)
+                    .padding(2.dp)
                     .size(20.dp)
                     .background(if (item.isOnline) Color.Cyan else Color.Red, shape = MaterialTheme.shapes.medium)
                     .align(Alignment.TopStart)
