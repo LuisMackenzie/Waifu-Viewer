@@ -39,7 +39,7 @@ fun VideoPlayerScreenContent(
     val testUrl = "https://embed.redtube.com/?id=206274421"
 
     LaunchedEffect(videoUrl) {
-        vm.getVideoFromEmbeddedUrl(videoUrl)
+        vm.getVideoFromEmbeddedUrl(videoUrl, embedUrl)
     }
 
     val exoPlayer = remember {

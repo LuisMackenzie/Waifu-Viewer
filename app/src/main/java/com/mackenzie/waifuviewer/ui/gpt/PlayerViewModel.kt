@@ -20,7 +20,7 @@ class PlayerViewModel @Inject constructor(
     private val _state = MutableStateFlow(PlayerUiState())
     val state: StateFlow<PlayerUiState> = _state.asStateFlow()
 
-    fun getVideoFromEmbeddedUrl(url: String) {
+    fun getVideoFromEmbeddedUrl(url: String, embedUrl: String) {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, error = null, embeddedVideoFile = null) }
 
