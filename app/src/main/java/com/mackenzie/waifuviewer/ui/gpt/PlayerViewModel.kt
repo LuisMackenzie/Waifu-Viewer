@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import com.mackenzie.waifuviewer.data.embed.EmbeddedVideoResolveError
 import com.mackenzie.waifuviewer.usecases.embed.ResolveEmbeddedVideoUrlUseCase
+import arrow.core.Either
 
 @HiltViewModel
 class PlayerViewModel @Inject constructor(
@@ -24,7 +25,21 @@ class PlayerViewModel @Inject constructor(
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, error = null, embeddedVideoFile = null) }
 
-            val result = resolveEmbeddedVideoUrlUseCase(url)
+            val primaryUrl = url.trim()
+            val fallbackUrl = embedUrl.trim()
+
+            val result = resolveEmbeddedVideoUrlUseCase(primaryUrl)
+                .fold(
+                    ifLeft = { firstError ->
+                        // Segundo intento solo si hay una alternativa no vacía y distinta.
+                        if (fallbackUrl.isNotBlank() && fallbackUrl != primaryUrl) {
+                            resolveEmbeddedVideoUrlUseCase(fallbackUrl)
+                        } else {
+                            Either.Left(firstError)
+                        }
+                    },
+                    ifRight = { resolved -> Either.Right(resolved) }
+                )
 
             result.fold(
                 ifLeft = { err ->
