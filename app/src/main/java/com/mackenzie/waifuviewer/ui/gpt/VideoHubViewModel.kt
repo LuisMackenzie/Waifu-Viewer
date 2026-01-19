@@ -107,7 +107,7 @@ class VideoHubViewModel @Inject constructor(
                 val scrapedVideos = mutableListOf<VideoDomainItem>()
 
                 // 1. Estrategia específica para Beeg (ID 3) - Extracción de JSON en scripts
-                if (serverId == 3) {
+                if (serverId == 3 || serverId == 6) {
                     val scripts = doc.select("script:not([src])")
                     scripts.forEach { script ->
                         val content = script.html()
