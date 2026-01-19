@@ -6,6 +6,8 @@ import arrow.core.right
 import com.mackenzie.waifuviewer.data.datasource.EmbeddedVideoResolver
 import com.mackenzie.waifuviewer.domain.video.embed.EmbeddedVideoResolveResult
 import com.mackenzie.waifuviewer.domain.video.embed.ServerSpec
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
@@ -17,6 +19,7 @@ import javax.inject.Inject
 
 class JsoupEmbeddedVideoResolver @Inject constructor(
     private val okHttpClient: OkHttpClient,
+    private val moshi: Moshi
 ) : EmbeddedVideoResolver {
 
     // Lista de servidores soportados (IDs 1-22) definidos en VideoItem.kt
@@ -55,7 +58,7 @@ class JsoupEmbeddedVideoResolver @Inject constructor(
         }
 
         // 3. Estrategia JSON-LD (Estructura estándar de metadatos de video)
-        // findFromJsonLd(doc, baseUrl)?.let { return it.right() }
+        findFromJsonLd(doc, baseUrl)?.let { return it.right() }
 
         // 4. Estrategia de Configuración en Atributos (data-config, data-sources)
         findFromDataAttributes(doc, baseUrl)?.let { return it.right() }
@@ -98,6 +101,35 @@ class JsoupEmbeddedVideoResolver @Inject constructor(
             }
             else -> null
         }
+    }
+
+    private fun findFromJsonLd(doc: Document, baseUrl: String): EmbeddedVideoResolveResult? {
+        val scripts = doc.select("script[type=application/ld+json]")
+
+        // Creamos un adaptador para Map<String, Any>
+        val mapType = Types.newParameterizedType(Map::class.java, String::class.java, Any::class.java)
+        val adapter = moshi.adapter<Map<String, Any>>(mapType)
+
+        for (script in scripts) {
+            try {
+                val jsonRaw = script.data().trim()
+                if (jsonRaw.isEmpty()) continue
+
+                val jsonMap = adapter.fromJson(jsonRaw) ?: continue
+
+                // 1. Intentar obtener contentUrl del nivel raíz
+                // 2. Si no existe, intentar obtenerlo de un objeto "video"
+                val contentUrl = (jsonMap["contentUrl"] as? String)
+                    ?: (jsonMap["video"] as? Map<*, *>)?.get("contentUrl") as? String
+
+                if (!contentUrl.isNullOrBlank()) {
+                    return createResult(contentUrl, inferType(contentUrl), baseUrl)
+                }
+            } catch (e: Exception) {
+                // Ignorar errores de parseo y continuar con el siguiente script
+            }
+        }
+        return null
     }
 
     /*private fun findFromJsonLd(doc: Document, baseUrl: String): EmbeddedVideoResolveResult? {
