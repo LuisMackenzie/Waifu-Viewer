@@ -186,29 +186,6 @@ fun getNameById(id: Int): String {
 
 fun getServerUrlById(id: Int): String {
     return when (id) {
-        /*1 -> "https://es.pornhub.com"
-        2 -> "https://es.redtube.com"
-        3 -> "https://beeg.com"
-        4 -> "https://www.eporner.com"
-        5 -> "https://www.tube8.com"
-        6 -> "https://www.xhamster.com"
-        7 -> "https://www.youjizz.com"
-        8 -> "https://www.youporn.com"
-        9 -> "https://www.xvideos.com"
-        10 -> "https://www.xnxx.com"
-        11 -> "https://www.tnaflix.com"
-        12 -> "https://blowjobs.pro"
-        13 -> "https://es.spankbang.com"
-        14 -> "https://www.porntrex.com"
-        15 -> "https://hqporner.com"
-        16 -> "https://www.analdin.com"
-        17 -> "https://www.xxxfiles.com"
-        18 -> "https://www.pornslash.com"
-        19 -> "https://watchporn.to"
-        20 -> "https://www.whoreshub.com"
-        21 -> "https://www.porn.com"
-        22 -> "https://www.pornhd.com"*/
-
         1 -> "https://es.pornhub.com/video"  // PornHub
         2 -> "https://es.redtube.com/newest" // RedTube
         3 -> "https://www.beeg.com" // Beeg No funciona
