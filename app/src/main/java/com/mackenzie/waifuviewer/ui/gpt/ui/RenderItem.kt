@@ -125,7 +125,7 @@ fun RenderItem(
                 )
             }
 
-            if (item.status.isFullyFunctional) {
+            if (item.status.canChargeList) {
                 Icon(
                     imageVector = Icons.Outlined.PlayCircle,
                     contentDescription = null,
@@ -133,7 +133,10 @@ fun RenderItem(
                     modifier = Modifier
                         .padding(2.dp)
                         .size(10.dp)
-                        .background(Color.Green, shape = MaterialTheme.shapes.medium)
+                        .background(
+                            color = if (item.status.isFullyFunctional) Color.Green else Color.Blue,
+                            shape = MaterialTheme.shapes.medium
+                        )
                         .align(Alignment.BottomEnd)
                         .clickable { onFavoriteClick() }
 
