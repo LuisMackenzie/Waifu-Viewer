@@ -23,6 +23,7 @@ import okhttp3.Headers
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.jsoup.Jsoup
+import org.jsoup.nodes.Element
 import java.net.URI
 import javax.inject.Inject
 
@@ -195,7 +196,7 @@ class VideoHubViewModel @Inject constructor(
                     return numeric ?: extractVideoIdFromHref(url)
                 }
 
-                fun parseCard(element: org.jsoup.nodes.Element): VideoDomainItem? {
+                fun parseCard(element: Element): VideoDomainItem? {
                     // URL principal
                     val linkEl = element.selectFirst(
                         "a[href*=/videos/], a[href*=/video/], a[href*=/porn/], a[href]"
@@ -207,7 +208,6 @@ class VideoHubViewModel @Inject constructor(
 
                     // Evitar enlaces que no son videos (por ej. perfiles/categorías)
                     if (!fullUrl.contains("/videos/")) {
-                        // Hay layouts donde el path puede variar; aun así filtramos lo evidente
                         val looksLikeVideo = fullUrl.contains("/video") || fullUrl.contains("/porn")
                         if (!looksLikeVideo) return null
                     }
@@ -219,12 +219,84 @@ class VideoHubViewModel @Inject constructor(
                         .trim()
                     if (videoId.isBlank()) return null
 
-                    // Título
-                    val title = (
-                        linkEl.attr("title").ifEmpty { linkEl.text() }
-                            .ifEmpty { element.selectFirst("a[title]")?.attr("title") ?: "" }
-                            .ifEmpty { element.selectFirst("img[alt]")?.attr("alt") ?: "" }
-                    ).trim()
+                    // Metadatos (los calculamos antes para poder validar el título)
+                    val duration = element.select(
+                        ".duration, .time, [class*=duration], [class*=time]"
+                    ).text().trim()
+
+                    val views = element.select(
+                        ".views, [class*=views]"
+                    ).text().trim()
+
+                    fun normalizeTitle(raw: String): String {
+                        return raw
+                            .replace("\u00A0", " ")
+                            .replace(Regex("\\s+"), " ")
+                            .trim()
+                    }
+
+                    fun looksLikeDuration(text: String): Boolean {
+                        val t = text.trim()
+                        if (t.isBlank()) return false
+                        // Formatos típicos: 12:34, 1:02:03
+                        if (Regex("^\\d{1,2}:\\d{2}(?::\\d{2})?$").matches(t)) return true
+                        // A veces: "12 min" o "12m"
+                        if (Regex("^\\d+\\s*(min|mins|m)$", RegexOption.IGNORE_CASE).matches(t)) return true
+                        return false
+                    }
+
+                    fun candidateTitles(): List<String> {
+                        val candidates = mutableListOf<String>()
+
+                        // 1) Atributos comunes en el link
+                        candidates += linkEl.attr("title")
+                        candidates += linkEl.attr("aria-label")
+                        candidates += linkEl.attr("data-title")
+
+                        // 2) Títulos dentro de headings
+                        candidates += element.selectFirst("h1")?.text().orEmpty()
+                        candidates += element.selectFirst("h2")?.text().orEmpty()
+                        candidates += element.selectFirst("h3")?.text().orEmpty()
+
+                        // 3) Elementos con clases típicas de título
+                        candidates += element.selectFirst(".title")?.text().orEmpty()
+                        candidates += element.selectFirst("[class*=title]")?.text().orEmpty()
+
+                        // 4) Meta semántico
+                        candidates += element.selectFirst("meta[itemprop=name]")?.attr("content").orEmpty()
+                        candidates += element.selectFirst("[itemprop=name]")?.attr("content").orEmpty()
+                        candidates += element.selectFirst("[itemprop=name]")?.text().orEmpty()
+
+                        // 5) Fallback: alt de imagen
+                        candidates += element.selectFirst("img[alt]")?.attr("alt").orEmpty()
+
+                        // 6) Último recurso: texto del link (pero puede estar contaminado)
+                        candidates += linkEl.text()
+
+                        return candidates
+                            .map(::normalizeTitle)
+                            .filter { it.isNotBlank() }
+                            .distinct()
+                    }
+
+                    val title = candidateTitles()
+                        .firstOrNull { cand ->
+                            // No aceptamos títulos que claramente sean solo duración
+                            if (looksLikeDuration(cand)) return@firstOrNull false
+
+                            // Si coincide exactamente con duration, descartarlo
+                            if (duration.isNotBlank() && cand.equals(duration, ignoreCase = true)) return@firstOrNull false
+
+                            // Evitar títulos excesivamente cortos que suelen ser ruido (ej: "HD")
+                            if (cand.length < 4) return@firstOrNull false
+
+                            true
+                        }
+                        ?: run {
+                            // Último fallback: si todo falla, usar el alt aunque sea corto
+                            val alt = normalizeTitle(element.selectFirst("img[alt]")?.attr("alt").orEmpty())
+                            if (alt.isNotBlank() && !looksLikeDuration(alt) && alt != duration) alt else ""
+                        }
 
                     if (title.isBlank()) return null
 
@@ -239,16 +311,7 @@ class VideoHubViewModel @Inject constructor(
 
                     val thumb = resolveUrlMaybeRelative(thumbRaw)
 
-                    // Metadatos
-                    val duration = element.select(
-                        ".duration, .time, [class*=duration], [class*=time]"
-                    ).text().trim()
-
-                    Log.e( "VideoHubViewModel", "xHamster Video Found - ID: $videoId, Title: $title, Duration: $duration")
-
-                    val views = element.select(
-                        ".views, [class*=views]"
-                    ).text().trim()
+                    Log.e("VideoHubViewModel", "xHamster Video Found - ID: $videoId, Title: $title, Duration: $duration")
 
                     return createVideoItem(
                         serverId = serverId,
@@ -277,6 +340,8 @@ class VideoHubViewModel @Inject constructor(
 
                     if (scrapedVideos.size >= 10) break
                 }
+                Log.e("VideoHubViewModel", "scrapedVideos.size= ${scrapedVideos.size}")
+
 
                 // 2) Fallback: anchors directos a /videos/
                 if (scrapedVideos.isEmpty()) {
@@ -309,6 +374,7 @@ class VideoHubViewModel @Inject constructor(
 
                 val deduped = scrapedVideos
                     .distinctBy { it.video.videoId.ifBlank { it.video.url } }
+                Log.e("VideoHubViewModel", "xHamster Videos scrapeados exitosamente: ${deduped.size}, scrapedVideos.size= ${scrapedVideos.size}")
 
                 _state.update {
                     it.copy(

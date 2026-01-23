@@ -29,8 +29,8 @@ fun VideoListScreenContent(
 
     val state by vm.state.collectAsStateWithLifecycle()
 
-    // Llamar a getServers() cuando se monta el composable o cambia el serverId
-    LaunchedEffect(serverId) {
+    // Llamar a getServers() cuando se monta el composable o cambia el serverId / serverUrl
+    LaunchedEffect(serverId, serverUrl) {
         val serverName = getNameById(serverId)
         when (serverId) {
             1, 66 -> vm.getPHUrlFetcher(serverUrl)
