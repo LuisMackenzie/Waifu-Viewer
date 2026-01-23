@@ -3,7 +3,7 @@ package com.mackenzie.waifuviewer.domain.video
 
 data class VideoListItem(
     val videos: List<VideoDomainItem>,
-    val count: Int
+    val count: Int? = null
 )
 
 
