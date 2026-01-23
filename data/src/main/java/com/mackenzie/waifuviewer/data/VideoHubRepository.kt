@@ -14,9 +14,13 @@ import com.mackenzie.waifuviewer.domain.video.VideoItemDetails
 import com.mackenzie.waifuviewer.domain.video.VideoListItem
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.withContext
+import okhttp3.Headers
 import okhttp3.OkHttpClient
+import okhttp3.Request
 import org.jsoup.Jsoup
+import java.net.URI
 import javax.inject.Inject
 
 class VideoHubRepository @Inject constructor(
@@ -56,8 +60,20 @@ class VideoHubRepository @Inject constructor(
         return remoteDataSource.searchVideos()
     }
 
-    suspend fun primaryVideoScrapper(serverUrl: String): Either<Error, VideoListItem> = withContext(Dispatchers.IO) {
+    suspend fun primaryVideoScrapper(serverId: Int, serverUrl: String): Either<Error, VideoListItem> = withContext(Dispatchers.IO) {
         // TODO implement primary scrapper
+        val baseUri = try { URI(serverUrl) } catch (_: Exception) { URI(getServerUrlById(serverId)) }
+        val baseUrl = "${baseUri.scheme ?: "https"}://${baseUri.host ?: "www.beeg.com"}"
+
+        // 1) Fetch HTML vía OkHttp (más control de headers/redirects/cookies)
+        val (html, httpErr) = fetchHtml(serverUrl)
+        if (httpErr != null && html.isBlank()) {
+            return@withContext Either.Left(Error.Unknown( httpErr) )
+        }
+
+        // 2) Parse
+        val doc = Jsoup.parse(html, baseUrl)
+
         return@withContext Either.Right(VideoListItem(emptyList()))
     }
 
@@ -196,6 +212,33 @@ class VideoHubRepository @Inject constructor(
                 segments.find { it.matches(Regex("\\d+")) } ?: ""
             }
             else -> ""
+        }
+    }
+
+    private fun fetchHtml(url: String): Pair<String, String?> {
+        val request = Request.Builder()
+            .url(url)
+            .headers(
+                Headers.Builder()
+                    .add("User-Agent", "Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36")
+                    .add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8")
+                    .add("Accept-Language", "es-ES,es;q=0.9,en-US;q=0.8,en;q=0.7")
+                    .add("Cache-Control", "no-cache")
+                    .add("Pragma", "no-cache")
+                    .add("Upgrade-Insecure-Requests", "1")
+                    .add("Sec-Fetch-Dest", "document")
+                    .add("Sec-Fetch-Mode", "navigate")
+                    .add("Sec-Fetch-Site", "none")
+                    .build()
+            )
+            .get()
+            .build()
+
+        okHttpClient.newCall(request).execute().use { resp ->
+            val body = resp.body?.string().orEmpty()
+            val finalUrl = resp.request.url.toString()
+            val err = if (!resp.isSuccessful) "HTTP ${resp.code}" else null
+            return body to (err?.let { "$it ($finalUrl)" })
         }
     }
 
