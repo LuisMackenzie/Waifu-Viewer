@@ -22,6 +22,7 @@ data class VideoItem(
 
 data class ServerStatus(
     val isOffline: Boolean = false,
+    val canChargeList: Boolean = false,
     val isFullyFunctional: Boolean = false
 )
 
@@ -85,7 +86,8 @@ fun getHentaiServers() = (50..67).map {
         Type.SERVER,
         ServerStatus(
             isOffline = it == 67,
-            isFullyFunctional = false
+            canChargeList = it == 66 || it == 51,
+            isFullyFunctional = it == 51
         ),
         "Generic Description $it"
     )
@@ -112,6 +114,7 @@ fun getVideoServers() = (1..22).map {
         Type.SERVER,
         ServerStatus(
             isOffline = false,
+            canChargeList = it == 1 || it == 2 || it == 4 || it == 6 || it == 7 || it == 9 || it == 14,
             isFullyFunctional = it == 9 || it == 14
         ),
         "Generic Description of ${getNameById(it)}"
