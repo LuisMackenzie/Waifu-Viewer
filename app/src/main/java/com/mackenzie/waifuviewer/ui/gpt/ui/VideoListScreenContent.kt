@@ -35,8 +35,10 @@ fun VideoListScreenContent(
         when (serverId) {
             1, 66 -> vm.getPHUrlFetcher(serverUrl)
             2 -> vm.getDefaultVideoList()
-            in 3..65, 67 -> vm.getJavaScriptUrlFetcher(serverId, serverUrl)
+            // 6 -> vm.getxHamsterUrlFetcher(serverUrl)v
+            // 3, 4, 5, in 7..65, 67 -> vm.getJavaScriptUrlFetcher(serverId, serverUrl)
             else -> {
+                vm.getxHamsterUrlFetcher(serverUrl)
                 Log.e("VideoListScreenContent", "Unknown server ID: $serverId with name: ${getNameById(serverId)}")
             }
         }

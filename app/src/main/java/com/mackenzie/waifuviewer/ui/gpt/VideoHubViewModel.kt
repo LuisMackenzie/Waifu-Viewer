@@ -10,7 +10,6 @@ import com.mackenzie.waifuviewer.domain.video.TagDomainInfo
 import com.mackenzie.waifuviewer.domain.video.ThumbItem
 import com.mackenzie.waifuviewer.domain.video.VideoDomainItem
 import com.mackenzie.waifuviewer.domain.video.VideoItemDetails
-import com.mackenzie.waifuviewer.domain.video.embed.ServerSpec
 import com.mackenzie.waifuviewer.usecases.video.GetVideoDefaultListUseCase
 import com.mackenzie.waifuviewer.usecases.video.GetVideoListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,13 +19,18 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import okhttp3.Headers
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import org.jsoup.Jsoup
+import java.net.URI
 import javax.inject.Inject
 
 @HiltViewModel
 class VideoHubViewModel @Inject constructor(
     private val getVideoListUseCase: GetVideoListUseCase,
-    private val getDefaultListUseCase: GetVideoDefaultListUseCase
+    private val getDefaultListUseCase: GetVideoDefaultListUseCase,
+    private val okHttpClient: OkHttpClient,
 ): ViewModel() {
 
     private val _state = MutableStateFlow(VideoHubUiState())
@@ -81,6 +85,245 @@ class VideoHubViewModel @Inject constructor(
                     }
                 }
             )
+        }
+    }
+
+    fun getxHamsterUrlFetcher(serverUrl: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                _state.update { it.copy(isLoading = true, error = null) }
+
+                val serverId = 6
+                val baseUri = try { URI(serverUrl) } catch (_: Exception) { URI(getServerUrlById(serverId)) }
+                val baseUrl = "${baseUri.scheme ?: "https"}://${baseUri.host ?: "www.xhamster.com"}"
+
+                Log.d("VideoHubViewModel", "Scrapeando XHamster: $serverUrl")
+
+                fun fetchHtml(url: String): Pair<String, String?> {
+                    val request = Request.Builder()
+                        .url(url)
+                        .headers(
+                            Headers.Builder()
+                                .add("User-Agent", "Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36")
+                                .add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8")
+                                .add("Accept-Language", "es-ES,es;q=0.9,en-US;q=0.8,en;q=0.7")
+                                .add("Cache-Control", "no-cache")
+                                .add("Pragma", "no-cache")
+                                .add("Upgrade-Insecure-Requests", "1")
+                                .add("Sec-Fetch-Dest", "document")
+                                .add("Sec-Fetch-Mode", "navigate")
+                                .add("Sec-Fetch-Site", "none")
+                                .build()
+                        )
+                        .get()
+                        .build()
+
+                    okHttpClient.newCall(request).execute().use { resp ->
+                        val body = resp.body?.string().orEmpty()
+                        val finalUrl = resp.request.url.toString()
+                        val err = if (!resp.isSuccessful) "HTTP ${resp.code}" else null
+                        return body to (err?.let { "$it ($finalUrl)" })
+                    }
+                }
+
+                // 1) Fetch HTML vía OkHttp (más control de headers/redirects/cookies)
+                val (html, httpErr) = fetchHtml(serverUrl)
+                if (httpErr != null && html.isBlank()) {
+                    _state.update { it.copy(isLoading = false, videos = emptyList(), error = "Error al cargar xHamster: $httpErr") }
+                    return@launch
+                }
+
+                // 2) Parse
+                val doc = Jsoup.parse(html, baseUrl)
+
+                // 3) Detección de bloqueo (más conservadora para evitar falsos positivos)
+                val htmlLower = html.lowercase()
+                val titleLower = doc.title().lowercase()
+
+                val looksLikeChallenge =
+                    listOf("captcha", "cloudflare", "access denied", "verify you are human", "enable javascript").any { token ->
+                        titleLower.contains(token) || htmlLower.contains(token)
+                    }
+
+                // Si es un challenge, normalmente el HTML es corto y sin anchors de videos
+                val videoAnchorsCount = doc.select("a[href*=/videos/]").size
+                val extremelyShort = html.length < 10_000
+
+                if (looksLikeChallenge && (videoAnchorsCount == 0 || extremelyShort)) {
+                    _state.update {
+                        it.copy(
+                            isLoading = false,
+                            videos = emptyList(),
+                            error = "xHamster devolvió una página de verificación (anti-bot / requiere JavaScript)."
+                        )
+                    }
+                    return@launch
+                }
+
+                val scrapedVideos = mutableListOf<VideoDomainItem>()
+
+                // 1) Intento principal: cards de video por selectores comunes en xHamster
+                val primarySelectors = listOf(
+                    "article",
+                    "div.video-thumb",
+                    "div.thumb-list__item",
+                    "div.video-item",
+                    "div[data-video-id]",
+                    "li[data-video-id]"
+                )
+
+                fun resolveUrlMaybeRelative(raw: String): String {
+                    if (raw.isBlank()) return ""
+                    return try {
+                        when {
+                            raw.startsWith("http") -> raw
+                            raw.startsWith("//") -> "https:$raw"
+                            else -> baseUri.resolve(raw).toString()
+                        }
+                    } catch (_: Exception) {
+                        when {
+                            raw.startsWith("//") -> "https:$raw"
+                            raw.startsWith("/") -> baseUrl + raw
+                            else -> "$baseUrl/$raw"
+                        }
+                    }
+                }
+
+                fun extractXhamsterIdFromUrl(url: String): String {
+                    // Ejemplos comunes: /videos/slug-12345678 o /videos/12345678/...
+                    val numeric = Regex("(?:-|/)(\\d{4,})(?:\\b|/|\\?|$)").find(url)?.groupValues?.get(1)
+                    return numeric ?: extractVideoIdFromHref(url)
+                }
+
+                fun parseCard(element: org.jsoup.nodes.Element): VideoDomainItem? {
+                    // URL principal
+                    val linkEl = element.selectFirst(
+                        "a[href*=/videos/], a[href*=/video/], a[href*=/porn/], a[href]"
+                    ) ?: return null
+
+                    val href = linkEl.attr("href")
+                    val fullUrl = resolveUrlMaybeRelative(href)
+                    if (fullUrl.isBlank()) return null
+
+                    // Evitar enlaces que no son videos (por ej. perfiles/categorías)
+                    if (!fullUrl.contains("/videos/")) {
+                        // Hay layouts donde el path puede variar; aun así filtramos lo evidente
+                        val looksLikeVideo = fullUrl.contains("/video") || fullUrl.contains("/porn")
+                        if (!looksLikeVideo) return null
+                    }
+
+                    // ID
+                    val videoId = element.attr("data-video-id")
+                        .ifEmpty { element.attr("data-id") }
+                        .ifEmpty { extractXhamsterIdFromUrl(fullUrl) }
+                        .trim()
+                    if (videoId.isBlank()) return null
+
+                    // Título
+                    val title = (
+                        linkEl.attr("title").ifEmpty { linkEl.text() }
+                            .ifEmpty { element.selectFirst("a[title]")?.attr("title") ?: "" }
+                            .ifEmpty { element.selectFirst("img[alt]")?.attr("alt") ?: "" }
+                    ).trim()
+
+                    if (title.isBlank()) return null
+
+                    // Thumb
+                    val img = element.selectFirst("img")
+                    val thumbRaw = img?.attr("data-src")
+                        ?.ifEmpty { img.attr("data-original") }
+                        ?.ifEmpty { img.attr("data-lazy") }
+                        ?.ifEmpty { img.attr("src") }
+                        ?.ifEmpty { element.selectFirst("video[poster]")?.attr("poster") ?: "" }
+                        ?: ""
+
+                    val thumb = resolveUrlMaybeRelative(thumbRaw)
+
+                    // Metadatos
+                    val duration = element.select(
+                        ".duration, .time, [class*=duration], [class*=time]"
+                    ).text().trim()
+
+                    Log.e( "VideoHubViewModel", "xHamster Video Found - ID: $videoId, Title: $title, Duration: $duration")
+
+                    val views = element.select(
+                        ".views, [class*=views]"
+                    ).text().trim()
+
+                    return createVideoItem(
+                        serverId = serverId,
+                        videoId = videoId,
+                        title = title,
+                        thumb = thumb,
+                        url = fullUrl,
+                        baseUrl = baseUrl,
+                        duration = duration,
+                        views = views
+                    )
+                }
+
+                // 1a) Recogida por selectores principales
+                for (selector in primarySelectors) {
+                    val cards = doc.select(selector)
+                    if (cards.isEmpty()) continue
+
+                    cards.forEach { el ->
+                        try {
+                            parseCard(el)?.let { scrapedVideos.add(it) }
+                        } catch (_: Exception) {
+                            // ignorar
+                        }
+                    }
+
+                    if (scrapedVideos.size >= 10) break
+                }
+
+                // 2) Fallback: anchors directos a /videos/
+                if (scrapedVideos.isEmpty()) {
+                    val anchors = doc.select("a[href*=/videos/]")
+                    anchors.forEach { a ->
+                        try {
+                            val container = a.parent() ?: a
+                            parseCard(container) ?: run {
+                                val href = resolveUrlMaybeRelative(a.attr("href"))
+                                val videoId = extractXhamsterIdFromUrl(href)
+                                val title = a.attr("title").ifEmpty { a.text() }.trim()
+                                if (videoId.isNotBlank() && title.isNotBlank()) {
+                                    scrapedVideos.add(
+                                        createVideoItem(
+                                            serverId = serverId,
+                                            videoId = videoId,
+                                            title = title,
+                                            thumb = "",
+                                            url = href,
+                                            baseUrl = baseUrl
+                                        )
+                                    )
+                                }
+                            }
+                        } catch (_: Exception) {
+                            // ignorar
+                        }
+                    }
+                }
+
+                val deduped = scrapedVideos
+                    .distinctBy { it.video.videoId.ifBlank { it.video.url } }
+
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        videos = deduped,
+                        error = if (deduped.isEmpty()) {
+                            "No se encontraron videos en xHamster. Título: '${doc.title()}'. Es posible que la estructura haya cambiado o que el sitio requiera JavaScript."
+                        } else null
+                    )
+                }
+
+            } catch (e: Exception) {
+                Log.e("VideoHubViewModel", "Error al scrapear xHamster: ${e.message}", e)
+                _state.update { it.copy(isLoading = false, error = "Error al cargar videos: ${e.message}") }
+            }
         }
     }
 
@@ -404,14 +647,14 @@ class VideoHubViewModel @Inject constructor(
         rating: String = "",
         tags: List<TagDomainInfo>? = null
     ): VideoDomainItem {
-        val xvideosId = url.substringAfter("/video.", "").substringBefore( "/").substringBefore("?")
+        val xvideosId = url.substringAfter("/video.", "").substringBefore("/").substringBefore("?")
         return VideoDomainItem(
             video = VideoItemDetails(
                 videoId = videoId,
                 title = title,
                 thumb = thumb,
                 url = url,
-                embedUrl = if(serverId == 9) getEmbedUrl(serverId, xvideosId) else getEmbedUrl(serverId, videoId),
+                embedUrl = if (serverId == 9) getEmbedUrl(serverId, xvideosId) else getEmbedUrl(serverId, videoId),
                 publishDate = "",
                 rating = rating.replace("%", "").trim(),
                 ratings = "0",
