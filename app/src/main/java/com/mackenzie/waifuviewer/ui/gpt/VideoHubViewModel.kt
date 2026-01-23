@@ -326,21 +326,32 @@ class VideoHubViewModel @Inject constructor(
                 }
 
                 // 1a) Recogida por selectores principales
+                // Procesamos TODOS los selectores para maximizar la cantidad de videos encontrados
                 for (selector in primarySelectors) {
                     val cards = doc.select(selector)
                     if (cards.isEmpty()) continue
 
                     cards.forEach { el ->
                         try {
-                            parseCard(el)?.let { scrapedVideos.add(it) }
+                            parseCard(el)?.let { video ->
+                                // Evitar duplicados durante la recolección
+                                val isDuplicate = scrapedVideos.any {
+                                    it.video.videoId == video.video.videoId ||
+                                    it.video.url == video.video.url
+                                }
+                                if (!isDuplicate) {
+                                    scrapedVideos.add(video)
+                                }
+                            }
                         } catch (_: Exception) {
                             // ignorar
                         }
                     }
 
-                    if (scrapedVideos.size >= 10) break
+                    // Continuamos con todos los selectores en lugar de hacer break temprano
+                    // Esto permite recolectar videos de diferentes estructuras HTML en la misma página
                 }
-                Log.e("VideoHubViewModel", "scrapedVideos.size= ${scrapedVideos.size}")
+                Log.e("VideoHubViewModel", "scrapedVideos.size después de primarySelectors= ${scrapedVideos.size}")
 
 
                 // 2) Fallback: anchors directos a /videos/
