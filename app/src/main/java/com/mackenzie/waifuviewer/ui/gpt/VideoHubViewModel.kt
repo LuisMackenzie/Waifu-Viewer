@@ -72,11 +72,11 @@ class VideoHubViewModel @Inject constructor(
         }
     }
 
-    fun getBeegVideoList(serverUrl: String) {
+    fun getBeegVideoList(serverId: Int, serverUrl: String) {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, error = null) }
 
-            getBeegVideoListUseCase(serverUrl).fold(
+            getBeegVideoListUseCase(serverId, serverUrl).fold(
                 ifLeft = { error ->
                     _state.update { it.copy(isLoading = false, error = error.toString()) }
                 },

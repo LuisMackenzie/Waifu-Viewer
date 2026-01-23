@@ -8,6 +8,6 @@ import javax.inject.Inject
 
 class GetBeegVideoListUseCase @Inject constructor(private val repo: VideoHubRepository) {
 
-    suspend operator fun invoke(serverUrl: String):  Either<Error, VideoListItem> = repo.primaryVideoScrapper(serverUrl)
+    suspend operator fun invoke(serverId: Int, serverUrl: String):  Either<Error, VideoListItem> = repo.primaryVideoScrapper(serverId, serverUrl)
 
 }

@@ -35,7 +35,7 @@ fun VideoListScreenContent(
         when (serverId) {
             1, 66 -> vm.getPHUrlFetcher(serverUrl)
             2 -> vm.getDefaultVideoList()
-            3 -> vm.getBeegVideoList(serverUrl)
+            3 -> vm.getBeegVideoList(serverId, serverUrl)
             4, 9, 14 -> vm.getSecondaryVideoList(serverId, serverUrl)
             6, 7, 51 -> vm.getxHamsterUrlFetcher(serverId, serverUrl)
             // 3, 4, 5, in 7..65, 67 -> vm.getJavaScriptUrlFetcher(serverId, serverUrl)
