@@ -77,7 +77,7 @@ fun getMedia2() = (1..20).map {
     )
 }
 
-fun getHentaiServers() = (50..67).map {
+fun getHentaiServers() = (50..68).map {
     VideoItem(
         it,
         getNameById(it),
@@ -85,11 +85,13 @@ fun getHentaiServers() = (50..67).map {
         getServerUrlById(it),
         Type.SERVER,
         ServerStatus(
-            isOffline = it == 67,
-            canChargeList = it == 66 || it == 51,
-            isFullyFunctional = it == 51
+            isOffline = it == 62,
+            canChargeList = it == 66 || it == 51 || it == 54 || it == 55 || it == 57 || it == 60 || it == 62 || it == 64 || it == 65,
+            isFullyFunctional = it == 51 || it == 60 || it == 65
         ),
         "Generic Description $it"
+
+
     )
 }
 
@@ -113,9 +115,9 @@ fun getVideoServers() = (1..22).map {
         getServerUrlById(it),
         Type.SERVER,
         ServerStatus(
-            isOffline = false,
-            canChargeList = it == 1 || it == 2 || it == 4 || it == 5 || it == 6 || it == 7 || it == 8 || it == 9 || it == 10 || it == 11 || it == 13 || it == 14 || it == 18 || it == 19 ,
-            isFullyFunctional = it == 9 || it == 14
+            isOffline = it == 1,
+            canChargeList = it == 1 || it == 2 || it == 4 || it == 5 || it == 6 || it == 7 || it == 8 || it == 9 || it == 10 || it == 13 || it == 14 || it == 18 || it == 19 ,
+            isFullyFunctional = it == 9 || it == 13 || it == 14
         ),
         "Generic Description of ${getNameById(it)}"
     )
@@ -229,7 +231,8 @@ fun getServerUrlById(id: Int): String {
         64 -> "https://aniporn.com/most-popular/" // AniPorn
         65 -> "https://www.zzcartoon.com" // ZZCartoon
         66 -> "https://es.pornhub.com/categories/hentai" // PornHub Hentai
-        67 -> "https://hentaiheaven.com" // HentaiHeaven
+        67 -> "https://hentaihaven.co/" // HentaiHeaven
+        68 -> "https://hentaihaven.com/" // HentaiHeaven
         else -> ""
     }
 }

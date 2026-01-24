@@ -29,6 +29,7 @@ class JsoupEmbeddedVideoResolver @Inject constructor(
         withContext(Dispatchers.IO) {
             try {
                 val server = identifyServer(embedUrl)
+                println("identifyServer::server: $server")
                 val initial = fetchDocument(embedUrl, referer = null)
                 val result = resolveFromDocument(initial, baseUrl = embedUrl, server = server)
                 result ?: EmbeddedVideoResolveError.NotFound().left()
@@ -39,7 +40,7 @@ class JsoupEmbeddedVideoResolver @Inject constructor(
             }
         }
 
-    private fun resolveFromDocument(
+    private suspend fun resolveFromDocument(
         doc: Document,
         baseUrl: String,
         server: ServerSpec?
@@ -53,9 +54,18 @@ class JsoupEmbeddedVideoResolver @Inject constructor(
         resolveServerSpecific(doc, baseUrl, server)?.let { return it.right() }
 
         // 2. Parser Genérico (Video tags, Meta, Scripts comunes)
-        EmbeddedVideoHtmlParser.parse(doc, baseUrl)?.let { parsed ->
-            return createResult(parsed.mediaUrl, parsed.mediaType, baseUrl).right()
+        try {
+            println("server?.id: ${server?.id}")
+            if (server?.id != 62) {
+                EmbeddedVideoHtmlParser.parse(doc, baseUrl)?.let { parsed ->
+                    return createResult(parsed.mediaUrl, parsed.mediaType, baseUrl).right()
+                }
+            }
+        } catch (e: Exception) {
+            // Ignorar errores del parser genérico
+            println("Error en EmbeddedVideoHtmlParser: ${e.message}")
         }
+
 
         // 3. Estrategia JSON-LD (Estructura estándar de metadatos de video)
         findFromJsonLd(doc, baseUrl)?.let { return it.right() }

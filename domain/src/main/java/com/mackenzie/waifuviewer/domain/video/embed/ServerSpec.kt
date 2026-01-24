@@ -30,7 +30,35 @@ data class ServerSpec(
                 ServerSpec(19, "WatchPorn", listOf("watchporn.to")),
                 ServerSpec(20, "WhoresHub", listOf("whoreshub.com")),
                 ServerSpec(21, "Porn.com", listOf("porn.com")),
-                ServerSpec(22, "Porn HD", listOf("pornhd.com"))
+                ServerSpec(22, "Porn HD", listOf("pornhd.com")),
+
+                ServerSpec(50, "", listOf("hanime.tv")),
+                ServerSpec(51, "", listOf("hentaicloud.com")),
+                ServerSpec(52, "", listOf("hentaigasm.com")),
+                ServerSpec(53, "", listOf("hentaimama.io")),
+                /*ServerSpec(54, "", listOf("")),
+                ServerSpec(55, "", listOf("")),
+                ServerSpec(56, "", listOf("")),
+                ServerSpec(57, "", listOf("")),
+                ServerSpec(58, "", listOf("")),
+                ServerSpec(59, "", listOf("")),
+                ServerSpec(60, "", listOf("")),
+                ServerSpec(61, "", listOf("")),*/
+                ServerSpec(62, "PorCore", listOf("porcore.com")),
+                /*ServerSpec(63, "", listOf("")),
+                ServerSpec(64, "", listOf("")),
+                ServerSpec(65, "", listOf("")),
+                ServerSpec(66, "", listOf("")),
+                ServerSpec(67, "", listOf("")),
+
+                ServerSpec(80, "", listOf("")),
+                ServerSpec(81, "", listOf("")),
+                ServerSpec(82, "", listOf("")),
+                ServerSpec(83, "", listOf("")),
+                ServerSpec(84, "", listOf("")),
+                ServerSpec(85, "", listOf("")),
+                ServerSpec(86, "", listOf("")),
+                ServerSpec(87, "", listOf(""))*/
             )
         }
     }

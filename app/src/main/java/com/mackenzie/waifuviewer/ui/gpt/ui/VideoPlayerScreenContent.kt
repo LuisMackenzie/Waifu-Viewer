@@ -84,7 +84,6 @@ fun VideoPlayerScreenContent(
             }
 
             Log.e("VideoHubScreenContent", "embeddedVideoFile=${state.embeddedVideoFile}")
-            Log.e("VideoHubScreenContent", "embeddedVideoFile.toUTI()=${state.embeddedVideoFile?.toUri()}")
             // 5. Integrar el PlayerView de ExoPlayer usando AndroidView
             AndroidView(
                 modifier = Modifier.fillMaxSize(),

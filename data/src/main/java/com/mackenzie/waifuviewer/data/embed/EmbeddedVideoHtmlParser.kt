@@ -1,6 +1,8 @@
 package com.mackenzie.waifuviewer.data.embed
 
 import com.mackenzie.waifuviewer.domain.video.embed.EmbeddedVideoResolveResult
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import java.net.URI
@@ -10,16 +12,16 @@ import java.net.URI
  */
 internal object EmbeddedVideoHtmlParser {
 
-    fun parse(html: String, baseUrl: String): ParsedCandidate? {
+    suspend fun parse(html: String, baseUrl: String): ParsedCandidate? = withContext(Dispatchers.IO) {
         val doc = Jsoup.parse(html, baseUrl)
-        return parse(doc, baseUrl)
+        return@withContext parse(doc, baseUrl)
     }
 
-    fun parse(doc: Document, baseUrl: String): ParsedCandidate? {
-        findFromVideoTags(doc, baseUrl)?.let { return it }
-        findFromMeta(doc, baseUrl)?.let { return it }
-        findFromScripts(doc, baseUrl)?.let { return it }
-        return null
+    suspend fun parse(doc: Document, baseUrl: String): ParsedCandidate? = withContext(Dispatchers.IO) {
+        findFromVideoTags(doc, baseUrl)?.let { return@withContext it }
+        findFromMeta(doc, baseUrl)?.let { return@withContext it }
+        findFromScripts(doc, baseUrl)?.let { return@withContext it }
+        return@withContext null
     }
 
     data class ParsedCandidate(
