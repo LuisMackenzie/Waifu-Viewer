@@ -51,14 +51,14 @@ data class ServerSpec(
                 ServerSpec(66, "PornHub Hentai", listOf("pornhub.com/categories/hentai")),
                 ServerSpec(67, "HentaiHeaven", listOf("hentaihaven.co")),
 
-                /*ServerSpec(80, "Chaturbate", listOf("")),
-                ServerSpec(81, "Amateur.tv", listOf("")),
-                ServerSpec(82, "BongaCams", listOf("")),
-                ServerSpec(83, "Cam4", listOf("")),
-                ServerSpec(84, "Camsoda", listOf("")),
-                ServerSpec(85, "CamWhoresBay", listOf("")),
-                ServerSpec(86, "StripChat", listOf("")),
-                ServerSpec(87, "Streamate", listOf(""))*/
+                ServerSpec(80, "Chaturbate", listOf("chaturbate.com")),
+                ServerSpec(81, "Amateur.tv", listOf("amateur.tv")),
+                ServerSpec(82, "BongaCams", listOf("bongacams.com")),
+                ServerSpec(83, "Cam4", listOf("cam4.com")),
+                ServerSpec(84, "Camsoda", listOf("camsoda.com")),
+                ServerSpec(85, "CamWhoresBay", listOf("camwhoresbay.com")),
+                ServerSpec(86, "StripChat", listOf("stripchat.com")),
+                ServerSpec(87, "Streamate", listOf("streamate.com"))
             )
         }
     }
