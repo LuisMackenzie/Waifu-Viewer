@@ -74,7 +74,15 @@ class VideoHubRepository @Inject constructor(
         // 2) Parse
         val doc = Jsoup.parse(html, baseUrl)
 
-        return@withContext Either.Right(VideoListItem(emptyList()))
+        return@withContext Either.Left(Error.Unknown("No se encontraron videos en ${getNameById(serverId)}"))
+
+
+        //println("videos encontrados: ${scrapedVideos.size}")
+        /*return@withContext if (scrapedVideos.isEmpty()) {
+            Either.Left(Error.Unknown("No se encontraron videos en $serverName"))
+        } else {
+            Either.Right(VideoListItem(videos = scrapedVideos.distinctBy { v -> v.video.videoId }))
+        }*/
     }
 
     suspend fun secondaryVideoScrapper(serverId: Int, serverUrl: String): Either<Error, VideoListItem> =

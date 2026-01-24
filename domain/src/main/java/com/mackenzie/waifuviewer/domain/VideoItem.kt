@@ -113,8 +113,8 @@ fun getVideoServers() = (1..22).map {
         getServerUrlById(it),
         Type.SERVER,
         ServerStatus(
-            isOffline = false,
-            canChargeList = it == 1 || it == 2 || it == 4 || it == 6 || it == 7 || it == 9 || it == 14,
+            isOffline = it == 13,
+            canChargeList = it == 1 || it == 2 || it == 4 || it == 6 || it == 7 || it == 9 || it == 14 || it == 18,
             isFullyFunctional = it == 9 || it == 14
         ),
         "Generic Description of ${getNameById(it)}"

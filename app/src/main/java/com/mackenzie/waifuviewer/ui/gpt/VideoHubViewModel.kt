@@ -62,13 +62,7 @@ class VideoHubViewModel @Inject constructor(
                     _state.update { it.copy(isLoading = false, error = error.toString()) }
                 },
                 ifRight = { videoListItem ->
-                    _state.update {
-                        it.copy(
-                            isLoading = false,
-                            videos = videoListItem.videos,
-                            error = null
-                        )
-                    }
+                    _state.update { it.copy(isLoading = false, videos = videoListItem.videos, error = null) }
                 })
         }
     }
@@ -79,16 +73,13 @@ class VideoHubViewModel @Inject constructor(
 
             getBeegVideoListUseCase(serverId, serverUrl).fold(
                 ifLeft = { error ->
-                    _state.update { it.copy(isLoading = false, error = error.toString()) }
+                    _state.update { it.copy(
+                        isLoading = false,
+                        error = "Error al cargar la lista de videos.\nCausa: ${(error as? Error.Unknown)?.message}"
+                    ) }
                 },
                 ifRight = { videoListItem ->
-                    _state.update {
-                        it.copy(
-                            isLoading = false,
-                            videos = videoListItem.videos,
-                            error = null
-                        )
-                    }
+                    _state.update { it.copy(isLoading = false, videos = videoListItem.videos, error = null) }
                 }
             )
         }
@@ -100,22 +91,13 @@ class VideoHubViewModel @Inject constructor(
 
             getSecondaryVideoListUseCase(serverId, serverUrl).fold(
                 ifLeft = { error ->
-                    Log.e( "VideoHubViewModel", "Error en getSecondaryVideoList: $error")
                     _state.update { it.copy(
                         isLoading = false,
                         error = "Error al cargar la lista de videos.\nCausa: ${(error as? Error.Unknown)?.message}"
                     ) }
                 },
                 ifRight = { videoListItem ->
-                    Log.e( "VideoHubViewModel", "Videos encontrados con el scrapper 2= ${videoListItem.videos.size}")
-                    _state.update {
-
-                        it.copy(
-                            isLoading = false,
-                            videos = videoListItem.videos,
-                            error = null
-                        )
-                    }
+                    _state.update { it.copy(isLoading = false, videos = videoListItem.videos, error = null) }
                 }
             )
         }
