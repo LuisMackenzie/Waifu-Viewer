@@ -29,7 +29,6 @@ class JsoupEmbeddedVideoResolver @Inject constructor(
         withContext(Dispatchers.IO) {
             try {
                 val server = identifyServer(embedUrl)
-                println("identifyServer::server: $server")
                 val initial = fetchDocument(embedUrl, referer = null)
                 val result = resolveFromDocument(initial, baseUrl = embedUrl, server = server)
                 result ?: EmbeddedVideoResolveError.NotFound().left()
@@ -55,7 +54,6 @@ class JsoupEmbeddedVideoResolver @Inject constructor(
 
         // 2. Parser Genérico (Video tags, Meta, Scripts comunes)
         try {
-            println("server?.id: ${server?.id}")
             if (server?.id != 62) {
                 EmbeddedVideoHtmlParser.parse(doc, baseUrl)?.let { parsed ->
                     return createResult(parsed.mediaUrl, parsed.mediaType, baseUrl).right()
@@ -109,7 +107,14 @@ class JsoupEmbeddedVideoResolver @Inject constructor(
                 }
                 url?.let { createResult(it, inferType(it), baseUrl) }
             }
-            else -> null
+            else -> {
+                // Buscan variables como html5player.setVideoUrlHigh('...')
+                val script = doc.select("script").find { it.data().contains("setVideoUrl") }
+                val url = script?.data()?.let { data ->
+                    Regex("setVideoUrl(?:High|Low)\\s*\\(\\s*['\"]([^'\"]+)['\"]").find(data)?.groupValues?.get(1)
+                }
+                url?.let { createResult(it, inferType(it), baseUrl) }
+            }
         }
     }
 
@@ -141,22 +146,6 @@ class JsoupEmbeddedVideoResolver @Inject constructor(
         }
         return null
     }
-
-    /*private fun findFromJsonLd(doc: Document, baseUrl: String): EmbeddedVideoResolveResult? {
-        val scripts = doc.select("script[type=application/ld+json]")
-        for (script in scripts) {
-            try {
-                val json = JSONObject(script.data())
-                val contentUrl = json.optString("contentUrl").takeIf { it.isNotBlank() }
-                    ?: json.optJSONObject("video")?.optString("contentUrl")
-                
-                contentUrl?.let {
-                    return createResult(it, inferType(it), baseUrl)
-                }
-            } catch (_: Exception) {}
-        }
-        return null
-    }*/
 
     private fun findFromDataAttributes(doc: Document, baseUrl: String): EmbeddedVideoResolveResult? {
         // Busca en cualquier elemento que tenga data-config o data-sources que parezca JSON
