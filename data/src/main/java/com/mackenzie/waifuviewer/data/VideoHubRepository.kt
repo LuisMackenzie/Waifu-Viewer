@@ -68,11 +68,11 @@ class VideoHubRepository @Inject constructor(
         println("Scrapeando $serverName ($serverId): $serverUrl")
 
         // Estrategia 1: Intentar obtener datos de API endpoints conocidos
-        val apiVideos = tryBeegApi(serverId, baseUrl)
-        if (apiVideos.isNotEmpty()) {
+        // val apiVideos = tryBeegApi(serverId, baseUrl)
+        /*if (apiVideos.isNotEmpty()) {
             println("Videos extraídos de API: ${apiVideos.size}")
             return@withContext Either.Right(VideoListItem(videos = apiVideos.distinctBy { it.video.videoId }))
-        }
+        }*/
 
         // Estrategia 2: Fetch HTML vía OkHttp y extraer datos de scripts JavaScript
         val (html, httpErr) = fetchHtml(serverUrl)
@@ -202,91 +202,6 @@ class VideoHubRepository @Inject constructor(
         }
     }
 
-    // Función auxiliar para intentar obtener videos desde API
-    private fun tryBeegApi(serverId: Int, baseUrl: String): List<VideoDomainItem> {
-        val videos = mutableListOf<VideoDomainItem>()
-
-        // Lista de posibles endpoints de API de Beeg
-        val apiEndpoints = listOf(
-            "$baseUrl/api/v1/index/main/0/pc",
-            "https://api.beeg.com/api/v1/index/main/0/pc",
-            "https://store.externulls.com/facts/video/list/0",
-            "$baseUrl/api/videos?page=0",
-            "$baseUrl/api/v1/videos/0"
-        )
-
-        for (endpoint in apiEndpoints) {
-            try {
-                val request = Request.Builder()
-                    .url(endpoint)
-                    .headers(
-                        Headers.Builder()
-                            .add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
-                            .add("Accept", "application/json, text/javascript, */*; q=0.01")
-                            .add("Referer", baseUrl)
-                            .build()
-                    )
-                    .get()
-                    .build()
-
-                val response = okHttpClient.newCall(request).execute()
-                response.use {
-                    if (it.isSuccessful) {
-                        val body = it.body?.string()
-                        if (body.isNullOrEmpty()) {
-                            return@use
-                        }
-
-                        // Intentar parsear como JSON
-                        if (body.startsWith("{") || body.startsWith("[")) {
-                            // Extraer videos del JSON usando regex (evitamos dependencia de librerías adicionales)
-                            val idPattern = """"(?:id|video_id)"\s*:\s*"?(\d+)"?""".toRegex()
-                            val titlePattern = """"title"\s*:\s*"([^"]+)"""".toRegex()
-                            val thumbPattern = """"(?:thumb|thumbnail)"\s*:\s*"([^"]+)"""".toRegex()
-
-                            val ids = idPattern.findAll(body).map { match -> match.groupValues[1] }.toList()
-                            val titles = titlePattern.findAll(body).map { match -> match.groupValues[1] }.toList()
-                            val thumbs = thumbPattern.findAll(body).map { match -> match.groupValues[1] }.toList()
-
-                            if (ids.isNotEmpty()) {
-                                ids.forEachIndexed { index, videoId ->
-                                    val title = titles.getOrNull(index) ?: "Video $videoId"
-                                    val thumb = thumbs.getOrNull(index) ?: ""
-                                    val cleanThumb = when {
-                                        thumb.startsWith("//") -> "https:$thumb"
-                                        thumb.startsWith("/") -> baseUrl + thumb
-                                        else -> thumb
-                                    }
-
-                                    videos.add(
-                                        createVideoItem(
-                                            serverId = serverId,
-                                            videoId = videoId,
-                                            title = title,
-                                            thumb = cleanThumb,
-                                            url = "$baseUrl/$videoId",
-                                            baseUrl = baseUrl
-                                        )
-                                    )
-                                }
-
-                                if (videos.isNotEmpty()) {
-                                    println("API endpoint exitoso: $endpoint")
-                                    return videos
-                                }
-                            }
-                        }
-                    }
-                }
-            } catch (_: Exception) {
-                // Continuar con el siguiente endpoint
-                println("Error en API $endpoint")
-            }
-        }
-
-        return videos
-    }
-
     // Función auxiliar para formatear duración (de segundos a mm:ss)
     private fun formatDuration(seconds: String): String {
         return try {
@@ -317,7 +232,7 @@ class VideoHubRepository @Inject constructor(
             val scrapedVideos = mutableListOf<VideoDomainItem>()
 
             // 1. Estrategia específica para Beeg (ID 3) - Extracción de JSON en scripts
-            if (serverId == 3 || serverId == 5 || serverId == 6) {
+            /*if (serverId == 18) {
                 val scripts = doc.select("script:not([src])")
                 scripts.forEach { script ->
                     val content = script.html()
@@ -347,7 +262,7 @@ class VideoHubRepository @Inject constructor(
                         }
                     }
                 }
-            }
+            }*/
 
             // 2. Estrategia HTML Genérica para todos los servidores (PornHub, RedTube, XVideos, etc.)
             if (scrapedVideos.isEmpty()) {
