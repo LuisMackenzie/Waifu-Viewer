@@ -3,6 +3,7 @@ package com.mackenzie.waifuviewer.ui.gpt
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mackenzie.waifuviewer.domain.Error
 import com.mackenzie.waifuviewer.domain.getEmbedUrl
 import com.mackenzie.waifuviewer.domain.getNameById
 import com.mackenzie.waifuviewer.domain.getServerUrlById
@@ -99,10 +100,16 @@ class VideoHubViewModel @Inject constructor(
 
             getSecondaryVideoListUseCase(serverId, serverUrl).fold(
                 ifLeft = { error ->
-                    _state.update { it.copy(isLoading = false, error = error.toString()) }
+                    Log.e( "VideoHubViewModel", "Error en getSecondaryVideoList: $error")
+                    _state.update { it.copy(
+                        isLoading = false,
+                        error = "Error al cargar la lista de videos.\nCausa: ${(error as? Error.Unknown)?.message}"
+                    ) }
                 },
                 ifRight = { videoListItem ->
+                    Log.e( "VideoHubViewModel", "Videos encontrados con el scrapper 2= ${videoListItem.videos.size}")
                     _state.update {
+
                         it.copy(
                             isLoading = false,
                             videos = videoListItem.videos,

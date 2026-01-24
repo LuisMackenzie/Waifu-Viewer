@@ -83,6 +83,7 @@ class VideoHubRepository @Inject constructor(
             val baseUrl = getServerUrlById(serverId)
 
             // Log.d("VideoHubViewModel", "Scrapeando $serverName ($serverId): $serverUrl")
+            println( "Scrapeando $serverName ($serverId): $serverUrl" )
 
             val doc = Jsoup.connect(serverUrl)
                 .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
@@ -94,7 +95,7 @@ class VideoHubRepository @Inject constructor(
             val scrapedVideos = mutableListOf<VideoDomainItem>()
 
             // 1. Estrategia específica para Beeg (ID 3) - Extracción de JSON en scripts
-            if (serverId == 3 || serverId == 6) {
+            if (serverId == 3 || serverId == 5 || serverId == 6) {
                 val scripts = doc.select("script:not([src])")
                 scripts.forEach { script ->
                     val content = script.html()
@@ -193,7 +194,12 @@ class VideoHubRepository @Inject constructor(
                 }
             }
 
-            return@withContext Either.Right(VideoListItem(videos = scrapedVideos.distinctBy { v -> v.video.videoId }))
+            println("videos encontrados: ${scrapedVideos.size}")
+            return@withContext if (scrapedVideos.isEmpty()) {
+                Either.Left(Error.Unknown("No se encontraron videos en $serverName"))
+            } else {
+                Either.Right(VideoListItem(videos = scrapedVideos.distinctBy { v -> v.video.videoId }))
+            }
         }
 
     suspend fun tertiaryVideoScrapper() {
