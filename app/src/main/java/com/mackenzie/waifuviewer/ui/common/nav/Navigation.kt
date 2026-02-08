@@ -38,14 +38,14 @@ fun Navigation() {
         composable(NavItem.SplashScreen) {
             SplashScreenRoute {
                 // Navegacion Principal desactivada temporalmente
-                /*navController.navigate(route = NavItem.SelectorScreen.route) {
-                    popUpTo(route = NavItem.SplashScreen.route) { inclusive = true }
-                }*/
-
-                // Navegacion directa a VideoHub para pruebas
-                navController.navigate(route = NavItem.VideoServersScreen.route) {
+                navController.navigate(route = NavItem.SelectorScreen.route) {
                     popUpTo(route = NavItem.SplashScreen.route) { inclusive = true }
                 }
+
+                // Navegacion directa a VideoHub para pruebas
+                /*navController.navigate(route = NavItem.VideoServersScreen.route) {
+                    popUpTo(route = NavItem.SplashScreen.route) { inclusive = true }
+                }*/
             }
         }
         composable(NavItem.SelectorScreen) {
