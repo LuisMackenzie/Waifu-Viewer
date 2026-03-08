@@ -27,9 +27,7 @@ interface WaifuImService {
     ): WaifuImResult
 
     @GET("tags/")
-    suspend fun getTagsWaifuIm(
-        @Query("full") full:Boolean = false,
-    ): WaifuImTagResult
+    suspend fun getTagsWaifuIm(): WaifuImTagResult
 
     @GET("tags/")
     suspend fun getTagsWaifuImFull(
