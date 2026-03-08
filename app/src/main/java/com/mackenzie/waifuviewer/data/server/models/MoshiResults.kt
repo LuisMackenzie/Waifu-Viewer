@@ -19,8 +19,7 @@ data class WaifuImResult(
 
 @JsonClass(generateAdapter = true)
 data class WaifuImTagResult(
-    @Json(name = "versatile") val versatile: List<String>,
-    @Json(name = "nsfw") val nsfw: List<String>
+    @Json(name = "items") val categories: List<Tag>
 )
 
 @JsonClass(generateAdapter = true)
