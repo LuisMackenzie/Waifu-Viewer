@@ -6,6 +6,7 @@ import com.mackenzie.waifuviewer.data.db.WaifuImDbItem
 import com.mackenzie.waifuviewer.data.db.WaifuImTagDb
 import com.mackenzie.waifuviewer.data.db.dao.WaifuImTagsDao
 import com.mackenzie.waifuviewer.data.db.datasources.RoomImDataSource.Companion.artistAdapter
+import com.mackenzie.waifuviewer.data.db.datasources.RoomImDataSource.Companion.artistListAdapter
 import com.mackenzie.waifuviewer.data.db.datasources.RoomImDataSource.Companion.stringAdapter
 import com.mackenzie.waifuviewer.data.db.datasources.RoomImDataSource.Companion.tagsAdapter
 import com.mackenzie.waifuviewer.data.tryCall
@@ -25,7 +26,10 @@ class RoomImDataSource @Inject constructor(private val imDao: WaifuImDao, privat
 
     companion object {
         private val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+
+        private val typeArtist = Types.newParameterizedType(List::class.java, ArtistIm::class.java)
         val artistAdapter = moshi.adapter(ArtistIm::class.java)
+        val artistListAdapter = moshi.adapter<List<ArtistIm?>>(typeArtist)
         private val typeTag = Types.newParameterizedType(List::class.java, TagItem::class.java)
         val tagsAdapter = moshi.adapter<List<TagItem?>>(typeTag)
         private val typeString = Types.newParameterizedType(List::class.java, String::class.java)
@@ -76,7 +80,7 @@ private fun WaifuImDbItem.toDomainModel(): WaifuImItem =
         extension,
         dominantColor,
         source,
-        artist.getArtistToDomainModel(),
+        artistListAdapter.fromJson(artist) ?: emptyList(),
         uploadedId,
         uploadedAt,
         isNsfw,
@@ -111,7 +115,7 @@ private fun WaifuImItem.fromDomainModel(): WaifuImDbItem = WaifuImDbItem(
     extension,
     dominantColor,
     source,
-    artistAdapter.toJson(artist) ?: "",
+    artistListAdapter.toJson(artist),
     uploadedId,
     uploadedAt,
     isNsfw,

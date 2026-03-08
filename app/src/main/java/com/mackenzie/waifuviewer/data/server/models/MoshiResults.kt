@@ -58,8 +58,8 @@ data class WaifuIm(
     @Json(name = "extension") val extension: String,
     @Json(name = "dominantColor") val dominant_color: String,
     @Json(name = "source") val source: String?,
-    @Json(name = "artists") val artist: ArtistImResult?,
-    @Json(name = "uploadedId") val uploadedId: String?,
+    @Json(name = "artists") val artists: List<ArtistImResult>?,
+    @Json(name = "uploaderId") val uploadedId: String?,
     @Json(name = "uploadedAt") val uploadedAt: String?,
     @Json(name = "isNsfw") val isNsfw: Boolean?,
     @Json(name = "isAnimated") val isAnimated: Boolean?,
@@ -67,27 +67,25 @@ data class WaifuIm(
     @Json(name = "height") val height: Int?,
     @Json(name = "byteSize") val byteSize: Long?,
     @Json(name = "url") val url: String,
-    @Json(name = "tags")val tags: List<Tag>?,
+    @Json(name = "tags") val tags: List<Tag>?,
     @Json(name = "favorites") val favourites: Int?,
     @Json(name = "likedAt") val likedAt: String?,
     @Json(name = "addedToAlbumAt") val addedToAlbumAt: String?,
-    @Json(name = "albums")val albums: List<String>
-
-
-    // @Json(name = "signature") val signature: String,
-
-    // @Json(name = "preview_url") val previewUrl: String,
+    @Json(name = "albums") val albums: List<String>
 ) : Parcelable
 
 @Parcelize
 @JsonClass(generateAdapter = true)
 data class ArtistImResult(
-    @Json(name = "id") val artistId: String?,
+    @Json(name = "id") val artistId: Int?,
     @Json(name = "deviantArt") val deviantArt: String?,
     @Json(name = "name") val name: String?,
     @Json(name = "patreon") val patreon: String?,
     @Json(name = "pixiv") val pixiv: String?,
-    @Json(name = "twitter") val twitter: String?
+    @Json(name = "twitter") val twitter: String?,
+    @Json(name = "reviewStatus") val reviewStatus: String?,
+    @Json(name = "creatorId") val creatorId: String?,
+    @Json(name = "imageCount") val imageCount: Int?
 ) : Parcelable
 
 @Parcelize
@@ -116,10 +114,12 @@ data class WaifuBestGif(
 @JsonClass(generateAdapter = true)
 data class Tag(
     @Json(name = "description") val description: String,
-    // @Json(name = "is_nsfw") val isNsfw: Boolean,
     @Json(name = "name") val name: String,
     @Json(name = "slug") val slug: String,
-    @Json(name = "id") val tagId: Int
+    @Json(name = "id") val tagId: Int,
+    @Json(name = "reviewStatus") val reviewStatus: String?,
+    @Json(name = "creatorId") val creatorId: String?,
+    @Json(name = "imageCount") val imageCount: Int?
 ) : Parcelable
 
 @JsonClass(generateAdapter = true)

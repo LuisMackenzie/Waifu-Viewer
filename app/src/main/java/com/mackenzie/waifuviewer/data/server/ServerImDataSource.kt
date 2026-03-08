@@ -60,7 +60,7 @@ private fun WaifuIm.toDomainModel(): WaifuImItem =
         extension,
         dominant_color,
         source,
-        artist?.toArtistDomainModel() ?: ArtistIm("", "", "", "", "", ""),
+        artists?.map { it.toArtistDomainModel() } ?: emptyList(),
         uploadedId,
         uploadedAt,
         isNsfw ,
@@ -75,7 +75,7 @@ private fun WaifuIm.toDomainModel(): WaifuImItem =
     )
 
 private fun ArtistImResult.toArtistDomainModel(): ArtistIm = ArtistIm(
-    artistId,
+    artistId.toString(),
     deviantArt,
     name,
     patreon,

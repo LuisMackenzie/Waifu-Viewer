@@ -8,7 +8,7 @@ data class WaifuImItem (
     val extension: String,
     val dominantColor: String,
     val source: String?,
-    val artist: ArtistIm,
+    val artist: List<ArtistIm?>,
     val uploadedId: String?,
     val uploadedAt: String?,
     val isNsfw: Boolean?,
