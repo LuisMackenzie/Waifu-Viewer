@@ -56,6 +56,9 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.net.URL
+import java.net.URLDecoder
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -387,7 +390,7 @@ fun String.decodeMimeTypeForTitle(title: String): String {
 fun loadInitialServer(): ServerType {
     when (Build.VERSION.SDK_INT) {
         in 0..Build.VERSION_CODES.N -> { return ENHANCED } // Android 7 API 24 Hacia Abajo
-        in 35..40 -> { return NEKOS } // Android 15 Hacia Arriba
+        in 37..40 -> { return NEKOS } // Android 17 Hacia Arriba
         else -> { return NORMAL }
     }
 }
@@ -485,4 +488,14 @@ fun Date?.dateToString(): String {
 fun String.stringToDate(): Date? {
     val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
     return format.parse(this)
+}
+
+fun String.urlEncoder(): String {
+    val encodedUrl = URLEncoder.encode(this, StandardCharsets.UTF_8.toString())
+    return encodedUrl
+}
+
+fun String.urlDecoder(): String {
+    val decodedUrl = URLDecoder.decode(this, StandardCharsets.UTF_8.toString())
+    return decodedUrl
 }

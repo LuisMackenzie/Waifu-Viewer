@@ -2,6 +2,7 @@ package com.mackenzie.waifuviewer.ui.common.nav
 
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import com.mackenzie.waifuviewer.domain.ServerStatus
 import java.io.File
 
 sealed class NavItem(
@@ -25,6 +26,16 @@ sealed class NavItem(
 
     object WaifuGptScreen : NavItem("gpt_screen")
 
+    object VideoServersScreen : NavItem("video_hub_screen")
+
+    object VideoListScreen : NavItem("video_list_screen", listOf(NavArg.VideoHubServerId, NavArg.VideoHubServerUrl)) {
+        fun createRoute(serverId: Int, serverUrl: String,) = baseRoute + File.separator + serverId + File.separator + serverUrl
+    }
+
+    object PlayerScreen : NavItem("player_screen", listOf(NavArg.VideoId, NavArg.VideoUrl, NavArg.VideoEmbeddedUrl)) {
+        fun createRoute( videoId: String, videoUrl: String, embedUrl: String) = baseRoute + File.separator + videoId + File.separator + videoUrl + File.separator + embedUrl
+    }
+
     object WaifuGeminiScreen : NavItem("gemini_screen")
 
     val route = run {
@@ -47,4 +58,10 @@ enum class NavArg(val key: String, val navType: NavType<*>) {
     NsfwState("nsfwState", NavType.BoolType),
     GifState("gifState", NavType.BoolType),
     LandsState("landsState", NavType.BoolType),
+    VideoHubServerId("videoHubServerId", NavType.IntType),
+    VideoHubServerUrl("videoHubServerUrl", NavType.StringType),
+    VideoUrl("videoUrl", NavType.StringType),
+
+    VideoEmbeddedUrl("videoEmbeddedUrl", NavType.StringType),
+    VideoId("videoId", NavType.StringType)
 }

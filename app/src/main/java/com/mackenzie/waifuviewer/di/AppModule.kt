@@ -2,15 +2,17 @@ package com.mackenzie.waifuviewer.di
 
 import android.app.Application
 import android.os.Build
-import androidx.room.Room
 import com.mackenzie.waifuviewer.data.*
 import com.mackenzie.waifuviewer.data.datasource.*
 import com.mackenzie.waifuviewer.data.db.WaifuDataBase
-import com.mackenzie.waifuviewer.data.db.WaifuDataBase.Companion.DATABASE_NAME
 import com.mackenzie.waifuviewer.data.db.datasources.*
 import com.mackenzie.waifuviewer.data.server.*
 import com.mackenzie.waifuviewer.data.server.models.RemoteConnect
+import com.mackenzie.waifuviewer.data.server.models.RemoteVideoHubConnect
+import com.mackenzie.waifuviewer.data.datasource.EmbeddedVideoResolver
+import com.mackenzie.waifuviewer.data.embed.JsoupEmbeddedVideoResolver
 import com.mackenzie.waifuviewer.domain.ApiUrl
+import com.mackenzie.waifuviewer.domain.ApiVideoUrl
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Binds
@@ -75,6 +77,10 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideVideoApiUrl(): ApiVideoUrl = ApiVideoUrl()
+
+    @Provides
+    @Singleton
     fun networkModule() = NetworkModule()
 
     @Provides
@@ -110,6 +116,23 @@ object AppModule {
     fun provideMoshi(): Moshi = Moshi.Builder()
         .add(KotlinJsonAdapterFactory())
         .build()
+
+    @Provides
+    @Singleton
+    fun provideVideoHubService(apiUrl: ApiVideoUrl, client: OkHttpClient, moshi: Moshi): RemoteVideoHubConnect {
+
+        val builderHub = Retrofit.Builder()
+            .baseUrl(apiUrl.redtubeBaseUrl)
+            .client(client)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .build()
+
+        val service = builderHub.create(VideoHubService::class.java)
+
+        val connection = RemoteVideoHubConnect(service)
+
+        return connection
+    }
 
     @Provides
     @Singleton
@@ -190,6 +213,12 @@ abstract class AppDataModule {
     abstract fun bindRemoteOpenAiDataSource(remoteOpenAiDataSource: OpenAiDataSource): OpenAiRemoteDataSource
 
     @Binds
+    abstract fun bindRemoteVideoHubDataSource(remoteVideoHubDataSource: VideoHubDataSource): VideoHubRemoteDataSource
+
+    // @Binds
+    // abstract fun bindLocalVideoHubDataSource(localVideoHubDataSource: RoomVideoHubDataSource): VideoHubLocalDataSource
+
+    @Binds
     abstract fun bindLocationDataSource(locationDataSource: PlayServicesLocationDataSource): LocationDataSource
 
     @Binds
@@ -200,5 +229,8 @@ abstract class AppDataModule {
 
     @Binds
     abstract fun bindLocalPushDataSource(localPushDataSource: RoomNotificationDataSource): NotificationLocalDataSource
+
+    @Binds
+    abstract fun bindEmbeddedVideoResolver(impl: JsoupEmbeddedVideoResolver): EmbeddedVideoResolver
 
 }

@@ -46,8 +46,8 @@ class ServerImDataSource @Inject constructor(private val remoteService: RemoteCo
 
 private fun WaifuImTagResult.toDomainModel(): WaifuImTagList = WaifuImTagList(
     0,
-    versatile,
-    nsfw
+    categories.toTagDomainModel(),
+    emptyList()
 )
 
 private fun List<WaifuIm>.toDomainModel(): List<WaifuImItem> = map { it.toDomainModel() }
@@ -55,25 +55,27 @@ private fun List<WaifuIm>.toDomainModel(): List<WaifuImItem> = map { it.toDomain
 private fun WaifuIm.toDomainModel(): WaifuImItem =
     WaifuImItem(
         0,
-        artist?.toArtistDomainModel() ?: ArtistIm("", "", "", "", "", ""),
-        byteSize,
-        signature,
+        imageId,
+        perceptualHash,
         extension,
         dominant_color,
-        source ?: "",
+        source,
+        artists?.map { it.toArtistDomainModel() } ?: emptyList(),
+        uploadedId,
         uploadedAt,
-        isNsfw,
-        width,
-        height,
-        imageId,
+        isNsfw ,
+        isAnimated,
+        width.toString(),
+        height.toString(),
+        byteSize,
         url,
-        previewUrl,
         tags?.toTagDomainModel() ?: emptyList(),
+        favourites,
         false
     )
 
 private fun ArtistImResult.toArtistDomainModel(): ArtistIm = ArtistIm(
-    artistId,
+    artistId.toString(),
     deviantArt,
     name,
     patreon,
@@ -85,7 +87,7 @@ private fun List<Tag>.toTagDomainModel() : List<TagItem> = map { it.toTagDomainM
 
 private fun Tag.toTagDomainModel(): TagItem = TagItem(
     description,
-    isNsfw,
+    // isNsfw,
     name,
     tagId
 )

@@ -11,20 +11,22 @@ import java.util.Date
 @Entity
 data class WaifuImDbItem(
     @PrimaryKey(autoGenerate = true) val id: Int,
-    val artist: String,
-    val byteSize: Long,
-    val signature: String,
+    val imageId: Int,
+    val perceptualHash: String,
     val extension: String,
     val dominantColor: String,
-    val source: String,
-    val uploadedAt: String,
-    val isNsfw: Boolean,
-    val width: String,
-    val height: String,
-    val imageId: Int,
+    val source: String?,
+    val artist: String,
+    val uploadedId: String?,
+    val uploadedAt: String?,
+    val isNsfw: Boolean?,
+    val isAnimated: Boolean?,
+    val width: String?,
+    val height: String?,
+    val byteSize: Long?,
     val url: String,
-    val previewUrl: String,
     val tags: String,
+    val favorites: Int?,
     val isFavorite: Boolean
 ) : Parcelable
 

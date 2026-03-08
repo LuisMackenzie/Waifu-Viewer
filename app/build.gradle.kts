@@ -67,7 +67,7 @@ android {
         getByName(SignConstants.variantNameRelease) {
             isMinifyEnabled = false
             versionNameSuffix = SignConstants.versionNameSuffixRelease
-            isDebuggable = true
+            // isDebuggable = true
             proguardFiles(getDefaultProguardFile(Constants.proGuardFile), Constants.proGuardRules)
             signingConfig = signingConfigs.getByName(SignConstants.variantNameRelease)
         }
@@ -75,7 +75,7 @@ android {
             isMinifyEnabled = false
             applicationIdSuffix = SignConstants.appIdSuffixEnhanced
             versionNameSuffix = SignConstants.versionNameSuffixEnhanced
-            isDebuggable = true
+            // isDebuggable = true
             resValue(Constants.type, SignConstants.varAppName, SignConstants.valueAppNameEnhanced)
             resValue(Constants.type, SignConstants.varWaifuViewer, SignConstants.homeWaifuViewerEnhanced)
             proguardFiles(getDefaultProguardFile(Constants.proGuardFile), Constants.proGuardRules)
@@ -84,6 +84,12 @@ android {
     }
 
     compileOptions {
+
+        // Flag to enable support for the new language APIs
+        // Flag for scrapping Java 8+ APIs desugaring
+        // For Jsoup library
+        isCoreLibraryDesugaringEnabled = true
+
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
@@ -113,10 +119,12 @@ android {
 
     packaging {
         resources {
+            pickFirsts += "mozilla/public-suffix-list.txt"
             excludes += Constants.metaLicenses
             excludes += Constants.metaInf
+            // For exclude things by ScrapeIt library
+            // excludes += Constants.metaInfDependencies
         }
-        // resources.excludes.add(Constants.metaInf)
     }
 }
 
@@ -134,6 +142,8 @@ dependencies {
     val composeBom = platform(Libs.AndroidX.Compose.bom)
     implementation(composeBom)
     implementation(Libs.AndroidX.Compose.material3)
+    implementation(Libs.AndroidX.Compose.iconsCore)
+    implementation(Libs.AndroidX.Compose.iconsExtend)
     implementation(Libs.AndroidX.Compose.foundation)
     implementation(Libs.AndroidX.Compose.runtime)
     implementation(Libs.AndroidX.Compose.livedata)
@@ -230,6 +240,20 @@ dependencies {
     // Google AI SDK for Android
     // implementation("com.google.ai.client.generativeai:generativeai:0.2.2")
     implementation(Libs.GenerativeAI.generativeai)
+
+    // Exoplayer
+    implementation(Libs.AndroidX.Media3.exoplayer)
+    implementation(Libs.AndroidX.Media3.ui)
+
+    // Scrapping Libraries
+    // implementation(Libs.Scrapping.skrapeIt)
+    // implementation(Libs.Scrapping.skrapeHttpFetcher)
+    // implementation(Libs.Ktor.KtorCore)
+    // implementation(Libs.Ktor.KtorClient)
+
+    implementation(Libs.Scrapping.jSoup)
+    // modules Implementation for Jsoup Dependency
+    coreLibraryDesugaring(Libs.AndroidX.CoreDesugar.desugar)
 
     // JUnit y Mockito
     testImplementation(Libs.JUnit.junit)

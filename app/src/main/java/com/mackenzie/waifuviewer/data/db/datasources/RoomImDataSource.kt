@@ -6,6 +6,7 @@ import com.mackenzie.waifuviewer.data.db.WaifuImDbItem
 import com.mackenzie.waifuviewer.data.db.WaifuImTagDb
 import com.mackenzie.waifuviewer.data.db.dao.WaifuImTagsDao
 import com.mackenzie.waifuviewer.data.db.datasources.RoomImDataSource.Companion.artistAdapter
+import com.mackenzie.waifuviewer.data.db.datasources.RoomImDataSource.Companion.artistListAdapter
 import com.mackenzie.waifuviewer.data.db.datasources.RoomImDataSource.Companion.stringAdapter
 import com.mackenzie.waifuviewer.data.db.datasources.RoomImDataSource.Companion.tagsAdapter
 import com.mackenzie.waifuviewer.data.tryCall
@@ -25,9 +26,12 @@ class RoomImDataSource @Inject constructor(private val imDao: WaifuImDao, privat
 
     companion object {
         private val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+
+        private val typeArtist = Types.newParameterizedType(List::class.java, ArtistIm::class.java)
         val artistAdapter = moshi.adapter(ArtistIm::class.java)
+        val artistListAdapter = moshi.adapter<List<ArtistIm?>>(typeArtist)
         private val typeTag = Types.newParameterizedType(List::class.java, TagItem::class.java)
-        val tagsAdapter = moshi.adapter<List<TagItem?>>(typeTag)
+        val tagsAdapter = moshi.adapter<List<TagItem>>(typeTag)
         private val typeString = Types.newParameterizedType(List::class.java, String::class.java)
         val stringAdapter = moshi.adapter<List<String>>(typeString)
     }
@@ -71,20 +75,22 @@ private fun List<WaifuImDbItem>.toDomainModel(): List<WaifuImItem> = map { it.to
 private fun WaifuImDbItem.toDomainModel(): WaifuImItem =
     WaifuImItem(
         id,
-        artist.getArtistToDomainModel(),
-        byteSize,
-        signature,
+        imageId,
+        perceptualHash,
         extension,
         dominantColor,
         source,
+        artistListAdapter.fromJson(artist) ?: emptyList(),
+        uploadedId,
         uploadedAt,
         isNsfw,
+        isAnimated,
         width,
         height,
-        imageId,
+        byteSize,
         url,
-        previewUrl,
         tagsAdapter.fromJson(tags) ?: emptyList(),
+        favorites,
         isFavorite
     )
 
@@ -104,33 +110,35 @@ fun List<WaifuImItem>.fromDomainModel(): List<WaifuImDbItem> = map { it.fromDoma
 
 private fun WaifuImItem.fromDomainModel(): WaifuImDbItem = WaifuImDbItem(
     id,
-    artistAdapter.toJson(artist) ?: "",
-    byteSize,
-    signature,
+    imageId,
+    perceptualHash,
     extension,
     dominantColor,
     source,
+    artistListAdapter.toJson(artist),
+    uploadedId,
     uploadedAt,
     isNsfw,
+    isAnimated,
     width,
     height,
-    imageId,
+    byteSize,
     url,
-    previewUrl,
-    tagsAdapter.toJson(tags),
+    tagsAdapter.toJson(tags as List<TagItem>?), // TODO revisar esto
+    favorites,
     isFavorite
 )
 
 private fun WaifuImTagList.fromDomainModel(): WaifuImTagDb = WaifuImTagDb(
     id,
-    stringAdapter.toJson(versatile),
-    stringAdapter.toJson(nsfw)
+    tagsAdapter.toJson(versatile),
+    tagsAdapter.toJson(nsfw)
 )
 
 private fun WaifuImTagDb.toDomainModel(): WaifuImTagList = WaifuImTagList(
     id,
-    stringAdapter.fromJson(versatile) ?: emptyList(),
-    stringAdapter.fromJson(nsfw) ?: emptyList()
+    tagsAdapter.fromJson(versatile) ?: emptyList(),
+    tagsAdapter.fromJson(nsfw) ?: emptyList()
 )
 
 

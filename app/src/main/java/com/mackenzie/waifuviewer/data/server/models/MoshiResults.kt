@@ -7,13 +7,19 @@ import kotlinx.parcelize.Parcelize
 
 @JsonClass(generateAdapter = true)
 data class WaifuImResult(
-    @Json(name = "images") val waifus: List<WaifuIm>
+    @Json(name = "items") val waifus: List<WaifuIm>,
+    @Json(name = "pageNumber") val pageNumber: Int,
+    @Json(name = "totalPages") val totalPages: Int,
+    @Json(name = "totalCount") val totalCount: Int,
+    @Json(name = "maxPageSize") val maxPageSize: Int,
+    @Json(name = "defaultPageSize") val defaultPageSize: Int,
+    @Json(name = "hasPreviousPage") val hasPreviousPage: Boolean,
+    @Json(name = "hasNextPage") val hasNextPage: Boolean
 )
 
 @JsonClass(generateAdapter = true)
 data class WaifuImTagResult(
-    @Json(name = "versatile") val versatile: List<String>,
-    @Json(name = "nsfw") val nsfw: List<String>
+    @Json(name = "items") val categories: List<Tag>
 )
 
 @JsonClass(generateAdapter = true)
@@ -46,33 +52,39 @@ data class WaifuBestGifResult(
 @Parcelize
 @JsonClass(generateAdapter = true)
 data class WaifuIm(
-    @Json(name = "artist") val artist: ArtistImResult?,
-    @Json(name = "byte_size") val byteSize: Long,
-    @Json(name = "signature") val signature: String,
+    @Json(name = "id") val imageId: Int,
+    @Json(name = "perceptualHash") val perceptualHash: String,
     @Json(name = "extension") val extension: String,
-    @Json(name = "image_id") val imageId: Int,
-    @Json(name = "favorites") val favourites: Int,
-    @Json(name = "dominant_color") val dominant_color: String,
+    @Json(name = "dominantColor") val dominant_color: String,
     @Json(name = "source") val source: String?,
-    @Json(name = "uploaded_at") val uploadedAt: String,
-    @Json(name = "liked_at") val likedAt: String?,
-    @Json(name = "is_nsfw") val isNsfw: Boolean,
-    @Json(name = "width") val width: String,
-    @Json(name = "height") val height: String,
+    @Json(name = "artists") val artists: List<ArtistImResult>?,
+    @Json(name = "uploaderId") val uploadedId: String?,
+    @Json(name = "uploadedAt") val uploadedAt: String?,
+    @Json(name = "isNsfw") val isNsfw: Boolean?,
+    @Json(name = "isAnimated") val isAnimated: Boolean?,
+    @Json(name = "width") val width: Int?,
+    @Json(name = "height") val height: Int?,
+    @Json(name = "byteSize") val byteSize: Long?,
     @Json(name = "url") val url: String,
-    @Json(name = "preview_url") val previewUrl: String,
-    @Json(name = "tags")val tags: List<Tag>?
+    @Json(name = "tags") val tags: List<Tag>?,
+    @Json(name = "favorites") val favourites: Int?,
+    @Json(name = "likedAt") val likedAt: String?,
+    @Json(name = "addedToAlbumAt") val addedToAlbumAt: String?,
+    @Json(name = "albums") val albums: List<String>
 ) : Parcelable
 
 @Parcelize
 @JsonClass(generateAdapter = true)
 data class ArtistImResult(
-    @Json(name = "artist_id") val artistId: String?,
-    @Json(name = "deviant_art") val deviantArt: String?,
+    @Json(name = "id") val artistId: Int?,
+    @Json(name = "deviantArt") val deviantArt: String?,
     @Json(name = "name") val name: String?,
     @Json(name = "patreon") val patreon: String?,
     @Json(name = "pixiv") val pixiv: String?,
-    @Json(name = "twitter") val twitter: String?
+    @Json(name = "twitter") val twitter: String?,
+    @Json(name = "reviewStatus") val reviewStatus: String?,
+    @Json(name = "creatorId") val creatorId: String?,
+    @Json(name = "imageCount") val imageCount: Int?
 ) : Parcelable
 
 @Parcelize
@@ -101,9 +113,12 @@ data class WaifuBestGif(
 @JsonClass(generateAdapter = true)
 data class Tag(
     @Json(name = "description") val description: String,
-    @Json(name = "is_nsfw") val isNsfw: Boolean,
     @Json(name = "name") val name: String,
-    @Json(name = "tag_id") val tagId: Int
+    @Json(name = "slug") val slug: String,
+    @Json(name = "id") val tagId: Int,
+    @Json(name = "reviewStatus") val reviewStatus: String?,
+    @Json(name = "creatorId") val creatorId: String?,
+    @Json(name = "imageCount") val imageCount: Int?
 ) : Parcelable
 
 @JsonClass(generateAdapter = true)

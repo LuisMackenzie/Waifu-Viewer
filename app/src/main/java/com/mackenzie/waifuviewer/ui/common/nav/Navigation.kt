@@ -1,6 +1,5 @@
 package com.mackenzie.waifuviewer.ui.common.nav
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -14,10 +13,13 @@ import androidx.navigation.compose.rememberNavController
 import com.mackenzie.waifuviewer.domain.ServerType
 import com.mackenzie.waifuviewer.domain.getTypes
 import com.mackenzie.waifuviewer.domain.selector.SwitchState
+import com.mackenzie.waifuviewer.ui.common.urlEncoder
 import com.mackenzie.waifuviewer.ui.detail.DetailScreenContentRoute
 import com.mackenzie.waifuviewer.ui.favs.ui.FavoriteScreenContentRoute
 import com.mackenzie.waifuviewer.ui.gemini.menu.WaifuGeminiScreenMenuRoute
-import com.mackenzie.waifuviewer.ui.gpt.ui.WaifuGptScreenContent
+import com.mackenzie.waifuviewer.ui.gpt.ui.VideoHubScreenContent
+import com.mackenzie.waifuviewer.ui.gpt.ui.VideoListScreenContent
+import com.mackenzie.waifuviewer.ui.gpt.ui.VideoPlayerScreenContent
 import com.mackenzie.waifuviewer.ui.main.WaifuScreenContentRoute
 import com.mackenzie.waifuviewer.ui.selector.SelectorScreenContentRoute
 import com.mackenzie.waifuviewer.ui.splash.SplashScreenRoute
@@ -35,9 +37,15 @@ fun Navigation() {
     ) {
         composable(NavItem.SplashScreen) {
             SplashScreenRoute {
+                // Navegacion Principal desactivada temporalmente
                 navController.navigate(route = NavItem.SelectorScreen.route) {
                     popUpTo(route = NavItem.SplashScreen.route) { inclusive = true }
                 }
+
+                // Navegacion directa a VideoHub para pruebas
+                /*navController.navigate(route = NavItem.VideoServersScreen.route) {
+                    popUpTo(route = NavItem.SplashScreen.route) { inclusive = true }
+                }*/
             }
         }
         composable(NavItem.SelectorScreen) {
@@ -46,7 +54,7 @@ fun Navigation() {
                     navController.navigate(route = NavItem.WaifuScreen.createRoute(server, tag, nsfw, gif, lands))
                 },
                 onGptButtonClicked = { gptType ->
-                    if (gptType) navController.navigate(route = NavItem.WaifuGptScreen.route)
+                    if (gptType) navController.navigate(route = NavItem.VideoServersScreen.route)
                     else navController.navigate(route = NavItem.WaifuGeminiScreen.route)
                 },
                 onFavoriteButtonClicked = { navController.navigate(route = NavItem.FavoriteScreen.route) },
@@ -76,8 +84,25 @@ fun Navigation() {
         composable(NavItem.FavoriteScreen) {
             FavoriteScreenContentRoute() { waifu -> navController.navigate(route = NavItem.WaifuDetail.createRoute(waifu, true)) }
         }
-        composable(NavItem.WaifuGptScreen) {
-            WaifuGptScreenContent()
+        composable(NavItem.VideoServersScreen) {
+            VideoHubScreenContent() { serverId, serverUrl ->
+                navController.navigate(route= NavItem.VideoListScreen.createRoute(serverId, serverUrl.urlEncoder()))
+            }
+        }
+        composable(NavItem.VideoListScreen) { backStackEntry ->
+            VideoListScreenContent(
+                serverId = backStackEntry.findArg(NavArg.VideoHubServerId),
+                serverUrl = backStackEntry.findArg(NavArg.VideoHubServerUrl)
+            ) { videoId, videoUrl, embedUrl ->
+                navController.navigate(route= NavItem.PlayerScreen.createRoute(videoId, videoUrl.urlEncoder(), embedUrl.urlEncoder()) )
+            }
+        }
+        composable(NavItem.PlayerScreen) { backStackEntry ->
+            VideoPlayerScreenContent(
+                videoId = backStackEntry.findArg(NavArg.VideoId),
+                videoUrl = backStackEntry.findArg(NavArg.VideoUrl),
+                embedUrl = backStackEntry.findArg(NavArg.VideoEmbeddedUrl)
+            )
         }
         composable(NavItem.WaifuGeminiScreen) {
             WaifuGeminiScreenMenuRoute()

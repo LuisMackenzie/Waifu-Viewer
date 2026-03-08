@@ -71,11 +71,20 @@ object Libs {
             const val gradlePlugin = "androidx.navigation:navigation-safe-args-gradle-plugin:_"
         }
 
+        object Media3 {
+            const val exoplayer = "androidx.media3:media3-exoplayer:1.3.1"
+            const val ui = "androidx.media3:media3-ui:1.3.1"
+        }
+
         object Room {
             const val runtime = "androidx.room:room-runtime:_"
             const val paging = "androidx.room:room-paging:_"
             const val ktx = "androidx.room:room-ktx:_"
             const val compiler = "androidx.room:room-compiler:_"
+        }
+
+        object CoreDesugar {
+            const val desugar = "com.android.tools:desugar_jdk_libs:2.0.3"
         }
 
         object Test {
@@ -92,6 +101,18 @@ object Libs {
             }
 
         }
+    }
+
+    object Scrapping {
+        const val skrapeIt = "it.skrape:skrapeit:1.2.2"
+
+        const val skrapeHttpFetcher = "it.skrape:skrapeit-http-fetcher:1.2.2"
+        const val jSoup = "org.jsoup:jsoup:1.22.1"
+    }
+
+    object Ktor {
+        const val KtorCore = "io.ktor:ktor-client-core:1.6.8"
+        const val KtorClient = "io.ktor:ktor-client-android:1.6.8"
     }
 
     object Glide {
