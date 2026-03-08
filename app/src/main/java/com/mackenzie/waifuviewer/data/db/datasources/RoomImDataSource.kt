@@ -31,7 +31,7 @@ class RoomImDataSource @Inject constructor(private val imDao: WaifuImDao, privat
         val artistAdapter = moshi.adapter(ArtistIm::class.java)
         val artistListAdapter = moshi.adapter<List<ArtistIm?>>(typeArtist)
         private val typeTag = Types.newParameterizedType(List::class.java, TagItem::class.java)
-        val tagsAdapter = moshi.adapter<List<TagItem?>>(typeTag)
+        val tagsAdapter = moshi.adapter<List<TagItem>>(typeTag)
         private val typeString = Types.newParameterizedType(List::class.java, String::class.java)
         val stringAdapter = moshi.adapter<List<String>>(typeString)
     }
@@ -124,21 +124,21 @@ private fun WaifuImItem.fromDomainModel(): WaifuImDbItem = WaifuImDbItem(
     height,
     byteSize,
     url,
-    tagsAdapter.toJson(tags),
+    tagsAdapter.toJson(tags as List<TagItem>?), // TODO revisar esto
     favorites,
     isFavorite
 )
 
 private fun WaifuImTagList.fromDomainModel(): WaifuImTagDb = WaifuImTagDb(
     id,
-    stringAdapter.toJson(versatile),
-    stringAdapter.toJson(nsfw)
+    tagsAdapter.toJson(versatile),
+    tagsAdapter.toJson(nsfw)
 )
 
 private fun WaifuImTagDb.toDomainModel(): WaifuImTagList = WaifuImTagList(
     id,
-    stringAdapter.fromJson(versatile) ?: emptyList(),
-    stringAdapter.fromJson(nsfw) ?: emptyList()
+    tagsAdapter.fromJson(versatile) ?: emptyList(),
+    tagsAdapter.fromJson(nsfw) ?: emptyList()
 )
 
 

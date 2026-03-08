@@ -5,6 +5,7 @@ import com.mackenzie.waifuviewer.data.datasource.WaifusImLocalDataSource
 import com.mackenzie.waifuviewer.data.datasource.WaifusImRemoteDataSource
 import com.mackenzie.waifuviewer.domain.im.WaifuImItem
 import com.mackenzie.waifuviewer.domain.Error
+import com.mackenzie.waifuviewer.domain.im.TagItem
 import com.mackenzie.waifuviewer.domain.im.WaifuImTagList
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -45,22 +46,24 @@ class WaifusImRepository @Inject constructor(
 
     suspend fun requestOnlyWaifuIm(orientation: Boolean): WaifuImItem? {
         val waifuIm = remoteImDataSource.getOnlyWaifuIm(getOrientation(orientation))
-        println("waifuIm?.url =${waifuIm?.url}")
-        println("waifuIm =${waifuIm.toString()}")
         if (waifuIm != null) return waifuIm else return null
     }
 
     suspend fun requestWaifuImTags(): Error? {
-        val versatileTags: MutableList<String> = mutableListOf("All Items")
-        val nsfwTags: MutableList<String> = mutableListOf("All Items")
+        val versatileTags: MutableList<TagItem> = mutableListOf(TagItem("All SFW filter", "All Items", 0))
+        val nsfwTags: MutableList<TagItem> = mutableListOf(TagItem("All NSFW Items", "All Items", 0))
         if (localImDataSource.isTagsImEmpty()) {
-            /*val waifuImTags = remoteImDataSource.getWaifuImTags()
+            val waifuImTags = remoteImDataSource.getWaifuImTags()
+            val orderedVersatile = waifuImTags?.versatile?.filter { it.tagId >= 10 }?.sortedBy { it.tagId }
+            val orderedNsfw = waifuImTags?.versatile?.filter { it.tagId <= 9 }?.sortedBy { it.tagId }
+
             if (waifuImTags != null) {
-                versatileTags.addAll(waifuImTags.versatile)
-                nsfwTags.addAll(waifuImTags.nsfw)
+                if (orderedVersatile != null) versatileTags.addAll(orderedVersatile)
+                if (orderedNsfw != null) nsfwTags.addAll(orderedNsfw)
                 val error = localImDataSource.saveImTags(WaifuImTagList(waifuImTags.id, versatileTags, nsfwTags))
+                println("SAving tags error = $error")
                 if (error != null) return error else return null
-            }*/
+            }
         }
         return null
     }

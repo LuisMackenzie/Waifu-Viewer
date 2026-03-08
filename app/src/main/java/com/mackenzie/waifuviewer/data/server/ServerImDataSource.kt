@@ -46,8 +46,8 @@ class ServerImDataSource @Inject constructor(private val remoteService: RemoteCo
 
 private fun WaifuImTagResult.toDomainModel(): WaifuImTagList = WaifuImTagList(
     0,
-    versatile,
-    nsfw
+    categories.toTagDomainModel(),
+    emptyList()
 )
 
 private fun List<WaifuIm>.toDomainModel(): List<WaifuImItem> = map { it.toDomainModel() }

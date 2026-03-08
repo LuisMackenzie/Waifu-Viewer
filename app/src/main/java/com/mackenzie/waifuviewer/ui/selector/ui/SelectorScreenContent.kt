@@ -71,7 +71,7 @@ fun SelectorScreenContent(
 
         state.tags?.let { imTags ->
             tagsState = TagsState(
-                ImTags(imTags.versatile, imTags.nsfw),
+                ImTags(imTags.versatile.map { it.name }, imTags.nsfw.map { it.name }),
                 PicsTags(tagsState.enhanced.sfw, tagsState.enhanced.nsfw),
                 NekosTags(tagsState.nekos.png, tagsState.nekos.gifs)
             )
