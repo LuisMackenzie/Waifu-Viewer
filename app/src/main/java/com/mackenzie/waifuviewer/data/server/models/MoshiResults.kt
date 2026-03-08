@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 
 @JsonClass(generateAdapter = true)
 data class WaifuImResult(
-    @Json(name = "images") val waifus: List<WaifuIm>
+    @Json(name = "items") val waifus: List<WaifuIm>
 )
 
 @JsonClass(generateAdapter = true)
@@ -46,22 +46,28 @@ data class WaifuBestGifResult(
 @Parcelize
 @JsonClass(generateAdapter = true)
 data class WaifuIm(
-    @Json(name = "artist") val artist: ArtistImResult?,
-    @Json(name = "byte_size") val byteSize: Long,
-    @Json(name = "signature") val signature: String,
+    @Json(name = "id") val imageId: Int,
+    @Json(name = "perceptualHash") val perceptualHash: String,
     @Json(name = "extension") val extension: String,
-    @Json(name = "image_id") val imageId: Int,
-    @Json(name = "favorites") val favourites: Int,
-    @Json(name = "dominant_color") val dominant_color: String,
+    @Json(name = "dominantColor") val dominant_color: String,
     @Json(name = "source") val source: String?,
-    @Json(name = "uploaded_at") val uploadedAt: String,
-    @Json(name = "liked_at") val likedAt: String?,
-    @Json(name = "is_nsfw") val isNsfw: Boolean,
-    @Json(name = "width") val width: String,
-    @Json(name = "height") val height: String,
+    @Json(name = "artists") val artist: ArtistImResult?,
+    @Json(name = "uploadedId") val uploadedId: String?,
+    @Json(name = "uploadedAt") val uploadedAt: String?,
+    @Json(name = "isNsfw") val isNsfw: Boolean?,
+    @Json(name = "isAnimated") val isAnimated: Boolean?,
+    @Json(name = "width") val width: String?,
+    @Json(name = "height") val height: String?,
+    @Json(name = "byteSize") val byteSize: Long?,
     @Json(name = "url") val url: String,
-    @Json(name = "preview_url") val previewUrl: String,
-    @Json(name = "tags")val tags: List<Tag>?
+    @Json(name = "tags")val tags: List<Tag>?,
+    @Json(name = "favorites") val favourites: Int?,
+    @Json(name = "likedAt") val likedAt: String?,
+
+
+    // @Json(name = "signature") val signature: String,
+
+    // @Json(name = "preview_url") val previewUrl: String,
 ) : Parcelable
 
 @Parcelize

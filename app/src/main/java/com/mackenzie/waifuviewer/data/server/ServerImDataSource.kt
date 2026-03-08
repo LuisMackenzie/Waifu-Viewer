@@ -55,20 +55,22 @@ private fun List<WaifuIm>.toDomainModel(): List<WaifuImItem> = map { it.toDomain
 private fun WaifuIm.toDomainModel(): WaifuImItem =
     WaifuImItem(
         0,
-        artist?.toArtistDomainModel() ?: ArtistIm("", "", "", "", "", ""),
-        byteSize,
-        signature,
+        imageId,
+        perceptualHash,
         extension,
         dominant_color,
-        source ?: "",
+        source,
+        artist?.toArtistDomainModel() ?: ArtistIm("", "", "", "", "", ""),
+        uploadedId,
         uploadedAt,
-        isNsfw,
+        isNsfw ,
+        isAnimated,
         width,
         height,
-        imageId,
+        byteSize,
         url,
-        previewUrl,
         tags?.toTagDomainModel() ?: emptyList(),
+        favourites,
         false
     )
 

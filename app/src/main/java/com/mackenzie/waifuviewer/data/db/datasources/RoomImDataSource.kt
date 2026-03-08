@@ -71,20 +71,22 @@ private fun List<WaifuImDbItem>.toDomainModel(): List<WaifuImItem> = map { it.to
 private fun WaifuImDbItem.toDomainModel(): WaifuImItem =
     WaifuImItem(
         id,
-        artist.getArtistToDomainModel(),
-        byteSize,
-        signature,
+        imageId,
+        perceptualHash,
         extension,
         dominantColor,
         source,
+        artist.getArtistToDomainModel(),
+        uploadedId,
         uploadedAt,
         isNsfw,
+        isAnimated,
         width,
         height,
-        imageId,
+        byteSize,
         url,
-        previewUrl,
         tagsAdapter.fromJson(tags) ?: emptyList(),
+        favorites,
         isFavorite
     )
 
@@ -104,20 +106,22 @@ fun List<WaifuImItem>.fromDomainModel(): List<WaifuImDbItem> = map { it.fromDoma
 
 private fun WaifuImItem.fromDomainModel(): WaifuImDbItem = WaifuImDbItem(
     id,
-    artistAdapter.toJson(artist) ?: "",
-    byteSize,
-    signature,
+    imageId,
+    perceptualHash,
     extension,
     dominantColor,
     source,
+    artistAdapter.toJson(artist) ?: "",
+    uploadedId,
     uploadedAt,
     isNsfw,
+    isAnimated,
     width,
     height,
-    imageId,
+    byteSize,
     url,
-    previewUrl,
     tagsAdapter.toJson(tags),
+    favorites,
     isFavorite
 )
 
