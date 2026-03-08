@@ -390,7 +390,7 @@ fun String.decodeMimeTypeForTitle(title: String): String {
 fun loadInitialServer(): ServerType {
     when (Build.VERSION.SDK_INT) {
         in 0..Build.VERSION_CODES.N -> { return ENHANCED } // Android 7 API 24 Hacia Abajo
-        in 35..40 -> { return NEKOS } // Android 15 Hacia Arriba
+        in 37..40 -> { return NEKOS } // Android 17 Hacia Arriba
         else -> { return NORMAL }
     }
 }
