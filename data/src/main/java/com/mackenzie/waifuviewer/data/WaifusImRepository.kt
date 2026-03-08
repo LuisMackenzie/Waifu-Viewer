@@ -45,6 +45,8 @@ class WaifusImRepository @Inject constructor(
 
     suspend fun requestOnlyWaifuIm(orientation: Boolean): WaifuImItem? {
         val waifuIm = remoteImDataSource.getOnlyWaifuIm(getOrientation(orientation))
+        println("waifuIm?.url =${waifuIm?.url}")
+        println("waifuIm =${waifuIm.toString()}")
         if (waifuIm != null) return waifuIm else return null
     }
 
@@ -52,22 +54,22 @@ class WaifusImRepository @Inject constructor(
         val versatileTags: MutableList<String> = mutableListOf("All Items")
         val nsfwTags: MutableList<String> = mutableListOf("All Items")
         if (localImDataSource.isTagsImEmpty()) {
-            val waifuImTags = remoteImDataSource.getWaifuImTags()
+            /*val waifuImTags = remoteImDataSource.getWaifuImTags()
             if (waifuImTags != null) {
                 versatileTags.addAll(waifuImTags.versatile)
                 nsfwTags.addAll(waifuImTags.nsfw)
                 val error = localImDataSource.saveImTags(WaifuImTagList(waifuImTags.id, versatileTags, nsfwTags))
                 if (error != null) return error else return null
-            }
+            }*/
         }
         return null
     }
 
     private fun getOrientation(ori: Boolean): String {
         if (ori) {
-            return "LANDSCAPE"
+            return "Landscape"
         } else {
-            return "PORTRAIT"
+            return "Portrait"
         }
     }
 

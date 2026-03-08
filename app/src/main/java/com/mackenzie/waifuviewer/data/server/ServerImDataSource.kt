@@ -65,8 +65,8 @@ private fun WaifuIm.toDomainModel(): WaifuImItem =
         uploadedAt,
         isNsfw ,
         isAnimated,
-        width,
-        height,
+        width.toString(),
+        height.toString(),
         byteSize,
         url,
         tags?.toTagDomainModel() ?: emptyList(),
@@ -87,7 +87,7 @@ private fun List<Tag>.toTagDomainModel() : List<TagItem> = map { it.toTagDomainM
 
 private fun Tag.toTagDomainModel(): TagItem = TagItem(
     description,
-    isNsfw,
+    // isNsfw,
     name,
     tagId
 )

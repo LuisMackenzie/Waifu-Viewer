@@ -22,7 +22,8 @@ interface WaifuImService {
         @Query("IsNsfw") isNsfw:Boolean = false,
         @Query("IncludedTags") tags:String = "waifu",
         @Query("IsAnimated") isGif:Boolean = false,
-        @Query("Orientation") orientation:String = "Portrait"
+        @Query("Orientation") orientation:String = "Portrait",
+        @Query("PageSize") manyWaifus:Int = 1
     ): WaifuImResult
 
     @GET("tags/")
