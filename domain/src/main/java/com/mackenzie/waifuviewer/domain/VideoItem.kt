@@ -214,25 +214,34 @@ fun getServerUrlById(id: Int): String {
         21 -> "https://www.porn.com" // Porn.com No funciona
         22 -> "https://www.pornhd.com" // Porn HD No funciona
 
-        50 -> "https://hanime.tv/" // Hanime.tv
+        50 -> "https://hanime.tv" // Hanime.tv
         51 -> "https://www.hentaicloud.com/" // HentaiCloud Funciona Bien ***
-        52 -> "https://hentaigasm.com/" // HentaiGasm
-        53 -> "https://hentaimama.io/" // HentaiMama
+        52 -> "https://hentaigasm.com" // HentaiGasm
+        53 -> "https://hentaimama.io" // HentaiMama
         54 -> "https://hentaimama.tv" // HentaiMama
         55 -> "https://hentaimama.xxx" // HentaiMama
-        56 -> "https://www.hentaitube.online/" // HentaiTube
-        57 -> "https://hentaitube.icu/" // HentaiTube
-        58 -> "https://hentaiplay.net/" // HentaiPlay
+        56 -> "https://www.hentaitube.online" // HentaiTube
+        57 -> "https://hentaitube.icu" // HentaiTube
+        58 -> "https://hentaiplay.net" // HentaiPlay
         59 -> "https://muchohentai.com/home" // MuchoHentai
-        60 -> "https://www.naughtymachinima.com/" // Naughty Machinima
+        60 -> "https://www.naughtymachinima.com" // Naughty Machinima
         61 -> "https://ohentai.org" // OHentai
         62 -> "https://porcore.com" // PorCore
-        63 -> "https://xanimeporn.com/" // xAnimePorn
-        64 -> "https://aniporn.com/most-popular/" // AniPorn
+        63 -> "https://xanimeporn.com" // xAnimePorn
+        64 -> "https://aniporn.com" // AniPorn
         65 -> "https://www.zzcartoon.com" // ZZCartoon
         66 -> "https://es.pornhub.com/categories/hentai" // PornHub Hentai
-        67 -> "https://hentaihaven.co/" // HentaiHeaven
-        68 -> "https://hentaihaven.com/" // HentaiHeaven
+        67 -> "https://hentaihaven.co" // HentaiHeaven
+        68 -> "https://hentaihaven.com" // HentaiHeaven
+
+        80 -> "https://chaturbate.com/#" // Chaturbate
+        81 -> "https://es.amateur.tv/"  // Amateur.tv
+        82 -> "https://es.bongacams.com/"  // BongaCams
+        83 -> "https://es.cam4.com/"  // Cam4
+        84 -> "https://www.camsoda.com/"  // Camsoda
+        85 -> "https://www.camwhoresbay.com/" // CamWhoresBay
+        86 -> "https://es.stripchat.com/" // StripChat
+        87 -> "https://streamate.com/" // Streamate
         else -> ""
     }
 }
@@ -309,7 +318,7 @@ fun getImageFromServerId(id: Int): String {
         69 -> "https://preview.redd.it/bi0o1d5qw7y21.jpg?auto=webp&s=55351ad97b3ae9503562da00d2d96d62f858899f" // HentaiHeaven
 
         80 -> "https://logowik.com/content/uploads/images/chaturbate1720166505.logowik.com.webp" // Chaturbate
-        81-> "https://www.kamastudioagencia.com/wp-content/uploads/2024/10/amateur-scaled.jpg"  // Amateur.tv
+        81 -> "https://www.kamastudioagencia.com/wp-content/uploads/2024/10/amateur-scaled.jpg"  // Amateur.tv
         82 -> "https://juanbustos.com/wp-content/uploads/2019/02/BongaCams_01-copia.jpg"  // BongaCams
         83 -> "https://webcamstartup.com/wp-content/uploads/2024/07/CAM4_Site_Logo.png"  // Cam4
         84 -> "https://play-lh.googleusercontent.com/BByJrJkoUsr1zl4-B16qjyfIlSZxvbiqaga27HCF_EebNkkQfIf2QgX4bXnWhBRMpF4"  // Camsoda
