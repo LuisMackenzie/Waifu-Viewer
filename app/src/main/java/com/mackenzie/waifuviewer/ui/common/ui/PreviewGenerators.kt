@@ -47,7 +47,7 @@ fun getImMediaItem(id: Int = 1) = WaifuImItem(
     extension = ".jpg",
     dominantColor = "",
     source = "",
-    artist = ArtistIm("", "", "", "", "", ""),
+    artist = listOf(ArtistIm("", "", "", "", "", "")),
     uploadedId = "",
     uploadedAt = "",
     isNsfw = false,
