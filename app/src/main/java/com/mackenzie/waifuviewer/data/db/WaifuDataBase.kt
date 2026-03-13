@@ -19,7 +19,7 @@ import com.mackenzie.waifuviewer.data.db.dao.WaifuPushDao
     WaifuImTagDb::class,
     FavoriteDbItem::class,
     FcmTokenDb::class,
-    NotificationDb::class], version = 1, exportSchema = false)
+    NotificationDb::class], version = 2, exportSchema = false)
 abstract class WaifuDataBase: RoomDatabase() {
     abstract fun waifuPicDao(): WaifuPicDao
     abstract fun waifuImDao(): WaifuImDao
@@ -41,7 +41,7 @@ abstract class WaifuDataBase: RoomDatabase() {
                     context.applicationContext,
                     WaifuDataBase::class.java,
                     DATABASE_NAME
-                ).fallbackToDestructiveMigration(false).build()
+                ).fallbackToDestructiveMigration(true).build()
                 INSTANCE = instance
                 instance
             }
